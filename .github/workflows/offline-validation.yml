@@ -1,0 +1,59 @@
+name: Offline validation
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: offline-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  catalog:
+    name: Catalog and release contracts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Use Python 3.11
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.11"
+      - name: Run offline project tests
+        run: >-
+          PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m unittest
+          discover -s tests -p 'test_*.py'
+      - name: Validate immutable Catalog release
+        run: >-
+          PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3
+          tools/release/check_catalog.py --release data/release/1
+
+  flutter:
+    name: Flutter contracts
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Use Flutter 3.47.2
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          channel: stable
+          flutter-version: 3.47.2
+          cache: true
+      - name: Resolve locked packages
+        run: flutter pub get --enforce-lockfile
+      - name: Check Dart formatting
+        run: dart format --output=none --set-exit-if-changed lib test
+      - name: Run static analysis
+        run: flutter analyze --no-pub
+      - name: Run Flutter tests
+        run: flutter test --no-pub

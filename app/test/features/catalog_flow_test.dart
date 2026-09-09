@@ -379,6 +379,36 @@ void main() {
     expect(restoreCalls, 1);
     expect(find.text('Bundled Catalog restored.'), findsOneWidget);
   });
+
+  testWidgets('settings exposes the locked App version and licenses', (
+    tester,
+  ) async {
+    await _setPhoneSurface(tester);
+    await tester.pumpWidget(
+      MaterialApp(home: CatalogHomePage(session: session)),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Settings'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.byKey(const ValueKey('open-source-licenses')),
+      300,
+      scrollable: find.byType(Scrollable).last,
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('1.0.0 (1)'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('open-source-licenses')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Licenses'), findsOneWidget);
+    expect(find.text('Roco Handbook'), findsOneWidget);
+    expect(
+      find.text('Independent, non-commercial, and unofficial.'),
+      findsOneWidget,
+    );
+  });
 }
 
 Future<void> _setPhoneSurface(WidgetTester tester) async {

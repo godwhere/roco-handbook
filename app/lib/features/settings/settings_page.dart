@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../app_version.dart';
 import '../../catalog_app.dart';
 import '../../data/catalog/catalog_installer.dart';
 
@@ -120,7 +121,7 @@ class SettingsPage extends StatelessWidget {
             children: <Widget>[
               const ListTile(
                 title: Text('App version'),
-                subtitle: Text('0.1.0 (1)'),
+                subtitle: Text(AppVersion.display),
               ),
               ListTile(
                 title: const Text('Catalog'),
@@ -145,6 +146,20 @@ class SettingsPage extends StatelessWidget {
               ListTile(
                 title: const Text('Catalog built'),
                 subtitle: Text(info.builtAtUtc),
+              ),
+              ListTile(
+                key: const ValueKey('open-source-licenses'),
+                leading: const Icon(Icons.code_rounded),
+                title: const Text('Open-source licenses'),
+                subtitle: const Text('Flutter and packaged dependencies'),
+                trailing: const Icon(Icons.chevron_right_rounded),
+                onTap: () => showLicensePage(
+                  context: context,
+                  applicationName: 'Roco Handbook',
+                  applicationVersion: AppVersion.display,
+                  applicationLegalese:
+                      'Independent, non-commercial, and unofficial.',
+                ),
               ),
             ],
           ),

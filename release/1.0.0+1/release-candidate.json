@@ -1,0 +1,91 @@
+{
+  "app": {
+    "build_number": 1,
+    "display_name": "Roco Handbook",
+    "version": "1.0.0"
+  },
+  "candidate_manifest_version": 1,
+  "catalog": {
+    "attribution_sha256": "0fe12d26c69f01469724e691927237ce78689f7a800fd0f503c3f0dc189a9ea2",
+    "catalog_check": "release/1.0.0+1/catalog-check.json",
+    "catalog_check_sha256": "b1660f042ba0eca645255af695e3ddbf32a495fb0278e943912902cb5238e304",
+    "data_version": 1,
+    "database_bytes": 3424256,
+    "database_sha256": "2c27ddc3cd36f543ea6319ea9878b4a3c8b8a9a89afad6bd6eaacfd9592ed8f2",
+    "manifest_sha256": "82f0a201014410fcdbbc252a968250d614def91c4ac02e4486fefe6dda141c33",
+    "normalized_catalog_sha256": "171db314e1c1f922af4cdce57eb8dc27654f9dd62c6d06676e5b8d4887e033a0",
+    "release": "data/release/1",
+    "schema_version": 1,
+    "snapshot_id": "snapshot-19235f9b9b34dc4e",
+    "source_lock_sha256": "98707d94b8d47ec3ce1599ee122ed67c75753b4578b8ceacbbf90c9531efb3ff"
+  },
+  "generated_at_utc": "2026-09-09T12:22:30Z",
+  "platforms": {
+    "android": {
+      "artifact": {
+        "bytes": 57492013,
+        "path": "app/build/app/outputs/bundle/release/app-release.aab",
+        "sha256": "f9316e510b7d18849b54599f6a30d8265ba63cc2d5c2d2f32d4401f4c701bebb",
+        "signed": false,
+        "tracked": false
+      },
+      "build_command": "flutter build appbundle --release",
+      "build_status": "passed",
+      "device_gate": {
+        "reason": "No physical Android device was connected.",
+        "status": "not_run"
+      },
+      "manifest": {
+        "application_id": "world.roco.roco_handbook",
+        "internet_permission": false,
+        "min_sdk": 24,
+        "requested_permissions": [
+          "world.roco.roco_handbook.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        ],
+        "sensitive_permissions": [],
+        "target_sdk": 36,
+        "version_code": 1,
+        "version_name": "1.0.0"
+      }
+    },
+    "ios": {
+      "artifact": {
+        "codesigned": false,
+        "content_tree_sha256": "b6fa812e5e7676cc8fdc80e43c2a1fb7d5a29ed3326ae49b5986431fcfb5996e",
+        "path": "app/build/ios/iphoneos/Runner.app",
+        "regular_file_bytes": 22331299,
+        "regular_file_count": 58,
+        "tracked": false
+      },
+      "build_command": "flutter build ios --release --no-codesign",
+      "build_status": "passed",
+      "device_gate": {
+        "reason": "Physical-device installation requires a separate authorized manual run.",
+        "status": "not_run"
+      },
+      "info": {
+        "bundle_id": "world.roco.rocoHandbook",
+        "build_number": "1",
+        "minimum_os_version": "15.0",
+        "protected_resource_usage_descriptions": [],
+        "version": "1.0.0"
+      }
+    }
+  },
+  "publication": {
+    "archives_exported": false,
+    "status": "not_authorized",
+    "store_ready": false,
+    "uploaded": false
+  },
+  "status": "local_checks_passed_manual_gates_pending",
+  "toolchain": {
+    "dart": "3.13.2",
+    "flutter": "3.47.2",
+    "xcode": "26.6"
+  },
+  "user_database": {
+    "schema_sha256": "848f2bd304e925d9651caf2df853233255a1d0f3b0853af7996a2f851d55ff71",
+    "schema_version": 1
+  }
+}

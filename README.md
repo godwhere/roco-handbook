@@ -4,7 +4,7 @@ An independent, non-commercial offline reference application for iOS and Android
 
 ## Current project status
 
-- Phases 0 through 5 were completed on 2026-09-09, with the Python and Flutter test suites passing.
+- Phases 0 through 5 are complete. Phase 6 local release preparation is complete, while physical-device acceptance and store publication remain separate unmet gates.
 - A local Git repository exists. Completed delivery checkpoints use GitHub Desktop for commits and pushes unless the active user instruction explicitly defers that step.
 - The supplied technical baseline is preserved at [docs/technical-spec-v1.md](docs/technical-spec-v1.md).
 - The Catalog and User V1 SQL files are the current normative schema sources. Catalog V1 currently contains 20 tables and two query views.
@@ -16,8 +16,10 @@ An independent, non-commercial offline reference application for iOS and Android
 - The App creates and validates an independent personal database from the normative User V1 schema. Creature and skill favorites, handbook-level collection marks, and device-local notes survive restart; missing Catalog objects retain their saved name and notes.
 - Startup now serializes Catalog installation, validates a new immutable whole-database candidate before activation, keeps independent active and previous records, rolls back a failed post-activation open, and retains at most the current and previous validated Catalog files. A newer compatible local Catalog is not silently downgraded by an older bundled version.
 - The fixed bottom navigation provides Creatures, Skills, My Library, and Settings. Settings explains local-storage and uninstall risk, shows the effective Catalog, recovery outcome, and personal schema versions, and provides an explicitly confirmed bundled-Catalog recovery action that does not modify `user.db`.
+- The first candidate is App version 1.0.0, build 1. Settings exposes that version and Flutter's packaged open-source license registry.
+- The offline release validator rejects transaction sidecars, placeholder metadata, false coverage, source-lock or hash divergence, unreviewed removals, schema failures, and probe failures. Read-only CI runs the Python and Flutter gates without BWIKI, signing, or store credentials.
 - Android first launch, personal-data persistence, legacy-pointer migration, and explicit bundled recovery passed in an emulator with airplane mode enabled and Wi-Fi disabled. iOS build, first launch, Catalog validation, personal-database creation, restart reuse, and legacy-pointer migration passed in an iPhone simulator. No physical-device, signing, upload, or store-release claim is made.
-- Phase 6 is the next implementation boundary: release metadata, permissions and license audit, CI and release checks, and physical-device update acceptance before any separately authorized store submission.
+- Local unsigned Android and no-codesign iOS release candidates have been built and audited. Final Phase 6 acceptance remains blocked on physical Android and iOS offline/update evidence; no store upload or publication is authorized.
 
 ## V1 boundary
 
@@ -37,6 +39,9 @@ V1 includes offline creature and skill lookup, favorites, collection marks, note
 - `data/reports/`: tracked structure, reference, source-field, and sample-mapping reports
 - `data/normalized/`: deterministic normalized build input with preserved source extras
 - `data/release/`: immutable versioned Catalog database, manifest, attribution, and build report
+- `licenses/`: Catalog attribution boundary and resolved runtime dependency notices
+- `release/`: versioned release-candidate checks, metadata, notes, and known limitations; generated App binaries remain untracked
+- `.github/workflows/`: credential-free offline project and Flutter validation
 
 ## Phase 1 tools
 
@@ -112,6 +117,27 @@ Launch on an available iOS or Android simulator with `flutter run`. The producti
 Favorites and notes are stored only in the private `user.db` on the device. They are not included in the replaceable Catalog database and are not synchronized to an account or cloud service.
 
 Catalog replacement runs only during startup or an explicit Settings recovery. The App does not download Catalog data. A candidate must pass manifest, hash, metadata, schema-object, integrity, foreign-key, and probe-query checks before its pointer is activated; failed updates retain the previous validated Catalog and personal database.
+
+## Release candidate validation
+
+Validate the immutable Catalog release from the repository root:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 tools/release/check_catalog.py \
+  --release data/release/1
+```
+
+The tracked candidate record, release notes, and known limitations are in `release/1.0.0+1/`. The checked-in workflow runs this gate plus the complete Python and Flutter suites without contacting BWIKI or any application store.
+
+Local Android and iOS candidate build commands are:
+
+```bash
+cd app
+flutter build appbundle --release
+flutter build ios --release --no-codesign
+```
+
+These commands intentionally do not produce a signed, exported, or store-ready submission. Signing and publication require separate credentials, platform checks, and explicit authorization.
 
 ## Local verification
 

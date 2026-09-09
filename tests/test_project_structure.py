@@ -15,6 +15,7 @@ class ProjectStructureTests(unittest.TestCase):
             "AGENTS.md",
             "docs/technical-spec-v1.md",
             "docs/decisions/ADR-0001-v1-delivery-scope.md",
+            "docs/decisions/ADR-0008-phase-6-release-candidate.md",
             "docs/evidence/environment-2026-09-09.md",
             "config/bwiki_sources.json",
             "config/identity_registry.json",
@@ -25,6 +26,14 @@ class ProjectStructureTests(unittest.TestCase):
             "schemas/user_v1.sql",
             "schemas/manifests/bundled_catalog_v1.schema.json",
             "tools/pyproject.toml",
+            "tools/release/check_catalog.py",
+            ".github/workflows/offline-validation.yml",
+            "licenses/DATA_ATTRIBUTION.md",
+            "licenses/THIRD_PARTY_NOTICES.md",
+            "release/1.0.0+1/release-candidate.json",
+            "release/1.0.0+1/catalog-check.json",
+            "release/1.0.0+1/RELEASE_NOTES.md",
+            "release/1.0.0+1/KNOWN_LIMITATIONS.md",
         ]
         missing = [path for path in expected if not (ROOT / path).is_file()]
         self.assertEqual([], missing)
@@ -85,6 +94,36 @@ class ProjectStructureTests(unittest.TestCase):
         bundled = ROOT / "app" / "assets" / "database" / "user_v1.sql"
         self.assertEqual(normative.read_bytes(), bundled.read_bytes())
 
+    def test_flutter_version_has_one_repository_source_of_truth(self) -> None:
+        pubspec = (ROOT / "app/pubspec.yaml").read_text(encoding="utf-8")
+        version_source = (ROOT / "app/lib/app_version.dart").read_text(
+            encoding="utf-8"
+        )
+        pubspec_match = re.search(r"^version: ([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)$", pubspec, re.M)
+        name_match = re.search(r"static const name = '([^']+)';", version_source)
+        build_match = re.search(r"static const buildNumber = ([0-9]+);", version_source)
+
+        self.assertIsNotNone(pubspec_match)
+        self.assertIsNotNone(name_match)
+        self.assertIsNotNone(build_match)
+        self.assertEqual(pubspec_match.group(1), name_match.group(1))
+        self.assertEqual(pubspec_match.group(2), build_match.group(1))
+
+    def test_ci_is_read_only_and_pins_third_party_actions(self) -> None:
+        workflow = (
+            ROOT / ".github/workflows/offline-validation.yml"
+        ).read_text(encoding="utf-8")
+        uses = re.findall(r"^\s*uses:\s*([^\s#]+)", workflow, re.M)
+
+        self.assertIn("permissions:\n  contents: read", workflow)
+        self.assertEqual(4, len(uses))
+        self.assertEqual(3, len(set(uses)))
+        for action in uses:
+            with self.subTest(action=action):
+                self.assertRegex(action, r"^[^@]+@[0-9a-f]{40}$")
+        self.assertNotIn("secrets.", workflow)
+        self.assertNotIn("bwiki", workflow.lower())
+
     def test_project_authored_text_is_english(self) -> None:
         checked_roots = [
             ROOT / "README.md",
@@ -93,6 +132,9 @@ class ProjectStructureTests(unittest.TestCase):
             ROOT / "schemas",
             ROOT / "tools",
             ROOT / "tests",
+            ROOT / ".github",
+            ROOT / "licenses",
+            ROOT / "release",
             ROOT / "docs/decisions",
             ROOT / "docs/evidence",
             ROOT / "docs/implementation-reports",
@@ -100,7 +142,16 @@ class ProjectStructureTests(unittest.TestCase):
             ROOT / "app/README.md",
             ROOT / "app/pubspec.yaml",
         ]
-        text_suffixes = {".dart", ".md", ".json", ".py", ".sql", ".toml", ".yaml"}
+        text_suffixes = {
+            ".dart",
+            ".md",
+            ".json",
+            ".py",
+            ".sql",
+            ".toml",
+            ".yaml",
+            ".yml",
+        }
         excluded = {ROOT / "docs/technical-spec-v1.md"}
         violations: list[str] = []
 
