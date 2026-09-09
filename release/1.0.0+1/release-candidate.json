@@ -4,7 +4,22 @@
     "display_name": "Roco Handbook",
     "version": "1.0.0"
   },
-  "candidate_manifest_version": 1,
+  "acceptance": {
+    "phase": 6,
+    "status": "complete_with_device_test_waiver",
+    "waiver": {
+      "authorization": "explicit_user_direction",
+      "authorized_at": "2026-09-09",
+      "effect": "Closes Phase 6 for project sequencing without establishing physical-device compatibility or store readiness.",
+      "evidence_status": "not_run",
+      "id": "PHASE6-PHYSICAL-DEVICE-001",
+      "scope": [
+        "android_physical_device_validation",
+        "ios_physical_device_validation"
+      ]
+    }
+  },
+  "candidate_manifest_version": 2,
   "catalog": {
     "attribution_sha256": "0fe12d26c69f01469724e691927237ce78689f7a800fd0f503c3f0dc189a9ea2",
     "catalog_check": "release/1.0.0+1/catalog-check.json",
@@ -78,7 +93,7 @@
     "store_ready": false,
     "uploaded": false
   },
-  "status": "local_checks_passed_manual_gates_pending",
+  "status": "phase_6_complete_with_device_test_waiver",
   "toolchain": {
     "dart": "3.13.2",
     "flutter": "3.47.2",

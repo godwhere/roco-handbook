@@ -6,5 +6,5 @@
 - Personal data stays only in the App's private device storage and may be removed by uninstalling the App.
 - Generated Android and iOS candidates are intentionally unsigned or not code-signed. Signing identities, credentials, store archives, and upload automation are not stored in this repository.
 - Automated host tests, Android emulator evidence, and iOS simulator evidence do not prove physical flash durability, store-managed upgrades, or platform review acceptance.
-- Physical Android update testing is not available without a connected Android device. Physical iOS installation, offline launch, update, recovery, and personal-data preservation remain a separately authorized manual gate unless recorded otherwise in Phase 6 evidence.
+- Physical Android and iOS installation, offline launch, update, recovery, and personal-data preservation were explicitly waived for Phase 6 closure and remain unrun. Waiver `PHASE6-PHYSICAL-DEVICE-001` does not establish device compatibility or store readiness.
 - The data attribution review is not legal advice and does not establish rights to game artwork, trademarks, or unrelated third-party material.

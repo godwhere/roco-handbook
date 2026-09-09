@@ -27,4 +27,6 @@ Settings provides **Open-source licenses**, backed by Flutter's packaged license
 
 `release/1.0.0+1/` records the Catalog check, candidate identity, exact locally built artifact hashes, release notes, known limitations, and manual-gate status. Generated App binaries stay outside Git.
 
-An unsigned Android bundle or no-codesign iOS App is a local build candidate, not a store-submittable archive. Physical-device evidence, platform signing, archive/export, upload, store review, and publication each require their own successful run and authority. The project does not infer any of those results from unit tests, emulators, simulators, or a successful compilation.
+Phase 6 closed under waiver `PHASE6-PHYSICAL-DEVICE-001` after the user explicitly directed the project to skip physical-device validation. Both device evidence statuses remain `not_run`; the waiver permits project sequencing only and is not a compatibility result.
+
+An unsigned Android bundle or no-codesign iOS App is a local build candidate, not a store-submittable archive. Physical-device evidence, platform signing, archive/export, upload, store review, and publication each require their own successful run and authority. The project does not infer any of those results from a waiver, unit tests, emulators, simulators, or a successful compilation.

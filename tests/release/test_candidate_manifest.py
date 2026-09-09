@@ -68,15 +68,32 @@ class ReleaseCandidateManifestTests(unittest.TestCase):
             self.candidate["user_database"]["schema_sha256"],
         )
 
-    def test_candidate_does_not_claim_signing_devices_or_publication(self) -> None:
+    def test_candidate_records_device_waiver_without_claiming_evidence(self) -> None:
         android = self.candidate["platforms"]["android"]
         ios = self.candidate["platforms"]["ios"]
         publication = self.candidate["publication"]
+        acceptance = self.candidate["acceptance"]
+        waiver = acceptance["waiver"]
 
+        self.assertEqual(2, self.candidate["candidate_manifest_version"])
+        self.assertEqual("complete_with_device_test_waiver", acceptance["status"])
+        self.assertEqual("PHASE6-PHYSICAL-DEVICE-001", waiver["id"])
+        self.assertEqual("not_run", waiver["evidence_status"])
+        self.assertEqual(
+            {
+                "android_physical_device_validation",
+                "ios_physical_device_validation",
+            },
+            set(waiver["scope"]),
+        )
         self.assertFalse(android["artifact"]["signed"])
         self.assertFalse(ios["artifact"]["codesigned"])
         self.assertEqual("not_run", android["device_gate"]["status"])
         self.assertEqual("not_run", ios["device_gate"]["status"])
+        self.assertEqual(
+            "phase_6_complete_with_device_test_waiver",
+            self.candidate["status"],
+        )
         self.assertFalse(publication["store_ready"])
         self.assertFalse(publication["uploaded"])
         self.assertEqual("not_authorized", publication["status"])

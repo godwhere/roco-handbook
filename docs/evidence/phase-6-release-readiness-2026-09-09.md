@@ -96,4 +96,8 @@ The following Phase 6 acceptance layers remain **not run**:
 - Signed Android artifact, signed iOS archive, platform export, or notarization
 - Store-managed upgrade, submission, review, upload, or publication
 
-The local candidate is therefore auditable but not store-ready. Missing physical-device evidence is a Phase 6 stopping condition and must not be represented as a pass.
+## Physical-device-test waiver
+
+On 2026-09-09, the user explicitly directed the project to skip physical-device validation, document the omission, close Phase 6, and begin Phase 7. ADR-0009 records waiver `PHASE6-PHYSICAL-DEVICE-001`. The waiver changes project sequencing only: every physical-device layer above remains `not_run`, and no compatibility, signing, store-readiness, upload, review, or publication result is inferred.
+
+The local candidate is auditable but not store-ready. The baseline stopping condition is explicitly waived for Phase 6 closure and remains an unresolved release risk rather than a pass.

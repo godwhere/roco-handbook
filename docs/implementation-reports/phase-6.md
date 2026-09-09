@@ -1,6 +1,6 @@
 # Phase 6 implementation report
 
-- Status: local candidate preparation complete; final acceptance stopped at physical-device gates
+- Status: complete with explicit physical-device-test waiver; device evidence remains not run
 - Date: 2026-09-09
 - Workspace: `/Users/ethan/Documents/ChatGPT/roco-handbook`
 
@@ -18,6 +18,7 @@ Phase 6 work was limited to release metadata, an offline Catalog release gate, r
 - Added full Catalog data attribution boundaries and a resolved runtime software-license inventory.
 - Built and audited an unsigned Android AAB and a no-codesign iOS App, verified version and permission metadata, confirmed packaged license notices, and matched each embedded Catalog to the immutable Release 1 database hash.
 - Added the tracked candidate manifest, deterministic Catalog check report, release notes, known limitations, ADR-0008, release-readiness feature contract, evidence, this report, and current-state README updates.
+- Recorded the user-authorized Phase 6 device-test waiver in ADR-0009, README, release readiness, evidence, the candidate manifest, release notes, known limitations, and its regression test. The waiver does not convert unrun device checks into passes.
 
 ## Verification performed
 
@@ -63,10 +64,10 @@ Result: the paired iPhone was available, the target bundle ID was not installed,
 - Signed release build, Android upload signing, iOS archive/export, or platform credential validation
 - Store-managed upgrade, upload, review, or publication
 
-## Stopping condition and next boundary
+## Closure and next boundary
 
-The local candidate, traceability, permission review, license review, and build materials are complete. Final Phase 6 acceptance cannot be claimed because no physical Android device is connected and the available physical iPhone has not received a separately authorized installation. The iPhone preflight confirmed that the target bundle is not already installed, but a signed test build still requires an explicitly selected development team.
+The local candidate, traceability, permission review, license review, and build materials are complete. Physical Android and iOS validation remains unrun. On 2026-09-09, the user explicitly waived that baseline stopping condition for Phase 6 project sequencing; ADR-0009 and candidate waiver `PHASE6-PHYSICAL-DEVICE-001` preserve the deviation and its risk without claiming a pass.
 
-The next allowed boundary is a manual device-acceptance run: connect a physical Android device and explicitly authorize installation on each target device, then prove offline first launch, upgrade/recovery behavior, and personal-data preservation. Signing, archive export, store upload, and publication remain later separately authorized actions even after device acceptance.
+Phase 7 may begin only under a new explicit scope. Runtime downloads, remote hosting, package signing, platform policy conclusions, store upload, and publication are not authorized by the Phase 6 waiver or by beginning Phase 7. Physical-device acceptance remains a future release boundary if the project later seeks a store-readiness claim.
 
-The Chinese baseline specification was not edited. ADR-0008 records the Phase 6 English decision required by the project documentation map.
+The Chinese baseline specification was not edited. ADR-0008 records the release-candidate boundary, and ADR-0009 records the later Phase 6 waiver required by the project documentation map.

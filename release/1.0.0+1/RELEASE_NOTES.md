@@ -18,4 +18,4 @@
 - Frozen snapshot: `snapshot-19235f9b9b34dc4e`
 - Catalog SHA-256: `2c27ddc3cd36f543ea6319ea9878b4a3c8b8a9a89afad6bd6eaacfd9592ed8f2`
 
-This is a local unsigned candidate. It has not been uploaded to, reviewed by, or released through an application store.
+This is a local unsigned candidate. Phase 6 physical-device validation was explicitly waived and remains unrun; the waiver is not a compatibility result. The candidate has not been uploaded to, reviewed by, or released through an application store.

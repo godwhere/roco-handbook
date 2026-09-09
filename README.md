@@ -4,7 +4,7 @@ An independent, non-commercial offline reference application for iOS and Android
 
 ## Current project status
 
-- Phases 0 through 5 are complete. Phase 6 local release preparation is complete, while physical-device acceptance and store publication remain separate unmet gates.
+- Phases 0 through 6 are complete. Phase 6 closed under an explicit physical-device-test waiver; those tests remain unrun and store publication remains a separate unmet gate.
 - A local Git repository exists. Completed delivery checkpoints use GitHub Desktop for commits and pushes unless the active user instruction explicitly defers that step.
 - The supplied technical baseline is preserved at [docs/technical-spec-v1.md](docs/technical-spec-v1.md).
 - The Catalog and User V1 SQL files are the current normative schema sources. Catalog V1 currently contains 20 tables and two query views.
@@ -19,7 +19,7 @@ An independent, non-commercial offline reference application for iOS and Android
 - The first candidate is App version 1.0.0, build 1. Settings exposes that version and Flutter's packaged open-source license registry.
 - The offline release validator rejects transaction sidecars, placeholder metadata, false coverage, source-lock or hash divergence, unreviewed removals, schema failures, and probe failures. Read-only CI runs the Python and Flutter gates without BWIKI, signing, or store credentials.
 - Android first launch, personal-data persistence, legacy-pointer migration, and explicit bundled recovery passed in an emulator with airplane mode enabled and Wi-Fi disabled. iOS build, first launch, Catalog validation, personal-database creation, restart reuse, and legacy-pointer migration passed in an iPhone simulator. No physical-device, signing, upload, or store-release claim is made.
-- Local unsigned Android and no-codesign iOS release candidates have been built and audited. Final Phase 6 acceptance remains blocked on physical Android and iOS offline/update evidence; no store upload or publication is authorized.
+- Local unsigned Android and no-codesign iOS release candidates have been built and audited. Physical Android and iOS offline/update validation was explicitly waived for Phase 6 sequencing, not passed; no store upload or publication is authorized.
 
 ## V1 boundary
 
