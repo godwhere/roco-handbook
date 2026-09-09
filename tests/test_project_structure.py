@@ -72,6 +72,19 @@ class ProjectStructureTests(unittest.TestCase):
             hashlib.sha256(copied).hexdigest(),
         )
 
+    def test_flutter_assets_match_the_validated_catalog_release(self) -> None:
+        names = ["catalog.db", "bundled_catalog.json", "ATTRIBUTION.txt"]
+        for name in names:
+            with self.subTest(name=name):
+                released = ROOT / "data" / "release" / "1" / "assets" / "catalog" / name
+                bundled = ROOT / "app" / "assets" / "catalog" / name
+                self.assertEqual(released.read_bytes(), bundled.read_bytes())
+
+    def test_flutter_uses_the_normative_user_schema_asset(self) -> None:
+        normative = ROOT / "schemas" / "user_v1.sql"
+        bundled = ROOT / "app" / "assets" / "database" / "user_v1.sql"
+        self.assertEqual(normative.read_bytes(), bundled.read_bytes())
+
     def test_project_authored_text_is_english(self) -> None:
         checked_roots = [
             ROOT / "README.md",
@@ -83,8 +96,11 @@ class ProjectStructureTests(unittest.TestCase):
             ROOT / "docs/decisions",
             ROOT / "docs/evidence",
             ROOT / "docs/implementation-reports",
+            ROOT / "app/lib",
+            ROOT / "app/README.md",
+            ROOT / "app/pubspec.yaml",
         ]
-        text_suffixes = {".md", ".json", ".py", ".sql", ".toml"}
+        text_suffixes = {".dart", ".md", ".json", ".py", ".sql", ".toml", ".yaml"}
         excluded = {ROOT / "docs/technical-spec-v1.md"}
         violations: list[str] = []
 

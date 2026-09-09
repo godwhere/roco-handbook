@@ -1,6 +1,16 @@
 {
   "config_version": 1,
   "dataset_id": "roco-world-zh-cn",
-  "exceptions": []
+  "exceptions": [
+    {
+      "exception_id": "evolution-member-types-core-43006-evolution-42851",
+      "exception_type": "evolution_member_type_snapshot_mismatch",
+      "core_revision_id": 43006,
+      "evolution_revision_id": 42851,
+      "pair_count": 31,
+      "pair_set_sha256": "1456a9b7beee2c79268d301391f933e15b150d3df2a6780bf99892b43e22f07e",
+      "resolution": "use_core_pet_types",
+      "reason": "Core owns canonical pet attributes. Evolution owns membership, direction, and conditions; its duplicated type snapshots are retained in the normalized audit but are not written over Core types."
+    }
+  ]
 }
-

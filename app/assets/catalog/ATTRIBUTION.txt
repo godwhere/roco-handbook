@@ -1,0 +1,25 @@
+Roco World Offline Handbook - Catalog Attribution
+
+This is an independent, non-commercial, unofficial project.
+
+Source: Roco World BWIKI contributors
+License: CC BY-NC-SA 4.0
+License URL: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+Changes: MediaWiki data was validated, safely parsed, normalized,
+cross-referenced, and packaged into an offline SQLite Catalog.
+
+Frozen source revisions:
+- core: revision 43006 - https://wiki.biligame.com/rocom/index.php?title=%E6%A8%A1%E5%9D%97%3APetData/Core&oldid=43006
+- dex_index_module: revision 43100 - https://wiki.biligame.com/rocom/index.php?title=%E6%A8%A1%E5%9D%97%3ADexIndex&oldid=43100
+- evolution: revision 42851 - https://wiki.biligame.com/rocom/index.php?title=%E6%A8%A1%E5%9D%97%3APetData/Evolution&oldid=42851
+- handbook: revision 42852 - https://wiki.biligame.com/rocom/index.php?title=%E6%A8%A1%E5%9D%97%3APetData/Handbook&oldid=42852
+- index: revision 42853 - https://wiki.biligame.com/rocom/index.php?title=%E6%A8%A1%E5%9D%97%3APetData/Index&oldid=42853
+- learnset_catalog: revision 42854 - https://wiki.biligame.com/rocom/index.php?title=%E6%A8%A1%E5%9D%97%3APetData/LearnsetCatalog&oldid=42854
+- learnsets: revision 42855 - https://wiki.biligame.com/rocom/index.php?title=%E6%A8%A1%E5%9D%97%3APetData/Learnsets&oldid=42855
+- pet_module: revision 42895 - https://wiki.biligame.com/rocom/index.php?title=%E6%A8%A1%E5%9D%97%3APet&oldid=42895
+- skill_catalog: revision 43008 - https://wiki.biligame.com/rocom/index.php?title=%E6%A8%A1%E5%9D%97%3APetData/SkillCatalog&oldid=43008
+- skills_module: revision 34741 - https://wiki.biligame.com/rocom/index.php?title=%E6%A8%A1%E5%9D%97%3APetData/Skills&oldid=34741
+
+Rendered handbook evidence:
+- Page revision 41359 - https://wiki.biligame.com/rocom/%E7%B2%BE%E7%81%B5%E5%9B%BE%E9%89%B4

@@ -21,6 +21,7 @@ CATALOG_TABLES = {
     "learnset_native_skills",
     "learnset_blood_skills",
     "learnset_skill_stones",
+    "learnset_legendary_skills",
     "evolution_groups",
     "pet_evolution_groups",
     "evolution_edges",
@@ -81,6 +82,15 @@ class CatalogSchemaTests(unittest.TestCase):
                 "INSERT INTO pets (pet_id, name, title, feature_skill_id) "
                 "VALUES (?, ?, ?, ?)",
                 ("pet_test", "Test Pet", "Test Title", "skill_missing"),
+            )
+
+    def test_legendary_skill_requires_real_learnset_and_skill(self) -> None:
+        with self.assertRaises(sqlite3.IntegrityError):
+            self.db.execute(
+                "INSERT INTO learnset_legendary_skills "
+                "(learnset_id, ordinal, skill_id, requirement_text) "
+                "VALUES (?, ?, ?, ?)",
+                ("learnset_missing", 0, "skill_missing", "Requirement"),
             )
 
 

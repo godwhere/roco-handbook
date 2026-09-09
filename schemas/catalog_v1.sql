@@ -170,6 +170,14 @@ CREATE TABLE learnset_skill_stones (
     PRIMARY KEY (learnset_id, ordinal)
 );
 
+CREATE TABLE learnset_legendary_skills (
+    learnset_id TEXT NOT NULL REFERENCES learnsets(learnset_id),
+    ordinal INTEGER NOT NULL CHECK (ordinal >= 0),
+    skill_id TEXT NOT NULL REFERENCES skills(skill_id),
+    requirement_text TEXT,
+    PRIMARY KEY (learnset_id, ordinal)
+);
+
 CREATE TABLE evolution_groups (
     evolution_group_id TEXT PRIMARY KEY NOT NULL,
     label TEXT,
@@ -229,6 +237,8 @@ CREATE INDEX idx_pet_learnsets_learnset ON pet_learnsets(learnset_id, pet_id);
 CREATE INDEX idx_native_skill ON learnset_native_skills(skill_id, learnset_id);
 CREATE INDEX idx_blood_skill ON learnset_blood_skills(skill_id, learnset_id);
 CREATE INDEX idx_stone_skill ON learnset_skill_stones(skill_id, learnset_id);
+CREATE INDEX idx_legendary_skill
+    ON learnset_legendary_skills(skill_id, learnset_id);
 CREATE INDEX idx_evolution_members_pet
     ON pet_evolution_groups(pet_id, evolution_group_id);
 CREATE INDEX idx_evolution_edges_to ON evolution_edges(to_pet_id);
@@ -239,24 +249,31 @@ CREATE INDEX idx_entity_sources_source ON entity_sources(source_ref);
 CREATE VIEW pet_skill_sources AS
 SELECT p.pet_id, l.learnset_id, n.skill_id,
        'native' AS source_kind, n.learn_level,
-       n.source_stage, NULL AS blood_raw, n.ordinal
+       n.source_stage, NULL AS blood_raw, NULL AS requirement_text, n.ordinal
 FROM pets p
 JOIN pet_learnsets l ON l.pet_id = p.pet_id
 JOIN learnset_native_skills n ON n.learnset_id = l.learnset_id
 WHERE p.status = 'active'
 UNION ALL
 SELECT p.pet_id, l.learnset_id, b.skill_id,
-       'blood', b.learn_level, NULL, b.blood_raw, b.ordinal
+       'blood', b.learn_level, NULL, b.blood_raw, NULL, b.ordinal
 FROM pets p
 JOIN pet_learnsets l ON l.pet_id = p.pet_id
 JOIN learnset_blood_skills b ON b.learnset_id = l.learnset_id
 WHERE p.status = 'active'
 UNION ALL
 SELECT p.pet_id, l.learnset_id, s.skill_id,
-       'stone', NULL, NULL, NULL, s.ordinal
+       'stone', NULL, NULL, NULL, NULL, s.ordinal
 FROM pets p
 JOIN pet_learnsets l ON l.pet_id = p.pet_id
 JOIN learnset_skill_stones s ON s.learnset_id = l.learnset_id
+WHERE p.status = 'active'
+UNION ALL
+SELECT p.pet_id, l.learnset_id, g.skill_id,
+       'legendary', NULL, NULL, NULL, g.requirement_text, g.ordinal
+FROM pets p
+JOIN pet_learnsets l ON l.pet_id = p.pet_id
+JOIN learnset_legendary_skills g ON g.learnset_id = l.learnset_id
 WHERE p.status = 'active';
 
 -- Core takes precedence and Learnset is a missing-value fallback. Build reports

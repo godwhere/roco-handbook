@@ -23,3 +23,8 @@ class AdapterError(CatalogToolError):
 class ReportWriteError(CatalogToolError):
     exit_code = 5
     error_code = "report_write_error"
+
+
+class BuildBlockedError(CatalogToolError):
+    exit_code = 6
+    error_code = "build_blocked"

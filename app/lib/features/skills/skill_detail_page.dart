@@ -1,0 +1,434 @@
+import 'package:flutter/material.dart';
+
+import '../../domain/catalog_models.dart';
+import '../../domain/catalog_repository.dart';
+import '../../domain/user_models.dart';
+import '../../domain/user_repository.dart';
+import '../pets/pet_detail_page.dart';
+import '../personal/personal_controls.dart';
+
+class SkillDetailPage extends StatefulWidget {
+  const SkillDetailPage({
+    required this.repository,
+    required this.userRepository,
+    required this.datasetId,
+    required this.skillId,
+    super.key,
+  });
+
+  final CatalogRepository repository;
+  final UserRepository userRepository;
+  final String datasetId;
+  final String skillId;
+
+  @override
+  State<SkillDetailPage> createState() => _SkillDetailPageState();
+}
+
+class _SkillDetailPageState extends State<SkillDetailPage> {
+  late Future<_SkillPageData> _data;
+
+  @override
+  void initState() {
+    super.initState();
+    _data = _load();
+  }
+
+  Future<_SkillPageData> _load() async {
+    final detail = await widget.repository.getSkillDetail(widget.skillId);
+    final values = await Future.wait<List<SkillUser>>(<Future<List<SkillUser>>>[
+      if (detail.summary.isFeature)
+        widget.repository.getSkillUsers(widget.skillId, feature: true)
+      else
+        Future<List<SkillUser>>.value(const <SkillUser>[]),
+      widget.repository.getSkillUsers(widget.skillId, feature: false),
+    ]);
+    return _SkillPageData(
+      detail: detail,
+      featureUsers: values[0],
+      learnableUsers: values[1],
+    );
+  }
+
+  void _retry() {
+    setState(() => _data = _load());
+  }
+
+  void _openPet(String petId) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => PetDetailPage(
+          repository: widget.repository,
+          userRepository: widget.userRepository,
+          datasetId: widget.datasetId,
+          initialPetId: petId,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Skill details')),
+      body: FutureBuilder<_SkillPageData>(
+        future: _data,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const Text('Skill details could not be loaded.'),
+                  const SizedBox(height: 12),
+                  FilledButton(
+                    onPressed: _retry,
+                    child: const Text('Try again'),
+                  ),
+                ],
+              ),
+            );
+          }
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final data = snapshot.requireData;
+          return SelectionArea(
+            child: ListView(
+              key: ValueKey('skill-detail-${data.detail.summary.skillId}'),
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+              children: <Widget>[
+                _SkillHeader(detail: data.detail),
+                const SizedBox(height: 18),
+                _Section(
+                  title: 'Values',
+                  child: Wrap(
+                    spacing: 24,
+                    runSpacing: 10,
+                    children: <Widget>[
+                      _Fact(
+                        label: 'Element',
+                        value: data.detail.summary.element,
+                      ),
+                      _Fact(
+                        label: 'Category',
+                        value: data.detail.summary.category,
+                      ),
+                      _Fact(
+                        label: 'Energy',
+                        value: _numericText(
+                          data.detail.summary.energyValue,
+                          data.detail.summary.energyText,
+                        ),
+                      ),
+                      _Fact(
+                        label: 'Power',
+                        value: _numericText(
+                          data.detail.summary.powerValue,
+                          data.detail.summary.powerText,
+                        ),
+                      ),
+                      _Fact(label: 'Target', value: data.detail.targetText),
+                    ],
+                  ),
+                ),
+                if (data.detail.descriptionNoteIds.isNotEmpty) ...<Widget>[
+                  const SizedBox(height: 18),
+                  const Card(
+                    child: ListTile(
+                      leading: Icon(Icons.info_outline_rounded),
+                      title: Text('Glossary definitions are not included'),
+                      subtitle: Text(
+                        'The original description is available, but referenced glossary definitions are not part of this Catalog.',
+                      ),
+                    ),
+                  ),
+                ],
+                if (data.featureUsers.isNotEmpty) ...<Widget>[
+                  const SizedBox(height: 18),
+                  _Section(
+                    title: 'Creatures with this feature',
+                    child: _UserList(
+                      users: data.featureUsers,
+                      onOpen: _openPet,
+                    ),
+                  ),
+                ],
+                if (data.learnableUsers.isNotEmpty) ...<Widget>[
+                  const SizedBox(height: 18),
+                  _Section(
+                    title: 'Creatures that can learn this skill',
+                    child: _UserList(
+                      users: data.learnableUsers,
+                      onOpen: _openPet,
+                    ),
+                  ),
+                ],
+                if (data.featureUsers.isEmpty &&
+                    data.learnableUsers.isEmpty) ...<Widget>[
+                  const SizedBox(height: 18),
+                  const Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Text('No creature relationship is provided.'),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 18),
+                _Section(
+                  title: 'My library',
+                  child: _SkillPersonalData(
+                    userRepository: widget.userRepository,
+                    datasetId: widget.datasetId,
+                    detail: data.detail,
+                  ),
+                ),
+                const SizedBox(height: 18),
+                _Section(
+                  title: 'Source',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: data.detail.sourceReferences
+                        .map(
+                          (source) => Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  '${source.sourceName} — revision ${source.revisionId}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(source.licenseId),
+                                SelectableText(source.sourceUrl),
+                              ],
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _SkillPersonalData extends StatelessWidget {
+  const _SkillPersonalData({
+    required this.userRepository,
+    required this.datasetId,
+    required this.detail,
+  });
+
+  final UserRepository userRepository;
+  final String datasetId;
+  final SkillDetail detail;
+
+  @override
+  Widget build(BuildContext context) {
+    final object = ObjectRef(
+      datasetId: datasetId,
+      objectType: UserObjectType.skill,
+      objectId: detail.summary.skillId,
+      nameSnapshot: detail.summary.name,
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        StreamBuilder<List<FavoriteItem>>(
+          initialData: const <FavoriteItem>[],
+          stream: userRepository.watchFavorites(),
+          builder: (context, snapshot) {
+            final favorite =
+                snapshot.data?.any(
+                  (item) =>
+                      item.object.datasetId == datasetId &&
+                      item.object.key == object.key,
+                ) ??
+                false;
+            return Row(
+              children: <Widget>[
+                FavoriteIconButton(
+                  favorite: favorite,
+                  objectLabel: detail.summary.skillId,
+                  onChanged: (enabled) =>
+                      userRepository.setFavorite(object, enabled),
+                ),
+                Text(favorite ? 'Skill favorite' : 'Add skill favorite'),
+              ],
+            );
+          },
+        ),
+        const SizedBox(height: 10),
+        PersonalNotesSection(repository: userRepository, object: object),
+      ],
+    );
+  }
+}
+
+class _SkillHeader extends StatelessWidget {
+  const _SkillHeader({required this.detail});
+
+  final SkillDetail detail;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Theme.of(context).colorScheme.secondaryContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Icon(
+                  detail.summary.isFeature
+                      ? Icons.auto_awesome_rounded
+                      : Icons.bolt_rounded,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  detail.summary.isFeature ? 'Feature' : 'Skill',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              detail.summary.name,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            if (detail.description != null) ...<Widget>[
+              const SizedBox(height: 14),
+              Text(detail.description!),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Section extends StatelessWidget {
+  const _Section({required this.title, required this.child});
+
+  final String title;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(title, style: Theme.of(context).textTheme.titleLarge),
+        const SizedBox(height: 8),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: SizedBox(width: double.infinity, child: child),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _Fact extends StatelessWidget {
+  const _Fact({required this.label, this.value});
+
+  final String label;
+  final String? value;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 145,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(label, style: Theme.of(context).textTheme.labelMedium),
+          const SizedBox(height: 2),
+          Text(value ?? 'Not provided'),
+        ],
+      ),
+    );
+  }
+}
+
+class _UserList extends StatelessWidget {
+  const _UserList({required this.users, required this.onOpen});
+
+  final List<SkillUser> users;
+  final ValueChanged<String> onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: users
+          .map(
+            (user) => ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(user.pet.name),
+              subtitle: Text(_relationshipText(user)),
+              trailing: const Icon(Icons.chevron_right_rounded),
+              onTap: () => onOpen(user.pet.petId),
+            ),
+          )
+          .toList(),
+    );
+  }
+}
+
+final class _SkillPageData {
+  const _SkillPageData({
+    required this.detail,
+    required this.featureUsers,
+    required this.learnableUsers,
+  });
+
+  final SkillDetail detail;
+  final List<SkillUser> featureUsers;
+  final List<SkillUser> learnableUsers;
+}
+
+String? _numericText(num? value, String? text) {
+  if (value != null) {
+    return value.toString();
+  }
+  return text;
+}
+
+String _relationshipText(SkillUser user) {
+  final values = <String>[_sourceLabel(user.relationshipKind)];
+  if (user.learnLevel != null) {
+    values.add('level ${user.learnLevel}');
+  }
+  if (user.sourceStage != null) {
+    values.add('source stage ${user.sourceStage}');
+  }
+  if (user.bloodRaw != null) {
+    values.add('bloodline: ${user.bloodRaw}');
+  }
+  if (user.requirementText != null) {
+    values.add(user.requirementText!);
+  }
+  return values.join(' · ');
+}
+
+String _sourceLabel(String sourceKind) {
+  return switch (sourceKind) {
+    'feature' => 'Feature relationship',
+    'native' => 'Native',
+    'blood' => 'Bloodline',
+    'stone' => 'Skill stone',
+    'legendary' => 'Legendary',
+    _ => 'Unknown source',
+  };
+}

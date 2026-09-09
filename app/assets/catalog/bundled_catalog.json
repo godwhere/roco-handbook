@@ -1,0 +1,18 @@
+{
+  "catalog_schema_version": 1,
+  "coverage": {
+    "description_note_definitions": false,
+    "evolutions": true,
+    "pets": true,
+    "skill_stone_topics": false,
+    "skills": true,
+    "topic_rewards": false
+  },
+  "data_version": 1,
+  "database_asset": "assets/catalog/catalog.db",
+  "database_bytes": 3424256,
+  "database_sha256": "2c27ddc3cd36f543ea6319ea9878b4a3c8b8a9a89afad6bd6eaacfd9592ed8f2",
+  "dataset_id": "roco-world-zh-cn",
+  "manifest_version": 1,
+  "snapshot_id": "snapshot-19235f9b9b34dc4e"
+}

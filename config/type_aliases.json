@@ -1,6 +1,26 @@
 {
   "config_version": 1,
   "dataset_id": "roco-world-zh-cn",
-  "aliases": {}
+  "aliases": {
+    "\u666e\u901a": "\u666e\u901a\u7cfb",
+    "\u8349": "\u8349\u7cfb",
+    "\u706b": "\u706b\u7cfb",
+    "\u6c34": "\u6c34\u7cfb",
+    "\u5149": "\u5149\u7cfb",
+    "\u5730": "\u5730\u7cfb",
+    "\u51b0": "\u51b0\u7cfb",
+    "\u9f99": "\u9f99\u7cfb",
+    "\u7535": "\u7535\u7cfb",
+    "\u6bd2": "\u6bd2\u7cfb",
+    "\u866b": "\u866b\u7cfb",
+    "\u6b66": "\u6b66\u7cfb",
+    "\u7ffc": "\u7ffc\u7cfb",
+    "\u840c": "\u840c\u7cfb",
+    "\u5e7d": "\u5e7d\u7cfb",
+    "\u6076": "\u6076\u7cfb",
+    "\u673a\u68b0": "\u673a\u68b0\u7cfb",
+    "\u5e7b": "\u5e7b\u7cfb",
+    "\u65e0\u7cfb\u522b": null,
+    "\u7a7a": null
+  }
 }
-
