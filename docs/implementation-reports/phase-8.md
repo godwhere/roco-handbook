@@ -61,6 +61,9 @@ Result: iOS and Android displayed localized navigation, creature heads, a full c
 git diff --check
 Result: passed.
 
+GitHub Actions `Offline validation`
+Result: passed for commit `94ee692d9fc30ef33f9937116c891773d425a489`; hosted run 34400308182 completed successfully.
+
 shasum -a 256 docs/technical-spec-v1.md
 Result: 343618b414b7b8d6262dd58f82010bfefb2f3fdb29711a9e86428e042dd81876; the provenance baseline is unchanged.
 ```
