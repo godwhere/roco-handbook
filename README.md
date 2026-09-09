@@ -5,6 +5,7 @@ An independent, non-commercial offline reference application for iOS and Android
 ## Current project status
 
 - Phases 0 through 6 are complete. Phase 6 closed under an explicit physical-device-test waiver; those tests remain unrun and store publication remains a separate unmet gate.
+- Phase 7 has begun as a separate post-V1 effort. Its inception scope is documented, but the App still has no runtime update client, remote host, signing configuration, or download permission.
 - A local Git repository exists. Completed delivery checkpoints use GitHub Desktop for commits and pushes unless the active user instruction explicitly defers that step.
 - The supplied technical baseline is preserved at [docs/technical-spec-v1.md](docs/technical-spec-v1.md).
 - The Catalog and User V1 SQL files are the current normative schema sources. Catalog V1 currently contains 20 tables and two query views.
@@ -24,6 +25,8 @@ An independent, non-commercial offline reference application for iOS and Android
 ## V1 boundary
 
 V1 includes offline creature and skill lookup, favorites, collection marks, notes, and safe whole-Catalog replacement with App updates. It excludes runtime BWIKI access, an application server, independent patch downloads, accounts, cloud synchronization, and bulk game-image acquisition.
+
+Phase 7 does not alter the shipped V1 boundary until an independently signed, host-restricted, fail-closed update path is implemented and accepted. The first implementation target is a complete Catalog package; logical patches remain later work.
 
 `catalog.db` and `user.db` remain physically separate: the Catalog is replaceable, while personal data changes only through an independent migration.
 
