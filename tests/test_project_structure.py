@@ -118,6 +118,7 @@ class ProjectStructureTests(unittest.TestCase):
         self.assertIn("permissions:\n  contents: read", workflow)
         self.assertEqual(4, len(uses))
         self.assertEqual(3, len(set(uses)))
+        self.assertEqual(2, workflow.count("persist-credentials: false"))
         for action in uses:
             with self.subTest(action=action):
                 self.assertRegex(action, r"^[^@]+@[0-9a-f]{40}$")
