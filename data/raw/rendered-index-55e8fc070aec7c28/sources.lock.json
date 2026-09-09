@@ -1,0 +1,14 @@
+{
+  "dataset_id": "roco-world-zh-cn",
+  "import_mode": "local_rendered_page_response",
+  "imported_at_utc": "2026-09-09T07:22:49.982696Z",
+  "lock_version": 1,
+  "page_id": 16709,
+  "page_revision_id": 41359,
+  "page_title": "精灵图鉴",
+  "response_bytes": 1771138,
+  "response_file": "responses/pet_index.json",
+  "response_sha256": "55e8fc070aec7c2832666230bc69cfac6d4fe7e3649550740f881e0559e392f0",
+  "snapshot_id": "rendered-index-55e8fc070aec7c28",
+  "source_key": "pet_index_render"
+}

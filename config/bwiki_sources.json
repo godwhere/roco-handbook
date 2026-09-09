@@ -10,18 +10,18 @@
     "max_retries": 3
   },
   "sources": [
-    {"source_key": "core", "title": "Module:PetData/Core", "level": "required"},
-    {"source_key": "index", "title": "Module:PetData/Index", "level": "required"},
-    {"source_key": "handbook", "title": "Module:PetData/Handbook", "level": "required"},
-    {"source_key": "evolution", "title": "Module:PetData/Evolution", "level": "required"},
-    {"source_key": "skill_catalog", "title": "Module:PetData/SkillCatalog", "level": "required"},
-    {"source_key": "learnsets", "title": "Module:PetData/Learnsets", "level": "required"},
-    {"source_key": "learnset_catalog", "title": "Module:PetData/LearnsetCatalog", "level": "required"},
-    {"source_key": "pet_module", "title": "Module:Pet", "level": "adapter_review"},
-    {"source_key": "skills_module", "title": "Module:PetData/Skills", "level": "adapter_review"},
+    {"source_key": "core", "title": "Module:PetData/Core", "level": "required", "local_filenames": ["Module_PetData_Core.json"]},
+    {"source_key": "index", "title": "Module:PetData/Index", "level": "required", "local_filenames": ["Module_PetData_Index.json"]},
+    {"source_key": "handbook", "title": "Module:PetData/Handbook", "level": "required", "local_filenames": ["Module_PetData_Handbook.json"]},
+    {"source_key": "evolution", "title": "Module:PetData/Evolution", "level": "required", "local_filenames": ["Module_PetData_Evolution.json"]},
+    {"source_key": "skill_catalog", "title": "Module:PetData/SkillCatalog", "level": "required", "local_filenames": ["Module_PetData_SkillCatalog.json"]},
+    {"source_key": "learnsets", "title": "Module:PetData/Learnsets", "level": "required", "local_filenames": ["Module_PetData_Learnsets.json"]},
+    {"source_key": "learnset_catalog", "title": "Module:PetData/LearnsetCatalog", "level": "required", "local_filenames": ["Module_PetData_LearnsetCatalog.json"]},
+    {"source_key": "pet_module", "title": "Module:Pet", "level": "adapter_review", "local_filenames": ["bwiki-pet.json", "Module_Pet.json"]},
+    {"source_key": "skills_module", "title": "Module:PetData/Skills", "level": "adapter_review", "local_filenames": ["Module_PetData_Skills.json"]},
+    {"source_key": "dex_index_module", "title": "Module:DexIndex", "level": "adapter_review", "local_filenames": ["Module_DexIndex.json"]},
     {"source_key": "head_overrides", "title": "Module:PetData/HeadOverrides", "level": "disabled_v1"},
     {"source_key": "skill_stone_topics", "title": "Module:PetData/SkillStoneTopics", "level": "disabled_v1"},
     {"source_key": "topic_rewards", "title": "Module:PetData/TopicRewards", "level": "disabled_v1"}
   ]
 }
-

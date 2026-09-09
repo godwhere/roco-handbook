@@ -17,3 +17,6 @@ line-length = 100
 pythonVersion = "3.11"
 typeCheckingMode = "strict"
 
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["bwiki_import*", "catalog_builder*"]

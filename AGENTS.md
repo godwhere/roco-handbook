@@ -63,7 +63,7 @@ Minimal scope must not remove source validation, identity stability, reference c
 - The default Phase 0 check is:
 
   ```sh
-  PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -p 'test_*.py'
+  PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m unittest discover -s tests -p 'test_*.py'
   ```
 
 - Schema changes must execute both normative SQL files in a fresh database and verify exact objects, `integrity_check`, `foreign_key_check`, constraints, and schema versions.

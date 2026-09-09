@@ -1,0 +1,3725 @@
+{
+  "adapter_version": "phase1-v1",
+  "blocking_issues": [],
+  "code_module_review": {
+    "dex_index_module": {
+      "declared_dependencies": [
+        "Module:LuaCacheUtil",
+        "Module:Pet",
+        "Module:PetData/SkillCatalog"
+      ],
+      "parsed_as_data": false,
+      "present": true,
+      "review_observations": {
+        "handbook_public_number_match": true,
+        "learnset_stage_filter": null,
+        "public_number_zero_padding": true,
+        "recursive_key_translation": false,
+        "rendered_main_form_marker": true
+      },
+      "safe_parser_rejection": "dex_index_module.lua:3:26: unsupported token '('"
+    },
+    "pet_module": {
+      "declared_dependencies": [
+        "Module:PetData/Core",
+        "Module:PetData/Evolution",
+        "Module:PetData/Handbook",
+        "Module:PetData/HeadOverrides",
+        "Module:PetData/Index",
+        "Module:PetData/SkillStoneTopics",
+        "Module:PetData/Skills",
+        "Module:PetData/TopicRewards"
+      ],
+      "parsed_as_data": false,
+      "present": true,
+      "review_observations": {
+        "learnset_stage_filter": null,
+        "recursive_key_translation": true
+      },
+      "safe_parser_rejection": "pet_module.lua:4:24: unsupported token '('"
+    },
+    "skills_module": {
+      "declared_dependencies": [
+        "Module:PetData/LearnsetCatalog",
+        "Module:PetData/Learnsets",
+        "Module:PetData/SkillCatalog"
+      ],
+      "parsed_as_data": false,
+      "present": true,
+      "review_observations": {
+        "learnset_stage_filter": false,
+        "recursive_key_translation": true
+      },
+      "safe_parser_rejection": "skills_module.lua:4:29: unsupported token '('"
+    }
+  },
+  "dataset_id": "roco-world-zh-cn",
+  "feature_resolution": {
+    "conflicts": [],
+    "counts": {
+      "matching": 596
+    }
+  },
+  "handbook_default_display": {
+    "resolved": {
+      "handbook_000001": {
+        "default_pet_id": "pet_000004",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000002": {
+        "default_pet_id": "pet_000001",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000003": {
+        "default_pet_id": "pet_000022",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000004": {
+        "default_pet_id": "pet_000007",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000005": {
+        "default_pet_id": "pet_000003",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000006": {
+        "default_pet_id": "pet_000029",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000007": {
+        "default_pet_id": "pet_000006",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000008": {
+        "default_pet_id": "pet_000002",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000009": {
+        "default_pet_id": "pet_000030",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000010": {
+        "default_pet_id": "pet_000005",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000011": {
+        "default_pet_id": "pet_000011",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000012": {
+        "default_pet_id": "pet_000047",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000013": {
+        "default_pet_id": "pet_000048",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000014": {
+        "default_pet_id": "pet_000049",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000015": {
+        "default_pet_id": "pet_000042",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000016": {
+        "default_pet_id": "pet_000043",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000017": {
+        "default_pet_id": "pet_000044",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000018": {
+        "default_pet_id": "pet_000420",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000019": {
+        "default_pet_id": "pet_000025",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000020": {
+        "default_pet_id": "pet_000034",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000021": {
+        "default_pet_id": "pet_000131",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000022": {
+        "default_pet_id": "pet_000132",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000023": {
+        "default_pet_id": "pet_000133",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000024": {
+        "default_pet_id": "pet_000095",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000025": {
+        "default_pet_id": "pet_000096",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000026": {
+        "default_pet_id": "pet_000097",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000027": {
+        "default_pet_id": "pet_000092",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000028": {
+        "default_pet_id": "pet_000093",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000029": {
+        "default_pet_id": "pet_000094",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000030": {
+        "default_pet_id": "pet_000009",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000031": {
+        "default_pet_id": "pet_000036",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000032": {
+        "default_pet_id": "pet_000122",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000033": {
+        "default_pet_id": "pet_000123",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000034": {
+        "default_pet_id": "pet_000124",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000035": {
+        "default_pet_id": "pet_000056",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000036": {
+        "default_pet_id": "pet_000261",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000037": {
+        "default_pet_id": "pet_000262",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000038": {
+        "default_pet_id": "pet_000263",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000039": {
+        "default_pet_id": "pet_000256",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000040": {
+        "default_pet_id": "pet_000257",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000041": {
+        "default_pet_id": "pet_000026",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000042": {
+        "default_pet_id": "pet_000027",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000043": {
+        "default_pet_id": "pet_000028",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000044": {
+        "default_pet_id": "pet_000037",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000045": {
+        "default_pet_id": "pet_000038",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000046": {
+        "default_pet_id": "pet_000039",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000047": {
+        "default_pet_id": "pet_000061",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000048": {
+        "default_pet_id": "pet_000062",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000049": {
+        "default_pet_id": "pet_000087",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000050": {
+        "default_pet_id": "pet_000088",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000051": {
+        "default_pet_id": "pet_000089",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000052": {
+        "default_pet_id": "pet_000294",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000053": {
+        "default_pet_id": "pet_000295",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000054": {
+        "default_pet_id": "pet_000052",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000055": {
+        "default_pet_id": "pet_000053",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000056": {
+        "default_pet_id": "pet_000326",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000057": {
+        "default_pet_id": "pet_000342",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000058": {
+        "default_pet_id": "pet_000343",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000059": {
+        "default_pet_id": "pet_000392",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000060": {
+        "default_pet_id": "pet_000146",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000061": {
+        "default_pet_id": "pet_000147",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000062": {
+        "default_pet_id": "pet_000148",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000063": {
+        "default_pet_id": "pet_000016",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000064": {
+        "default_pet_id": "pet_000017",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000065": {
+        "default_pet_id": "pet_000018",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000066": {
+        "default_pet_id": "pet_000167",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000067": {
+        "default_pet_id": "pet_000168",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000068": {
+        "default_pet_id": "pet_000169",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000069": {
+        "default_pet_id": "pet_000031",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000070": {
+        "default_pet_id": "pet_000024",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000071": {
+        "default_pet_id": "pet_000040",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000072": {
+        "default_pet_id": "pet_000041",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000073": {
+        "default_pet_id": "pet_000045",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000074": {
+        "default_pet_id": "pet_000090",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000075": {
+        "default_pet_id": "pet_000091",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000076": {
+        "default_pet_id": "pet_000269",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000077": {
+        "default_pet_id": "pet_000270",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000078": {
+        "default_pet_id": "pet_000271",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000079": {
+        "default_pet_id": "pet_000193",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000080": {
+        "default_pet_id": "pet_000170",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000081": {
+        "default_pet_id": "pet_000171",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000082": {
+        "default_pet_id": "pet_000050",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000083": {
+        "default_pet_id": "pet_000051",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000084": {
+        "default_pet_id": "pet_000143",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000085": {
+        "default_pet_id": "pet_000128",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000086": {
+        "default_pet_id": "pet_000129",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000087": {
+        "default_pet_id": "pet_000130",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000088": {
+        "default_pet_id": "pet_000278",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000089": {
+        "default_pet_id": "pet_000279",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000090": {
+        "default_pet_id": "pet_000280",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000091": {
+        "default_pet_id": "pet_000446",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000092": {
+        "default_pet_id": "pet_000060",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000093": {
+        "default_pet_id": "pet_000023",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000094": {
+        "default_pet_id": "pet_000032",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000095": {
+        "default_pet_id": "pet_000046",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000096": {
+        "default_pet_id": "pet_000154",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000097": {
+        "default_pet_id": "pet_000155",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000098": {
+        "default_pet_id": "pet_000156",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000099": {
+        "default_pet_id": "pet_000125",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000100": {
+        "default_pet_id": "pet_000126",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000101": {
+        "default_pet_id": "pet_000127",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000102": {
+        "default_pet_id": "pet_000226",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000103": {
+        "default_pet_id": "pet_000227",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000104": {
+        "default_pet_id": "pet_000228",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000105": {
+        "default_pet_id": "pet_000013",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000106": {
+        "default_pet_id": "pet_000014",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000107": {
+        "default_pet_id": "pet_000015",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000108": {
+        "default_pet_id": "pet_000104",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000109": {
+        "default_pet_id": "pet_000105",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000110": {
+        "default_pet_id": "pet_000106",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000111": {
+        "default_pet_id": "pet_000149",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000112": {
+        "default_pet_id": "pet_000150",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000113": {
+        "default_pet_id": "pet_000098",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000114": {
+        "default_pet_id": "pet_000099",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000115": {
+        "default_pet_id": "pet_000100",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000116": {
+        "default_pet_id": "pet_000054",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000117": {
+        "default_pet_id": "pet_000055",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000118": {
+        "default_pet_id": "pet_000303",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000119": {
+        "default_pet_id": "pet_000383",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000120": {
+        "default_pet_id": "pet_000304",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000121": {
+        "default_pet_id": "pet_000444",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000122": {
+        "default_pet_id": "pet_000445",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000123": {
+        "default_pet_id": "pet_000057",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000124": {
+        "default_pet_id": "pet_000058",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000125": {
+        "default_pet_id": "pet_000137",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000126": {
+        "default_pet_id": "pet_000138",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000127": {
+        "default_pet_id": "pet_000139",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000128": {
+        "default_pet_id": "pet_000204",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000129": {
+        "default_pet_id": "pet_000205",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000130": {
+        "default_pet_id": "pet_000206",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000131": {
+        "default_pet_id": "pet_000010",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000132": {
+        "default_pet_id": "pet_000338",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000133": {
+        "default_pet_id": "pet_000339",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000134": {
+        "default_pet_id": "pet_000151",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000135": {
+        "default_pet_id": "pet_000152",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000136": {
+        "default_pet_id": "pet_000153",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000137": {
+        "default_pet_id": "pet_000218",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000138": {
+        "default_pet_id": "pet_000219",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000139": {
+        "default_pet_id": "pet_000272",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000140": {
+        "default_pet_id": "pet_000273",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000141": {
+        "default_pet_id": "pet_000274",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000142": {
+        "default_pet_id": "pet_000110",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000143": {
+        "default_pet_id": "pet_000111",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000144": {
+        "default_pet_id": "pet_000112",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000145": {
+        "default_pet_id": "pet_000329",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000146": {
+        "default_pet_id": "pet_000330",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000147": {
+        "default_pet_id": "pet_000066",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000148": {
+        "default_pet_id": "pet_000067",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000149": {
+        "default_pet_id": "pet_000068",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000150": {
+        "default_pet_id": "pet_000317",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000151": {
+        "default_pet_id": "pet_000318",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000152": {
+        "default_pet_id": "pet_000319",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000153": {
+        "default_pet_id": "pet_000459",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000154": {
+        "default_pet_id": "pet_000460",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000155": {
+        "default_pet_id": "pet_000461",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000156": {
+        "default_pet_id": "pet_000465",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000157": {
+        "default_pet_id": "pet_000466",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000158": {
+        "default_pet_id": "pet_000467",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000159": {
+        "default_pet_id": "pet_000462",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000160": {
+        "default_pet_id": "pet_000463",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000161": {
+        "default_pet_id": "pet_000464",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000162": {
+        "default_pet_id": "pet_000397",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000163": {
+        "default_pet_id": "pet_000202",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000164": {
+        "default_pet_id": "pet_000203",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000165": {
+        "default_pet_id": "pet_000116",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000166": {
+        "default_pet_id": "pet_000117",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000167": {
+        "default_pet_id": "pet_000118",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000168": {
+        "default_pet_id": "pet_000119",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000169": {
+        "default_pet_id": "pet_000120",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000170": {
+        "default_pet_id": "pet_000121",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000171": {
+        "default_pet_id": "pet_000403",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000172": {
+        "default_pet_id": "pet_000404",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000173": {
+        "default_pet_id": "pet_000405",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000174": {
+        "default_pet_id": "pet_000305",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000175": {
+        "default_pet_id": "pet_000306",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000176": {
+        "default_pet_id": "pet_000307",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000177": {
+        "default_pet_id": "pet_000421",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000178": {
+        "default_pet_id": "pet_000422",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000179": {
+        "default_pet_id": "pet_000008",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000180": {
+        "default_pet_id": "pet_000059",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000181": {
+        "default_pet_id": "pet_000189",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000182": {
+        "default_pet_id": "pet_000190",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000183": {
+        "default_pet_id": "pet_000416",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000184": {
+        "default_pet_id": "pet_000417",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000185": {
+        "default_pet_id": "pet_000101",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000186": {
+        "default_pet_id": "pet_000102",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000187": {
+        "default_pet_id": "pet_000103",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000188": {
+        "default_pet_id": "pet_000432",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000189": {
+        "default_pet_id": "pet_000433",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000190": {
+        "default_pet_id": "pet_000435",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000191": {
+        "default_pet_id": "pet_000436",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000192": {
+        "default_pet_id": "pet_000434",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000193": {
+        "default_pet_id": "pet_000213",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000194": {
+        "default_pet_id": "pet_000214",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000195": {
+        "default_pet_id": "pet_000084",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000196": {
+        "default_pet_id": "pet_000085",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000197": {
+        "default_pet_id": "pet_000086",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000198": {
+        "default_pet_id": "pet_000300",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000199": {
+        "default_pet_id": "pet_000301",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000200": {
+        "default_pet_id": "pet_000302",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000201": {
+        "default_pet_id": "pet_000401",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000202": {
+        "default_pet_id": "pet_000402",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000203": {
+        "default_pet_id": "pet_000188",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000204": {
+        "default_pet_id": "pet_000331",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000205": {
+        "default_pet_id": "pet_000165",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000206": {
+        "default_pet_id": "pet_000166",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000207": {
+        "default_pet_id": "pet_000172",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000208": {
+        "default_pet_id": "pet_000173",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000209": {
+        "default_pet_id": "pet_000174",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000210": {
+        "default_pet_id": "pet_000483",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000211": {
+        "default_pet_id": "pet_000484",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000212": {
+        "default_pet_id": "pet_000191",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000213": {
+        "default_pet_id": "pet_000192",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000214": {
+        "default_pet_id": "pet_000157",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000215": {
+        "default_pet_id": "pet_000158",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000216": {
+        "default_pet_id": "pet_000081",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000217": {
+        "default_pet_id": "pet_000082",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000218": {
+        "default_pet_id": "pet_000083",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000219": {
+        "default_pet_id": "pet_000412",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000220": {
+        "default_pet_id": "pet_000334",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000221": {
+        "default_pet_id": "pet_000183",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000222": {
+        "default_pet_id": "pet_000184",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000223": {
+        "default_pet_id": "pet_000185",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000224": {
+        "default_pet_id": "pet_000186",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000225": {
+        "default_pet_id": "pet_000187",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000226": {
+        "default_pet_id": "pet_000288",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000227": {
+        "default_pet_id": "pet_000289",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000228": {
+        "default_pet_id": "pet_000290",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000229": {
+        "default_pet_id": "pet_000327",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000230": {
+        "default_pet_id": "pet_000328",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000231": {
+        "default_pet_id": "pet_000210",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000232": {
+        "default_pet_id": "pet_000211",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000233": {
+        "default_pet_id": "pet_000212",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000234": {
+        "default_pet_id": "pet_000113",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000235": {
+        "default_pet_id": "pet_000114",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000236": {
+        "default_pet_id": "pet_000115",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000237": {
+        "default_pet_id": "pet_000452",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000238": {
+        "default_pet_id": "pet_000453",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000239": {
+        "default_pet_id": "pet_000311",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000240": {
+        "default_pet_id": "pet_000312",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000241": {
+        "default_pet_id": "pet_000313",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000242": {
+        "default_pet_id": "pet_000222",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000243": {
+        "default_pet_id": "pet_000223",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000244": {
+        "default_pet_id": "pet_000108",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000245": {
+        "default_pet_id": "pet_000109",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000246": {
+        "default_pet_id": "pet_000140",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000247": {
+        "default_pet_id": "pet_000141",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000248": {
+        "default_pet_id": "pet_000142",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000249": {
+        "default_pet_id": "pet_000074",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000250": {
+        "default_pet_id": "pet_000075",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000251": {
+        "default_pet_id": "pet_000076",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000252": {
+        "default_pet_id": "pet_000215",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000253": {
+        "default_pet_id": "pet_000216",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000254": {
+        "default_pet_id": "pet_000217",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000255": {
+        "default_pet_id": "pet_000072",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000256": {
+        "default_pet_id": "pet_000073",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000257": {
+        "default_pet_id": "pet_000284",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000258": {
+        "default_pet_id": "pet_000423",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000259": {
+        "default_pet_id": "pet_000424",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000260": {
+        "default_pet_id": "pet_000425",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000261": {
+        "default_pet_id": "pet_000384",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000262": {
+        "default_pet_id": "pet_000431",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000263": {
+        "default_pet_id": "pet_000177",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000264": {
+        "default_pet_id": "pet_000178",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000265": {
+        "default_pet_id": "pet_000179",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000266": {
+        "default_pet_id": "pet_000077",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000267": {
+        "default_pet_id": "pet_000078",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000268": {
+        "default_pet_id": "pet_000079",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000269": {
+        "default_pet_id": "pet_000080",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000270": {
+        "default_pet_id": "pet_000496",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000271": {
+        "default_pet_id": "pet_000497",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000272": {
+        "default_pet_id": "pet_000348",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000273": {
+        "default_pet_id": "pet_000308",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000274": {
+        "default_pet_id": "pet_000063",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000275": {
+        "default_pet_id": "pet_000064",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000276": {
+        "default_pet_id": "pet_000065",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000277": {
+        "default_pet_id": "pet_000019",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000278": {
+        "default_pet_id": "pet_000020",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000279": {
+        "default_pet_id": "pet_000021",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000280": {
+        "default_pet_id": "pet_000449",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000281": {
+        "default_pet_id": "pet_000450",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000282": {
+        "default_pet_id": "pet_000451",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000283": {
+        "default_pet_id": "pet_000035",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000284": {
+        "default_pet_id": "pet_000012",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000285": {
+        "default_pet_id": "pet_000429",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000286": {
+        "default_pet_id": "pet_000430",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000287": {
+        "default_pet_id": "pet_000390",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000288": {
+        "default_pet_id": "pet_000391",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000289": {
+        "default_pet_id": "pet_000224",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000290": {
+        "default_pet_id": "pet_000225",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000291": {
+        "default_pet_id": "pet_000332",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000292": {
+        "default_pet_id": "pet_000333",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000293": {
+        "default_pet_id": "pet_000159",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000294": {
+        "default_pet_id": "pet_000160",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000295": {
+        "default_pet_id": "pet_000161",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000296": {
+        "default_pet_id": "pet_000468",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000297": {
+        "default_pet_id": "pet_000469",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000298": {
+        "default_pet_id": "pet_000470",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000299": {
+        "default_pet_id": "pet_000471",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000300": {
+        "default_pet_id": "pet_000472",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000301": {
+        "default_pet_id": "pet_000473",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000302": {
+        "default_pet_id": "pet_000474",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000303": {
+        "default_pet_id": "pet_000475",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000304": {
+        "default_pet_id": "pet_000476",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000305": {
+        "default_pet_id": "pet_000477",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000306": {
+        "default_pet_id": "pet_000478",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000307": {
+        "default_pet_id": "pet_000207",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000308": {
+        "default_pet_id": "pet_000208",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000309": {
+        "default_pet_id": "pet_000209",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000310": {
+        "default_pet_id": "pet_000258",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000311": {
+        "default_pet_id": "pet_000259",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000312": {
+        "default_pet_id": "pet_000260",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000313": {
+        "default_pet_id": "pet_000107",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000314": {
+        "default_pet_id": "pet_000413",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000315": {
+        "default_pet_id": "pet_000414",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000316": {
+        "default_pet_id": "pet_000415",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000317": {
+        "default_pet_id": "pet_000320",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000318": {
+        "default_pet_id": "pet_000321",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000319": {
+        "default_pet_id": "pet_000322",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000320": {
+        "default_pet_id": "pet_000309",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000321": {
+        "default_pet_id": "pet_000310",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000322": {
+        "default_pet_id": "pet_000358",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000323": {
+        "default_pet_id": "pet_000479",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000324": {
+        "default_pet_id": "pet_000480",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000325": {
+        "default_pet_id": "pet_000340",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000326": {
+        "default_pet_id": "pet_000341",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000327": {
+        "default_pet_id": "pet_000134",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000328": {
+        "default_pet_id": "pet_000135",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000329": {
+        "default_pet_id": "pet_000136",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000330": {
+        "default_pet_id": "pet_000175",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000331": {
+        "default_pet_id": "pet_000176",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000332": {
+        "default_pet_id": "pet_000180",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000333": {
+        "default_pet_id": "pet_000181",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000334": {
+        "default_pet_id": "pet_000182",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000335": {
+        "default_pet_id": "pet_000264",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000336": {
+        "default_pet_id": "pet_000265",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000337": {
+        "default_pet_id": "pet_000385",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000338": {
+        "default_pet_id": "pet_000374",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000339": {
+        "default_pet_id": "pet_000375",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000340": {
+        "default_pet_id": "pet_000517",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000341": {
+        "default_pet_id": "pet_000518",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000342": {
+        "default_pet_id": "pet_000144",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000343": {
+        "default_pet_id": "pet_000145",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000344": {
+        "default_pet_id": "pet_000299",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000345": {
+        "default_pet_id": "pet_000296",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000346": {
+        "default_pet_id": "pet_000297",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000347": {
+        "default_pet_id": "pet_000298",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000348": {
+        "default_pet_id": "pet_000508",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000349": {
+        "default_pet_id": "pet_000509",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000350": {
+        "default_pet_id": "pet_000510",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000351": {
+        "default_pet_id": "pet_000314",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000352": {
+        "default_pet_id": "pet_000315",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000353": {
+        "default_pet_id": "pet_000316",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000354": {
+        "default_pet_id": "pet_000418",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000355": {
+        "default_pet_id": "pet_000419",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000356": {
+        "default_pet_id": "pet_000447",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000357": {
+        "default_pet_id": "pet_000448",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000358": {
+        "default_pet_id": "pet_000506",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000359": {
+        "default_pet_id": "pet_000507",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000360": {
+        "default_pet_id": "pet_000486",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000361": {
+        "default_pet_id": "pet_000487",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000362": {
+        "default_pet_id": "pet_000387",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000363": {
+        "default_pet_id": "pet_000388",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000364": {
+        "default_pet_id": "pet_000389",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000365": {
+        "default_pet_id": "pet_000490",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000366": {
+        "default_pet_id": "pet_000491",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000367": {
+        "default_pet_id": "pet_000492",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000368": {
+        "default_pet_id": "pet_000493",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000369": {
+        "default_pet_id": "pet_000511",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000370": {
+        "default_pet_id": "pet_000512",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000371": {
+        "default_pet_id": "pet_000500",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000372": {
+        "default_pet_id": "pet_000501",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000373": {
+        "default_pet_id": "pet_000200",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000374": {
+        "default_pet_id": "pet_000201",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000375": {
+        "default_pet_id": "pet_000485",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000376": {
+        "default_pet_id": "pet_000069",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000377": {
+        "default_pet_id": "pet_000070",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000378": {
+        "default_pet_id": "pet_000071",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000379": {
+        "default_pet_id": "pet_000525",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000380": {
+        "default_pet_id": "pet_000526",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000381": {
+        "default_pet_id": "pet_000323",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000382": {
+        "default_pet_id": "pet_000324",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000383": {
+        "default_pet_id": "pet_000325",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000384": {
+        "default_pet_id": "pet_000522",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000385": {
+        "default_pet_id": "pet_000523",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000386": {
+        "default_pet_id": "pet_000524",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000387": {
+        "default_pet_id": "pet_000285",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000388": {
+        "default_pet_id": "pet_000286",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000389": {
+        "default_pet_id": "pet_000287",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000390": {
+        "default_pet_id": "pet_000275",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000391": {
+        "default_pet_id": "pet_000276",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000392": {
+        "default_pet_id": "pet_000277",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000393": {
+        "default_pet_id": "pet_000527",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000394": {
+        "default_pet_id": "pet_000528",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000395": {
+        "default_pet_id": "pet_000529",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000396": {
+        "default_pet_id": "pet_000194",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000397": {
+        "default_pet_id": "pet_000195",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000398": {
+        "default_pet_id": "pet_000520",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000399": {
+        "default_pet_id": "pet_000521",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000400": {
+        "default_pet_id": "pet_000162",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000401": {
+        "default_pet_id": "pet_000163",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000402": {
+        "default_pet_id": "pet_000164",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000403": {
+        "default_pet_id": "pet_000266",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000404": {
+        "default_pet_id": "pet_000267",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000405": {
+        "default_pet_id": "pet_000268",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000406": {
+        "default_pet_id": "pet_000281",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000407": {
+        "default_pet_id": "pet_000282",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000408": {
+        "default_pet_id": "pet_000283",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000409": {
+        "default_pet_id": "pet_000367",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000410": {
+        "default_pet_id": "pet_000530",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000411": {
+        "default_pet_id": "pet_000531",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000412": {
+        "default_pet_id": "pet_000481",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000413": {
+        "default_pet_id": "pet_000482",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000414": {
+        "default_pet_id": "pet_000196",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000415": {
+        "default_pet_id": "pet_000197",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000416": {
+        "default_pet_id": "pet_000198",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000417": {
+        "default_pet_id": "pet_000199",
+        "evidence": "rendered-index-revision-41359",
+        "selection_reason": "reviewed_override"
+      },
+      "handbook_000418": {
+        "default_pet_id": "pet_000502",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000419": {
+        "default_pet_id": "pet_000503",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000420": {
+        "default_pet_id": "pet_000504",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000421": {
+        "default_pet_id": "pet_000505",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000422": {
+        "default_pet_id": "pet_000291",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000423": {
+        "default_pet_id": "pet_000292",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000424": {
+        "default_pet_id": "pet_000293",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000425": {
+        "default_pet_id": "pet_000532",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000426": {
+        "default_pet_id": "pet_000533",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000427": {
+        "default_pet_id": "pet_000456",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000428": {
+        "default_pet_id": "pet_000457",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000429": {
+        "default_pet_id": "pet_000458",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000430": {
+        "default_pet_id": "pet_000220",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000431": {
+        "default_pet_id": "pet_000221",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000432": {
+        "default_pet_id": "pet_000488",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000433": {
+        "default_pet_id": "pet_000489",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000434": {
+        "default_pet_id": "pet_000498",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000435": {
+        "default_pet_id": "pet_000499",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000436": {
+        "default_pet_id": "pet_000494",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000437": {
+        "default_pet_id": "pet_000495",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000438": {
+        "default_pet_id": "pet_000442",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000439": {
+        "default_pet_id": "pet_000443",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000440": {
+        "default_pet_id": "pet_000519",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000441": {
+        "default_pet_id": "pet_000513",
+        "selection_reason": "unique_unformed_name_match"
+      },
+      "handbook_000442": {
+        "default_pet_id": "pet_000514",
+        "selection_reason": "unique_unformed_name_match"
+      }
+    },
+    "resolved_count": 442,
+    "selection_rules": [
+      "Use a reviewed override when present.",
+      "Otherwise require exactly one unformed creature whose name equals entry_name.",
+      "Do not use show_topics or hide_entry_name as an unverified default-form rule.",
+      "Never derive the default from ID order or suffixes."
+    ],
+    "unresolved": {},
+    "unresolved_count": 0
+  },
+  "modules": {
+    "core": {
+      "field_profile": [
+        {
+          "occurrences": 147,
+          "path": "record.belong_season",
+          "record_coverage": 0.24664429530201343,
+          "types": {
+            "integer": 147
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.can_double_ride",
+          "record_coverage": 1.0,
+          "types": {
+            "boolean": 596
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.class",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 596
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.description",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 596
+          }
+        },
+        {
+          "occurrences": 534,
+          "path": "record.egg_group",
+          "record_coverage": 0.8959731543624161,
+          "table_kinds": {
+            "array": 534
+          },
+          "types": {
+            "table": 534
+          }
+        },
+        {
+          "occurrences": 837,
+          "path": "record.egg_group[]",
+          "record_coverage": 1.4043624161073827,
+          "types": {
+            "integer": 837
+          }
+        },
+        {
+          "occurrences": 594,
+          "path": "record.evolution_groups",
+          "record_coverage": 0.9966442953020134,
+          "table_kinds": {
+            "array": 594
+          },
+          "types": {
+            "table": 594
+          }
+        },
+        {
+          "occurrences": 642,
+          "path": "record.evolution_groups[]",
+          "record_coverage": 1.0771812080536913,
+          "types": {
+            "string": 642
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.feature_skill",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 596
+          }
+        },
+        {
+          "occurrences": 202,
+          "path": "record.form",
+          "record_coverage": 0.3389261744966443,
+          "types": {
+            "string": 202
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.gender_ratio",
+          "record_coverage": 1.0,
+          "table_kinds": {
+            "map": 596
+          },
+          "types": {
+            "table": 596
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.gender_ratio.female",
+          "record_coverage": 1.0,
+          "types": {
+            "integer": 596
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.gender_ratio.male",
+          "record_coverage": 1.0,
+          "types": {
+            "integer": 596
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.handbook",
+          "record_coverage": 1.0,
+          "table_kinds": {
+            "map": 596
+          },
+          "types": {
+            "table": 596
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.handbook.hide_entry_name",
+          "record_coverage": 1.0,
+          "types": {
+            "boolean": 596
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.handbook.id",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 596
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.handbook.show_topics",
+          "record_coverage": 1.0,
+          "types": {
+            "boolean": 596
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.has_shiny",
+          "record_coverage": 1.0,
+          "types": {
+            "boolean": 596
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.height",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 596
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.id",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 596
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.image",
+          "record_coverage": 1.0,
+          "table_kinds": {
+            "map": 596
+          },
+          "types": {
+            "table": 596
+          }
+        },
+        {
+          "occurrences": 506,
+          "path": "record.image.egg",
+          "record_coverage": 0.8489932885906041,
+          "types": {
+            "string": 506
+          }
+        },
+        {
+          "occurrences": 485,
+          "path": "record.image.fruit",
+          "record_coverage": 0.8137583892617449,
+          "types": {
+            "string": 485
+          }
+        },
+        {
+          "occurrences": 485,
+          "path": "record.image.fruits",
+          "record_coverage": 0.8137583892617449,
+          "table_kinds": {
+            "array": 485
+          },
+          "types": {
+            "table": 485
+          }
+        },
+        {
+          "occurrences": 487,
+          "path": "record.image.fruits[]",
+          "record_coverage": 0.8171140939597316,
+          "types": {
+            "string": 487
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.image.has_egg",
+          "record_coverage": 1.0,
+          "types": {
+            "boolean": 596
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.image.has_fruit",
+          "record_coverage": 1.0,
+          "types": {
+            "boolean": 596
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.image.head",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 596
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.image.illustration",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 596
+          }
+        },
+        {
+          "occurrences": 61,
+          "path": "record.is_lord_evolution",
+          "record_coverage": 0.10234899328859061,
+          "types": {
+            "boolean": 61
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.name",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 596
+          }
+        },
+        {
+          "occurrences": 521,
+          "path": "record.review_gold",
+          "record_coverage": 0.8741610738255033,
+          "types": {
+            "integer": 521
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.stage",
+          "record_coverage": 1.0,
+          "types": {
+            "integer": 596
+          }
+        },
+        {
+          "occurrences": 521,
+          "path": "record.starlight",
+          "record_coverage": 0.8741610738255033,
+          "types": {
+            "integer": 521
+          }
+        },
+        {
+          "occurrences": 595,
+          "path": "record.stats",
+          "record_coverage": 0.9983221476510067,
+          "table_kinds": {
+            "map": 595
+          },
+          "types": {
+            "table": 595
+          }
+        },
+        {
+          "occurrences": 595,
+          "path": "record.stats.atk",
+          "record_coverage": 0.9983221476510067,
+          "types": {
+            "integer": 595
+          }
+        },
+        {
+          "occurrences": 595,
+          "path": "record.stats.def",
+          "record_coverage": 0.9983221476510067,
+          "types": {
+            "integer": 595
+          }
+        },
+        {
+          "occurrences": 595,
+          "path": "record.stats.hp",
+          "record_coverage": 0.9983221476510067,
+          "types": {
+            "integer": 595
+          }
+        },
+        {
+          "occurrences": 595,
+          "path": "record.stats.spa",
+          "record_coverage": 0.9983221476510067,
+          "types": {
+            "integer": 595
+          }
+        },
+        {
+          "occurrences": 595,
+          "path": "record.stats.spd",
+          "record_coverage": 0.9983221476510067,
+          "types": {
+            "integer": 595
+          }
+        },
+        {
+          "occurrences": 595,
+          "path": "record.stats.spe",
+          "record_coverage": 0.9983221476510067,
+          "types": {
+            "integer": 595
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.title",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 596
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.types",
+          "record_coverage": 1.0,
+          "table_kinds": {
+            "array": 596
+          },
+          "types": {
+            "table": 596
+          }
+        },
+        {
+          "occurrences": 906,
+          "path": "record.types[]",
+          "record_coverage": 1.5201342281879195,
+          "types": {
+            "string": 906
+          }
+        },
+        {
+          "occurrences": 596,
+          "path": "record.weight",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 596
+          }
+        }
+      ],
+      "metadata_key_count": 59,
+      "metadata_keys": {
+        "at": "atk",
+        "bl": "blood",
+        "bs": "blood_skills",
+        "bsn": "belong_season",
+        "c": "class",
+        "d": "description",
+        "df": "def",
+        "dr": "can_double_ride",
+        "eg": "egg",
+        "egp": "egg_group",
+        "evg": "evolution_groups",
+        "f": "form",
+        "fm": "female",
+        "fr": "fruit",
+        "frs": "fruits",
+        "fs": "feature_skill",
+        "gr": "gender_ratio",
+        "hb": "handbook",
+        "hd": "head",
+        "he": "handbook_entry",
+        "heg": "has_egg",
+        "hen": "hide_entry_name",
+        "hfr": "has_fruit",
+        "hi": "handbook_id",
+        "hp": "hp",
+        "hs": "has_shiny",
+        "ht": "height",
+        "htl": "handbook_title",
+        "i": "id",
+        "il": "illustration",
+        "img": "image",
+        "le": "is_lord_evolution",
+        "lg": "legendary",
+        "lv": "level",
+        "m": "male",
+        "n": "name",
+        "ns": "native_skills",
+        "pn": "pet_name",
+        "rc": "recipe",
+        "rcc": "recipe_count",
+        "rg": "review_gold",
+        "rq": "requires",
+        "sa": "spa",
+        "sc": "skill_count",
+        "sd": "spd",
+        "se": "spe",
+        "sg": "stage",
+        "sk": "skill",
+        "sl": "starlight",
+        "ss": "skill_stones",
+        "st": "stats",
+        "stp": "show_topics",
+        "t": "title",
+        "tg": "target",
+        "ti": "topic_id",
+        "to": "topic",
+        "tp": "types",
+        "tps": "topic_points",
+        "wt": "weight"
+      },
+      "record_count": 596,
+      "sample_records": {
+        "pet_000007": {
+          "feature_skill": "skill_000003",
+          "form": null,
+          "handbook": {
+            "hide_entry_name": true,
+            "id": "handbook_000004",
+            "show_topics": true
+          },
+          "id": "pet_000007",
+          "name": "魔力猫",
+          "stats": {
+            "atk": 109,
+            "def": 81,
+            "hp": 108,
+            "spa": 109,
+            "spd": 151,
+            "spe": 55
+          },
+          "title": "魔力猫"
+        },
+        "pet_000538": {
+          "feature_skill": "skill_000197",
+          "form": "首领形态",
+          "handbook": {
+            "hide_entry_name": false,
+            "id": "handbook_000004",
+            "show_topics": false
+          },
+          "id": "pet_000538",
+          "name": "叶冕魔力猫",
+          "stats": {
+            "atk": 127,
+            "def": 81,
+            "hp": 108,
+            "spa": 127,
+            "spd": 151,
+            "spe": 55
+          },
+          "title": "叶冕魔力猫"
+        },
+        "pet_000595": {
+          "feature_skill": "skill_000226",
+          "form": "首领形态",
+          "handbook": {
+            "hide_entry_name": false,
+            "id": "handbook_000004",
+            "show_topics": false
+          },
+          "id": "pet_000595",
+          "name": "武斗酷猫",
+          "stats": {
+            "atk": 134,
+            "def": 110,
+            "hp": 126,
+            "spa": 57,
+            "spd": 80,
+            "spe": 135
+          },
+          "title": "武斗酷猫"
+        }
+      },
+      "unknown_fields": []
+    },
+    "evolution": {
+      "derived_edge_count": 400,
+      "direction_contract": {
+        "basis": "The source separates ordered chain and lord_branches tables; the adapter preserves their order and explicit target conditions.",
+        "chain": "Earlier chain member to the next member.",
+        "condition_source": "The target member's level and cond fields.",
+        "lord_branch": "Terminal chain member to each ordered lord branch."
+      },
+      "field_profile": [
+        {
+          "occurrences": 242,
+          "path": "record.chain",
+          "record_coverage": 1.0,
+          "table_kinds": {
+            "array": 242
+          },
+          "types": {
+            "table": 242
+          }
+        },
+        {
+          "occurrences": 581,
+          "path": "record.chain[]",
+          "record_coverage": 2.4008264462809916,
+          "table_kinds": {
+            "map": 581
+          },
+          "types": {
+            "table": 581
+          }
+        },
+        {
+          "occurrences": 80,
+          "path": "record.chain[].cond",
+          "record_coverage": 0.3305785123966942,
+          "types": {
+            "string": 80
+          }
+        },
+        {
+          "occurrences": 149,
+          "path": "record.chain[].form",
+          "record_coverage": 0.6157024793388429,
+          "types": {
+            "string": 149
+          }
+        },
+        {
+          "occurrences": 581,
+          "path": "record.chain[].head",
+          "record_coverage": 2.4008264462809916,
+          "types": {
+            "string": 581
+          }
+        },
+        {
+          "occurrences": 581,
+          "path": "record.chain[].id",
+          "record_coverage": 2.4008264462809916,
+          "types": {
+            "string": 581
+          }
+        },
+        {
+          "occurrences": 581,
+          "path": "record.chain[].illustration",
+          "record_coverage": 2.4008264462809916,
+          "types": {
+            "string": 581
+          }
+        },
+        {
+          "occurrences": 339,
+          "path": "record.chain[].level",
+          "record_coverage": 1.4008264462809918,
+          "types": {
+            "integer": 339
+          }
+        },
+        {
+          "occurrences": 581,
+          "path": "record.chain[].name",
+          "record_coverage": 2.4008264462809916,
+          "types": {
+            "string": 581
+          }
+        },
+        {
+          "occurrences": 581,
+          "path": "record.chain[].stage",
+          "record_coverage": 2.4008264462809916,
+          "types": {
+            "integer": 581
+          }
+        },
+        {
+          "occurrences": 581,
+          "path": "record.chain[].title",
+          "record_coverage": 2.4008264462809916,
+          "types": {
+            "string": 581
+          }
+        },
+        {
+          "occurrences": 581,
+          "path": "record.chain[].types",
+          "record_coverage": 2.4008264462809916,
+          "table_kinds": {
+            "array": 581
+          },
+          "types": {
+            "table": 581
+          }
+        },
+        {
+          "occurrences": 859,
+          "path": "record.chain[].types[]",
+          "record_coverage": 3.549586776859504,
+          "types": {
+            "string": 859
+          }
+        },
+        {
+          "occurrences": 57,
+          "path": "record.lord_branches",
+          "record_coverage": 0.23553719008264462,
+          "table_kinds": {
+            "array": 57
+          },
+          "types": {
+            "table": 57
+          }
+        },
+        {
+          "occurrences": 61,
+          "path": "record.lord_branches[]",
+          "record_coverage": 0.25206611570247933,
+          "table_kinds": {
+            "map": 61
+          },
+          "types": {
+            "table": 61
+          }
+        },
+        {
+          "occurrences": 61,
+          "path": "record.lord_branches[].cond",
+          "record_coverage": 0.25206611570247933,
+          "types": {
+            "string": 61
+          }
+        },
+        {
+          "occurrences": 61,
+          "path": "record.lord_branches[].form",
+          "record_coverage": 0.25206611570247933,
+          "types": {
+            "string": 61
+          }
+        },
+        {
+          "occurrences": 61,
+          "path": "record.lord_branches[].head",
+          "record_coverage": 0.25206611570247933,
+          "types": {
+            "string": 61
+          }
+        },
+        {
+          "occurrences": 61,
+          "path": "record.lord_branches[].id",
+          "record_coverage": 0.25206611570247933,
+          "types": {
+            "string": 61
+          }
+        },
+        {
+          "occurrences": 61,
+          "path": "record.lord_branches[].illustration",
+          "record_coverage": 0.25206611570247933,
+          "types": {
+            "string": 61
+          }
+        },
+        {
+          "occurrences": 1,
+          "path": "record.lord_branches[].level",
+          "record_coverage": 0.004132231404958678,
+          "types": {
+            "integer": 1
+          }
+        },
+        {
+          "occurrences": 61,
+          "path": "record.lord_branches[].name",
+          "record_coverage": 0.25206611570247933,
+          "types": {
+            "string": 61
+          }
+        },
+        {
+          "occurrences": 61,
+          "path": "record.lord_branches[].stage",
+          "record_coverage": 0.25206611570247933,
+          "types": {
+            "integer": 61
+          }
+        },
+        {
+          "occurrences": 61,
+          "path": "record.lord_branches[].title",
+          "record_coverage": 0.25206611570247933,
+          "types": {
+            "string": 61
+          }
+        },
+        {
+          "occurrences": 61,
+          "path": "record.lord_branches[].types",
+          "record_coverage": 0.25206611570247933,
+          "table_kinds": {
+            "array": 61
+          },
+          "types": {
+            "table": 61
+          }
+        },
+        {
+          "occurrences": 94,
+          "path": "record.lord_branches[].types[]",
+          "record_coverage": 0.3884297520661157,
+          "types": {
+            "string": 94
+          }
+        },
+        {
+          "occurrences": 242,
+          "path": "record.name",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 242
+          }
+        }
+      ],
+      "member_count": 594,
+      "record_count": 242,
+      "unknown_fields": []
+    },
+    "handbook": {
+      "display_number": {
+        "evidence_page_revision_id": 41359,
+        "evidence_response_sha256": "55e8fc070aec7c2832666230bc69cfac6d4fe7e3649550740f881e0559e392f0",
+        "rule": "Preserve the displayed card value observed in the rendered upstream index; do not derive it locally from an ID suffix.",
+        "source_field": null,
+        "status": "verified_from_rendered_index",
+        "verified_count": 442
+      },
+      "field_profile": [
+        {
+          "occurrences": 442,
+          "path": "record.areas",
+          "record_coverage": 1.0,
+          "table_kinds": {
+            "array": 442
+          },
+          "types": {
+            "table": 442
+          }
+        },
+        {
+          "occurrences": 828,
+          "path": "record.areas[]",
+          "record_coverage": 1.8733031674208145,
+          "types": {
+            "string": 828
+          }
+        },
+        {
+          "occurrences": 442,
+          "path": "record.entry_name",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 442
+          }
+        },
+        {
+          "occurrences": 442,
+          "path": "record.habitat",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 442
+          }
+        },
+        {
+          "occurrences": 442,
+          "path": "record.title",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 442
+          }
+        },
+        {
+          "occurrences": 442,
+          "path": "record.topics",
+          "record_coverage": 1.0,
+          "table_kinds": {
+            "array": 442
+          },
+          "types": {
+            "table": 442
+          }
+        },
+        {
+          "occurrences": 2215,
+          "path": "record.topics[]",
+          "record_coverage": 5.01131221719457,
+          "table_kinds": {
+            "map": 2215
+          },
+          "types": {
+            "table": 2215
+          }
+        },
+        {
+          "occurrences": 2215,
+          "path": "record.topics[].id",
+          "record_coverage": 5.01131221719457,
+          "types": {
+            "string": 2215
+          }
+        },
+        {
+          "occurrences": 2215,
+          "path": "record.topics[].target",
+          "record_coverage": 5.01131221719457,
+          "types": {
+            "integer": 2215
+          }
+        },
+        {
+          "occurrences": 2215,
+          "path": "record.topics[].text",
+          "record_coverage": 5.01131221719457,
+          "types": {
+            "string": 2215
+          }
+        }
+      ],
+      "record_count": 442,
+      "topic_count": 2215,
+      "unknown_fields": []
+    },
+    "index": {
+      "by_id_count": 596,
+      "by_name_count": 479,
+      "by_title_count": 596,
+      "duplicate_name_count": 61,
+      "titles_count": 596,
+      "top_level_unknown_fields": []
+    },
+    "learnsets": {
+      "assignment_count": 596,
+      "field_profile": [
+        {
+          "occurrences": 297,
+          "path": "record.blood_skills",
+          "record_coverage": 0.9966442953020134,
+          "table_kinds": {
+            "array": 297
+          },
+          "types": {
+            "table": 297
+          }
+        },
+        {
+          "occurrences": 5346,
+          "path": "record.blood_skills[]",
+          "record_coverage": 17.93959731543624,
+          "table_kinds": {
+            "map": 5346
+          },
+          "types": {
+            "table": 5346
+          }
+        },
+        {
+          "occurrences": 5346,
+          "path": "record.blood_skills[].blood",
+          "record_coverage": 17.93959731543624,
+          "types": {
+            "string": 5346
+          }
+        },
+        {
+          "occurrences": 5346,
+          "path": "record.blood_skills[].level",
+          "record_coverage": 17.93959731543624,
+          "types": {
+            "integer": 5346
+          }
+        },
+        {
+          "occurrences": 5346,
+          "path": "record.blood_skills[].skill",
+          "record_coverage": 17.93959731543624,
+          "types": {
+            "string": 5346
+          }
+        },
+        {
+          "occurrences": 298,
+          "path": "record.feature_skill",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 298
+          }
+        },
+        {
+          "occurrences": 6,
+          "path": "record.legendary",
+          "record_coverage": 0.020134228187919462,
+          "table_kinds": {
+            "map": 6
+          },
+          "types": {
+            "table": 6
+          }
+        },
+        {
+          "occurrences": 6,
+          "path": "record.legendary.requires",
+          "record_coverage": 0.020134228187919462,
+          "types": {
+            "string": 6
+          }
+        },
+        {
+          "occurrences": 6,
+          "path": "record.legendary.skill",
+          "record_coverage": 0.020134228187919462,
+          "types": {
+            "string": 6
+          }
+        },
+        {
+          "occurrences": 297,
+          "path": "record.native_skills",
+          "record_coverage": 0.9966442953020134,
+          "table_kinds": {
+            "array": 297
+          },
+          "types": {
+            "table": 297
+          }
+        },
+        {
+          "occurrences": 4212,
+          "path": "record.native_skills[]",
+          "record_coverage": 14.134228187919463,
+          "table_kinds": {
+            "map": 4212
+          },
+          "types": {
+            "table": 4212
+          }
+        },
+        {
+          "occurrences": 4212,
+          "path": "record.native_skills[].level",
+          "record_coverage": 14.134228187919463,
+          "types": {
+            "integer": 4212
+          }
+        },
+        {
+          "occurrences": 4212,
+          "path": "record.native_skills[].skill",
+          "record_coverage": 14.134228187919463,
+          "types": {
+            "string": 4212
+          }
+        },
+        {
+          "occurrences": 4212,
+          "path": "record.native_skills[].stage",
+          "record_coverage": 14.134228187919463,
+          "types": {
+            "integer": 4212
+          }
+        },
+        {
+          "occurrences": 298,
+          "path": "record.skill_stones",
+          "record_coverage": 1.0,
+          "table_kinds": {
+            "array": 297,
+            "empty": 1
+          },
+          "types": {
+            "table": 298
+          }
+        },
+        {
+          "occurrences": 5198,
+          "path": "record.skill_stones[]",
+          "record_coverage": 17.44295302013423,
+          "types": {
+            "string": 5198
+          }
+        }
+      ],
+      "maximum_pet_reuse": 13,
+      "metadata_key_count": 59,
+      "metadata_keys": {
+        "at": "atk",
+        "bl": "blood",
+        "bs": "blood_skills",
+        "bsn": "belong_season",
+        "c": "class",
+        "d": "description",
+        "df": "def",
+        "dr": "can_double_ride",
+        "eg": "egg",
+        "egp": "egg_group",
+        "evg": "evolution_groups",
+        "f": "form",
+        "fm": "female",
+        "fr": "fruit",
+        "frs": "fruits",
+        "fs": "feature_skill",
+        "gr": "gender_ratio",
+        "hb": "handbook",
+        "hd": "head",
+        "he": "handbook_entry",
+        "heg": "has_egg",
+        "hen": "hide_entry_name",
+        "hfr": "has_fruit",
+        "hi": "handbook_id",
+        "hp": "hp",
+        "hs": "has_shiny",
+        "ht": "height",
+        "htl": "handbook_title",
+        "i": "id",
+        "il": "illustration",
+        "img": "image",
+        "le": "is_lord_evolution",
+        "lg": "legendary",
+        "lv": "level",
+        "m": "male",
+        "n": "name",
+        "ns": "native_skills",
+        "pn": "pet_name",
+        "rc": "recipe",
+        "rcc": "recipe_count",
+        "rg": "review_gold",
+        "rq": "requires",
+        "sa": "spa",
+        "sc": "skill_count",
+        "sd": "spd",
+        "se": "spe",
+        "sg": "stage",
+        "sk": "skill",
+        "sl": "starlight",
+        "ss": "skill_stones",
+        "st": "stats",
+        "stp": "show_topics",
+        "t": "title",
+        "tg": "target",
+        "ti": "topic_id",
+        "to": "topic",
+        "tp": "types",
+        "tps": "topic_points",
+        "wt": "weight"
+      },
+      "record_count": 298,
+      "shared_learnset_count": 182,
+      "source_counts": {
+        "blood": 5346,
+        "feature": 298,
+        "legendary": 6,
+        "native": 4212,
+        "stone": 5198
+      },
+      "source_stage": {
+        "evidence": "The reviewed Skills module aliases native_skills to level and contains no stage filter.",
+        "filtering_rule": "Preserve the value and do not filter by the current creature stage.",
+        "normalized_field": "source_stage",
+        "observed_values": {
+          "1": 4212
+        }
+      },
+      "unknown_fields": []
+    },
+    "skill_catalog": {
+      "categories": {
+        "攻击": 349,
+        "特性": 231,
+        "状态": 156,
+        "防御": 52
+      },
+      "field_profile": [
+        {
+          "occurrences": 788,
+          "path": "record.category",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 788
+          }
+        },
+        {
+          "occurrences": 345,
+          "path": "record.damage_class",
+          "record_coverage": 0.43781725888324874,
+          "types": {
+            "string": 345
+          }
+        },
+        {
+          "occurrences": 788,
+          "path": "record.desc",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 788
+          }
+        },
+        {
+          "occurrences": 383,
+          "path": "record.desc_notes",
+          "record_coverage": 0.4860406091370558,
+          "table_kinds": {
+            "array": 383
+          },
+          "types": {
+            "table": 383
+          }
+        },
+        {
+          "occurrences": 523,
+          "path": "record.desc_notes[]",
+          "record_coverage": 0.6637055837563451,
+          "types": {
+            "integer": 523
+          }
+        },
+        {
+          "occurrences": 788,
+          "path": "record.element",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 788
+          }
+        },
+        {
+          "occurrences": 788,
+          "path": "record.energy",
+          "record_coverage": 1.0,
+          "types": {
+            "integer": 788
+          }
+        },
+        {
+          "occurrences": 195,
+          "path": "record.flavor",
+          "record_coverage": 0.24746192893401014,
+          "types": {
+            "string": 195
+          }
+        },
+        {
+          "occurrences": 788,
+          "path": "record.icon_id",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 788
+          }
+        },
+        {
+          "occurrences": 788,
+          "path": "record.id",
+          "record_coverage": 1.0,
+          "types": {
+            "integer": 788
+          }
+        },
+        {
+          "occurrences": 788,
+          "path": "record.name",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 788
+          }
+        },
+        {
+          "occurrences": 345,
+          "path": "record.power",
+          "record_coverage": 0.43781725888324874,
+          "types": {
+            "integer": 345
+          }
+        },
+        {
+          "occurrences": 788,
+          "path": "record.target",
+          "record_coverage": 1.0,
+          "types": {
+            "string": 788
+          }
+        }
+      ],
+      "record_count": 788,
+      "sample_feature": {
+        "category": "特性",
+        "energy": 0,
+        "name": "氧循环",
+        "skill_id": "skill_000003",
+        "upstream_numeric_id": 200076
+      },
+      "unknown_fields": []
+    }
+  },
+  "parser": {
+    "core": {
+      "content_bytes": 394098,
+      "maximum_table_depth": 4,
+      "token_count": 98475,
+      "top_level_field_count": 597,
+      "top_level_table_kind": "map"
+    },
+    "evolution": {
+      "content_bytes": 114329,
+      "maximum_table_depth": 5,
+      "token_count": 27065,
+      "top_level_field_count": 242,
+      "top_level_table_kind": "map"
+    },
+    "handbook": {
+      "content_bytes": 198733,
+      "maximum_table_depth": 4,
+      "token_count": 43277,
+      "top_level_field_count": 442,
+      "top_level_table_kind": "map"
+    },
+    "index": {
+      "content_bytes": 63246,
+      "maximum_table_depth": 3,
+      "token_count": 12429,
+      "top_level_field_count": 4,
+      "top_level_table_kind": "map"
+    },
+    "learnset_catalog": {
+      "content_bytes": 412526,
+      "maximum_table_depth": 4,
+      "token_count": 150480,
+      "top_level_field_count": 299,
+      "top_level_table_kind": "map"
+    },
+    "learnsets": {
+      "content_bytes": 17335,
+      "maximum_table_depth": 1,
+      "token_count": 2387,
+      "top_level_field_count": 596,
+      "top_level_table_kind": "map"
+    },
+    "skill_catalog": {
+      "content_bytes": 185997,
+      "maximum_table_depth": 3,
+      "token_count": 34489,
+      "top_level_field_count": 788,
+      "top_level_table_kind": "map"
+    }
+  },
+  "references": {
+    "core_feature_skills_missing": [],
+    "core_pets_missing_learnset_assignment": [],
+    "core_vs_index_ids": {
+      "missing_from_core": [],
+      "missing_from_index": []
+    },
+    "evolution_group_references_missing": [],
+    "evolution_members_missing_from_core": [],
+    "handbook_references_missing": [],
+    "index_pet_references_missing_from_core": [],
+    "learnset_feature_skills_missing": [],
+    "learnset_pet_assignments_missing_from_core": [],
+    "learnset_references_missing": [],
+    "learnset_skills_missing": []
+  },
+  "rendered_index_evidence": {
+    "card_count": 594,
+    "core_pet_ids_not_rendered": [
+      "pet_000534",
+      "pet_000535"
+    ],
+    "display_number_count": 442,
+    "display_numbers": {
+      "handbook_000001": "001",
+      "handbook_000002": "002",
+      "handbook_000003": "003",
+      "handbook_000004": "004",
+      "handbook_000005": "005",
+      "handbook_000006": "006",
+      "handbook_000007": "007",
+      "handbook_000008": "008",
+      "handbook_000009": "009",
+      "handbook_000010": "010",
+      "handbook_000011": "011",
+      "handbook_000012": "012",
+      "handbook_000013": "013",
+      "handbook_000014": "014",
+      "handbook_000015": "015",
+      "handbook_000016": "016",
+      "handbook_000017": "017",
+      "handbook_000018": "018",
+      "handbook_000019": "019",
+      "handbook_000020": "020",
+      "handbook_000021": "021",
+      "handbook_000022": "022",
+      "handbook_000023": "023",
+      "handbook_000024": "024",
+      "handbook_000025": "025",
+      "handbook_000026": "026",
+      "handbook_000027": "027",
+      "handbook_000028": "028",
+      "handbook_000029": "029",
+      "handbook_000030": "030",
+      "handbook_000031": "031",
+      "handbook_000032": "032",
+      "handbook_000033": "033",
+      "handbook_000034": "034",
+      "handbook_000035": "035",
+      "handbook_000036": "036",
+      "handbook_000037": "037",
+      "handbook_000038": "038",
+      "handbook_000039": "039",
+      "handbook_000040": "040",
+      "handbook_000041": "041",
+      "handbook_000042": "042",
+      "handbook_000043": "043",
+      "handbook_000044": "044",
+      "handbook_000045": "045",
+      "handbook_000046": "046",
+      "handbook_000047": "047",
+      "handbook_000048": "048",
+      "handbook_000049": "049",
+      "handbook_000050": "050",
+      "handbook_000051": "051",
+      "handbook_000052": "052",
+      "handbook_000053": "053",
+      "handbook_000054": "054",
+      "handbook_000055": "055",
+      "handbook_000056": "056",
+      "handbook_000057": "057",
+      "handbook_000058": "058",
+      "handbook_000059": "059",
+      "handbook_000060": "060",
+      "handbook_000061": "061",
+      "handbook_000062": "062",
+      "handbook_000063": "063",
+      "handbook_000064": "064",
+      "handbook_000065": "065",
+      "handbook_000066": "066",
+      "handbook_000067": "067",
+      "handbook_000068": "068",
+      "handbook_000069": "069",
+      "handbook_000070": "070",
+      "handbook_000071": "071",
+      "handbook_000072": "072",
+      "handbook_000073": "073",
+      "handbook_000074": "074",
+      "handbook_000075": "075",
+      "handbook_000076": "076",
+      "handbook_000077": "077",
+      "handbook_000078": "078",
+      "handbook_000079": "079",
+      "handbook_000080": "080",
+      "handbook_000081": "081",
+      "handbook_000082": "082",
+      "handbook_000083": "083",
+      "handbook_000084": "084",
+      "handbook_000085": "085",
+      "handbook_000086": "086",
+      "handbook_000087": "087",
+      "handbook_000088": "088",
+      "handbook_000089": "089",
+      "handbook_000090": "090",
+      "handbook_000091": "091",
+      "handbook_000092": "092",
+      "handbook_000093": "093",
+      "handbook_000094": "094",
+      "handbook_000095": "095",
+      "handbook_000096": "096",
+      "handbook_000097": "097",
+      "handbook_000098": "098",
+      "handbook_000099": "099",
+      "handbook_000100": "100",
+      "handbook_000101": "101",
+      "handbook_000102": "102",
+      "handbook_000103": "103",
+      "handbook_000104": "104",
+      "handbook_000105": "105",
+      "handbook_000106": "106",
+      "handbook_000107": "107",
+      "handbook_000108": "108",
+      "handbook_000109": "109",
+      "handbook_000110": "110",
+      "handbook_000111": "111",
+      "handbook_000112": "112",
+      "handbook_000113": "113",
+      "handbook_000114": "114",
+      "handbook_000115": "115",
+      "handbook_000116": "116",
+      "handbook_000117": "117",
+      "handbook_000118": "118",
+      "handbook_000119": "119",
+      "handbook_000120": "120",
+      "handbook_000121": "121",
+      "handbook_000122": "122",
+      "handbook_000123": "123",
+      "handbook_000124": "124",
+      "handbook_000125": "125",
+      "handbook_000126": "126",
+      "handbook_000127": "127",
+      "handbook_000128": "128",
+      "handbook_000129": "129",
+      "handbook_000130": "130",
+      "handbook_000131": "131",
+      "handbook_000132": "132",
+      "handbook_000133": "133",
+      "handbook_000134": "134",
+      "handbook_000135": "135",
+      "handbook_000136": "136",
+      "handbook_000137": "137",
+      "handbook_000138": "138",
+      "handbook_000139": "139",
+      "handbook_000140": "140",
+      "handbook_000141": "141",
+      "handbook_000142": "142",
+      "handbook_000143": "143",
+      "handbook_000144": "144",
+      "handbook_000145": "145",
+      "handbook_000146": "146",
+      "handbook_000147": "147",
+      "handbook_000148": "148",
+      "handbook_000149": "149",
+      "handbook_000150": "150",
+      "handbook_000151": "151",
+      "handbook_000152": "152",
+      "handbook_000153": "153",
+      "handbook_000154": "154",
+      "handbook_000155": "155",
+      "handbook_000156": "156",
+      "handbook_000157": "157",
+      "handbook_000158": "158",
+      "handbook_000159": "159",
+      "handbook_000160": "160",
+      "handbook_000161": "161",
+      "handbook_000162": "162",
+      "handbook_000163": "163",
+      "handbook_000164": "164",
+      "handbook_000165": "165",
+      "handbook_000166": "166",
+      "handbook_000167": "167",
+      "handbook_000168": "168",
+      "handbook_000169": "169",
+      "handbook_000170": "170",
+      "handbook_000171": "171",
+      "handbook_000172": "172",
+      "handbook_000173": "173",
+      "handbook_000174": "174",
+      "handbook_000175": "175",
+      "handbook_000176": "176",
+      "handbook_000177": "177",
+      "handbook_000178": "178",
+      "handbook_000179": "179",
+      "handbook_000180": "180",
+      "handbook_000181": "181",
+      "handbook_000182": "182",
+      "handbook_000183": "183",
+      "handbook_000184": "184",
+      "handbook_000185": "185",
+      "handbook_000186": "186",
+      "handbook_000187": "187",
+      "handbook_000188": "188",
+      "handbook_000189": "189",
+      "handbook_000190": "190",
+      "handbook_000191": "191",
+      "handbook_000192": "192",
+      "handbook_000193": "193",
+      "handbook_000194": "194",
+      "handbook_000195": "195",
+      "handbook_000196": "196",
+      "handbook_000197": "197",
+      "handbook_000198": "198",
+      "handbook_000199": "199",
+      "handbook_000200": "200",
+      "handbook_000201": "201",
+      "handbook_000202": "202",
+      "handbook_000203": "203",
+      "handbook_000204": "204",
+      "handbook_000205": "205",
+      "handbook_000206": "206",
+      "handbook_000207": "207",
+      "handbook_000208": "208",
+      "handbook_000209": "209",
+      "handbook_000210": "210",
+      "handbook_000211": "211",
+      "handbook_000212": "212",
+      "handbook_000213": "213",
+      "handbook_000214": "214",
+      "handbook_000215": "215",
+      "handbook_000216": "216",
+      "handbook_000217": "217",
+      "handbook_000218": "218",
+      "handbook_000219": "219",
+      "handbook_000220": "220",
+      "handbook_000221": "221",
+      "handbook_000222": "222",
+      "handbook_000223": "223",
+      "handbook_000224": "224",
+      "handbook_000225": "225",
+      "handbook_000226": "226",
+      "handbook_000227": "227",
+      "handbook_000228": "228",
+      "handbook_000229": "229",
+      "handbook_000230": "230",
+      "handbook_000231": "231",
+      "handbook_000232": "232",
+      "handbook_000233": "233",
+      "handbook_000234": "234",
+      "handbook_000235": "235",
+      "handbook_000236": "236",
+      "handbook_000237": "237",
+      "handbook_000238": "238",
+      "handbook_000239": "239",
+      "handbook_000240": "240",
+      "handbook_000241": "241",
+      "handbook_000242": "242",
+      "handbook_000243": "243",
+      "handbook_000244": "244",
+      "handbook_000245": "245",
+      "handbook_000246": "246",
+      "handbook_000247": "247",
+      "handbook_000248": "248",
+      "handbook_000249": "249",
+      "handbook_000250": "250",
+      "handbook_000251": "251",
+      "handbook_000252": "252",
+      "handbook_000253": "253",
+      "handbook_000254": "254",
+      "handbook_000255": "255",
+      "handbook_000256": "256",
+      "handbook_000257": "257",
+      "handbook_000258": "258",
+      "handbook_000259": "259",
+      "handbook_000260": "260",
+      "handbook_000261": "261",
+      "handbook_000262": "262",
+      "handbook_000263": "263",
+      "handbook_000264": "264",
+      "handbook_000265": "265",
+      "handbook_000266": "266",
+      "handbook_000267": "267",
+      "handbook_000268": "268",
+      "handbook_000269": "269",
+      "handbook_000270": "270",
+      "handbook_000271": "271",
+      "handbook_000272": "272",
+      "handbook_000273": "273",
+      "handbook_000274": "274",
+      "handbook_000275": "275",
+      "handbook_000276": "276",
+      "handbook_000277": "277",
+      "handbook_000278": "278",
+      "handbook_000279": "279",
+      "handbook_000280": "280",
+      "handbook_000281": "281",
+      "handbook_000282": "282",
+      "handbook_000283": "283",
+      "handbook_000284": "284",
+      "handbook_000285": "285",
+      "handbook_000286": "286",
+      "handbook_000287": "287",
+      "handbook_000288": "288",
+      "handbook_000289": "289",
+      "handbook_000290": "290",
+      "handbook_000291": "291",
+      "handbook_000292": "292",
+      "handbook_000293": "293",
+      "handbook_000294": "294",
+      "handbook_000295": "295",
+      "handbook_000296": "296",
+      "handbook_000297": "297",
+      "handbook_000298": "298",
+      "handbook_000299": "299",
+      "handbook_000300": "300",
+      "handbook_000301": "301",
+      "handbook_000302": "302",
+      "handbook_000303": "303",
+      "handbook_000304": "304",
+      "handbook_000305": "305",
+      "handbook_000306": "306",
+      "handbook_000307": "307",
+      "handbook_000308": "308",
+      "handbook_000309": "309",
+      "handbook_000310": "310",
+      "handbook_000311": "311",
+      "handbook_000312": "312",
+      "handbook_000313": "313",
+      "handbook_000314": "314",
+      "handbook_000315": "315",
+      "handbook_000316": "316",
+      "handbook_000317": "317",
+      "handbook_000318": "318",
+      "handbook_000319": "319",
+      "handbook_000320": "320",
+      "handbook_000321": "321",
+      "handbook_000322": "322",
+      "handbook_000323": "323",
+      "handbook_000324": "324",
+      "handbook_000325": "325",
+      "handbook_000326": "326",
+      "handbook_000327": "327",
+      "handbook_000328": "328",
+      "handbook_000329": "329",
+      "handbook_000330": "330",
+      "handbook_000331": "331",
+      "handbook_000332": "332",
+      "handbook_000333": "333",
+      "handbook_000334": "334",
+      "handbook_000335": "335",
+      "handbook_000336": "336",
+      "handbook_000337": "337",
+      "handbook_000338": "338",
+      "handbook_000339": "339",
+      "handbook_000340": "340",
+      "handbook_000341": "341",
+      "handbook_000342": "342",
+      "handbook_000343": "343",
+      "handbook_000344": "344",
+      "handbook_000345": "345",
+      "handbook_000346": "346",
+      "handbook_000347": "347",
+      "handbook_000348": "348",
+      "handbook_000349": "349",
+      "handbook_000350": "350",
+      "handbook_000351": "351",
+      "handbook_000352": "352",
+      "handbook_000353": "353",
+      "handbook_000354": "354",
+      "handbook_000355": "355",
+      "handbook_000356": "356",
+      "handbook_000357": "357",
+      "handbook_000358": "358",
+      "handbook_000359": "359",
+      "handbook_000360": "360",
+      "handbook_000361": "361",
+      "handbook_000362": "362",
+      "handbook_000363": "363",
+      "handbook_000364": "364",
+      "handbook_000365": "365",
+      "handbook_000366": "366",
+      "handbook_000367": "367",
+      "handbook_000368": "368",
+      "handbook_000369": "369",
+      "handbook_000370": "370",
+      "handbook_000371": "371",
+      "handbook_000372": "372",
+      "handbook_000373": "373",
+      "handbook_000374": "374",
+      "handbook_000375": "375",
+      "handbook_000376": "376",
+      "handbook_000377": "377",
+      "handbook_000378": "378",
+      "handbook_000379": "379",
+      "handbook_000380": "380",
+      "handbook_000381": "381",
+      "handbook_000382": "382",
+      "handbook_000383": "383",
+      "handbook_000384": "384",
+      "handbook_000385": "385",
+      "handbook_000386": "386",
+      "handbook_000387": "387",
+      "handbook_000388": "388",
+      "handbook_000389": "389",
+      "handbook_000390": "390",
+      "handbook_000391": "391",
+      "handbook_000392": "392",
+      "handbook_000393": "393",
+      "handbook_000394": "394",
+      "handbook_000395": "395",
+      "handbook_000396": "396",
+      "handbook_000397": "397",
+      "handbook_000398": "398",
+      "handbook_000399": "399",
+      "handbook_000400": "400",
+      "handbook_000401": "401",
+      "handbook_000402": "402",
+      "handbook_000403": "403",
+      "handbook_000404": "404",
+      "handbook_000405": "405",
+      "handbook_000406": "406",
+      "handbook_000407": "407",
+      "handbook_000408": "408",
+      "handbook_000409": "409",
+      "handbook_000410": "410",
+      "handbook_000411": "411",
+      "handbook_000412": "412",
+      "handbook_000413": "413",
+      "handbook_000414": "414",
+      "handbook_000415": "415",
+      "handbook_000416": "416",
+      "handbook_000417": "417",
+      "handbook_000418": "418",
+      "handbook_000419": "419",
+      "handbook_000420": "420",
+      "handbook_000421": "421",
+      "handbook_000422": "422",
+      "handbook_000423": "423",
+      "handbook_000424": "424",
+      "handbook_000425": "425",
+      "handbook_000426": "426",
+      "handbook_000427": "427",
+      "handbook_000428": "428",
+      "handbook_000429": "429",
+      "handbook_000430": "430",
+      "handbook_000431": "431",
+      "handbook_000432": "432",
+      "handbook_000433": "433",
+      "handbook_000434": "434",
+      "handbook_000435": "435",
+      "handbook_000436": "436",
+      "handbook_000437": "437",
+      "handbook_000438": "438",
+      "handbook_000439": "439",
+      "handbook_000440": "440",
+      "handbook_000441": "441",
+      "handbook_000442": "442"
+    },
+    "main_form_count": 442,
+    "mapped_card_count": 594,
+    "page_id": 16709,
+    "page_revision_id": 41359,
+    "page_title": "精灵图鉴",
+    "response_bytes": 1771138,
+    "response_file": "pet_index.json",
+    "response_sha256": "55e8fc070aec7c2832666230bc69cfac6d4fe7e3649550740f881e0559e392f0",
+    "show_topics_main_form_correlation": {
+      "matching_pet_count": 442,
+      "rendered_main_only_pet_ids": [],
+      "show_topics_only_pet_ids": [],
+      "usage": "Diagnostic only; this flag is not a default-form rule."
+    }
+  },
+  "report_version": 1,
+  "snapshot_id": "snapshot-19235f9b9b34dc4e",
+  "source_revisions": {
+    "core": {
+      "content_sha256": "5e13a2a49cdda7d36ea9ad96c26faab9a11e21d86c5ea540287c136112f2fa40",
+      "response_sha256": "715789effba7b24c73982a92833701c68ce8616ea655c99d941c42c67351f9cb",
+      "revision_id": 43006
+    },
+    "dex_index_module": {
+      "content_sha256": "711dca2657d95f7abad4e2886c07736ed8edb97f2b8915246076290e03d49dbb",
+      "response_sha256": "9afbdcbbe184f058373f49d4b149369113d3d8b22314bcefc0bcd33836b3d49a",
+      "revision_id": 43100
+    },
+    "evolution": {
+      "content_sha256": "53f823fc0c00715c23e2d19a5e232d5d86f2b69cfc6cf90b680fe89951c39150",
+      "response_sha256": "b2921ddf5f8e37ef7a5b19bc98aff1dc017c27c109c09b57c21844734ab48738",
+      "revision_id": 42851
+    },
+    "handbook": {
+      "content_sha256": "278f8fd885152e144e1ac944b0cbb14255b3a7f1c231dbf790bb1e14dba73765",
+      "response_sha256": "fbe8d06bcc60148af48466ca50feb0b9082fb631991d2428949f46692a0a2ae4",
+      "revision_id": 42852
+    },
+    "index": {
+      "content_sha256": "ca3568a5f6cca61b278e8e0cd69c60ec513e96a0942ac5d1fa8b6d5bac94a5ae",
+      "response_sha256": "117d4766f6fe422c602c176afea716680249f97ef1a93edd7566a5b7b705e13d",
+      "revision_id": 42853
+    },
+    "learnset_catalog": {
+      "content_sha256": "bc188085a9e17a58b6dcc17995fec1f325857aa1c8e85f9fbec45d0ae4244fe1",
+      "response_sha256": "02ae87c7ad541a2b32d6b459669dbe706988820d53d0fbfcc667ec95ddce8659",
+      "revision_id": 42854
+    },
+    "learnsets": {
+      "content_sha256": "5ff7177b47718e54b029626a6b2f85c03f1606fb5fb1a6ad527cd3ed350c7ba1",
+      "response_sha256": "4b85cd3629b6299fed66295be2f31474f9e6e57168182a27477f2ef3c0a78d7c",
+      "revision_id": 42855
+    },
+    "pet_module": {
+      "content_sha256": "85a19e97b10f2c590673df3c06d73b742089be589c6fb09b6f52e5373e03056c",
+      "response_sha256": "c85bc11850335fe23d8695196e28a9af5b7543e19948a10b55c0310a89f5f315",
+      "revision_id": 42895
+    },
+    "skill_catalog": {
+      "content_sha256": "a1d13f35496b496e3797a1f8ffc5291386a1f0c1a13e4d2e7da5cf5644497632",
+      "response_sha256": "5dc9aa3a0e4f1d7466365345dc93ba1f08f11943a24900a7df0e7f86da8609a6",
+      "revision_id": 43008
+    },
+    "skills_module": {
+      "content_sha256": "f05bf7eaa437e365d678ce1caaaa4fe970837c2f11362c198df2268d2605a0a4",
+      "response_sha256": "a4acd3573dc479dceb3f83c998242fb781588ec82d1ade882dd73ee5ce600718",
+      "revision_id": 34741
+    }
+  },
+  "status": "passed_with_warnings",
+  "warnings": [
+    {
+      "code": "disabled_v1_sources_not_imported",
+      "sources": [
+        "head_overrides",
+        "skill_stone_topics",
+        "topic_rewards"
+      ]
+    }
+  ]
+}

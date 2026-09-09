@@ -1,0 +1,109 @@
+{
+  "three_form_creature": {
+    "all_forms_share_handbook": true,
+    "base_core_and_learnset_feature_match": true,
+    "base_feature": {
+      "category": "特性",
+      "name": "氧循环",
+      "skill_id": "skill_000003"
+    },
+    "distinct_pet_ids": true,
+    "handbook_entry": {
+      "areas": [
+        "世界图鉴",
+        "风眠省图鉴"
+      ],
+      "entry_name": "魔力猫",
+      "habitat": "行踪神秘",
+      "title": "草之灵",
+      "topics": [
+        {
+          "id": "topic_000014",
+          "target": 1,
+          "text": "捕捉1只精灵"
+        },
+        {
+          "id": "topic_000015",
+          "target": 1,
+          "text": "捕捉1只了不起天分的精灵"
+        },
+        {
+          "id": "topic_000016",
+          "target": 1,
+          "text": "捕捉1只炫彩突变的精灵"
+        },
+        {
+          "id": "topic_000017",
+          "target": 1,
+          "text": "使用进化之力，将精灵进化为首领"
+        },
+        {
+          "id": "topic_000018",
+          "target": 1,
+          "text": "获得「命定勇者」奖牌"
+        },
+        {
+          "id": "topic_000019",
+          "target": 2,
+          "text": "使用2次棘突"
+        },
+        {
+          "id": "topic_000020",
+          "target": 3,
+          "text": "使用3次光合作用"
+        }
+      ]
+    },
+    "pets": {
+      "pet_000007": {
+        "core_feature_skill_id": "skill_000003",
+        "handbook_id": "handbook_000004",
+        "learnset_feature_skill_id": "skill_000003",
+        "learnset_id": "learnset_000001",
+        "name": "魔力猫",
+        "pet_id": "pet_000007",
+        "stats": {
+          "atk": 109,
+          "def": 81,
+          "hp": 108,
+          "spa": 109,
+          "spd": 151,
+          "spe": 55
+        }
+      },
+      "pet_000538": {
+        "core_feature_skill_id": "skill_000197",
+        "handbook_id": "handbook_000004",
+        "learnset_feature_skill_id": "skill_000197",
+        "learnset_id": "learnset_000243",
+        "name": "叶冕魔力猫",
+        "pet_id": "pet_000538",
+        "stats": {
+          "atk": 127,
+          "def": 81,
+          "hp": 108,
+          "spa": 127,
+          "spd": 151,
+          "spe": 55
+        }
+      },
+      "pet_000595": {
+        "core_feature_skill_id": "skill_000226",
+        "handbook_id": "handbook_000004",
+        "learnset_feature_skill_id": "skill_000226",
+        "learnset_id": "learnset_000297",
+        "name": "武斗酷猫",
+        "pet_id": "pet_000595",
+        "stats": {
+          "atk": 134,
+          "def": 110,
+          "hp": 126,
+          "spa": 57,
+          "spd": 80,
+          "spe": 135
+        }
+      }
+    },
+    "shared_handbook_id": "handbook_000004"
+  }
+}
