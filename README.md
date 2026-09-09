@@ -1,5 +1,7 @@
 # Roco World Offline Handbook
 
+[![Offline validation](https://github.com/godwhere/roco-handbook/actions/workflows/offline-validation.yml/badge.svg)](https://github.com/godwhere/roco-handbook/actions/workflows/offline-validation.yml)
+
 An independent, non-commercial, offline-first reference application for iOS and Android. Development tools convert validated BWIKI snapshots into a SQLite Catalog. The App ships with a complete local Catalog and can optionally install a newer authenticated complete Catalog after an explicit Settings action.
 
 ## Current project status

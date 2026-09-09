@@ -12,6 +12,12 @@ void main() {
 
   setUp(() {
     temporary = Directory.systemTemp.createTempSync('roco-catalog-signing-');
+    if (Platform.isMacOS || Platform.isLinux) {
+      expect(
+        Process.runSync('chmod', <String>['700', temporary.path]).exitCode,
+        0,
+      );
+    }
     repositoryRoot = Directory.current.parent;
   });
 
