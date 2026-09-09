@@ -1,9 +1,13 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:roco_handbook/catalog_app.dart';
+import 'package:roco_handbook/data/catalog/catalog_installer.dart';
+import 'package:roco_handbook/data/catalog/catalog_update_source.dart';
+import 'package:roco_handbook/data/catalog/remote_catalog_manifest.dart';
 import 'package:roco_handbook/data/catalog/sqlite_catalog_repository.dart';
 import 'package:roco_handbook/data/user/sqlite_user_repository.dart';
 import 'package:roco_handbook/data/user/user_database_migrator.dart';
@@ -140,6 +144,14 @@ void main() {
     expect(find.text('Skills'), findsOneWidget);
     expect(find.text('My Library'), findsOneWidget);
     expect(find.text('Settings'), findsOneWidget);
+    await tester.tap(find.text('Settings'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.byKey(const ValueKey('check-catalog-update')),
+      300,
+      scrollable: find.byType(Scrollable).last,
+    );
+    expect(find.byKey(const ValueKey('check-catalog-update')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -380,6 +392,229 @@ void main() {
     expect(find.text('Bundled Catalog restored.'), findsOneWidget);
   });
 
+  testWidgets('Catalog update checks are explicit and report current state', (
+    tester,
+  ) async {
+    await _setPhoneSurface(tester);
+    var checkCalls = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: CatalogHomePage(
+          session: session,
+          onCheckCatalogUpdate: (_) async {
+            checkCalls += 1;
+            return const CatalogUpdateCurrent();
+          },
+          onInstallCatalogUpdate: (_, _, _) async {},
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(checkCalls, 0);
+    await tester.tap(find.text('Settings'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.byKey(const ValueKey('check-catalog-update')),
+      300,
+      scrollable: find.byType(Scrollable).last,
+    );
+    expect(
+      find.textContaining('does not check, download, or install'),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.byKey(const ValueKey('check-catalog-update')));
+    await tester.pumpAndSettle();
+
+    expect(checkCalls, 1);
+    expect(find.text('Catalog is up to date.'), findsOneWidget);
+  });
+
+  testWidgets(
+    'Catalog download shows size and cancellation keeps current data',
+    (tester) async {
+      await _setPhoneSurface(tester);
+      final candidate = _updateCandidate();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: CatalogHomePage(
+            session: session,
+            onCheckCatalogUpdate: (_) async =>
+                CatalogUpdateAvailable(candidate),
+            onInstallCatalogUpdate: (_, cancellation, onProgress) {
+              final stopped = Completer<void>();
+              onProgress(
+                CatalogUpdateProgress(
+                  phase: CatalogUpdatePhase.downloading,
+                  receivedBytes: 1024 * 1024,
+                  totalBytes: candidate.manifest.package.archiveBytes,
+                ),
+              );
+              cancellation.addListener(
+                () => stopped.completeError(
+                  const CatalogUpdateException(
+                    'cancelled',
+                    'The Catalog update was cancelled.',
+                  ),
+                ),
+              );
+              return stopped.future;
+            },
+            onRestoreBundledCatalog: () async {},
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Settings'));
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        find.byKey(const ValueKey('check-catalog-update')),
+        300,
+        scrollable: find.byType(Scrollable).last,
+      );
+      await tester.tap(find.byKey(const ValueKey('check-catalog-update')));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.text('Download Catalog data 2?'), findsOneWidget);
+      expect(find.textContaining('Download 5.0 MiB'), findsOneWidget);
+      expect(
+        find.textContaining('Favorites, collection marks, and notes are kept.'),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.byKey(const ValueKey('confirm-catalog-download')));
+      await tester.pump();
+      expect(find.text('Downloading 1.0 MiB of 5.0 MiB...'), findsOneWidget);
+      expect(
+        tester
+            .widget<FilledButton>(
+              find.byKey(const ValueKey('restore-bundled-catalog')),
+            )
+            .onPressed,
+        isNull,
+      );
+
+      await tester.tap(find.byKey(const ValueKey('cancel-catalog-update')));
+      await tester.pumpAndSettle();
+      expect(
+        find.text('Catalog update cancelled. Current Catalog unchanged.'),
+        findsOneWidget,
+      );
+      expect(find.text('Data v1'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'verification cannot be cancelled and activates the new Catalog',
+    (tester) async {
+      await _setPhoneSurface(tester);
+      final candidate = _updateCandidate();
+      final installation = Completer<void>();
+      final updated = _sessionWithDataVersion(session, 2);
+      await tester.pumpWidget(
+        CatalogBootstrapApp(
+          bootstrap: () async => session,
+          checkForCatalogUpdate: (_, _) async =>
+              CatalogUpdateAvailable(candidate),
+          installCatalogUpdate:
+              (current, selected, cancellation, onProgress) async {
+                expect(current, same(session));
+                expect(selected, same(candidate));
+                onProgress(
+                  CatalogUpdateProgress(
+                    phase: CatalogUpdatePhase.verifyingAndInstalling,
+                    receivedBytes: candidate.manifest.package.archiveBytes,
+                    totalBytes: candidate.manifest.package.archiveBytes,
+                  ),
+                );
+                await installation.future;
+                return updated;
+              },
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Settings'));
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        find.byKey(const ValueKey('check-catalog-update')),
+        300,
+        scrollable: find.byType(Scrollable).last,
+      );
+      await tester.tap(find.byKey(const ValueKey('check-catalog-update')));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.byKey(const ValueKey('confirm-catalog-download')));
+      await tester.pump();
+
+      expect(find.text('Verifying and installing...'), findsOneWidget);
+      expect(find.byKey(const ValueKey('cancel-catalog-update')), findsNothing);
+
+      installation.complete();
+      await tester.pumpAndSettle();
+      expect(find.text('Data v2'), findsOneWidget);
+      expect(find.text('Catalog data 2 installed.'), findsOneWidget);
+    },
+  );
+
+  testWidgets('a failed Catalog download remains explicitly retryable', (
+    tester,
+  ) async {
+    await _setPhoneSurface(tester);
+    final candidate = _updateCandidate();
+    var checkCalls = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: CatalogHomePage(
+          session: session,
+          onCheckCatalogUpdate: (_) async {
+            checkCalls += 1;
+            return CatalogUpdateAvailable(candidate);
+          },
+          onInstallCatalogUpdate: (_, _, _) async {
+            throw const CatalogUpdateException(
+              'network',
+              'The Catalog update request failed.',
+            );
+          },
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Settings'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.byKey(const ValueKey('check-catalog-update')),
+      300,
+      scrollable: find.byType(Scrollable).last,
+    );
+
+    await tester.tap(find.byKey(const ValueKey('check-catalog-update')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.tap(find.byKey(const ValueKey('confirm-catalog-download')));
+    await tester.pumpAndSettle();
+    expect(
+      find.text('Catalog update failed (network). Current Catalog unchanged.'),
+      findsOneWidget,
+    );
+    expect(
+      tester
+          .widget<FilledButton>(
+            find.byKey(const ValueKey('check-catalog-update')),
+          )
+          .onPressed,
+      isNotNull,
+    );
+
+    await tester.tap(find.byKey(const ValueKey('check-catalog-update')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(checkCalls, 2);
+    expect(find.text('Download Catalog data 2?'), findsOneWidget);
+  });
+
   testWidgets('settings exposes the locked App version and licenses', (
     tester,
   ) async {
@@ -398,7 +633,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('1.0.0 (1)'), findsOneWidget);
+    expect(find.text('1.1.0 (2)'), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('open-source-licenses')));
     await tester.pumpAndSettle();
 
@@ -427,6 +662,65 @@ PetSummary _summary(String id, String name) {
     title: name,
     types: const <String>[],
     isDefaultForm: true,
+  );
+}
+
+CatalogUpdateCandidate _updateCandidate() {
+  final package = RemoteCatalogPackage(
+    url: Uri.parse(
+      'https://github.com/godwhere/roco-handbook/releases/download/'
+      'catalog-data-v2/catalog-v2.zip',
+    ),
+    archiveBytes: 5 * 1024 * 1024,
+    archiveSha256: '0' * 64,
+  );
+  final manifest = VerifiedRemoteCatalogManifest(
+    keyId: 'widget-test-key',
+    protocolVersion: 1,
+    minimumProtocolVersion: 1,
+    datasetId: 'roco-world-zh-cn',
+    catalogSchemaVersion: 1,
+    dataVersion: 2,
+    releaseSequence: 2,
+    minimumAppVersion: '1.0.0',
+    publishedAtUtc: DateTime.utc(2026, 9, 10),
+    snapshotId: 'snapshot-widget-test-v2',
+    coverage: const <String, bool>{
+      'pets': true,
+      'skills': true,
+      'evolutions': true,
+      'topic_rewards': true,
+      'skill_stone_topics': true,
+      'description_note_definitions': true,
+    },
+    package: package,
+    signedPayloadBytes: Uint8List(0),
+  );
+  return CatalogUpdateCandidate(envelopeText: '{}', manifest: manifest);
+}
+
+CatalogSession _sessionWithDataVersion(CatalogSession source, int dataVersion) {
+  final info = source.info;
+  return CatalogSession(
+    repository: source.repository,
+    info: CatalogInfo(
+      datasetId: info.datasetId,
+      schemaVersion: info.schemaVersion,
+      dataVersion: dataVersion,
+      snapshotId: 'snapshot-widget-test-v$dataVersion',
+      adapterVersion: info.adapterVersion,
+      builderVersion: info.builderVersion,
+      builtAtUtc: info.builtAtUtc,
+      coverage: info.coverage,
+      earliestSourceRevisionUtc: info.earliestSourceRevisionUtc,
+      latestSourceRevisionUtc: info.latestSourceRevisionUtc,
+    ),
+    attribution: source.attribution,
+    installed: true,
+    userRepository: source.userRepository,
+    userDatabaseCreated: source.userDatabaseCreated,
+    userSchemaVersion: source.userSchemaVersion,
+    catalogOutcome: CatalogOpenOutcome.installedRemote,
   );
 }
 

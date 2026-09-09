@@ -10,6 +10,14 @@ When the bundle has a newer data version, the App copies the complete database a
 
 The same installer can accept an already authenticated and strictly validated Phase 7 complete package through its remote-candidate entry point. A remote candidate must advance the active data version. Its release sequence advances a separate monotonic high-water file before pointer activation and is not reduced by an explicit bundled recovery.
 
+## User-triggered complete-Catalog update
+
+Settings provides **Check for Catalog update**. This is the only production trigger; startup, timers, and background tasks do not check the network. Discovery uses the fixed public GitHub Release channel and requires an authenticated manifest. A missing channel asset or a valid manifest already matching the active data version reports that the Catalog is current.
+
+For a newer candidate, a confirmation dialog shows the data version and total package size before any package transfer. The App downloads over the current connection only after **Download**, shows byte progress, and allows cancellation while bytes are in flight. Partial bytes stay in memory and are discarded. There is no automatic retry.
+
+After download, the App removes cancellation and reports **Verifying and installing...** while the authenticated archive and existing installer state machine run. Success creates a new read-only Catalog session without closing or replacing the personal repository. Failure before activation leaves the active Catalog unchanged; the installer owns rollback for later failures.
+
 ## Failure and rollback
 
 A staging copy or validation failure leaves the old active pointer unchanged. A failure after the new pointer is written restores and opens the separately recorded previous Catalog. A damaged active pointer may use only a valid previous record or the exact bundled package; it does not scan arbitrary files.
@@ -30,4 +38,4 @@ Settings provides **Restore bundled Catalog**. A confirmation dialog explains th
 
 After confirmation, the App closes the current session, runs the same trusted installer state machine in explicit-recovery mode, and creates a new read-only Catalog session. The Settings page reports whether startup reused, installed, recovered, or explicitly restored the Catalog.
 
-This is a local recovery action, not an online update. It does not reduce the remote release-sequence high-water mark. The current App has no Catalog download button, timer, background updater, incremental patcher, account, or cloud service.
+This is a local recovery action, not an online update. It does not reduce the remote release-sequence high-water mark. The current App has a separate complete-Catalog download flow, but no timer, background updater, logical incremental patcher, account, or cloud service.

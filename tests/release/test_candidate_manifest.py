@@ -17,14 +17,20 @@ class ReleaseCandidateManifestTests(unittest.TestCase):
     def setUp(self) -> None:
         self.candidate = json.loads(CANDIDATE_PATH.read_text(encoding="utf-8"))
 
-    def test_app_version_matches_pubspec_and_platform_metadata(self) -> None:
+    def test_candidate_app_version_matches_its_platform_metadata(self) -> None:
         pubspec = (ROOT / "app/pubspec.yaml").read_text(encoding="utf-8")
         version = re.search(
             r"^version: ([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)$", pubspec, re.M
         )
         self.assertIsNotNone(version)
-        self.assertEqual(version.group(1), self.candidate["app"]["version"])
-        self.assertEqual(int(version.group(2)), self.candidate["app"]["build_number"])
+        self.assertEqual(("1.1.0", "2"), version.groups())
+        self.assertEqual("1.0.0", self.candidate["app"]["version"])
+        self.assertEqual(1, self.candidate["app"]["build_number"])
+        app_version = (ROOT / "app/lib/app_version.dart").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("static const name = '1.1.0';", app_version)
+        self.assertIn("static const buildNumber = 2;", app_version)
         self.assertEqual(
             self.candidate["app"]["version"],
             self.candidate["platforms"]["android"]["manifest"]["version_name"],
@@ -98,14 +104,16 @@ class ReleaseCandidateManifestTests(unittest.TestCase):
         self.assertFalse(publication["uploaded"])
         self.assertEqual("not_authorized", publication["status"])
 
-    def test_release_source_manifests_do_not_request_sensitive_access(self) -> None:
+    def test_release_source_manifests_request_only_approved_access(self) -> None:
         android_manifest = (
             ROOT / "app/android/app/src/main/AndroidManifest.xml"
         ).read_text(encoding="utf-8")
         ios_plist = (ROOT / "app/ios/Runner/Info.plist").read_text(encoding="utf-8")
 
-        self.assertNotIn("uses-permission", android_manifest)
-        self.assertNotIn("android.permission.INTERNET", android_manifest)
+        self.assertEqual(
+            ["android.permission.INTERNET"],
+            re.findall(r'<uses-permission android:name="([^"]+)"', android_manifest),
+        )
         self.assertIsNone(re.search(r"NS[A-Za-z]+UsageDescription", ios_plist))
 
 

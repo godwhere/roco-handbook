@@ -145,7 +145,8 @@ class CompleteUpdatePackageTests(unittest.TestCase):
                     archive,
                     repository_root / "forbidden-payload.json",
                     package_url=(
-                        "https://updates.example.test/releases/catalog-v2.zip"
+                        "https://github.com/godwhere/roco-handbook/releases/"
+                        "download/catalog-data-v2/catalog-v2.zip"
                     ),
                     release_sequence=2,
                     minimum_app_version="1.0.0",
@@ -158,7 +159,8 @@ class CompleteUpdatePackageTests(unittest.TestCase):
                 archive,
                 payload_path,
                 package_url=(
-                    "https://updates.example.test/releases/catalog-v2.zip"
+                    "https://github.com/godwhere/roco-handbook/releases/"
+                    "download/catalog-data-v2/catalog-v2.zip"
                 ),
                 release_sequence=2,
                 minimum_app_version="1.0.0",
@@ -192,7 +194,25 @@ class CompleteUpdatePackageTests(unittest.TestCase):
                     release,
                     archive,
                     Path(temporary) / "invalid-url.json",
-                    package_url="https://updates.example.test/%2e%2e/catalog-v2.zip",
+                    package_url=(
+                        "https://github.com/godwhere/roco-handbook/releases/"
+                        "download/catalog-data-v2/%2e%2e/catalog-v2.zip"
+                    ),
+                    release_sequence=2,
+                    minimum_app_version="1.0.0",
+                    published_at_utc="2026-09-09T23:45:00Z",
+                    repository_root=repository_root,
+                )
+
+            with self.assertRaisesRegex(AdapterError, "GitHub Release"):
+                build_remote_manifest_payload(
+                    release,
+                    archive,
+                    Path(temporary) / "wrong-version-url.json",
+                    package_url=(
+                        "https://github.com/godwhere/roco-handbook/releases/"
+                        "download/catalog-data-v3/catalog-v3.zip"
+                    ),
                     release_sequence=2,
                     minimum_app_version="1.0.0",
                     published_at_utc="2026-09-09T23:45:00Z",

@@ -9,6 +9,8 @@ void main() {
     CatalogBootstrapApp(
       bootstrap: bootstrap.load,
       restoreBundledCatalog: bootstrap.restoreBundledCatalog,
+      checkForCatalogUpdate: bootstrap.checkForCatalogUpdate,
+      installCatalogUpdate: bootstrap.installCatalogUpdate,
     ),
   );
 }

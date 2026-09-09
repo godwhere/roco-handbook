@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../catalog_app.dart';
+import '../../data/catalog/catalog_update_source.dart';
 import '../../domain/user_models.dart';
 import '../pets/pet_catalog_page.dart';
 import '../personal/my_library_page.dart';
@@ -11,11 +12,23 @@ class CatalogHomePage extends StatefulWidget {
   const CatalogHomePage({
     required this.session,
     this.onRestoreBundledCatalog,
+    this.onCheckCatalogUpdate,
+    this.onInstallCatalogUpdate,
     super.key,
   });
 
   final CatalogSession session;
   final Future<void> Function()? onRestoreBundledCatalog;
+  final Future<CatalogUpdateCheckResult> Function(
+    CatalogUpdateCancellationToken cancellation,
+  )?
+  onCheckCatalogUpdate;
+  final Future<void> Function(
+    CatalogUpdateCandidate candidate,
+    CatalogUpdateCancellationToken cancellation,
+    void Function(CatalogUpdateProgress progress) onProgress,
+  )?
+  onInstallCatalogUpdate;
 
   @override
   State<CatalogHomePage> createState() => _CatalogHomePageState();
@@ -111,18 +124,23 @@ class _CatalogHomePageState extends State<CatalogHomePage> {
             index: _index,
             children: <Widget>[
               PetCatalogPage(
+                key: ValueKey('pet-catalog-${widget.session.info.dataVersion}'),
                 repository: widget.session.repository,
                 userRepository: widget.session.userRepository,
                 datasetId: widget.session.info.datasetId,
                 favoriteKeys: favoriteKeys,
               ),
               SkillCatalogPage(
+                key: ValueKey(
+                  'skill-catalog-${widget.session.info.dataVersion}',
+                ),
                 repository: widget.session.repository,
                 userRepository: widget.session.userRepository,
                 datasetId: widget.session.info.datasetId,
                 favoriteKeys: favoriteKeys,
               ),
               MyLibraryPage(
+                key: ValueKey('my-library-${widget.session.info.dataVersion}'),
                 catalogRepository: widget.session.repository,
                 userRepository: widget.session.userRepository,
                 datasetId: widget.session.info.datasetId,
@@ -130,6 +148,8 @@ class _CatalogHomePageState extends State<CatalogHomePage> {
               SettingsPage(
                 session: widget.session,
                 onRestoreBundledCatalog: widget.onRestoreBundledCatalog,
+                onCheckCatalogUpdate: widget.onCheckCatalogUpdate,
+                onInstallCatalogUpdate: widget.onInstallCatalogUpdate,
               ),
             ],
           );

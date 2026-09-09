@@ -9,7 +9,7 @@ The bottom navigation has four destinations:
 - **Creatures** opens the handbook browser.
 - **Skills** opens the skill browser.
 - **My Library** opens device-local favorites and handbook collection marks.
-- **Settings** shows local data versions, attribution, and the confirmed bundled-Catalog recovery action.
+- **Settings** shows local data versions and attribution, starts the optional foreground complete-Catalog update flow, and provides the confirmed bundled-Catalog recovery action.
 
 The information action shows data version, Catalog schema, snapshot ID, build time, complete source revision time range, coverage flags, and the attribution text validated and retained with that exact Catalog version.
 
@@ -37,8 +37,8 @@ A skill detail preserves category, element, energy, power, target, original desc
 
 Description-note identifiers remain stored in the Catalog. When their definitions are not included, the App shows a coverage notice instead of a broken glossary link.
 
-## Offline and accessibility behavior
+## Offline-first and accessibility behavior
 
-The production Dart code has no HTTP client or BWIKI endpoint. All ordinary data comes from the installed read-only SQLite file. Search requests use a generation token so a slow older result cannot replace a newer query.
+All ordinary browsing data comes from the installed read-only SQLite file, and first launch requires no network. Production code has no BWIKI endpoint. Its only HTTP client is the exact-host GitHub Releases Catalog source, and Settings is its only trigger; browsing, search, favorites, notes, startup, and recovery do not request the network. Search requests use a generation token so a slow older result cannot replace a newer query.
 
-Controls provide text labels or tooltips, progress states announce local preparation, content is scrollable, and layouts are tested with dark theme and a 2.0 text scale. Canonical upstream text may retain its source language; navigation and explanatory copy are English.
+Controls provide text labels or tooltips, local preparation and Catalog update states use live semantics, transfer progress is visible, content is scrollable, and layouts are tested with dark theme and a 2.0 text scale. Canonical upstream text may retain its source language; navigation and explanatory copy are English.

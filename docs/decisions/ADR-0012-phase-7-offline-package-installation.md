@@ -2,6 +2,7 @@
 
 - Status: accepted
 - Date: 2026-09-09
+- Runtime follow-up: ADR-0013 accepted on 2026-09-10
 - Scope: complete ZIP validation, installer handoff, attribution ownership, and persisted replay state
 
 ## Context
@@ -26,7 +27,7 @@ Declared uncompressed limits are 64 KiB for the Catalog manifest, 256 KiB for at
 
 The inner Catalog manifest retains the existing bundled-manifest contract. Its dataset, schema, data version, snapshot, and coverage must exactly match the signed outer payload. Its database length and SHA-256 then drive the existing SQLite metadata, required-object, integrity, foreign-key, and stable-probe validation. No generic archive path is ever written to disk.
 
-The offline package pipeline performs Ed25519 authentication, archive validation, and installer handoff in that order. Remote installation requires an already validated active Catalog and a strictly newer data version. Runtime startup, Settings, and platform manifests do not invoke this pipeline in this phase.
+The package pipeline performs Ed25519 authentication, archive validation, and installer handoff in that order. Remote installation requires an already validated active Catalog and a strictly newer data version. This decision originally proved that path offline; ADR-0013 later connected it only to the explicit Settings foreground flow.
 
 Catalog attribution now belongs to each installed Catalog artifact. Pointer version 2 adds attribution byte length and SHA-256, stores a hash-qualified sibling attribution file, validates it with the database during reuse and recovery, and returns the active attribution to the App. Pointer version 1 and the Phase 3 four-field pointer migrate using the trusted bundled attribution available during startup. This compatibility path predates remote installation; all newly installed artifacts carry their own validated attribution.
 
@@ -40,4 +41,4 @@ The publisher-side builder first reruns the complete immutable release check, th
 
 An eligible Catalog release can now be converted into the exact complete-package shape, and an authenticated complete package can be exercised end to end without networking and without touching `user.db`. Corrupt, ambiguous, oversized, encrypted, linked, mismatched, replayed, or SQLite-invalid candidates retain the prior validated Catalog. Attribution follows activation and rollback rather than whichever App bundle happened to launch.
 
-Phase 7 is still not a runtime online-update feature. The later production-key addendum in ADR-0011 resolves the initial trust key and local custody boundary, but production hosting, redirects, foreground consent and progress UX, download interruption, final platform policy, and device evidence remain pending authorization and implementation.
+ADR-0013 subsequently selected production hosting, implemented the redirect and foreground consent boundary, added transfer cancellation, and connected successful downloads to this installer. A real newer Release, production transfer interruption, low-storage, physical-device, and final store evidence remain pending.

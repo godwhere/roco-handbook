@@ -102,6 +102,16 @@ void main() {
       verifier.verify(envelopeText, context: _context(currentDataVersion: 2)),
       _failure('data_version'),
     );
+    await expectLater(
+      verifier.verify(
+        envelopeText,
+        context: _context(
+          currentDataVersion: 2,
+          highestAcceptedReleaseSequence: 2,
+        ),
+      ),
+      _failure('no_update'),
+    );
   });
 
   test('rejects incompatible Apps, hosts, and key sequence ranges', () async {

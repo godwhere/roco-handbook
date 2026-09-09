@@ -317,6 +317,7 @@ final class RemoteCatalogManifestVerifier {
   Future<VerifiedRemoteCatalogManifest> verify(
     String envelopeText, {
     required RemoteCatalogValidationContext context,
+    bool allowInstalledManifest = false,
   }) async {
     if (envelopeText.length > _maximumEnvelopeCharacters) {
       throw const RemoteCatalogManifestException(
@@ -410,7 +411,14 @@ final class RemoteCatalogManifestVerifier {
       code: 'payload_shape',
       message: 'The signed Catalog manifest payload has an invalid shape.',
     );
-    return _validatePayload(payload, payloadBytes, keyId, trustedKey, context);
+    return _validatePayload(
+      payload,
+      payloadBytes,
+      keyId,
+      trustedKey,
+      context,
+      allowInstalledManifest,
+    );
   }
 
   VerifiedRemoteCatalogManifest _validatePayload(
@@ -419,6 +427,7 @@ final class RemoteCatalogManifestVerifier {
     String keyId,
     CatalogManifestTrustedKey trustedKey,
     RemoteCatalogValidationContext context,
+    bool allowInstalledManifest,
   ) {
     final protocolVersion = _integer(payload, 'protocol_version');
     final minimumProtocolVersion = _integer(
@@ -449,19 +458,7 @@ final class RemoteCatalogManifestVerifier {
       );
     }
     final dataVersion = _integer(payload, 'data_version');
-    if (dataVersion <= context.currentDataVersion) {
-      throw const RemoteCatalogManifestException(
-        'data_version',
-        'The signed Catalog manifest does not target a newer data version.',
-      );
-    }
     final releaseSequence = _integer(payload, 'release_sequence');
-    if (releaseSequence <= context.highestAcceptedReleaseSequence) {
-      throw const RemoteCatalogManifestException(
-        'release_sequence',
-        'The signed Catalog manifest release sequence is stale or replayed.',
-      );
-    }
     if (!trustedKey.acceptsReleaseSequence(releaseSequence)) {
       throw const RemoteCatalogManifestException(
         'key_sequence',
@@ -496,6 +493,28 @@ final class RemoteCatalogManifestVerifier {
     }
     final coverage = _validateCoverage(payload['coverage']);
     final package = _validatePackage(payload['package'], context);
+    final alreadyInstalled =
+        dataVersion <= context.currentDataVersion &&
+        releaseSequence <= context.highestAcceptedReleaseSequence;
+    if (alreadyInstalled && !allowInstalledManifest) {
+      throw const RemoteCatalogManifestException(
+        'no_update',
+        'The signed Catalog manifest is already installed.',
+      );
+    }
+    if (!alreadyInstalled && dataVersion <= context.currentDataVersion) {
+      throw const RemoteCatalogManifestException(
+        'data_version',
+        'The signed Catalog manifest does not target a newer data version.',
+      );
+    }
+    if (!alreadyInstalled &&
+        releaseSequence <= context.highestAcceptedReleaseSequence) {
+      throw const RemoteCatalogManifestException(
+        'release_sequence',
+        'The signed Catalog manifest release sequence is stale or replayed.',
+      );
+    }
     return VerifiedRemoteCatalogManifest(
       keyId: keyId,
       protocolVersion: protocolVersion,

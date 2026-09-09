@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'app_version.dart';
 import 'data/catalog/catalog_installer.dart';
+import 'data/catalog/catalog_update_service.dart';
+import 'data/catalog/catalog_update_source.dart';
+import 'data/catalog/remote_catalog_manifest.dart';
 import 'data/catalog/sqlite_catalog_repository.dart';
 import 'data/user/sqlite_user_repository.dart';
 import 'data/user/user_database_migrator.dart';
@@ -40,6 +45,75 @@ final class ProductionCatalogBootstrap {
 
   Future<CatalogSession> restoreBundledCatalog() => _load(restoreBundled: true);
 
+  Future<CatalogUpdateCheckResult> checkForCatalogUpdate(
+    CatalogSession session,
+    CatalogUpdateCancellationToken cancellation,
+  ) async {
+    final service = await _updateService();
+    return service.check(
+      currentAppVersion: AppVersion.name,
+      currentDataVersion: session.info.dataVersion,
+      cancellation: cancellation,
+    );
+  }
+
+  Future<CatalogSession> installCatalogUpdate(
+    CatalogSession session,
+    CatalogUpdateCandidate candidate,
+    CatalogUpdateCancellationToken cancellation,
+    void Function(CatalogUpdateProgress progress) onProgress,
+  ) async {
+    final service = await _updateService();
+    final open = await service.downloadAndInstall(
+      currentAppVersion: AppVersion.name,
+      currentDataVersion: session.info.dataVersion,
+      candidate: candidate,
+      cancellation: cancellation,
+      onProgress: onProgress,
+    );
+    final repository = SqliteCatalogRepository(open.databasePath);
+    final info = await repository.getCatalogInfo();
+    return CatalogSession(
+      repository: repository,
+      info: info,
+      attribution: open.attributionText,
+      installed: open.installed,
+      userRepository: session.userRepository,
+      userDatabaseCreated: session.userDatabaseCreated,
+      userSchemaVersion: session.userSchemaVersion,
+      catalogOutcome: open.outcome,
+    );
+  }
+
+  Future<CatalogUpdateService> _updateService() async {
+    try {
+      final support = await getApplicationSupportDirectory();
+      final trustStoreText = await rootBundle.loadString(
+        'assets/catalog/catalog_trust_store.json',
+      );
+      final verifier = RemoteCatalogManifestVerifier(
+        CatalogManifestTrustStore.fromJsonText(trustStoreText),
+      );
+      return CatalogUpdateService(
+        source: GitHubReleaseCatalogSource(verifier: verifier),
+        verifier: verifier,
+        installer: LocalCatalogInstaller(support.path),
+      );
+    } on RemoteCatalogManifestException catch (error) {
+      throw CatalogUpdateException(
+        'trust_${error.code}',
+        'The bundled Catalog update trust configuration is invalid.',
+      );
+    } on CatalogUpdateException {
+      rethrow;
+    } on Object {
+      throw const CatalogUpdateException(
+        'update_setup',
+        'The Catalog update service could not be prepared.',
+      );
+    }
+  }
+
   Future<CatalogSession> _load({required bool restoreBundled}) async {
     const source = AssetBundledCatalogSource();
     final bundle = await source.load();
@@ -71,11 +145,25 @@ class CatalogBootstrapApp extends StatefulWidget {
   const CatalogBootstrapApp({
     required this.bootstrap,
     this.restoreBundledCatalog,
+    this.checkForCatalogUpdate,
+    this.installCatalogUpdate,
     super.key,
   });
 
   final Future<CatalogSession> Function() bootstrap;
   final Future<CatalogSession> Function()? restoreBundledCatalog;
+  final Future<CatalogUpdateCheckResult> Function(
+    CatalogSession session,
+    CatalogUpdateCancellationToken cancellation,
+  )?
+  checkForCatalogUpdate;
+  final Future<CatalogSession> Function(
+    CatalogSession session,
+    CatalogUpdateCandidate candidate,
+    CatalogUpdateCancellationToken cancellation,
+    void Function(CatalogUpdateProgress progress) onProgress,
+  )?
+  installCatalogUpdate;
 
   @override
   State<CatalogBootstrapApp> createState() => _CatalogBootstrapAppState();
@@ -123,6 +211,48 @@ class _CatalogBootstrapAppState extends State<CatalogBootstrapApp> {
     await replacement;
   }
 
+  Future<CatalogUpdateCheckResult> _checkForCatalogUpdate(
+    CatalogUpdateCancellationToken cancellation,
+  ) {
+    final checker = widget.checkForCatalogUpdate;
+    final session = _openedSession;
+    if (checker == null || session == null) {
+      throw const CatalogUpdateException(
+        'update_unavailable',
+        'Catalog updates are not available in this build.',
+      );
+    }
+    return checker(session, cancellation);
+  }
+
+  Future<void> _installCatalogUpdate(
+    CatalogUpdateCandidate candidate,
+    CatalogUpdateCancellationToken cancellation,
+    void Function(CatalogUpdateProgress progress) onProgress,
+  ) async {
+    final installer = widget.installCatalogUpdate;
+    final current = _openedSession;
+    if (installer == null || current == null) {
+      throw const CatalogUpdateException(
+        'update_unavailable',
+        'Catalog updates are not available in this build.',
+      );
+    }
+    final replacement = await installer(
+      current,
+      candidate,
+      cancellation,
+      onProgress,
+    );
+    if (!mounted) {
+      return;
+    }
+    _openedSession = replacement;
+    setState(() {
+      _session = Future<CatalogSession>.value(replacement);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final lightScheme = ColorScheme.fromSeed(
@@ -164,6 +294,12 @@ class _CatalogBootstrapAppState extends State<CatalogBootstrapApp> {
               onRestoreBundledCatalog: widget.restoreBundledCatalog == null
                   ? null
                   : _restoreBundledCatalog,
+              onCheckCatalogUpdate: widget.checkForCatalogUpdate == null
+                  ? null
+                  : _checkForCatalogUpdate,
+              onInstallCatalogUpdate: widget.installCatalogUpdate == null
+                  ? null
+                  : _installCatalogUpdate,
             );
           }
           if (snapshot.hasError) {

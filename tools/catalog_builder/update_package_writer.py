@@ -33,6 +33,10 @@ _ENTRY_LIMITS = {
 _FIXED_ZIP_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
 _VERSION_PATTERN = re.compile(r"^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$")
 _UTC_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
+_GITHUB_RELEASE_PACKAGE_PATTERN = re.compile(
+    r"^/godwhere/roco-handbook/releases/download/"
+    r"catalog-data-v([1-9][0-9]*)/catalog-v([1-9][0-9]*)\.zip$"
+)
 
 
 def _sha256(path: Path) -> str:
@@ -263,8 +267,6 @@ def build_remote_manifest_payload(
         datetime.strptime(published_at_utc, "%Y-%m-%dT%H:%M:%SZ")
     except ValueError as error:
         raise AdapterError("Catalog publication time is not a real UTC date") from error
-    _validate_package_url(package_url)
-
     try:
         release_report = check_release(release, root=repository_root.resolve())
     except (OSError, ReleaseCheckError) as error:
@@ -275,6 +277,10 @@ def build_remote_manifest_payload(
         raise AdapterError(
             "A remote Catalog payload must advance the bundled base data version"
         )
+    _validate_package_url(
+        package_url,
+        data_version=release_report["catalog_data_version"],
+    )
     if not archive_path.is_file() or archive_path.is_symlink():
         raise AdapterError("The complete Catalog update archive is missing or unsafe")
     try:
@@ -331,25 +337,28 @@ def build_remote_manifest_payload(
     }
 
 
-def _validate_package_url(value: str) -> None:
+def _validate_package_url(value: str, *, data_version: int) -> None:
     try:
         parsed = urlsplit(value)
         port = parsed.port
     except ValueError as error:
         raise AdapterError("Catalog package URL is invalid") from error
     decoded_segments = [unquote(segment) for segment in parsed.path.split("/")]
+    release_match = _GITHUB_RELEASE_PACKAGE_PATTERN.fullmatch(parsed.path)
     if (
         parsed.scheme != "https"
-        or not parsed.hostname
+        or parsed.hostname != "github.com"
         or parsed.username is not None
         or parsed.password is not None
         or port not in (None, 443)
         or parsed.query
         or parsed.fragment
-        or not parsed.path.endswith(".zip")
         or any(segment in {".", ".."} for segment in decoded_segments)
+        or release_match is None
+        or int(release_match.group(1)) != data_version
+        or int(release_match.group(2)) != data_version
     ):
-        raise AdapterError("Catalog package URL violates the signed manifest contract")
+        raise AdapterError("Catalog package URL violates the GitHub Release contract")
 
 
 def _write_new_bytes(path: Path, content: bytes) -> None:

@@ -203,29 +203,37 @@ class ProjectStructureTests(unittest.TestCase):
         self.assertNotIn("secrets.", workflow)
         self.assertNotIn("bwiki", workflow.lower())
 
-    def test_phase_seven_offline_foundation_does_not_enable_network_runtime(
-        self,
-    ) -> None:
+    def test_phase_seven_runtime_transport_is_explicit_and_dependency_free(self) -> None:
         pubspec = (ROOT / "app/pubspec.yaml").read_text(encoding="utf-8")
         release_manifest = (
             ROOT / "app/android/app/src/main/AndroidManifest.xml"
         ).read_text(encoding="utf-8")
-        excluded = {
-            ROOT / "app/lib/data/catalog/catalog_installer.dart",
-            ROOT / "app/lib/data/catalog/remote_catalog_archive.dart",
-            ROOT / "app/lib/data/catalog/remote_catalog_manifest.dart",
-        }
-        runtime_sources = "\n".join(
-            path.read_text(encoding="utf-8")
+        sources = {
+            path: path.read_text(encoding="utf-8")
             for path in (ROOT / "app/lib").rglob("*.dart")
-            if path not in excluded
-        )
+        }
+        network_sources = {
+            path.relative_to(ROOT).as_posix()
+            for path, text in sources.items()
+            if "HttpClient()" in text or ".getUrl(" in text
+        }
 
         self.assertIsNone(re.search(r"^\s{2}(?:dio|http):", pubspec, re.M))
-        self.assertNotIn("android.permission.INTERNET", release_manifest)
-        self.assertNotIn("RemoteCatalogPackagePipeline", runtime_sources)
-        self.assertNotIn("RemoteCatalogArchiveDecoder", runtime_sources)
-        self.assertNotIn("installVerifiedRemoteCatalog(", runtime_sources)
+        self.assertIsNone(
+            re.search(r"^\s{2}(?:background_fetch|workmanager):", pubspec, re.M)
+        )
+        self.assertEqual(1, release_manifest.count("android.permission.INTERNET"))
+        self.assertEqual(
+            {"app/lib/data/catalog/catalog_update_source.dart"}, network_sources
+        )
+        self.assertIn(
+            "GitHubReleaseCatalogSource",
+            sources[ROOT / "app/lib/catalog_app.dart"],
+        )
+        self.assertIn(
+            "RemoteCatalogPackagePipeline",
+            sources[ROOT / "app/lib/data/catalog/catalog_update_service.dart"],
+        )
 
     def test_production_catalog_trust_store_is_public_only(self) -> None:
         trust_store = json.loads(

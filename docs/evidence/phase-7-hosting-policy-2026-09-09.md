@@ -2,7 +2,7 @@
 
 - Evidence date: 2026-09-09
 - Scope: public static hosting feasibility, redirect boundary, and store-policy risk
-- Decision status: evidence only; no host, Release, credential, permission, or runtime network behavior was created. A production signing key was added later under separate custody authorization.
+- Decision status: initial feasibility evidence. GitHub Releases, the redirect boundary, the foreground UX, and synchronized key custody were accepted on 2026-09-10 in ADR-0013. No Release was created.
 
 ## GitHub Releases feasibility
 
@@ -10,7 +10,7 @@ GitHub documents Releases as a mechanism for packaging deployable software with 
 
 GitHub's release-asset API documentation says a public asset can be fetched without authentication. A binary request can return either `200 OK` or `302 Found`, so any client must treat a redirect as an explicit protocol event rather than enabling unrestricted redirect following. GitHub's network reference lists `release-assets.githubusercontent.com` as the domain needed to download release assets and states that listed domains remain constant even when their underlying CNAME records change.
 
-These facts make GitHub Releases a viable candidate for the first public complete-package trial, not a selected production service or an availability guarantee. If selected, the proposed transport boundary is:
+These facts made GitHub Releases a viable candidate for the first public complete-package trial. It was subsequently selected in ADR-0013; selection is not an availability guarantee. The accepted transport boundary is:
 
 - fetch a fixed discovery URL on `github.com` over HTTPS;
 - allow at most one HTTPS redirect to the exact host `release-assets.githubusercontent.com` on the default port;
@@ -18,7 +18,7 @@ These facts make GitHub Releases a viable candidate for the first public complet
 - require an immutable versioned release URL inside the signed payload rather than treating a mutable `latest` URL as package identity; and
 - retain signed length and SHA-256 validation over the final received bytes.
 
-The public repository does not require an App-embedded GitHub token. No GitHub REST dependency is needed for the proposed direct asset URL. Availability, regional reachability, status behavior, caching, redirect observations against a real owned Release, and terms-of-service suitability still require a controlled trial after the host is approved.
+The public repository does not require an App-embedded GitHub token. No GitHub REST dependency is used for the direct asset URL. Availability, regional reachability, status behavior, caching, and redirect observations against a real owned Release still require a controlled trial when a real newer Catalog exists.
 
 ## Apple distribution risk
 
@@ -42,6 +42,6 @@ The first transport should remain a user-initiated foreground data transfer with
 - Apple Developer, [App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/)
 - Google Play Console Help, [Device and Network Abuse](https://support.google.com/googleplay/android-developer/answer/16559646?hl=en)
 
-## Remaining decision
+## Decision follow-up
 
-Network implementation remains paused until the repository owner approves the host, redirect boundary, and foreground UX. Production Ed25519 key custody was subsequently authorized and is recorded separately. Store policy must be checked again immediately before submission because the cited policies can change.
+The repository owner approved GitHub Releases, the exact one-redirect policy, the user-triggered foreground UX, and current iCloud-synchronized key custody on 2026-09-10. ADR-0013 and `phase-7-github-release-transport-2026-09-10.md` record the implemented boundary and current probe. Store policy must still be checked again immediately before submission because the cited policies can change.

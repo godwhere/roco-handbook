@@ -2,6 +2,7 @@
 
 - Status: accepted
 - Date: 2026-09-09
+- Runtime follow-up: ADR-0013 accepted on 2026-09-10
 - Scope: post-V1 independent Catalog updates
 
 ## Context
@@ -33,8 +34,8 @@ The following invariants apply from the first Phase 7 change:
 
 ## Pending authorization and evidence
 
-Implementation may continue with offline protocol fixtures and validators. The repository owner later authorized Desktop custody for the Catalog signing key; ADR-0011 and the corresponding evidence record the key and the subsequently confirmed iCloud Desktop synchronization risk. Network activation still stops until the user approves the concrete host, allowed domains, redirect behavior, and download UX. Store-policy conclusions stop until the intended distribution channels and then-current rules are reviewed. Logical patch work stops until complete-package measurements demonstrate a real need.
+The repository owner later authorized Desktop custody for the Catalog signing key, accepted the confirmed iCloud Desktop synchronization model, approved GitHub Releases, and approved the concrete one-redirect foreground UX. ADR-0011 records the key and ADR-0013 records the runtime transport. Store-policy conclusions still stop until the intended distribution channels and then-current rules are reviewed. Logical patch work still stops until complete-package measurements demonstrate a real need.
 
 ## Consequences
 
-Phase 7 is active, but no existing App behavior changes in this inception slice. The repository gains an explicit path for safe progress without treating a transport hash as publisher authentication, exposing a private key, or prematurely committing to hosting and incremental-update complexity.
+This inception slice initially changed no App behavior. Later accepted slices implemented the authenticated complete-package pipeline and bounded GitHub Release foreground flow without treating a transport hash as publisher authentication or exposing a private key. Incremental patch complexity remains outside the accepted runtime scope.
