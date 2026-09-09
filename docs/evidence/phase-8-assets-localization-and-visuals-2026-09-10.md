@@ -56,6 +56,8 @@ The current `1.1.0` build `2` source built successfully with the complete frozen
 
 The generated build products remain ignored and untracked. The larger package sizes are the measured cost of shipping the complete image library for offline use.
 
+The focused `RunnerTests` iOS suite also passed on the iPhone 17 Pro simulator. It verifies that the built application exposes the published Chinese display name and `world.roco.rocoHandbook` Bundle ID; the generated empty example test is no longer present.
+
 ## Hosted validation
 
 GitHub Actions run [34400308182](https://github.com/godwhere/roco-handbook/actions/runs/34400308182) executed the `Offline validation` workflow against commit `94ee692d9fc30ef33f9937116c891773d425a489`. The run started at `2026-09-09T20:19:10Z`, completed at `2026-09-09T20:20:29Z`, and reported `success`.

@@ -19,7 +19,7 @@ App signing, store account configuration, listing submission, upload, publicatio
 - App domain and data: asset keys added to existing Catalog DTOs and repository mapping, plus the type-relationship contract and bundled-asset repository
 - App presentation: centralized `en-US` and `zh-CN` strings; localized startup, navigation, Catalog, personal library, and Settings flows; accessible creature, skill, feature, type, stat, and category images; total base stats; incoming and outgoing type relationships
 - Platform identity: Android and iOS display names, launcher and App icons, branded launch resources, and regenerated platform image slots
-- Tests: focused image manifest, type relation, repository, localization, asset, and widget coverage
+- Tests: focused image manifest, type relation, repository, localization, asset, widget, and iOS platform-identity coverage; the generated empty iOS example test was replaced
 - Store evidence: four iOS screenshots at 1206 × 2622 and three Android screenshots at 1080 × 2424 under `docs/evidence/phase-8-store-screenshots/`
 
 ## Verification performed
@@ -45,6 +45,9 @@ Result: source revision 39538, 19 source types, eight reviewed inverse-list exce
 
 cd app && flutter build ios --simulator
 Result: passed; the rebuilt App was installed and launched on the iPhone 17 Pro simulator.
+
+cd app/ios && xcodebuild test -workspace Runner.xcworkspace -scheme Runner -destination 'id=4DCEC9FD-FE44-4047-AE85-D481E03AD9D0' -only-testing:RunnerTests
+Result: passed; the platform regression verified the published iOS display name and Bundle ID after replacing the generated empty example test.
 
 cd app && flutter build apk --debug
 Result: passed; the rebuilt APK was installed and launched on the Android API 36 emulator.
