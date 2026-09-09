@@ -140,6 +140,22 @@ final class CatalogManifestTrustStore {
         'The Catalog manifest trust store must contain one to eight keys.',
       );
     }
+    final ranges = indexed.values.toList()
+      ..sort(
+        (left, right) =>
+            left.firstReleaseSequence.compareTo(right.firstReleaseSequence),
+      );
+    for (var index = 1; index < ranges.length; index += 1) {
+      final previous = ranges[index - 1];
+      final current = ranges[index];
+      if (previous.lastReleaseSequence == null ||
+          current.firstReleaseSequence <= previous.lastReleaseSequence!) {
+        throw const RemoteCatalogManifestException(
+          'trust_store_key_range',
+          'Trusted manifest key release ranges must not overlap.',
+        );
+      }
+    }
     return Map.unmodifiable(indexed);
   }
 
@@ -179,6 +195,18 @@ final class RemoteCatalogValidationContext {
   final int supportedProtocolVersion;
   final int supportedCatalogSchemaVersion;
   final int maximumPackageBytes;
+
+  RemoteCatalogValidationContext withHighestAcceptedReleaseSequence(
+    int value,
+  ) => RemoteCatalogValidationContext(
+    currentAppVersion: currentAppVersion,
+    currentDataVersion: currentDataVersion,
+    highestAcceptedReleaseSequence: value,
+    allowedHosts: allowedHosts,
+    supportedProtocolVersion: supportedProtocolVersion,
+    supportedCatalogSchemaVersion: supportedCatalogSchemaVersion,
+    maximumPackageBytes: maximumPackageBytes,
+  );
 }
 
 final class RemoteCatalogPackage {
@@ -370,7 +398,7 @@ final class RemoteCatalogManifestVerifier {
     } on FormatException catch (error) {
       throw RemoteCatalogManifestException('payload_json', error.message);
     }
-    if (_canonicalJson(decodedPayload) != payloadText) {
+    if (encodeCanonicalCatalogManifestJson(decodedPayload) != payloadText) {
       throw const RemoteCatalogManifestException(
         'payload_canonical',
         'The signed Catalog manifest payload is not canonical JSON.',
@@ -653,16 +681,16 @@ String _decodeUtf8(Uint8List bytes) {
   }
 }
 
-String _canonicalJson(Object? value) {
+String encodeCanonicalCatalogManifestJson(Object? value) {
   if (value == null || value is bool || value is int || value is String) {
     return jsonEncode(value);
   }
   if (value is List) {
-    return '[${value.map(_canonicalJson).join(',')}]';
+    return '[${value.map(encodeCanonicalCatalogManifestJson).join(',')}]';
   }
   if (value is Map<String, dynamic>) {
     final keys = value.keys.toList()..sort();
-    return '{${keys.map((key) => '${jsonEncode(key)}:${_canonicalJson(value[key])}').join(',')}}';
+    return '{${keys.map((key) => '${jsonEncode(key)}:${encodeCanonicalCatalogManifestJson(value[key])}').join(',')}}';
   }
   throw const RemoteCatalogManifestException(
     'payload_canonical',

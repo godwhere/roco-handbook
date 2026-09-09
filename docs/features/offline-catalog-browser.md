@@ -11,7 +11,7 @@ The bottom navigation has four destinations:
 - **My Library** opens device-local favorites and handbook collection marks.
 - **Settings** shows local data versions, attribution, and the confirmed bundled-Catalog recovery action.
 
-The information action shows data version, Catalog schema, snapshot ID, build time, complete source revision time range, coverage flags, and the packaged attribution text.
+The information action shows data version, Catalog schema, snapshot ID, build time, complete source revision time range, coverage flags, and the attribution text validated and retained with that exact Catalog version.
 
 ## Creature browser
 

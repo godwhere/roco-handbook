@@ -57,7 +57,7 @@ final class ProductionCatalogBootstrap {
     return CatalogSession(
       repository: repository,
       info: info,
-      attribution: bundle.attributionText,
+      attribution: open.attributionText,
       installed: open.installed,
       userRepository: SqliteUserRepository(userOpen.databasePath),
       userDatabaseCreated: userOpen.created,

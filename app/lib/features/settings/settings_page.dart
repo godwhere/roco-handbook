@@ -182,6 +182,8 @@ String _catalogOutcomeLabel(CatalogOpenOutcome outcome) {
   return switch (outcome) {
     CatalogOpenOutcome.reused => 'Opened the current validated Catalog',
     CatalogOpenOutcome.installedBundled => 'Installed bundled Catalog data',
+    CatalogOpenOutcome.installedRemote =>
+      'Installed a verified Catalog package',
     CatalogOpenOutcome.recoveredPrevious =>
       'Recovered the previous validated Catalog',
     CatalogOpenOutcome.restoredBundled =>

@@ -187,6 +187,23 @@ void main() {
       _failure('trust_store_key'),
     );
   });
+
+  test('rejects overlapping trust-store key ranges', () {
+    final trust = _jsonObject(trustStoreText);
+    final first = Map<String, dynamic>.from(
+      (trust['keys'] as List<dynamic>).single as Map,
+    )..['last_release_sequence'] = 10;
+    final overlapping = Map<String, dynamic>.from(first)
+      ..['key_id'] = 'fixture-release-key-2'
+      ..['first_release_sequence'] = 10
+      ..['last_release_sequence'] = 20;
+    trust['keys'] = <Object?>[first, overlapping];
+
+    expect(
+      () => CatalogManifestTrustStore.fromJsonText(jsonEncode(trust)),
+      _failure('trust_store_key_range'),
+    );
+  });
 }
 
 String _fixture(String name) =>

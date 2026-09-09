@@ -28,15 +28,22 @@ void main() {
     temporary.deleteSync(recursive: true);
   });
 
-  BundledCatalogBundle bundle({Uint8List? bytes, String? manifest}) {
+  BundledCatalogBundle bundle({
+    Uint8List? bytes,
+    String? manifest,
+    String? attribution,
+  }) {
     return BundledCatalogBundle(
       manifestText: manifest ?? manifestText,
       databaseBytes: bytes ?? databaseBytes,
-      attributionText: attributionText,
+      attributionText: attribution ?? attributionText,
     );
   }
 
-  BundledCatalogBundle updatedBundle({int dataVersion = 2}) {
+  BundledCatalogBundle updatedBundle({
+    int dataVersion = 2,
+    String? attribution,
+  }) {
     final fixture = File('${temporary.path}/fixture-v$dataVersion.db');
     fixture.writeAsBytesSync(databaseBytes, flush: true);
     final database = sqlite3.open(fixture.path, mode: OpenMode.readWrite);
@@ -74,7 +81,11 @@ void main() {
     manifest['snapshot_id'] = 'snapshot-phase-5-v$dataVersion';
     manifest['database_bytes'] = bytes.length;
     manifest['database_sha256'] = sha256.convert(bytes).toString();
-    return bundle(bytes: bytes, manifest: jsonEncode(manifest));
+    return bundle(
+      bytes: bytes,
+      manifest: jsonEncode(manifest),
+      attribution: attribution,
+    );
   }
 
   test(
@@ -86,6 +97,7 @@ void main() {
       expect(first.installed, isTrue);
       expect(first.outcome, CatalogOpenOutcome.installedBundled);
       expect(first.manifest.dataVersion, 1);
+      expect(first.attributionText, attributionText);
       expect(File(first.databasePath).existsSync(), isTrue);
       expect(
         File('${temporary.path}/catalog-state/active_catalog.json')
@@ -103,6 +115,7 @@ void main() {
       expect(second.installed, isFalse);
       expect(second.outcome, CatalogOpenOutcome.reused);
       expect(second.databasePath, first.databasePath);
+      expect(second.attributionText, attributionText);
     },
   );
 
@@ -143,8 +156,97 @@ void main() {
     expect(result.outcome, CatalogOpenOutcome.reused);
     expect(result.databasePath, legacyDatabase.path);
     final migrated = _readJson('${state.path}/active_catalog.json');
-    expect(migrated['pointer_version'], 1);
+    expect(migrated['pointer_version'], 2);
     expect(migrated['file_name'], 'catalog-v1-s1.db');
+    expect(migrated['attribution_bytes'], utf8.encode(attributionText).length);
+    expect(
+      File('${catalogs.path}/catalog-v1-s1.attribution.txt').readAsStringSync(),
+      attributionText,
+    );
+  });
+
+  test(
+    'migrates a pointer V1 descriptor and restores its attribution',
+    () async {
+      final installer = LocalCatalogInstaller(
+        temporary.path,
+        backgroundWork: false,
+      );
+      final first = await installer.prepareBundledCatalog(bundle());
+      final pointerPath = '${temporary.path}/catalog-state/active_catalog.json';
+      final pointer = _readJson(pointerPath);
+      final attributionName = (pointer['file_name'] as String).replaceFirst(
+        RegExp(r'\.db$'),
+        '.attribution.txt',
+      );
+      File('${temporary.path}/catalogs/$attributionName').deleteSync();
+      pointer
+        ..['pointer_version'] = 1
+        ..remove('attribution_bytes')
+        ..remove('attribution_sha256');
+      File(pointerPath).writeAsStringSync(jsonEncode(pointer), flush: true);
+
+      final migrated = await installer.prepareBundledCatalog(bundle());
+      expect(migrated.outcome, CatalogOpenOutcome.reused);
+      expect(migrated.databasePath, first.databasePath);
+      expect(migrated.attributionText, attributionText);
+      expect(_readJson(pointerPath)['pointer_version'], 2);
+      expect(
+        File('${temporary.path}/catalogs/$attributionName').readAsStringSync(),
+        attributionText,
+      );
+    },
+  );
+
+  test('persists the attribution owned by each Catalog version', () async {
+    final installer = LocalCatalogInstaller(
+      temporary.path,
+      backgroundWork: false,
+    );
+    await installer.prepareBundledCatalog(bundle());
+    final updatedAttribution = '$attributionText\nPackage: Phase 7 version 2\n';
+    final updated = await installer.prepareBundledCatalog(
+      updatedBundle(attribution: updatedAttribution),
+    );
+
+    expect(updated.attributionText, updatedAttribution);
+    final reused = await installer.prepareBundledCatalog(bundle());
+    expect(reused.manifest.dataVersion, 2);
+    expect(reused.attributionText, updatedAttribution);
+    final active = _readJson(
+      '${temporary.path}/catalog-state/active_catalog.json',
+    );
+    final attributionName = (active['file_name'] as String).replaceFirst(
+      RegExp(r'\.db$'),
+      '.attribution.txt',
+    );
+    expect(
+      File('${temporary.path}/catalogs/$attributionName').readAsStringSync(),
+      updatedAttribution,
+    );
+  });
+
+  test('a damaged active attribution recovers the previous Catalog', () async {
+    final installer = LocalCatalogInstaller(
+      temporary.path,
+      backgroundWork: false,
+    );
+    final first = await installer.prepareBundledCatalog(bundle());
+    await installer.prepareBundledCatalog(updatedBundle());
+    final active = _readJson(
+      '${temporary.path}/catalog-state/active_catalog.json',
+    );
+    final attributionName = (active['file_name'] as String).replaceFirst(
+      RegExp(r'\.db$'),
+      '.attribution.txt',
+    );
+    File('${temporary.path}/catalogs/$attributionName')
+        .writeAsStringSync('damaged', flush: true);
+
+    final recovered = await installer.prepareBundledCatalog(bundle());
+    expect(recovered.outcome, CatalogOpenOutcome.recoveredPrevious);
+    expect(recovered.databasePath, first.databasePath);
+    expect(recovered.attributionText, attributionText);
   });
 
   test('rejects changed bytes and cleans only its staging file', () async {
@@ -518,6 +620,91 @@ void main() {
       );
     },
   );
+
+  test('never follows Catalog database or attribution symlinks', () async {
+    final databaseSupport = '${temporary.path}/database-symlink';
+    final databaseInstaller = LocalCatalogInstaller(
+      databaseSupport,
+      backgroundWork: false,
+    );
+    final databaseOpen = await databaseInstaller.prepareBundledCatalog(
+      bundle(),
+    );
+    final outsideDatabase = File('${temporary.path}/outside-catalog.db')
+      ..writeAsBytesSync(databaseBytes, flush: true);
+    final outsideDatabaseHash = sha256
+        .convert(outsideDatabase.readAsBytesSync())
+        .toString();
+    File(databaseOpen.databasePath).deleteSync();
+    Link(databaseOpen.databasePath).createSync(outsideDatabase.path);
+
+    final repairedDatabase = await databaseInstaller.prepareBundledCatalog(
+      bundle(),
+    );
+    expect(
+      FileSystemEntity.typeSync(
+        repairedDatabase.databasePath,
+        followLinks: false,
+      ),
+      FileSystemEntityType.file,
+    );
+    expect(
+      sha256.convert(outsideDatabase.readAsBytesSync()).toString(),
+      outsideDatabaseHash,
+    );
+
+    File(repairedDatabase.databasePath).deleteSync();
+    Link(repairedDatabase.databasePath)
+        .createSync('${temporary.path}/missing-outside-catalog.db');
+    final repairedDanglingDatabase = await databaseInstaller
+        .prepareBundledCatalog(bundle());
+    expect(
+      FileSystemEntity.typeSync(
+        repairedDanglingDatabase.databasePath,
+        followLinks: false,
+      ),
+      FileSystemEntityType.file,
+    );
+
+    final attributionSupport = '${temporary.path}/attribution-symlink';
+    final attributionInstaller = LocalCatalogInstaller(
+      attributionSupport,
+      backgroundWork: false,
+    );
+    await attributionInstaller.prepareBundledCatalog(bundle());
+    final pointer = _readJson(
+      '$attributionSupport/catalog-state/active_catalog.json',
+    );
+    final attributionName = (pointer['file_name'] as String).replaceFirst(
+      RegExp(r'\.db$'),
+      '.attribution.txt',
+    );
+    final attributionPath = '$attributionSupport/catalogs/$attributionName';
+    final outsideAttribution = File('${temporary.path}/outside-attribution.txt')
+      ..writeAsStringSync(attributionText, flush: true);
+    File(attributionPath).deleteSync();
+    Link(attributionPath).createSync(outsideAttribution.path);
+
+    final repairedAttribution = await attributionInstaller
+        .prepareBundledCatalog(bundle());
+    expect(
+      FileSystemEntity.typeSync(attributionPath, followLinks: false),
+      FileSystemEntityType.file,
+    );
+    expect(repairedAttribution.attributionText, attributionText);
+    expect(outsideAttribution.readAsStringSync(), attributionText);
+
+    File(attributionPath).deleteSync();
+    Link(attributionPath)
+        .createSync('${temporary.path}/missing-outside-attribution.txt');
+    final repairedDanglingAttribution = await attributionInstaller
+        .prepareBundledCatalog(bundle());
+    expect(
+      FileSystemEntity.typeSync(attributionPath, followLinks: false),
+      FileSystemEntityType.file,
+    );
+    expect(repairedDanglingAttribution.attributionText, attributionText);
+  });
 
   test(
     'explicit bundled recovery may downgrade Catalog but preserves User V1',

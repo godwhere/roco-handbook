@@ -33,7 +33,7 @@ The following invariants apply from the first Phase 7 change:
 
 ## Pending authorization and evidence
 
-Implementation may continue with offline protocol fixtures and validators. Network activation stops until the user approves the concrete host, allowed domains, redirect behavior, download UX, and signing-key custody. Store-policy conclusions stop until the intended distribution channels and then-current rules are reviewed. Logical patch work stops until complete-package measurements demonstrate a real need.
+Implementation may continue with offline protocol fixtures and validators. The repository owner later authorized Desktop custody for the Catalog signing key; ADR-0011 and the corresponding evidence record the key and the subsequently confirmed iCloud Desktop synchronization risk. Network activation still stops until the user approves the concrete host, allowed domains, redirect behavior, and download UX. Store-policy conclusions stop until the intended distribution channels and then-current rules are reviewed. Logical patch work stops until complete-package measurements demonstrate a real need.
 
 ## Consequences
 

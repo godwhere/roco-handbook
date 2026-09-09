@@ -19,10 +19,14 @@ class ProjectStructureTests(unittest.TestCase):
             "docs/decisions/ADR-0008-phase-6-release-candidate.md",
             "docs/decisions/ADR-0010-phase-7-inception.md",
             "docs/decisions/ADR-0011-phase-7-signed-manifest-contract.md",
+            "docs/decisions/ADR-0012-phase-7-offline-package-installation.md",
             "docs/features/independent-catalog-updates.md",
             "docs/implementation-reports/phase-7.md",
             "docs/evidence/environment-2026-09-09.md",
             "docs/evidence/phase-7-signed-manifest-2026-09-09.md",
+            "docs/evidence/phase-7-offline-package-2026-09-09.md",
+            "docs/evidence/phase-7-hosting-policy-2026-09-09.md",
+            "docs/evidence/phase-7-signing-custody-2026-09-09.md",
             "config/bwiki_sources.json",
             "config/identity_registry.json",
             "config/type_aliases.json",
@@ -35,12 +39,19 @@ class ProjectStructureTests(unittest.TestCase):
             "schemas/manifests/remote_catalog_envelope_v1.schema.json",
             "schemas/manifests/remote_catalog_payload_v1.schema.json",
             "app/lib/data/catalog/remote_catalog_manifest.dart",
+            "app/lib/data/catalog/remote_catalog_archive.dart",
+            "app/assets/catalog/catalog_trust_store.json",
+            "app/tool/catalog_signing.dart",
             "app/test/data/remote_catalog_manifest_test.dart",
+            "app/test/data/remote_catalog_archive_test.dart",
+            "app/test/tool/catalog_signing_test.dart",
             "app/test/fixtures/catalog_update/catalog_trust_store_v1.json",
             "app/test/fixtures/catalog_update/remote_catalog_envelope_v1.json",
             "app/test/fixtures/catalog_update/remote_catalog_payload_v1.json",
             "tools/pyproject.toml",
             "tools/release/check_catalog.py",
+            "tools/catalog_builder/update_package_writer.py",
+            "tests/builder/test_update_package_writer.py",
             ".github/workflows/offline-validation.yml",
             "licenses/DATA_ATTRIBUTION.md",
             "licenses/THIRD_PARTY_NOTICES.md",
@@ -191,6 +202,53 @@ class ProjectStructureTests(unittest.TestCase):
                 self.assertRegex(action, r"^[^@]+@[0-9a-f]{40}$")
         self.assertNotIn("secrets.", workflow)
         self.assertNotIn("bwiki", workflow.lower())
+
+    def test_phase_seven_offline_foundation_does_not_enable_network_runtime(
+        self,
+    ) -> None:
+        pubspec = (ROOT / "app/pubspec.yaml").read_text(encoding="utf-8")
+        release_manifest = (
+            ROOT / "app/android/app/src/main/AndroidManifest.xml"
+        ).read_text(encoding="utf-8")
+        excluded = {
+            ROOT / "app/lib/data/catalog/catalog_installer.dart",
+            ROOT / "app/lib/data/catalog/remote_catalog_archive.dart",
+            ROOT / "app/lib/data/catalog/remote_catalog_manifest.dart",
+        }
+        runtime_sources = "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in (ROOT / "app/lib").rglob("*.dart")
+            if path not in excluded
+        )
+
+        self.assertIsNone(re.search(r"^\s{2}(?:dio|http):", pubspec, re.M))
+        self.assertNotIn("android.permission.INTERNET", release_manifest)
+        self.assertNotIn("RemoteCatalogPackagePipeline", runtime_sources)
+        self.assertNotIn("RemoteCatalogArchiveDecoder", runtime_sources)
+        self.assertNotIn("installVerifiedRemoteCatalog(", runtime_sources)
+
+    def test_production_catalog_trust_store_is_public_only(self) -> None:
+        trust_store = json.loads(
+            (
+                ROOT / "app/assets/catalog/catalog_trust_store.json"
+            ).read_text(encoding="utf-8")
+        )
+        serialized = json.dumps(trust_store, sort_keys=True)
+        key = trust_store["keys"][0]
+
+        self.assertEqual(1, trust_store["trust_store_version"])
+        self.assertEqual("catalog-prod-2026-01", key["key_id"])
+        self.assertEqual("ed25519", key["algorithm"])
+        self.assertEqual(1, key["first_release_sequence"])
+        self.assertIsNone(key["last_release_sequence"])
+        self.assertRegex(key["public_key"], r"^[A-Za-z0-9_-]{43}$")
+        self.assertNotIn("private_key", serialized)
+        self.assertNotIn("private-key", serialized)
+        self.assertEqual([], list(ROOT.rglob("*.private.json")))
+        self.assertIn(
+            "*.private.json",
+            (ROOT / ".gitignore").read_text(encoding="utf-8"),
+        )
 
     def test_project_authored_text_is_english(self) -> None:
         checked_roots = [

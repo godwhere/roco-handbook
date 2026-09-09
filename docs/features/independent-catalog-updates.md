@@ -2,13 +2,15 @@
 
 ## Current state
 
-Phase 7 now has an offline signed-manifest validator, but independent updates are not enabled. The installed App still uses only a Catalog bundled with an App release, performs no runtime network request, and has no production host or trust key.
+Phase 7 now has an offline complete-ZIP publisher, signed-manifest generator, production public trust key, validator, and strict installation pipeline, but independent updates are not enabled. The installed App still performs no runtime network request and has no production host, discovery trigger, or download UI.
 
 ## Planned first capability
 
 The first Phase 7 delivery targets a complete immutable Catalog database package. ADR-0011 freezes its strict envelope, canonical signed payload, Ed25519 authentication, public-key sequence ranges, dataset and compatibility fields, monotonic release sequence, exact-host HTTPS URL, byte length, and SHA-256. Offline conformance fixtures and negative tests now cover that metadata boundary.
 
-A future update client will authenticate metadata, enforce compatibility and anti-replay rules, download only from an approved HTTPS host, verify the archive, and pass its validated Catalog to the existing installer. The installer remains the only owner of staging, database validation, activation, rollback, retention, recovery, and personal-database isolation. The current validator is not connected to startup, Settings, transport, archive extraction, or the installer.
+A future update client will fetch only from an approved HTTPS host and pass the received bytes into the existing offline pipeline. That pipeline already authenticates metadata, enforces compatibility and anti-replay rules, validates the exact ZIP and inner Catalog, and hands the candidate to the existing installer. The installer remains the only owner of staging, database validation, activation, rollback, retention, recovery, and personal-database isolation. It now also keeps version-specific attribution and a separate monotonic remote release-sequence high-water mark.
+
+The publisher can already turn a validated immutable Catalog release into the exact three-entry ZIP accepted by the App. It reruns release validation, is reproducible for the same toolchain and input, verifies its own output, reports the bytes and SHA-256 required by the signed payload, and refuses overwrite. A separate canonical-payload command binds an approved future URL and release metadata to those bytes. The external signing tool uses the Desktop-held production key and self-verifies the public envelope; publication remains separate so this repository never becomes a private-key store. The custody evidence records that this Desktop is currently synchronized to iCloud, which requires an explicit acceptance or replacement decision before real release signing.
 
 ## Frozen offline manifest boundary
 
@@ -17,7 +19,9 @@ A future update client will authenticate metadata, enforce compatibility and ant
 - Both data version and release sequence must advance, and the key must cover the release sequence.
 - Package URLs must use HTTPS, match the exact supplied host allowlist, use the standard port, and contain no credentials, query, fragment, or traversal segment.
 - The package descriptor supports only a complete ZIP and binds its maximum size, exact byte length, and lowercase SHA-256.
-- The fixture package proves only byte identity. ZIP safety, Catalog contents, installation, and persisted anti-replay state remain later ownership boundaries.
+- A complete package contains exactly the existing bundled manifest, database, and attribution asset paths. ZIP structure, actual decompressed output, CRC, inner-to-outer identity, SQLite validity, installation, attribution rollback, and persisted anti-replay state are covered offline.
+
+The pipeline is not called by production bootstrap or Settings. No update check, network request, archive download, automatic installation, or background task exists.
 
 ## Failure behavior
 
@@ -32,7 +36,7 @@ A future update client will authenticate metadata, enforce compatibility and ant
 
 - Static hosting provider and exact allowed hostnames
 - Redirect policy and availability expectations
-- Production public-key set, private-key custody, rotation, revocation, and persisted replay-state ownership
+- Production public-key set, private-key custody, rotation, and revocation operations
 - Foreground check/download UX, user consent, retry limits, and metered-network behavior
 - Intended distribution channels and current iOS and Android policy evidence
 - Production-like interruption, corruption, low-storage, rollback, and device test matrix

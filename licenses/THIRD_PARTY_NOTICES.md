@@ -21,6 +21,8 @@ BSD-3-Clause:
 
 MIT:
 
+- `archive 4.2.0`
+- `posix 6.5.2`
 - `sqlite3 3.5.2`
 - `yaml 3.1.4`
 

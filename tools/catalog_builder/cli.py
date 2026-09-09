@@ -15,6 +15,10 @@ from .package_writer import (
     read_normalized_catalog,
     write_normalized_catalog,
 )
+from .update_package_writer import (
+    build_complete_update_archive,
+    build_remote_manifest_payload,
+)
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -59,6 +63,25 @@ def _parser() -> argparse.ArgumentParser:
     release.add_argument("--reviewed-exceptions", type=Path, required=True)
     release.add_argument("--output", type=Path, required=True)
     release.add_argument("--previous-database", type=Path)
+
+    update = subparsers.add_parser(
+        "build-complete-update",
+        help="Build a validated complete-Catalog ZIP without signing or publishing it.",
+    )
+    update.add_argument("--release", type=Path, required=True)
+    update.add_argument("--output", type=Path, required=True)
+
+    payload = subparsers.add_parser(
+        "build-update-payload",
+        help="Build canonical unsigned metadata for a complete-Catalog ZIP.",
+    )
+    payload.add_argument("--release", type=Path, required=True)
+    payload.add_argument("--archive", type=Path, required=True)
+    payload.add_argument("--package-url", required=True)
+    payload.add_argument("--release-sequence", type=int, required=True)
+    payload.add_argument("--minimum-app-version", required=True)
+    payload.add_argument("--published-at-utc", required=True)
+    payload.add_argument("--output", type=Path, required=True)
     return parser
 
 
@@ -149,6 +172,29 @@ def main(argv: list[str] | None = None) -> int:
                     sort_keys=True,
                 )
             )
+            return 0
+        if args.command == "build-complete-update":
+            root = Path(__file__).resolve().parents[2]
+            report = build_complete_update_archive(
+                args.release,
+                args.output,
+                repository_root=root,
+            )
+            print(json.dumps(report, indent=2, sort_keys=True))
+            return 0
+        if args.command == "build-update-payload":
+            root = Path(__file__).resolve().parents[2]
+            report = build_remote_manifest_payload(
+                args.release,
+                args.archive,
+                args.output,
+                package_url=args.package_url,
+                release_sequence=args.release_sequence,
+                minimum_app_version=args.minimum_app_version,
+                published_at_utc=args.published_at_utc,
+                repository_root=root,
+            )
+            print(json.dumps(report, indent=2, sort_keys=True))
             return 0
     except CatalogToolError as error:
         print(

@@ -1,0 +1,12 @@
+{
+  "keys": [
+    {
+      "algorithm": "ed25519",
+      "first_release_sequence": 1,
+      "key_id": "catalog-prod-2026-01",
+      "last_release_sequence": null,
+      "public_key": "dCiuCXN5e0TRFUL5RYU9p9Z-INiuppmX5W0mJh7_yvg"
+    }
+  ],
+  "trust_store_version": 1
+}

@@ -2,13 +2,14 @@
 
 - Status: accepted
 - Date: 2026-09-09
+- Custody follow-up: 2026-09-10
 - Scope: offline authentication and validation of complete-Catalog package metadata
 
 ## Context
 
 Phase 7 needs publisher authentication before any remote transport can be considered. A package SHA-256 proves byte identity only; it does not prove who published the bytes. The contract must also reject ambiguous encodings, incompatible data, replayed releases, unapproved hosts, and metadata that could bypass the existing Catalog installer.
 
-This decision intentionally precedes network activation. There is no selected production host, production public key, private signing key, downloader, redirect path, or installer integration in this slice.
+This decision intentionally precedes network activation. The original offline fixture slice had no production host, key, downloader, or redirect path. The repository owner subsequently authorized Desktop key custody; the production public-key and signing-tool addendum below does not select a host or activate networking.
 
 ## Decision
 
@@ -23,7 +24,11 @@ The V1 remote manifest consists of a strict JSON envelope and a signed payload:
 - A caller-provided validation context must prove that the target data version and release sequence are both newer, the App and protocol are compatible, the Catalog schema matches, the signing key covers that release sequence, and the package is within the configured size limit.
 - Package bytes must match both the authenticated length and SHA-256 before they can advance to archive or Catalog validation.
 
-The App trust store contains one to eight public Ed25519 keys with unique identifiers and inclusive release-sequence ranges. It contains no private material. Key rotation is represented by non-overlapping operational ranges selected during the later custody decision; the verifier itself fails closed on an unknown key or an out-of-range release.
+The App trust store contains one to eight public Ed25519 keys with unique identifiers and inclusive release-sequence ranges. It contains no private material. Key rotation is represented by non-overlapping operational ranges; the verifier itself fails closed on an unknown key or an out-of-range release.
+
+Following explicit custody authorization, `catalog-prod-2026-01` is the first production Catalog key. Its public key is the sole entry in `app/assets/catalog/catalog_trust_store.json`, beginning at release sequence 1 with no current upper bound. The unencrypted private JSON is outside the repository under `~/Desktop/RocoWorld-Catalog-Signing/`, inside an owner-only directory with an owner-only file. A later read-only check confirmed that macOS iCloud Desktop synchronization is enabled and that this file is visible through the iCloud Desktop path. Before real release signing, the repository owner must either explicitly accept that synchronized custody model or authorize a replacement key in an approved non-synchronized location, and must separately decide whether to create an encrypted offline backup.
+
+`app/tool/catalog_signing.dart` owns key generation and envelope signing. It refuses repository-local private keys, linked or over-permissive key files, invalid or out-of-range payloads, and existing outputs. It verifies the private/public pair and passes every generated envelope through the production verifier before writing it. Private bytes are cleared from the tool's owned mutable buffers after use. The root ignore rule is defense in depth; it is not permission to place a private key in the repository.
 
 The implementation uses the pure-Dart `cryptography 2.9.0` package for Ed25519 verification. The dependency is locked, adds no platform plugin, and is recorded under Apache-2.0 in the runtime notice inventory. The existing `crypto` package remains the SHA-256 implementation.
 
@@ -35,4 +40,4 @@ The fixture package bytes exercise authenticated length and SHA-256 comparison o
 
 ## Consequences
 
-The repository now has a real offline publisher-authentication boundary and executable negative conformance tests. It still cannot check for, download, extract, or install a remote update. A later slice must select production hosting and key custody, implement a bounded foreground transport, validate archive shape without executable content or unsafe paths, and hand a verified Catalog to the existing installer. That work requires the pending authorization and evidence in ADR-0010.
+The repository now has a real offline publisher-authentication boundary, a public production trust root, an external private-key custody location, and executable negative conformance tests. The complete package can be built, signed, verified, decoded, and installed offline, but the production App still cannot discover or download an update. A later slice must select production hosting and implement a bounded foreground transport. That work still requires the pending host, redirect, and UX authorization in ADR-0010.
