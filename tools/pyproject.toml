@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "roco-handbook-tools"
+version = "0.0.0"
+description = "Offline import and catalog build tools for the Roco World handbook"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.pyright]
+pythonVersion = "3.11"
+typeCheckingMode = "strict"
+

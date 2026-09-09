@@ -1,0 +1,27 @@
+{
+  "config_version": 1,
+  "dataset_id": "roco-world-zh-cn",
+  "endpoint": "https://wiki.biligame.com/rocom/api.php",
+  "request_policy": {
+    "max_concurrency": 1,
+    "minimum_interval_seconds": 1,
+    "connect_timeout_seconds": 10,
+    "read_timeout_seconds": 60,
+    "max_retries": 3
+  },
+  "sources": [
+    {"source_key": "core", "title": "Module:PetData/Core", "level": "required"},
+    {"source_key": "index", "title": "Module:PetData/Index", "level": "required"},
+    {"source_key": "handbook", "title": "Module:PetData/Handbook", "level": "required"},
+    {"source_key": "evolution", "title": "Module:PetData/Evolution", "level": "required"},
+    {"source_key": "skill_catalog", "title": "Module:PetData/SkillCatalog", "level": "required"},
+    {"source_key": "learnsets", "title": "Module:PetData/Learnsets", "level": "required"},
+    {"source_key": "learnset_catalog", "title": "Module:PetData/LearnsetCatalog", "level": "required"},
+    {"source_key": "pet_module", "title": "Module:Pet", "level": "adapter_review"},
+    {"source_key": "skills_module", "title": "Module:PetData/Skills", "level": "adapter_review"},
+    {"source_key": "head_overrides", "title": "Module:PetData/HeadOverrides", "level": "disabled_v1"},
+    {"source_key": "skill_stone_topics", "title": "Module:PetData/SkillStoneTopics", "level": "disabled_v1"},
+    {"source_key": "topic_rewards", "title": "Module:PetData/TopicRewards", "level": "disabled_v1"}
+  ]
+}
+

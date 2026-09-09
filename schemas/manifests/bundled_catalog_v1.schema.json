@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/roco-handbook/bundled_catalog_v1.schema.json",
+  "title": "Bundled catalog manifest V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifest_version",
+    "dataset_id",
+    "catalog_schema_version",
+    "data_version",
+    "snapshot_id",
+    "database_asset",
+    "database_bytes",
+    "database_sha256",
+    "coverage"
+  ],
+  "properties": {
+    "manifest_version": {"const": 1},
+    "dataset_id": {"const": "roco-world-zh-cn"},
+    "catalog_schema_version": {"const": 1},
+    "data_version": {"type": "integer", "minimum": 1},
+    "snapshot_id": {"type": "string", "minLength": 1},
+    "database_asset": {"const": "assets/catalog/catalog.db"},
+    "database_bytes": {"type": "integer", "minimum": 1},
+    "database_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pets",
+        "skills",
+        "evolutions",
+        "topic_rewards",
+        "skill_stone_topics",
+        "description_note_definitions"
+      ],
+      "properties": {
+        "pets": {"type": "boolean"},
+        "skills": {"type": "boolean"},
+        "evolutions": {"type": "boolean"},
+        "topic_rewards": {"type": "boolean"},
+        "skill_stone_topics": {"type": "boolean"},
+        "description_note_definitions": {"type": "boolean"}
+      }
+    }
+  }
+}
+
