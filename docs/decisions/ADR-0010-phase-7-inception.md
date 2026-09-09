@@ -3,6 +3,7 @@
 - Status: accepted
 - Date: 2026-09-09
 - Runtime follow-up: ADR-0013 accepted on 2026-09-10
+- Closure follow-up: ADR-0014 accepted on 2026-09-10
 - Scope: post-V1 independent Catalog updates
 
 ## Context
@@ -34,7 +35,7 @@ The following invariants apply from the first Phase 7 change:
 
 ## Pending authorization and evidence
 
-The repository owner later authorized Desktop custody for the Catalog signing key, accepted the confirmed iCloud Desktop synchronization model, approved GitHub Releases, and approved the concrete one-redirect foreground UX. ADR-0011 records the key and ADR-0013 records the runtime transport. Store-policy conclusions still stop until the intended distribution channels and then-current rules are reviewed. Logical patch work still stops until complete-package measurements demonstrate a real need.
+The repository owner later authorized Desktop custody for the Catalog signing key, accepted the confirmed iCloud Desktop synchronization model, approved GitHub Releases, and approved the concrete one-redirect foreground UX. ADR-0011 records the key and ADR-0013 records the runtime transport. ADR-0014 temporarily closes the phase while a genuine changed Catalog is unavailable and preserves the missing live-package matrix as deferred evidence. Store-policy conclusions still stop until the intended distribution channels and then-current rules are reviewed. Logical patch work still stops until complete-package measurements demonstrate a real need.
 
 ## Consequences
 

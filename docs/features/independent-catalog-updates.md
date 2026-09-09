@@ -2,7 +2,7 @@
 
 ## Current state
 
-Phase 7 now has a complete-ZIP publisher, signed-manifest generator, production public trust key, strict validator and installer, and an enabled user-triggered GitHub Releases transport. The App still starts entirely from its bundled Catalog and performs no automatic or background network request.
+Phase 7 now has a complete-ZIP publisher, signed-manifest generator, production public trust key, strict validator and installer, and an enabled user-triggered GitHub Releases transport. The App still starts entirely from its bundled Catalog and performs no automatic or background network request. ADR-0014 temporarily closes the phase under `PHASE7-LIVE-CATALOG-001` while a genuine newer Catalog is unavailable; the real-package matrix remains deferred rather than passed.
 
 ## Supported first capability
 

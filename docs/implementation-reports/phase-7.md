@@ -1,6 +1,6 @@
 # Phase 7 implementation report
 
-- Status: foreground complete-Catalog runtime implemented; real newer Release and physical-device evidence pending
+- Status: temporarily closed under `PHASE7-LIVE-CATALOG-001`; foreground complete-Catalog runtime implemented, live newer Release evidence deferred
 - Date: 2026-09-10
 - Workspace: `/Users/ethan/Documents/ChatGPT/roco-handbook`
 
@@ -9,6 +9,12 @@
 Phase 7 implements optional independent delivery of complete immutable Catalog databases. It includes the signed manifest, public trust store, external signing ceremony, strict ZIP and SQLite validation, existing-installer activation and rollback, exact GitHub Releases transport, Settings-only consent and progress, cancellation before installation, version-specific attribution, and monotonic replay state.
 
 It does not implement App binary self-update, App Store differential delivery, runtime BWIKI access, background work, automatic retry, arbitrary endpoints, logical Catalog patches, accounts, cloud synchronization, or any network path for `user.db`. Private key material remains outside the repository and App. No real Release is created until a validated Catalog data version greater than 1 exists.
+
+## Temporary closure
+
+On 2026-09-10, the repository owner directed Phase 7 to close temporarily because a genuine upstream game update is expected in approximately two days. ADR-0014 records waiver `PHASE7-LIVE-CATALOG-001`. The waiver closes current sequencing without claiming the still-missing real Release, GitHub CDN transfer, production fault, or device evidence.
+
+The future data-change test must start from a real changed source snapshot and use the implemented complete-Catalog replacement protocol. It must not create a duplicate or synthetic data version merely to close the evidence gap. Logical row-level patches remain disabled and require a separate accepted protocol if later requested.
 
 ## Completed foundation
 
@@ -37,7 +43,7 @@ It does not implement App binary self-update, App Store differential delivery, r
 - Platform and version identity: `app/android/app/src/main/AndroidManifest.xml`, `app/lib/app_version.dart`, and `app/pubspec.yaml`
 - Publisher: `tools/catalog_builder/update_package_writer.py`
 - Tests: `app/test/data/catalog_update_source_test.dart`, `app/test/data/catalog_update_service_test.dart`, `app/test/data/remote_catalog_manifest_test.dart`, `app/test/features/catalog_flow_test.dart`, `tests/builder/test_update_package_writer.py`, `tests/release/test_candidate_manifest.py`, and `tests/test_project_structure.py`
-- Decisions, evidence, and current-state documentation: ADR-0010 through ADR-0013, the Phase 7 hosting, transport, and hosted-CI evidence files, the independent-update, recovery, browser, and release-readiness feature documents, the root and App READMEs, and this report
+- Decisions, evidence, and current-state documentation: ADR-0010 through ADR-0014, the Phase 7 hosting, transport, hosted-CI, and live-update-deferral evidence files, the independent-update, recovery, browser, and release-readiness feature documents, the root and App READMEs, and this report
 - Hosted-CI compatibility follow-up: `app/test/tool/catalog_signing_test.dart` now establishes the required owner-only temporary-directory fixture on macOS and Linux without weakening the production signing checks; the root README includes the public workflow badge
 
 The Chinese baseline specification was not edited. ADR-0013 is the required English decision record for the accepted runtime architecture, host, lifecycle, permissions, and validation criteria.
@@ -99,4 +105,4 @@ Generated Android and iOS products remain ignored and untracked. Dependency reso
 
 ## Remaining risks and next boundary
 
-The runtime capability is implemented and locally verified at its available boundaries, and the empty production channel fails safely. Its next meaningful evidence requires a real validated Catalog data version greater than 1. That release must be built outside the repository, signed with the accepted external key, uploaded under the exact immutable package tag, checked through the foreground client, and then exercised for interruption, low storage, rollback, and platform behavior. Logical patch work remains deferred until complete-package evidence demonstrates a material need and a separate protocol is accepted.
+The runtime capability is implemented and locally verified at its available boundaries, and the empty production channel fails safely. Phase 7 is temporarily closed under ADR-0014, with the missing live-package matrix deferred rather than passed. Its next meaningful evidence requires a real validated Catalog data version greater than 1. That release must be built outside the repository, signed with the accepted external key, uploaded under the exact immutable package tag, checked through the foreground client, and then exercised for interruption, low storage, rollback, and platform behavior. Logical patch work remains deferred until complete-package evidence demonstrates a material need and a separate protocol is accepted.

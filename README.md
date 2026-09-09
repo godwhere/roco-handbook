@@ -7,7 +7,7 @@ An independent, non-commercial, offline-first reference application for iOS and 
 ## Current project status
 
 - Phases 0 through 6 are complete. Phase 6 closed under an explicit physical-device-test waiver; those tests remain unrun and store publication remains a separate unmet gate.
-- Phase 7 now connects the complete-package path to an explicit foreground GitHub Releases flow. Settings performs the only check, shows the signed data version and total size before download, reports progress, supports cancellation and manual retry, then reuses strict Ed25519, ZIP, SQLite, replay, attribution, activation, and rollback validation. No background update or logical patch path exists.
+- Phase 7 is temporarily closed under explicit live-update evidence deferral `PHASE7-LIVE-CATALOG-001`. Its complete-package GitHub Releases flow is implemented and passes local and hosted checks, but no genuine newer Catalog exists yet, so real package delivery remains unrun rather than simulated. No background update or logical patch path exists.
 - A local Git repository exists. Completed delivery checkpoints use GitHub Desktop for commits and pushes unless the active user instruction explicitly defers that step.
 - The supplied technical baseline is preserved at [docs/technical-spec-v1.md](docs/technical-spec-v1.md).
 - The Catalog and User V1 SQL files are the current normative schema sources. Catalog V1 currently contains 20 tables and two query views.
@@ -28,7 +28,7 @@ An independent, non-commercial, offline-first reference application for iOS and 
 
 V1 includes offline creature and skill lookup, favorites, collection marks, notes, and safe whole-Catalog replacement with App updates. Phase 7 additionally enables an optional user-triggered authenticated complete-Catalog download. It excludes runtime BWIKI access, an application server, logical patch downloads, accounts, cloud synchronization, and bulk game-image acquisition.
 
-The complete Catalog remains the first supported independent-update unit. The runtime transport, consent, progress, cancellation, and local activation paths are implemented, but no newer production Catalog Release exists yet. Physical-device and real-package network evidence remain absent, and logical patches remain later work.
+The complete Catalog remains the first supported independent-update unit. The runtime transport, consent, progress, cancellation, and local activation paths are implemented, but no newer production Catalog Release exists yet. Physical-device and real-package network evidence remain absent, and logical patches remain later work. Temporary Phase 7 closure does not convert those deferred checks into passed evidence.
 
 `catalog.db` and `user.db` remain physically separate: the Catalog is replaceable, while personal data changes only through an independent migration.
 
