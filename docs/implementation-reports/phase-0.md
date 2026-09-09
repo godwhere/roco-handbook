@@ -6,11 +6,11 @@
 
 ## Declared boundary
 
-Phase 0 was limited to README and project instructions, documentation, configuration templates, normative SQL schemas, Python tool configuration, and test foundations. It did not access BWIKI, import snapshots, create the Flutter application, modify system networking, publish an App, or upload a release artifact. The user explicitly authorized a private GitHub remote and phase-completion pushes through GitHub Desktop.
+Phase 0 was limited to README and project instructions, documentation, configuration templates, normative SQL schemas, Python tool configuration, and test foundations. It did not access BWIKI, import snapshots, create the Flutter application, modify system networking, publish an App, or upload a release artifact. The user explicitly authorized the GitHub remote and phase-completion pushes through GitHub Desktop.
 
 ## Changes
 
-- Created the local repository through GitHub Desktop. GitHub Desktop generated the `main` branch, `.gitattributes`, and its automatic initial commit. Phase completion is delivered to a private remote through GitHub Desktop.
+- Created the local repository through GitHub Desktop. GitHub Desktop generated the `main` branch, `.gitattributes`, and its automatic initial commit. Phase completion is delivered to the configured `origin` through GitHub Desktop.
 - Preserved the supplied technical specification byte-for-byte at `docs/technical-spec-v1.md`.
 - Extracted the two normative SQL structures into `schemas/catalog_v1.sql` and `schemas/user_v1.sql`, translating comments to comply with the English-only project policy without changing DDL behavior.
 - Added V1 data-source and review configuration templates without contacting the upstream service.
