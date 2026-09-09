@@ -37,7 +37,8 @@ It does not implement App binary self-update, App Store differential delivery, r
 - Platform and version identity: `app/android/app/src/main/AndroidManifest.xml`, `app/lib/app_version.dart`, and `app/pubspec.yaml`
 - Publisher: `tools/catalog_builder/update_package_writer.py`
 - Tests: `app/test/data/catalog_update_source_test.dart`, `app/test/data/catalog_update_service_test.dart`, `app/test/data/remote_catalog_manifest_test.dart`, `app/test/features/catalog_flow_test.dart`, `tests/builder/test_update_package_writer.py`, `tests/release/test_candidate_manifest.py`, and `tests/test_project_structure.py`
-- Decisions, evidence, and current-state documentation: ADR-0010 through ADR-0013, both Phase 7 hosting and transport evidence files, the independent-update, recovery, browser, and release-readiness feature documents, the root and App READMEs, and this report
+- Decisions, evidence, and current-state documentation: ADR-0010 through ADR-0013, the Phase 7 hosting, transport, and hosted-CI evidence files, the independent-update, recovery, browser, and release-readiness feature documents, the root and App READMEs, and this report
+- Hosted-CI compatibility follow-up: `app/test/tool/catalog_signing_test.dart` now establishes the required owner-only temporary-directory fixture on macOS and Linux without weakening the production signing checks; the root README includes the public workflow badge
 
 The Chinese baseline specification was not edited. ADR-0013 is the required English decision record for the accepted runtime architecture, host, lifecycle, permissions, and validation criteria.
 
@@ -61,6 +62,9 @@ Result: passed; integrity check was `ok`, foreign-key violations were zero, and 
 
 Production Catalog source probe against the fixed GitHub discovery URL
 Result: `current_or_unpublished`; no token or remote mutation was used.
+
+GitHub Actions run 34384152396 at d88e5e7
+Result: passed; both `Catalog and release contracts` and `Flutter contracts` completed successfully on Ubuntu. The preceding failed run and the Linux-only test-fixture correction are recorded in `docs/evidence/phase-7-hosted-ci-2026-09-10.md`.
 
 cd app && flutter build appbundle --release
 Result: passed; 59.0 MB AAB; SHA-256 `435179c42a114ffd98efa8f2b3b41c4dbb4f7ea29e72210975cae745e35f9ccb`.
