@@ -5,7 +5,7 @@ An independent, non-commercial offline reference application for iOS and Android
 ## Current project status
 
 - Phases 0 through 6 are complete. Phase 6 closed under an explicit physical-device-test waiver; those tests remain unrun and store publication remains a separate unmet gate.
-- Phase 7 has begun as a separate post-V1 effort. Its inception scope is documented, but the App still has no runtime update client, remote host, signing configuration, or download permission.
+- Phase 7 has an offline Ed25519 complete-package manifest validator with canonical signed-payload, compatibility, anti-replay, exact-host HTTPS, size, and SHA-256 checks. It is not connected to runtime behavior; the App still has no update client, production host or key, download permission, or installer handoff.
 - A local Git repository exists. Completed delivery checkpoints use GitHub Desktop for commits and pushes unless the active user instruction explicitly defers that step.
 - The supplied technical baseline is preserved at [docs/technical-spec-v1.md](docs/technical-spec-v1.md).
 - The Catalog and User V1 SQL files are the current normative schema sources. Catalog V1 currently contains 20 tables and two query views.
@@ -26,7 +26,7 @@ An independent, non-commercial offline reference application for iOS and Android
 
 V1 includes offline creature and skill lookup, favorites, collection marks, notes, and safe whole-Catalog replacement with App updates. It excludes runtime BWIKI access, an application server, independent patch downloads, accounts, cloud synchronization, and bulk game-image acquisition.
 
-Phase 7 does not alter the shipped V1 boundary until an independently signed, host-restricted, fail-closed update path is implemented and accepted. The first implementation target is a complete Catalog package; logical patches remain later work.
+Phase 7 does not alter the shipped V1 boundary. Its signed-manifest contract is implemented and tested offline, but transport, archive validation, installation, and production trust configuration remain absent. The first delivery target remains a complete Catalog package; logical patches remain later work.
 
 `catalog.db` and `user.db` remain physically separate: the Catalog is replaceable, while personal data changes only through an independent migration.
 
@@ -34,7 +34,7 @@ Phase 7 does not alter the shipped V1 boundary until an independently signed, ho
 
 - `docs/`: baseline specification, decisions, evidence, and implementation reports
 - `config/`: source, identity, display, and reviewed-exception configuration
-- `schemas/`: normative Catalog, User, and manifest structures
+- `schemas/`: normative Catalog, User, bundled-manifest, and signed remote-manifest structures
 - `tools/`: project configuration for later import and build tools
 - `tests/`: offline, repeatable structure and contract tests
 - `app/`: Flutter iOS and Android client, bundled Catalog assets, and App tests

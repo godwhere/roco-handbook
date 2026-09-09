@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/roco-handbook/remote_catalog_envelope_v1.schema.json",
+  "title": "Remote catalog signed envelope V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "envelope_version",
+    "payload_encoding",
+    "signature_algorithm",
+    "key_id",
+    "payload",
+    "signature"
+  ],
+  "properties": {
+    "envelope_version": {"const": 1},
+    "payload_encoding": {"const": "base64url"},
+    "signature_algorithm": {"const": "ed25519"},
+    "key_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,63}$"},
+    "payload": {"type": "string", "pattern": "^[A-Za-z0-9_-]+$"},
+    "signature": {"type": "string", "pattern": "^[A-Za-z0-9_-]{86}$"}
+  }
+}

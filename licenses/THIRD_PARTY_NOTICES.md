@@ -26,6 +26,7 @@ MIT:
 
 Apache-2.0:
 
+- `cryptography 2.9.0`
 - `material_color_utilities 0.13.0`
 
 Flutter SDK components:

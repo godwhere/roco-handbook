@@ -1,0 +1,12 @@
+{
+  "keys": [
+    {
+      "algorithm": "ed25519",
+      "first_release_sequence": 1,
+      "key_id": "fixture-release-key-1",
+      "last_release_sequence": null,
+      "public_key": "azkzGb1XjUzH8XKUcuqLE-BCckAAUuYkasQA94XFr-w"
+    }
+  ],
+  "trust_store_version": 1
+}

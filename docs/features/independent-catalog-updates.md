@@ -2,13 +2,22 @@
 
 ## Current state
 
-Phase 7 inception is complete, but independent updates are not implemented or enabled. The installed App still uses only a Catalog bundled with an App release and performs no runtime network request.
+Phase 7 now has an offline signed-manifest validator, but independent updates are not enabled. The installed App still uses only a Catalog bundled with an App release, performs no runtime network request, and has no production host or trust key.
 
 ## Planned first capability
 
-The first Phase 7 delivery will support a complete immutable Catalog database package. Its signed manifest must identify the dataset, protocol, Catalog schema, target data version, monotonic release sequence, minimum compatible App, package URL, byte length, SHA-256, signing key, and signature. Exact field names and signed-byte encoding will be frozen with offline conformance fixtures before any transport is added.
+The first Phase 7 delivery targets a complete immutable Catalog database package. ADR-0011 freezes its strict envelope, canonical signed payload, Ed25519 authentication, public-key sequence ranges, dataset and compatibility fields, monotonic release sequence, exact-host HTTPS URL, byte length, and SHA-256. Offline conformance fixtures and negative tests now cover that metadata boundary.
 
-The App will authenticate metadata, enforce compatibility and anti-replay rules, download only from an approved HTTPS host, verify the package, and pass it to the existing Catalog installer. The installer remains the only owner of staging, database validation, activation, rollback, retention, recovery, and personal-database isolation.
+A future update client will authenticate metadata, enforce compatibility and anti-replay rules, download only from an approved HTTPS host, verify the archive, and pass its validated Catalog to the existing installer. The installer remains the only owner of staging, database validation, activation, rollback, retention, recovery, and personal-database isolation. The current validator is not connected to startup, Settings, transport, archive extraction, or the installer.
+
+## Frozen offline manifest boundary
+
+- The Ed25519 signature covers the exact canonical UTF-8 payload before semantic parsing.
+- The App supplies a public-only trust store and an independently owned validation context; no private key is accepted.
+- Both data version and release sequence must advance, and the key must cover the release sequence.
+- Package URLs must use HTTPS, match the exact supplied host allowlist, use the standard port, and contain no credentials, query, fragment, or traversal segment.
+- The package descriptor supports only a complete ZIP and binds its maximum size, exact byte length, and lowercase SHA-256.
+- The fixture package proves only byte identity. ZIP safety, Catalog contents, installation, and persisted anti-replay state remain later ownership boundaries.
 
 ## Failure behavior
 
@@ -23,7 +32,7 @@ The App will authenticate metadata, enforce compatibility and anti-replay rules,
 
 - Static hosting provider and exact allowed hostnames
 - Redirect policy and availability expectations
-- Manifest signature algorithm, public-key set, private-key custody, rotation, revocation, and replay policy
+- Production public-key set, private-key custody, rotation, revocation, and persisted replay-state ownership
 - Foreground check/download UX, user consent, retry limits, and metered-network behavior
 - Intended distribution channels and current iOS and Android policy evidence
 - Production-like interruption, corruption, low-storage, rollback, and device test matrix

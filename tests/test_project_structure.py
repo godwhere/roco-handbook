@@ -1,3 +1,4 @@
+import base64
 import hashlib
 import json
 from pathlib import Path
@@ -16,7 +17,12 @@ class ProjectStructureTests(unittest.TestCase):
             "docs/technical-spec-v1.md",
             "docs/decisions/ADR-0001-v1-delivery-scope.md",
             "docs/decisions/ADR-0008-phase-6-release-candidate.md",
+            "docs/decisions/ADR-0010-phase-7-inception.md",
+            "docs/decisions/ADR-0011-phase-7-signed-manifest-contract.md",
+            "docs/features/independent-catalog-updates.md",
+            "docs/implementation-reports/phase-7.md",
             "docs/evidence/environment-2026-09-09.md",
+            "docs/evidence/phase-7-signed-manifest-2026-09-09.md",
             "config/bwiki_sources.json",
             "config/identity_registry.json",
             "config/type_aliases.json",
@@ -25,6 +31,14 @@ class ProjectStructureTests(unittest.TestCase):
             "schemas/catalog_v1.sql",
             "schemas/user_v1.sql",
             "schemas/manifests/bundled_catalog_v1.schema.json",
+            "schemas/manifests/catalog_trust_store_v1.schema.json",
+            "schemas/manifests/remote_catalog_envelope_v1.schema.json",
+            "schemas/manifests/remote_catalog_payload_v1.schema.json",
+            "app/lib/data/catalog/remote_catalog_manifest.dart",
+            "app/test/data/remote_catalog_manifest_test.dart",
+            "app/test/fixtures/catalog_update/catalog_trust_store_v1.json",
+            "app/test/fixtures/catalog_update/remote_catalog_envelope_v1.json",
+            "app/test/fixtures/catalog_update/remote_catalog_payload_v1.json",
             "tools/pyproject.toml",
             "tools/release/check_catalog.py",
             ".github/workflows/offline-validation.yml",
@@ -73,6 +87,59 @@ class ProjectStructureTests(unittest.TestCase):
             },
             required,
         )
+
+    def test_remote_catalog_fixtures_match_the_frozen_schema_shapes(self) -> None:
+        manifest_root = ROOT / "schemas" / "manifests"
+        fixture_root = ROOT / "app" / "test" / "fixtures" / "catalog_update"
+        cases = [
+            ("catalog_trust_store_v1.schema.json", "catalog_trust_store_v1.json"),
+            (
+                "remote_catalog_envelope_v1.schema.json",
+                "remote_catalog_envelope_v1.json",
+            ),
+            (
+                "remote_catalog_payload_v1.schema.json",
+                "remote_catalog_payload_v1.json",
+            ),
+        ]
+
+        documents: dict[str, dict[str, object]] = {}
+        for schema_name, fixture_name in cases:
+            with self.subTest(fixture=fixture_name):
+                schema = json.loads(
+                    (manifest_root / schema_name).read_text(encoding="utf-8")
+                )
+                document = json.loads(
+                    (fixture_root / fixture_name).read_text(encoding="utf-8")
+                )
+                self.assertFalse(schema["additionalProperties"])
+                self.assertEqual(set(schema["required"]), set(document))
+                for field, field_schema in schema["properties"].items():
+                    if "const" in field_schema:
+                        self.assertEqual(field_schema["const"], document[field])
+                documents[fixture_name] = document
+
+        envelope = documents["remote_catalog_envelope_v1.json"]
+        payload_text = (
+            fixture_root / "remote_catalog_payload_v1.json"
+        ).read_text(encoding="utf-8").strip()
+        encoded_payload = str(envelope["payload"])
+        padding = "=" * (-len(encoded_payload) % 4)
+        self.assertEqual(
+            payload_text,
+            base64.urlsafe_b64decode(encoded_payload + padding).decode("utf-8"),
+        )
+
+        payload = documents["remote_catalog_payload_v1.json"]
+        payload_schema = json.loads(
+            (manifest_root / "remote_catalog_payload_v1.schema.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        for field in ("coverage", "package"):
+            nested_schema = payload_schema["properties"][field]
+            self.assertFalse(nested_schema["additionalProperties"])
+            self.assertEqual(set(nested_schema["required"]), set(payload[field]))
 
     def test_baseline_spec_is_preserved_verbatim(self) -> None:
         copied = (ROOT / "docs/technical-spec-v1.md").read_bytes()
