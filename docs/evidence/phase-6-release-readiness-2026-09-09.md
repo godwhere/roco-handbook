@@ -32,7 +32,9 @@ The root Python suite passed 70 tests. The Flutter suite passed 44 tests: 14 Cat
 
 `dart format --output=none --set-exit-if-changed lib test` passed, and `flutter analyze --no-pub` completed with no issues.
 
-The CI workflow parsed as YAML and exposes two jobs. Every third-party action reference is pinned to a 40-character commit SHA, workflow permissions grant only `contents: read`, and no secret or BWIKI access is configured. A hosted GitHub Actions run was not available before the phase commit and push.
+The CI workflow parsed as YAML and exposes two jobs. Every third-party action reference is pinned to a 40-character commit SHA, workflow permissions grant only `contents: read`, checkout credential persistence is disabled, and no secret or BWIKI access is configured.
+
+The first hosted run completed successfully but reported that the initially pinned checkout and setup-python releases used the deprecated Node 20 action runtime. The pins were upgraded to the official current checkout v7.0.1 and setup-python v7.0.0 releases before final handoff. Follow-up workflow run `34352830184` at commit `d3a5f6a` completed successfully: every step in **Catalog and release contracts** and **Flutter contracts** passed.
 
 ## Android candidate
 
@@ -91,6 +93,5 @@ The following Phase 6 acceptance layers remain **not run**:
 - Actual physical-device storage exhaustion
 - Signed Android artifact, signed iOS archive, platform export, or notarization
 - Store-managed upgrade, submission, review, upload, or publication
-- Hosted CI run after the Phase 6 commit is pushed
 
 The local candidate is therefore auditable but not store-ready. Missing physical-device evidence is a Phase 6 stopping condition and must not be represented as a pass.

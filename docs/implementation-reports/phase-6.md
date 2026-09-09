@@ -47,7 +47,10 @@ Release manifest and package inspection
 Result: both platform candidates contain the exact Catalog Release 1 hash and Flutter notices; Android has no Internet or sensitive permission; iOS has no protected-resource usage-description key.
 
 Workflow parse and contract review
-Result: valid YAML mapping with two jobs, three fully pinned action references, read-only contents permission, no secrets, and no BWIKI step.
+Result: valid YAML mapping with two jobs, three current action releases pinned by full SHA, disabled checkout credential persistence, read-only contents permission, no secrets, and no BWIKI step.
+
+GitHub Actions run 34352830184 at d3a5f6a
+Result: Catalog and release contracts passed; Flutter contracts passed; every reported step completed successfully.
 ```
 
 ## Not run
@@ -56,7 +59,6 @@ Result: valid YAML mapping with two jobs, three fully pinned action references, 
 - Actual physical-device storage exhaustion
 - Signed release build, Android upload signing, iOS archive/export, or platform credential validation
 - Store-managed upgrade, upload, review, or publication
-- Hosted GitHub Actions execution before this phase checkpoint is pushed
 
 ## Stopping condition and next boundary
 
