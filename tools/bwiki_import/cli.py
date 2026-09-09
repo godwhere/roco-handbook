@@ -6,8 +6,10 @@ from pathlib import Path
 import sys
 
 from .errors import ImportToolError
+from .image_assets import asset_preflight, import_image_assets
 from .rendered_snapshot import import_rendered_index_response
 from .snapshot_store import import_local_snapshot
+from .type_relations import import_type_relations
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -26,6 +28,26 @@ def _parser() -> argparse.ArgumentParser:
     )
     rendered.add_argument("--input", type=Path, required=True)
     rendered.add_argument("--output", type=Path, required=True)
+    image_preflight = subparsers.add_parser(
+        "preflight-image-assets",
+        help="Validate Wiki image metadata and report the frozen asset scope.",
+    )
+    image_preflight.add_argument("--catalog", type=Path, required=True)
+    image_preflight.add_argument("--config", type=Path, required=True)
+    image_import = subparsers.add_parser(
+        "import-image-assets",
+        help="Validate, download, and freeze the offline Wiki image asset set.",
+    )
+    image_import.add_argument("--catalog", type=Path, required=True)
+    image_import.add_argument("--config", type=Path, required=True)
+    image_import.add_argument("--output", type=Path, required=True)
+    image_import.add_argument("--cache", type=Path)
+    type_relations = subparsers.add_parser(
+        "import-type-relations",
+        help="Validate and freeze the Wiki type relationship contract.",
+    )
+    type_relations.add_argument("--config", type=Path, required=True)
+    type_relations.add_argument("--output", type=Path, required=True)
     return parser
 
 
@@ -60,6 +82,41 @@ def main(argv: list[str] | None = None) -> int:
                     sort_keys=True,
                 )
             )
+            return 0
+        if args.command == "preflight-image-assets":
+            print(
+                json.dumps(
+                    asset_preflight(args.catalog, args.config),
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+            return 0
+        if args.command == "import-image-assets":
+            frozen = import_image_assets(
+                args.catalog,
+                args.config,
+                args.output,
+                cache_root=args.cache,
+            )
+            print(
+                json.dumps(
+                    {
+                        "asset_count": frozen.asset_count,
+                        "manifest": str(frozen.manifest_path),
+                        "path": str(frozen.path),
+                        "reference_count": frozen.reference_count,
+                        "reused_existing": frozen.reused_existing,
+                        "total_bytes": frozen.total_bytes,
+                    },
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+            return 0
+        if args.command == "import-type-relations":
+            output = import_type_relations(args.config, args.output)
+            print(json.dumps({"path": str(output)}, indent=2, sort_keys=True))
             return 0
     except ImportToolError as error:
         print(

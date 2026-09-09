@@ -20,10 +20,14 @@ class ProjectStructureTests(unittest.TestCase):
             "docs/decisions/ADR-0010-phase-7-inception.md",
             "docs/decisions/ADR-0011-phase-7-signed-manifest-contract.md",
             "docs/decisions/ADR-0012-phase-7-offline-package-installation.md",
+            "docs/decisions/ADR-0015-phase-8-brand-localization-and-wiki-assets.md",
             "docs/features/independent-catalog-updates.md",
+            "docs/features/localized-visual-handbook.md",
             "docs/implementation-reports/phase-7.md",
+            "docs/implementation-reports/phase-8.md",
             "docs/evidence/environment-2026-09-09.md",
             "docs/evidence/phase-7-signed-manifest-2026-09-09.md",
+            "docs/evidence/phase-8-assets-localization-and-visuals-2026-09-10.md",
             "docs/evidence/phase-7-offline-package-2026-09-09.md",
             "docs/evidence/phase-7-hosting-policy-2026-09-09.md",
             "docs/evidence/phase-7-signing-custody-2026-09-09.md",
@@ -32,6 +36,9 @@ class ProjectStructureTests(unittest.TestCase):
             "config/type_aliases.json",
             "config/handbook_display_overrides.json",
             "config/reviewed_exceptions.json",
+            "config/ui_terminology_zh_cn.json",
+            "config/wiki_assets_v1.json",
+            "config/type_relations_v1.json",
             "schemas/catalog_v1.sql",
             "schemas/user_v1.sql",
             "schemas/manifests/bundled_catalog_v1.schema.json",
@@ -286,7 +293,17 @@ class ProjectStructureTests(unittest.TestCase):
             ".yaml",
             ".yml",
         }
-        excluded = {ROOT / "docs/technical-spec-v1.md"}
+        excluded = {
+            ROOT / "docs/technical-spec-v1.md",
+            ROOT / "config/ui_terminology_zh_cn.json",
+            ROOT / "config/wiki_assets_v1.json",
+            ROOT / "config/type_relations_v1.json",
+            ROOT / "app/lib/l10n/app_strings.dart",
+            ROOT
+            / "docs/decisions/ADR-0015-phase-8-brand-localization-and-wiki-assets.md",
+            ROOT
+            / "docs/evidence/phase-8-assets-localization-and-visuals-2026-09-10.md",
+        }
         violations: list[str] = []
 
         for root in checked_roots:

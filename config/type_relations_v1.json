@@ -1,0 +1,31 @@
+{
+  "config_version": 1,
+  "dataset_id": "roco-world-zh-cn",
+  "api_endpoint": "https://wiki.biligame.com/rocom/api.php",
+  "source_title": "Module:TypeRelation",
+  "source_page_id": 12987,
+  "type_order": [
+    "无系别", "普通", "草", "火", "水", "光", "地", "冰", "龙", "电",
+    "毒", "虫", "武", "翼", "萌", "幽", "恶", "机械", "幻"
+  ],
+  "source_relation_names": {
+    "strong_against": "克制",
+    "resisted_by": "被抵抗",
+    "weak_to": "被克制",
+    "resists": "抵抗"
+  },
+  "reviewed_reciprocity_exceptions": [
+    "resisted_by:冰:冰",
+    "strong_against:龙:龙",
+    "resisted_by:电:电",
+    "resisted_by:毒:毒",
+    "strong_against:幽:幽",
+    "resisted_by:恶:恶",
+    "resisted_by:机械:机械",
+    "resisted_by:幻:幻"
+  ],
+  "request_policy": {
+    "timeout_seconds": 60,
+    "max_retries": 3
+  }
+}

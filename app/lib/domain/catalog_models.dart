@@ -72,6 +72,7 @@ class PetDetail {
     required this.sourceReferences,
     this.className,
     this.description,
+    this.illustrationKey,
     this.stage,
     this.heightText,
     this.weightText,
@@ -85,6 +86,7 @@ class PetDetail {
   final PetSummary summary;
   final String? className;
   final String? description;
+  final String? illustrationKey;
   final int? stage;
   final String? heightText;
   final String? weightText;
@@ -103,6 +105,7 @@ class SkillSummary {
     required this.name,
     required this.isFeature,
     this.category,
+    this.iconKey,
     this.element,
     this.energyValue,
     this.energyText,
@@ -113,6 +116,7 @@ class SkillSummary {
   final String skillId;
   final String name;
   final String? category;
+  final String? iconKey;
   final String? element;
   final num? energyValue;
   final String? energyText;

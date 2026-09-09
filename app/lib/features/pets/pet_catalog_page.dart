@@ -8,6 +8,8 @@ import '../../domain/user_models.dart';
 import '../../domain/user_repository.dart';
 import '../personal/personal_controls.dart';
 import 'pet_detail_page.dart';
+import '../../l10n/app_strings.dart';
+import '../../widgets/catalog_asset_image.dart';
 
 class PetCatalogPage extends StatefulWidget {
   const PetCatalogPage({
@@ -131,7 +133,9 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
     } on Object {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Creature types could not be loaded.')),
+          SnackBar(
+            content: Text(context.tr('Creature types could not be loaded.')),
+          ),
         );
       }
       return;
@@ -152,11 +156,11 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Filter by type',
+                  context.tr('Filter by type'),
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 6),
-                const Text('A creature may match any selected type.'),
+                Text(context.tr('A creature may match any selected type.')),
                 const SizedBox(height: 16),
                 Wrap(
                   spacing: 8,
@@ -164,7 +168,10 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
                   children: types
                       .map(
                         (type) => FilterChip(
-                          label: Text(type.name),
+                          label: TypeIconLabel(
+                            typeName: type.name,
+                            compact: true,
+                          ),
                           selected: selected.contains(type.typeId),
                           onSelected: (enabled) {
                             setSheetState(() {
@@ -185,12 +192,12 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
                   children: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context, <String>{}),
-                      child: const Text('Clear'),
+                      child: Text(context.tr('Clear')),
                     ),
                     const SizedBox(width: 8),
                     FilledButton(
                       onPressed: () => Navigator.pop(context, selected),
-                      child: const Text('Apply'),
+                      child: Text(context.tr('Apply')),
                     ),
                   ],
                 ),
@@ -237,13 +244,13 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
                   onChanged: _scheduleSearch,
                   textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
-                    labelText: 'Search creatures',
-                    hintText: 'Name, title, alias, or number',
+                    labelText: context.tr('Search creatures'),
+                    hintText: context.tr('Name, title, alias, or number'),
                     prefixIcon: const Icon(Icons.search_rounded),
                     suffixIcon: _searchController.text.isEmpty
                         ? null
                         : IconButton(
-                            tooltip: 'Clear search',
+                            tooltip: context.tr('Clear search'),
                             onPressed: () {
                               _searchController.clear();
                               _load();
@@ -254,16 +261,16 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
                 ),
                 const SizedBox(height: 10),
                 SegmentedButton<PetListMode>(
-                  segments: const <ButtonSegment<PetListMode>>[
+                  segments: <ButtonSegment<PetListMode>>[
                     ButtonSegment<PetListMode>(
                       value: PetListMode.handbooks,
-                      icon: Icon(Icons.menu_book_outlined),
-                      label: Text('Handbook'),
+                      icon: const Icon(Icons.menu_book_outlined),
+                      label: Text(context.tr('Handbook')),
                     ),
                     ButtonSegment<PetListMode>(
                       value: PetListMode.allForms,
-                      icon: Icon(Icons.layers_outlined),
-                      label: Text('All forms'),
+                      icon: const Icon(Icons.layers_outlined),
+                      label: Text(context.tr('All forms')),
                     ),
                   ],
                   selected: <PetListMode>{_mode},
@@ -273,15 +280,15 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
                 DropdownButtonFormField<PetSort>(
                   initialValue: _sort,
                   isExpanded: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Sort',
-                    prefixIcon: Icon(Icons.sort_rounded),
+                  decoration: InputDecoration(
+                    labelText: context.tr('Sort'),
+                    prefixIcon: const Icon(Icons.sort_rounded),
                     isDense: true,
                   ),
                   selectedItemBuilder: (context) => PetSort.values
                       .map(
                         (sort) => Text(
-                          _sortLabel(sort),
+                          _sortLabel(context, sort),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -292,7 +299,7 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
                         (sort) => DropdownMenuItem<PetSort>(
                           value: sort,
                           child: Text(
-                            _sortLabel(sort),
+                            _sortLabel(context, sort),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -309,15 +316,17 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
                     icon: const Icon(Icons.filter_alt_outlined),
                     label: Text(
                       _selectedTypeIds.isEmpty
-                          ? 'Types'
-                          : 'Types (${_selectedTypeIds.length})',
+                          ? context.tr('Types')
+                          : '${context.tr('Types')} (${_selectedTypeIds.length})',
                     ),
                   ),
                 ),
                 if (_searchController.text.isNotEmpty) ...<Widget>[
                   const SizedBox(height: 8),
                   Text(
-                    'Search results show concrete forms so a matching form opens directly.',
+                    context.tr(
+                      'Search results show concrete forms so a matching form opens directly.',
+                    ),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
@@ -347,7 +356,7 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
               const Icon(Icons.search_off_rounded, size: 48),
               const SizedBox(height: 12),
               Text(
-                'No creatures match this search.',
+                context.tr('No creatures match this search.'),
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
@@ -356,7 +365,7 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
                   _searchController.clear();
                   _load();
                 },
-                child: const Text('Clear search'),
+                child: Text(context.tr('Clear search')),
               ),
             ],
           ),
@@ -381,7 +390,9 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Icon(Icons.expand_more_rounded),
-                label: Text(_loadingMore ? 'Loading...' : 'Load more'),
+                label: Text(
+                  context.tr(_loadingMore ? 'Loading...' : 'Load more'),
+                ),
               ),
             );
           }
@@ -406,13 +417,13 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
   }
 }
 
-String _sortLabel(PetSort sort) {
+String _sortLabel(BuildContext context, PetSort sort) {
   return switch (sort) {
-    PetSort.handbook => 'Handbook number',
-    PetSort.name => 'Name',
-    PetSort.attack => 'Attack, high to low',
-    PetSort.magicAttack => 'Magic attack, high to low',
-    PetSort.speed => 'Speed, high to low',
+    PetSort.handbook => context.tr('Handbook number'),
+    PetSort.name => context.tr('Name'),
+    PetSort.attack => context.tr('Attack, high to low'),
+    PetSort.magicAttack => context.tr('Magic attack, high to low'),
+    PetSort.speed => context.tr('Speed, high to low'),
   };
 }
 
@@ -433,7 +444,8 @@ class _PetResultCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final form =
-        pet.form ?? (pet.isDefaultForm ? 'Default form' : 'Form not provided');
+        pet.form ??
+        context.tr(pet.isDefaultForm ? 'Default form' : 'Form not provided');
     return Card(
       child: InkWell(
         onTap: onTap,
@@ -441,9 +453,33 @@ class _PetResultCard extends StatelessWidget {
           padding: const EdgeInsets.all(14),
           child: Row(
             children: <Widget>[
-              Semantics(
-                label: 'Handbook number ${pet.dexNo}',
-                child: CircleAvatar(child: Text(pet.dexNo)),
+              Stack(
+                alignment: Alignment.bottomCenter,
+                children: <Widget>[
+                  CatalogAssetImage(
+                    assetPath: petHeadAsset(pet.headKey),
+                    semanticLabel: pet.name,
+                    width: 68,
+                    height: 68,
+                    fit: BoxFit.cover,
+                    fallbackIcon: Icons.pets_outlined,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface
+                          .withAlpha(224),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      child: Text(
+                        pet.dexNo,
+                        style: Theme.of(context).textTheme.labelSmall,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -465,7 +501,10 @@ class _PetResultCard extends StatelessWidget {
                             .map(
                               (type) => Chip(
                                 visualDensity: VisualDensity.compact,
-                                label: Text(type),
+                                label: TypeIconLabel(
+                                  typeName: type,
+                                  compact: true,
+                                ),
                               ),
                             )
                             .toList(),
@@ -503,9 +542,12 @@ class _QueryFailure extends StatelessWidget {
           children: <Widget>[
             const Icon(Icons.error_outline_rounded, size: 48),
             const SizedBox(height: 12),
-            const Text('The local Catalog query failed.'),
+            Text(context.tr('The local Catalog query failed.')),
             const SizedBox(height: 12),
-            FilledButton(onPressed: onRetry, child: const Text('Try again')),
+            FilledButton(
+              onPressed: onRetry,
+              child: Text(context.tr('Try again')),
+            ),
           ],
         ),
       ),

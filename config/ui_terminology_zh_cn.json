@@ -1,0 +1,56 @@
+{
+  "config_version": 1,
+  "dataset_id": "roco-world-zh-cn",
+  "locale": "zh-CN",
+  "source_pages": [
+    {
+      "page_id": 16709,
+      "revision_id": 41359,
+      "title": "精灵图鉴",
+      "url": "https://wiki.biligame.com/rocom/index.php?title=%E7%B2%BE%E7%81%B5%E5%9B%BE%E9%89%B4&oldid=41359"
+    },
+    {
+      "page_id": 3168,
+      "revision_id": 38703,
+      "title": "喵喵",
+      "url": "https://wiki.biligame.com/rocom/index.php?title=%E5%96%B5%E5%96%B5&oldid=38703"
+    },
+    {
+      "page_id": 5754,
+      "revision_id": 28838,
+      "title": "克制计算器",
+      "url": "https://wiki.biligame.com/rocom/index.php?title=%E5%85%8B%E5%88%B6%E8%AE%A1%E7%AE%97%E5%99%A8&oldid=28838"
+    },
+    {
+      "page_id": 12987,
+      "revision_id": 39538,
+      "title": "模块:TypeRelation",
+      "url": "https://wiki.biligame.com/rocom/index.php?title=Module%3ATypeRelation&oldid=39538"
+    }
+  ],
+  "terms": {
+    "base_stats": "种族资质",
+    "category": "分类",
+    "creature": "精灵",
+    "creature_handbook": "精灵图鉴",
+    "energy": "耗能",
+    "evolution": "进化",
+    "feature": "特性",
+    "handbook": "图鉴",
+    "health": "生命",
+    "magic_attack": "魔攻",
+    "magic_defense": "魔防",
+    "physical_attack": "物攻",
+    "physical_defense": "物防",
+    "power": "威力",
+    "skill": "技能",
+    "speed": "速度",
+    "total_base_stats": "种族资质总和",
+    "type": "系别",
+    "type_effectiveness": "属性克制",
+    "incoming_damage_increased": "受到伤害增加",
+    "incoming_damage_reduced": "受到伤害降低",
+    "strong_against": "克制",
+    "resisted_by": "被抵抗"
+  }
+}

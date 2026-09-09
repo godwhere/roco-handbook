@@ -14,10 +14,11 @@ Choose solutions in this order and stop expanding once one is sufficient:
 
 Minimal scope must not remove source validation, identity stability, reference closure, personal-data protection, recovery behavior, accessibility, explicit user requirements, or tests that can prove the behavior.
 
-### English-only project language
+### Project language
 
-- All project-authored code, identifiers, comments, documentation, reports, configuration descriptions, test names, CLI messages, UI copy, and commit messages must be written in English.
+- All project-authored code, identifiers, comments, documentation, reports, configuration descriptions, test names, CLI messages, and commit messages must be written in English.
 - New explanatory prose in the repository must not be written in Chinese.
+- Phase 8 localization and terminology resources may contain `zh-CN` UI copy, and focused tests may assert that copy. Chinese domain terms must follow the frozen BWIKI terminology contract instead of being inferred from English labels.
 - Canonical upstream game data, such as creature names and descriptions, may retain its source language. Fixtures may contain that data only when the language itself is part of the parsing or mapping case.
 - `docs/technical-spec-v1.md` is the sole governance exception: it preserves the user-supplied Chinese baseline specification byte-for-byte for provenance and must not be translated in place.
 - User communication may use the user's language; this repository-language rule applies to project artifacts.

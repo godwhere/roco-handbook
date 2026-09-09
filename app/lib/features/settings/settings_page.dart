@@ -4,6 +4,7 @@ import '../../app_version.dart';
 import '../../catalog_app.dart';
 import '../../data/catalog/catalog_installer.dart';
 import '../../data/catalog/catalog_update_source.dart';
+import '../../l10n/app_strings.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({
@@ -58,9 +59,9 @@ class _SettingsPageState extends State<SettingsPage> {
         return;
       }
       if (result is CatalogUpdateCurrent) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Catalog is up to date.')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.tr('Catalog is up to date.'))),
+        );
         return;
       }
       final candidate = (result as CatalogUpdateAvailable).candidate;
@@ -88,7 +89,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Catalog data ${candidate.manifest.dataVersion} installed.',
+              context.strings.catalogInstalled(candidate.manifest.dataVersion),
             ),
           ),
         );
@@ -99,8 +100,8 @@ class _SettingsPageState extends State<SettingsPage> {
             ? error.code
             : 'catalog_update';
         final message = code == 'cancelled'
-            ? 'Catalog update cancelled. Current Catalog unchanged.'
-            : 'Catalog update failed ($code). Current Catalog unchanged.';
+            ? context.tr('Catalog update cancelled. Current Catalog unchanged.')
+            : context.strings.catalogUpdateFailed(code);
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(message)));
       }
@@ -120,23 +121,24 @@ class _SettingsPageState extends State<SettingsPage> {
         context: context,
         builder: (dialogContext) => AlertDialog(
           title: Text(
-            'Download Catalog data ${candidate.manifest.dataVersion}?',
+            dialogContext.strings.downloadCatalogTitle(
+              candidate.manifest.dataVersion,
+            ),
           ),
           content: Text(
-            'Download ${_formatBytes(candidate.manifest.package.archiveBytes)} '
-            'using the current network connection. The complete Catalog is '
-            'verified before installation. Favorites, collection marks, and '
-            'notes are kept.',
+            dialogContext.strings.downloadCatalogBody(
+              _formatBytes(candidate.manifest.package.archiveBytes),
+            ),
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(dialogContext, false),
-              child: const Text('Later'),
+              child: Text(dialogContext.tr('Later')),
             ),
             FilledButton(
               key: const ValueKey('confirm-catalog-download'),
               onPressed: () => Navigator.pop(dialogContext, true),
-              child: const Text('Download'),
+              child: Text(dialogContext.tr('Download')),
             ),
           ],
         ),
@@ -153,21 +155,21 @@ class _SettingsPageState extends State<SettingsPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Restore bundled Catalog?'),
-        content: const Text(
-          'This replaces only the offline Catalog with the version included '
-          'in this App. Favorites, collection marks, and notes are kept. The '
-          'bundled version may be older than the current Catalog.',
+        title: Text(dialogContext.tr('Restore bundled Catalog?')),
+        content: Text(
+          dialogContext.tr(
+            'This replaces only the offline Catalog with the version included in this App. Favorites, collection marks, and notes are kept. The bundled version may be older than the current Catalog.',
+          ),
         ),
         actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
-            child: const Text('Cancel'),
+            child: Text(dialogContext.tr('Cancel')),
           ),
           FilledButton(
             key: const ValueKey('confirm-catalog-restore'),
             onPressed: () => Navigator.pop(dialogContext, true),
-            child: const Text('Restore Catalog'),
+            child: Text(dialogContext.tr('Restore Catalog')),
           ),
         ],
       ),
@@ -179,7 +181,7 @@ class _SettingsPageState extends State<SettingsPage> {
       await widget.onRestoreBundledCatalog!();
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Bundled Catalog restored.')),
+          SnackBar(content: Text(context.tr('Bundled Catalog restored.'))),
         );
       }
     } on Object catch (error) {
@@ -188,7 +190,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ? error.code
             : 'catalog_restore';
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Catalog restore failed ($code).')),
+          SnackBar(content: Text(context.strings.catalogRestoreFailed(code))),
         );
       }
     }
@@ -200,29 +202,37 @@ class _SettingsPageState extends State<SettingsPage> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
       children: <Widget>[
-        Text('Settings', style: Theme.of(context).textTheme.headlineSmall),
+        Text(
+          context.tr('Settings'),
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
         const SizedBox(height: 12),
-        const Card(
+        Card(
           child: Column(
             children: <Widget>[
               ListTile(
-                leading: Icon(Icons.brightness_auto_rounded),
-                title: Text('Theme'),
-                subtitle: Text('Follow device setting'),
+                leading: const Icon(Icons.brightness_auto_rounded),
+                title: Text(context.tr('Theme')),
+                subtitle: Text(context.tr('Follow device setting')),
               ),
-              Divider(height: 1),
+              const Divider(height: 1),
               ListTile(
-                leading: Icon(Icons.phone_iphone_rounded),
-                title: Text('Personal data'),
+                leading: const Icon(Icons.phone_iphone_rounded),
+                title: Text(context.tr('Personal data')),
                 subtitle: Text(
-                  'Favorites, collection marks, and notes stay on this device. Uninstalling the App may remove them.',
+                  context.tr(
+                    'Favorites, collection marks, and notes stay on this device. Uninstalling the App may remove them.',
+                  ),
                 ),
               ),
             ],
           ),
         ),
         const SizedBox(height: 18),
-        Text('Catalog updates', style: Theme.of(context).textTheme.titleLarge),
+        Text(
+          context.tr('Catalog updates'),
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         const SizedBox(height: 8),
         Card(
           child: Padding(
@@ -231,8 +241,9 @@ class _SettingsPageState extends State<SettingsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Checks are started only by you. This App does not check, '
-                  'download, or install Catalog data in the background.',
+                  context.tr(
+                    'Checks are started only by you. This App does not check, download, or install Catalog data in the background.',
+                  ),
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 12),
@@ -245,7 +256,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ? null
                       : _checkForCatalogUpdate,
                   icon: const Icon(Icons.system_update_alt_rounded),
-                  label: const Text('Check for Catalog update'),
+                  label: Text(context.tr('Check for Catalog update')),
                 ),
                 if (_updateBusy) ...<Widget>[
                   const SizedBox(height: 16),
@@ -273,7 +284,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             key: const ValueKey('cancel-catalog-update'),
                             onPressed: _cancelCatalogUpdate,
                             icon: const Icon(Icons.close_rounded),
-                            label: const Text('Cancel'),
+                            label: Text(context.tr('Cancel')),
                           ),
                         ],
                       ],
@@ -285,7 +296,10 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
         const SizedBox(height: 18),
-        Text('Catalog recovery', style: Theme.of(context).textTheme.titleLarge),
+        Text(
+          context.tr('Catalog recovery'),
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         const SizedBox(height: 8),
         Card(
           child: Padding(
@@ -294,8 +308,9 @@ class _SettingsPageState extends State<SettingsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Restore the complete read-only Catalog shipped with this '
-                  'App. Personal data is stored separately and is not removed.',
+                  context.tr(
+                    'Restore the complete read-only Catalog shipped with this App. Personal data is stored separately and is not removed.',
+                  ),
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 12),
@@ -306,67 +321,77 @@ class _SettingsPageState extends State<SettingsPage> {
                       ? null
                       : () => _confirmRestore(context),
                   icon: const Icon(Icons.restore_rounded),
-                  label: const Text('Restore bundled Catalog'),
+                  label: Text(context.tr('Restore bundled Catalog')),
                 ),
               ],
             ),
           ),
         ),
         const SizedBox(height: 18),
-        Text('About', style: Theme.of(context).textTheme.titleLarge),
+        Text(
+          context.tr('About'),
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         const SizedBox(height: 8),
         Card(
           child: Column(
             children: <Widget>[
-              const ListTile(
-                title: Text('App version'),
-                subtitle: Text(AppVersion.display),
+              ListTile(
+                title: Text(context.tr('App version')),
+                subtitle: const Text(AppVersion.display),
               ),
               ListTile(
-                title: const Text('Catalog'),
+                title: Text(context.tr('Catalog')),
                 subtitle: Text(
-                  'Data ${info.dataVersion} · Schema ${info.schemaVersion}',
+                  context.strings.catalogSummary(
+                    info.dataVersion,
+                    info.schemaVersion,
+                  ),
                 ),
               ),
               ListTile(
-                title: const Text('Last Catalog action'),
+                title: Text(context.tr('Last Catalog action')),
                 subtitle: Text(
-                  _catalogOutcomeLabel(widget.session.catalogOutcome),
+                  _catalogOutcomeLabel(context, widget.session.catalogOutcome),
                 ),
               ),
               ListTile(
-                title: const Text('Personal database schema'),
+                title: Text(context.tr('Personal database schema')),
                 subtitle: Text('${widget.session.userSchemaVersion}'),
               ),
               ListTile(
-                title: const Text('Source revision range'),
+                title: Text(context.tr('Source revision range')),
                 subtitle: Text(
                   '${info.earliestSourceRevisionUtc} — ${info.latestSourceRevisionUtc}',
                 ),
               ),
               ListTile(
-                title: const Text('Catalog built'),
+                title: Text(context.tr('Catalog built')),
                 subtitle: Text(info.builtAtUtc),
               ),
               ListTile(
                 key: const ValueKey('open-source-licenses'),
                 leading: const Icon(Icons.code_rounded),
-                title: const Text('Open-source licenses'),
-                subtitle: const Text('Flutter and packaged dependencies'),
+                title: Text(context.tr('Open-source licenses')),
+                subtitle: Text(context.tr('Flutter and packaged dependencies')),
                 trailing: const Icon(Icons.chevron_right_rounded),
                 onTap: () => showLicensePage(
                   context: context,
-                  applicationName: 'Roco Handbook',
+                  applicationName: context.tr('Roco World Handbook'),
                   applicationVersion: AppVersion.display,
-                  applicationLegalese:
-                      'Independent, non-commercial, and unofficial.',
+                  applicationLegalese: context.tr(
+                    'Independent, non-commercial, and unofficial.',
+                  ),
                 ),
               ),
             ],
           ),
         ),
         const SizedBox(height: 18),
-        Text('Attribution', style: Theme.of(context).textTheme.titleLarge),
+        Text(
+          context.tr('Attribution'),
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         const SizedBox(height: 8),
         Card(
           child: Padding(
@@ -380,11 +405,16 @@ class _SettingsPageState extends State<SettingsPage> {
 
   String get _updateStatus => switch (_updatePhase) {
     _CatalogUpdateUiPhase.idle => '',
-    _CatalogUpdateUiPhase.checking => 'Checking for a Catalog update...',
-    _CatalogUpdateUiPhase.downloading =>
-      'Downloading ${_formatBytes(_updateProgress?.receivedBytes ?? 0)} of '
-          '${_formatBytes(_updateProgress?.totalBytes ?? 0)}...',
-    _CatalogUpdateUiPhase.verifying => 'Verifying and installing...',
+    _CatalogUpdateUiPhase.checking => context.tr(
+      'Checking for a Catalog update...',
+    ),
+    _CatalogUpdateUiPhase.downloading => context.strings.downloadingProgress(
+      _formatBytes(_updateProgress?.receivedBytes ?? 0),
+      _formatBytes(_updateProgress?.totalBytes ?? 0),
+    ),
+    _CatalogUpdateUiPhase.verifying => context.tr(
+      'Verifying and installing...',
+    ),
   };
 }
 
@@ -398,15 +428,22 @@ String _formatBytes(int bytes) {
   return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MiB';
 }
 
-String _catalogOutcomeLabel(CatalogOpenOutcome outcome) {
+String _catalogOutcomeLabel(BuildContext context, CatalogOpenOutcome outcome) {
   return switch (outcome) {
-    CatalogOpenOutcome.reused => 'Opened the current validated Catalog',
-    CatalogOpenOutcome.installedBundled => 'Installed bundled Catalog data',
-    CatalogOpenOutcome.installedRemote =>
+    CatalogOpenOutcome.reused => context.tr(
+      'Opened the current validated Catalog',
+    ),
+    CatalogOpenOutcome.installedBundled => context.tr(
+      'Installed bundled Catalog data',
+    ),
+    CatalogOpenOutcome.installedRemote => context.tr(
       'Installed a verified Catalog package',
-    CatalogOpenOutcome.recoveredPrevious =>
+    ),
+    CatalogOpenOutcome.recoveredPrevious => context.tr(
       'Recovered the previous validated Catalog',
-    CatalogOpenOutcome.restoredBundled =>
+    ),
+    CatalogOpenOutcome.restoredBundled => context.tr(
       'Restored the Catalog bundled with this App',
+    ),
   };
 }

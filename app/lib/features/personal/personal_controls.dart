@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/user_models.dart';
 import '../../domain/user_repository.dart';
+import '../../l10n/app_strings.dart';
 
 class FavoriteIconButton extends StatefulWidget {
   const FavoriteIconButton({
@@ -46,8 +47,10 @@ class _CollectedControlState extends State<CollectedControl> {
     } on Object {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('The collection mark could not be saved. Try again.'),
+          SnackBar(
+            content: Text(
+              context.tr('The collection mark could not be saved. Try again.'),
+            ),
           ),
         );
       }
@@ -70,7 +73,7 @@ class _CollectedControlState extends State<CollectedControl> {
               child: CircularProgressIndicator(strokeWidth: 2),
             )
           : null,
-      label: const Text('Handbook entry collected'),
+      label: Text(context.tr('Handbook entry collected')),
       onSelected: _busy ? null : _change,
     );
   }
@@ -89,8 +92,10 @@ class _FavoriteIconButtonState extends State<FavoriteIconButton> {
     } on Object {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('The favorite could not be saved. Try again.'),
+          SnackBar(
+            content: Text(
+              context.tr('The favorite could not be saved. Try again.'),
+            ),
           ),
         );
       }
@@ -103,10 +108,12 @@ class _FavoriteIconButtonState extends State<FavoriteIconButton> {
 
   @override
   Widget build(BuildContext context) {
-    final action = widget.favorite ? 'Remove' : 'Add';
     return IconButton(
       key: ValueKey('favorite-${widget.objectLabel}'),
-      tooltip: '$action ${widget.objectLabel} favorite',
+      tooltip: context.strings.favoriteLabel(
+        widget.objectLabel,
+        remove: widget.favorite,
+      ),
       onPressed: _busy ? null : _change,
       icon: _busy
           ? const SizedBox.square(
@@ -216,9 +223,11 @@ class _PersonalNotesSectionState extends State<PersonalNotesSection> {
     } on Object {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text(
-              'The note could not be saved. Your draft is still here.',
+              context.tr(
+                'The note could not be saved. Your draft is still here.',
+              ),
             ),
           ),
         );
@@ -250,17 +259,19 @@ class _PersonalNotesSectionState extends State<PersonalNotesSection> {
   Future<void> _delete(PersonalNote note) async {
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete note?'),
-        content: const Text('This removes the note from this device.'),
+      builder: (dialogContext) => AlertDialog(
+        title: Text(dialogContext.tr('Delete note?')),
+        content: Text(
+          dialogContext.tr('This removes the note from this device.'),
+        ),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(dialogContext.tr('Cancel')),
           ),
           FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete'),
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: Text(dialogContext.tr('Delete')),
           ),
         ],
       ),
@@ -277,7 +288,7 @@ class _PersonalNotesSectionState extends State<PersonalNotesSection> {
     } on Object {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('The note could not be deleted.')),
+          SnackBar(content: Text(context.tr('The note could not be deleted.'))),
         );
       }
     }
@@ -294,9 +305,9 @@ class _PersonalNotesSectionState extends State<PersonalNotesSection> {
           minLines: 3,
           maxLines: 8,
           maxLength: 10000,
-          decoration: const InputDecoration(
-            labelText: 'Personal note',
-            hintText: 'Saved only on this device',
+          decoration: InputDecoration(
+            labelText: context.tr('Personal note'),
+            hintText: context.tr('Saved only on this device'),
             alignLabelWithHint: true,
           ),
           onChanged: (_) => setState(() {}),
@@ -317,10 +328,15 @@ class _PersonalNotesSectionState extends State<PersonalNotesSection> {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : const Icon(Icons.save_outlined),
-              label: Text(_editingNoteId == null ? 'Save note' : 'Save edit'),
+              label: Text(
+                context.tr(_editingNoteId == null ? 'Save note' : 'Save edit'),
+              ),
             ),
             if (_editingNoteId != null)
-              TextButton(onPressed: _cancelEdit, child: const Text('Cancel')),
+              TextButton(
+                onPressed: _cancelEdit,
+                child: Text(context.tr('Cancel')),
+              ),
           ],
         ),
         const SizedBox(height: 14),
@@ -329,28 +345,30 @@ class _PersonalNotesSectionState extends State<PersonalNotesSection> {
         else if (_error != null)
           Row(
             children: <Widget>[
-              const Expanded(child: Text('Saved notes could not be loaded.')),
-              TextButton(onPressed: _load, child: const Text('Retry')),
+              Expanded(
+                child: Text(context.tr('Saved notes could not be loaded.')),
+              ),
+              TextButton(onPressed: _load, child: Text(context.tr('Retry'))),
             ],
           )
         else if (_notes.isEmpty)
-          const Text('No notes saved for this item.')
+          Text(context.tr('No notes saved for this item.'))
         else
           ..._notes.map(
             (note) => Card.outlined(
               child: ListTile(
                 title: Text(note.content),
-                subtitle: Text('Updated ${note.updatedAtUtc}'),
+                subtitle: Text(context.strings.updated(note.updatedAtUtc)),
                 trailing: Wrap(
                   spacing: 0,
                   children: <Widget>[
                     IconButton(
-                      tooltip: 'Edit note',
+                      tooltip: context.tr('Edit note'),
                       onPressed: () => _edit(note),
                       icon: const Icon(Icons.edit_outlined),
                     ),
                     IconButton(
-                      tooltip: 'Delete note',
+                      tooltip: context.tr('Delete note'),
                       onPressed: () => _delete(note),
                       icon: const Icon(Icons.delete_outline_rounded),
                     ),

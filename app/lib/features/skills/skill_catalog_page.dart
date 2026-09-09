@@ -8,6 +8,8 @@ import '../../domain/user_models.dart';
 import '../../domain/user_repository.dart';
 import '../personal/personal_controls.dart';
 import 'skill_detail_page.dart';
+import '../../l10n/app_strings.dart';
+import '../../widgets/catalog_asset_image.dart';
 
 class SkillCatalogPage extends StatefulWidget {
   const SkillCatalogPage({
@@ -141,13 +143,13 @@ class _SkillCatalogPageState extends State<SkillCatalogPage> {
                   onChanged: _scheduleSearch,
                   textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
-                    labelText: 'Search skills',
-                    hintText: 'Skill name',
+                    labelText: context.tr('Search skills'),
+                    hintText: context.tr('Skill name'),
                     prefixIcon: const Icon(Icons.search_rounded),
                     suffixIcon: _searchController.text.isEmpty
                         ? null
                         : IconButton(
-                            tooltip: 'Clear search',
+                            tooltip: context.tr('Clear search'),
                             onPressed: () {
                               _searchController.clear();
                               _load();
@@ -158,18 +160,18 @@ class _SkillCatalogPageState extends State<SkillCatalogPage> {
                 ),
                 const SizedBox(height: 10),
                 SegmentedButton<SkillFilter>(
-                  segments: const <ButtonSegment<SkillFilter>>[
+                  segments: <ButtonSegment<SkillFilter>>[
                     ButtonSegment<SkillFilter>(
                       value: SkillFilter.all,
-                      label: Text('All'),
+                      label: Text(context.tr('All')),
                     ),
                     ButtonSegment<SkillFilter>(
                       value: SkillFilter.features,
-                      label: Text('Features'),
+                      label: Text(context.tr('Features')),
                     ),
                     ButtonSegment<SkillFilter>(
                       value: SkillFilter.learnable,
-                      label: Text('Learnable'),
+                      label: Text(context.tr('Learnable')),
                     ),
                   ],
                   selected: <SkillFilter>{_filter},
@@ -194,9 +196,12 @@ class _SkillCatalogPageState extends State<SkillCatalogPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const Text('The local Catalog query failed.'),
+            Text(context.tr('The local Catalog query failed.')),
             const SizedBox(height: 12),
-            FilledButton(onPressed: _load, child: const Text('Try again')),
+            FilledButton(
+              onPressed: _load,
+              child: Text(context.tr('Try again')),
+            ),
           ],
         ),
       );
@@ -209,7 +214,7 @@ class _SkillCatalogPageState extends State<SkillCatalogPage> {
             const Icon(Icons.search_off_rounded, size: 48),
             const SizedBox(height: 12),
             Text(
-              'No skills match this search.',
+              context.tr('No skills match this search.'),
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ],
@@ -234,7 +239,9 @@ class _SkillCatalogPageState extends State<SkillCatalogPage> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Icon(Icons.expand_more_rounded),
-                label: Text(_loadingMore ? 'Loading...' : 'Load more'),
+                label: Text(
+                  context.tr(_loadingMore ? 'Loading...' : 'Load more'),
+                ),
               ),
             );
           }
@@ -249,15 +256,18 @@ class _SkillCatalogPageState extends State<SkillCatalogPage> {
             key: ValueKey('skill-result-${skill.skillId}'),
             child: ListTile(
               onTap: () => _open(skill),
-              leading: CircleAvatar(
-                child: Icon(
-                  skill.isFeature
-                      ? Icons.auto_awesome_rounded
-                      : Icons.bolt_rounded,
-                ),
+              leading: CatalogAssetImage(
+                assetPath: skillIconAsset(skill),
+                semanticLabel: skill.name,
+                width: 48,
+                height: 48,
+                fallbackIcon: skill.isFeature
+                    ? Icons.auto_awesome_rounded
+                    : Icons.bolt_rounded,
+                borderRadius: BorderRadius.circular(12),
               ),
               title: Text(skill.name),
-              subtitle: Text(_skillSummaryText(skill)),
+              subtitle: Text(_skillSummaryText(context, skill)),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
@@ -278,10 +288,10 @@ class _SkillCatalogPageState extends State<SkillCatalogPage> {
   }
 }
 
-String _skillSummaryText(SkillSummary skill) {
+String _skillSummaryText(BuildContext context, SkillSummary skill) {
   final values = <String>[];
   if (skill.isFeature) {
-    values.add('Feature');
+    values.add(context.tr('Feature'));
   }
   if (skill.element != null) {
     values.add(skill.element!);
@@ -291,7 +301,9 @@ String _skillSummaryText(SkillSummary skill) {
   }
   final power = skill.powerValue?.toString() ?? skill.powerText;
   if (power != null) {
-    values.add('Power $power');
+    values.add(context.strings.power(power));
   }
-  return values.isEmpty ? 'Details not provided' : values.join(' · ');
+  return values.isEmpty
+      ? context.tr('Details not provided')
+      : values.join(' · ');
 }

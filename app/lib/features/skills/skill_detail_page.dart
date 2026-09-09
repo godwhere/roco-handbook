@@ -6,6 +6,8 @@ import '../../domain/user_models.dart';
 import '../../domain/user_repository.dart';
 import '../pets/pet_detail_page.dart';
 import '../personal/personal_controls.dart';
+import '../../l10n/app_strings.dart';
+import '../../widgets/catalog_asset_image.dart';
 
 class SkillDetailPage extends StatefulWidget {
   const SkillDetailPage({
@@ -70,7 +72,7 @@ class _SkillDetailPageState extends State<SkillDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Skill details')),
+      appBar: AppBar(title: Text(context.tr('Skill details'))),
       body: FutureBuilder<_SkillPageData>(
         future: _data,
         builder: (context, snapshot) {
@@ -79,11 +81,11 @@ class _SkillDetailPageState extends State<SkillDetailPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const Text('Skill details could not be loaded.'),
+                  Text(context.tr('Skill details could not be loaded.')),
                   const SizedBox(height: 12),
                   FilledButton(
                     onPressed: _retry,
-                    child: const Text('Try again'),
+                    child: Text(context.tr('Try again')),
                   ),
                 ],
               ),
@@ -101,7 +103,7 @@ class _SkillDetailPageState extends State<SkillDetailPage> {
                 _SkillHeader(detail: data.detail),
                 const SizedBox(height: 18),
                 _Section(
-                  title: 'Values',
+                  title: context.tr('Values'),
                   child: Wrap(
                     spacing: 24,
                     runSpacing: 10,
@@ -134,12 +136,16 @@ class _SkillDetailPageState extends State<SkillDetailPage> {
                 ),
                 if (data.detail.descriptionNoteIds.isNotEmpty) ...<Widget>[
                   const SizedBox(height: 18),
-                  const Card(
+                  Card(
                     child: ListTile(
-                      leading: Icon(Icons.info_outline_rounded),
-                      title: Text('Glossary definitions are not included'),
+                      leading: const Icon(Icons.info_outline_rounded),
+                      title: Text(
+                        context.tr('Glossary definitions are not included'),
+                      ),
                       subtitle: Text(
-                        'The original description is available, but referenced glossary definitions are not part of this Catalog.',
+                        context.tr(
+                          'The original description is available, but referenced glossary definitions are not part of this Catalog.',
+                        ),
                       ),
                     ),
                   ),
@@ -147,7 +153,7 @@ class _SkillDetailPageState extends State<SkillDetailPage> {
                 if (data.featureUsers.isNotEmpty) ...<Widget>[
                   const SizedBox(height: 18),
                   _Section(
-                    title: 'Creatures with this feature',
+                    title: context.tr('Creatures with this feature'),
                     child: _UserList(
                       users: data.featureUsers,
                       onOpen: _openPet,
@@ -157,7 +163,7 @@ class _SkillDetailPageState extends State<SkillDetailPage> {
                 if (data.learnableUsers.isNotEmpty) ...<Widget>[
                   const SizedBox(height: 18),
                   _Section(
-                    title: 'Creatures that can learn this skill',
+                    title: context.tr('Creatures that can learn this skill'),
                     child: _UserList(
                       users: data.learnableUsers,
                       onOpen: _openPet,
@@ -167,16 +173,18 @@ class _SkillDetailPageState extends State<SkillDetailPage> {
                 if (data.featureUsers.isEmpty &&
                     data.learnableUsers.isEmpty) ...<Widget>[
                   const SizedBox(height: 18),
-                  const Card(
+                  Card(
                     child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text('No creature relationship is provided.'),
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        context.tr('No creature relationship is provided.'),
+                      ),
                     ),
                   ),
                 ],
                 const SizedBox(height: 18),
                 _Section(
-                  title: 'My library',
+                  title: context.tr('My library'),
                   child: _SkillPersonalData(
                     userRepository: widget.userRepository,
                     datasetId: widget.datasetId,
@@ -185,7 +193,7 @@ class _SkillDetailPageState extends State<SkillDetailPage> {
                 ),
                 const SizedBox(height: 18),
                 _Section(
-                  title: 'Source',
+                  title: context.tr('Source'),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: data.detail.sourceReferences
@@ -196,7 +204,10 @@ class _SkillDetailPageState extends State<SkillDetailPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  '${source.sourceName} — revision ${source.revisionId}',
+                                  context.strings.revision(
+                                    source.sourceName,
+                                    source.revisionId,
+                                  ),
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -260,7 +271,11 @@ class _SkillPersonalData extends StatelessWidget {
                   onChanged: (enabled) =>
                       userRepository.setFavorite(object, enabled),
                 ),
-                Text(favorite ? 'Skill favorite' : 'Add skill favorite'),
+                Text(
+                  context.tr(
+                    favorite ? 'Skill favorite' : 'Add skill favorite',
+                  ),
+                ),
               ],
             );
           },
@@ -288,22 +303,36 @@ class _SkillHeader extends StatelessWidget {
           children: <Widget>[
             Row(
               children: <Widget>[
-                Icon(
-                  detail.summary.isFeature
+                CatalogAssetImage(
+                  assetPath: skillIconAsset(detail.summary),
+                  semanticLabel: detail.summary.name,
+                  width: 58,
+                  height: 58,
+                  fallbackIcon: detail.summary.isFeature
                       ? Icons.auto_awesome_rounded
                       : Icons.bolt_rounded,
+                  borderRadius: BorderRadius.circular(14),
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  detail.summary.isFeature ? 'Feature' : 'Skill',
-                  style: Theme.of(context).textTheme.labelLarge,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        context.tr(
+                          detail.summary.isFeature ? 'Feature' : 'Skill',
+                        ),
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        detail.summary.name,
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                    ],
+                  ),
                 ),
               ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              detail.summary.name,
-              style: Theme.of(context).textTheme.headlineMedium,
             ),
             if (detail.description != null) ...<Widget>[
               const SizedBox(height: 14),
@@ -353,9 +382,12 @@ class _Fact extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(label, style: Theme.of(context).textTheme.labelMedium),
+          Text(
+            context.tr(label),
+            style: Theme.of(context).textTheme.labelMedium,
+          ),
           const SizedBox(height: 2),
-          Text(value ?? 'Not provided'),
+          Text(value ?? context.tr('Not provided')),
         ],
       ),
     );
@@ -375,8 +407,17 @@ class _UserList extends StatelessWidget {
           .map(
             (user) => ListTile(
               contentPadding: EdgeInsets.zero,
+              leading: CatalogAssetImage(
+                assetPath: petHeadAsset(user.pet.headKey),
+                semanticLabel: user.pet.name,
+                width: 44,
+                height: 44,
+                fit: BoxFit.cover,
+                fallbackIcon: Icons.pets_outlined,
+                borderRadius: BorderRadius.circular(10),
+              ),
               title: Text(user.pet.name),
-              subtitle: Text(_relationshipText(user)),
+              subtitle: Text(_relationshipText(context, user)),
               trailing: const Icon(Icons.chevron_right_rounded),
               onTap: () => onOpen(user.pet.petId),
             ),
@@ -405,16 +446,16 @@ String? _numericText(num? value, String? text) {
   return text;
 }
 
-String _relationshipText(SkillUser user) {
-  final values = <String>[_sourceLabel(user.relationshipKind)];
+String _relationshipText(BuildContext context, SkillUser user) {
+  final values = <String>[_sourceLabel(context, user.relationshipKind)];
   if (user.learnLevel != null) {
-    values.add('level ${user.learnLevel}');
+    values.add('${context.tr('Level')} ${user.learnLevel}');
   }
   if (user.sourceStage != null) {
-    values.add('source stage ${user.sourceStage}');
+    values.add('${context.tr('Source stage')} ${user.sourceStage}');
   }
   if (user.bloodRaw != null) {
-    values.add('bloodline: ${user.bloodRaw}');
+    values.add('${context.tr('Bloodline')}：${user.bloodRaw}');
   }
   if (user.requirementText != null) {
     values.add(user.requirementText!);
@@ -422,13 +463,13 @@ String _relationshipText(SkillUser user) {
   return values.join(' · ');
 }
 
-String _sourceLabel(String sourceKind) {
+String _sourceLabel(BuildContext context, String sourceKind) {
   return switch (sourceKind) {
-    'feature' => 'Feature relationship',
-    'native' => 'Native',
-    'blood' => 'Bloodline',
-    'stone' => 'Skill stone',
-    'legendary' => 'Legendary',
-    _ => 'Unknown source',
+    'feature' => context.tr('Feature relationship'),
+    'native' => context.tr('Native'),
+    'blood' => context.tr('Bloodline'),
+    'stone' => context.tr('Skill stone'),
+    'legendary' => context.tr('Legendary'),
+    _ => context.tr('Unknown source'),
   };
 }

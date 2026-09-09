@@ -7,6 +7,7 @@ import '../../domain/user_repository.dart';
 import '../pets/pet_detail_page.dart';
 import '../skills/skill_detail_page.dart';
 import 'personal_controls.dart';
+import '../../l10n/app_strings.dart';
 
 class MyLibraryPage extends StatelessWidget {
   const MyLibraryPage({
@@ -26,10 +27,16 @@ class MyLibraryPage extends StatelessWidget {
       length: 2,
       child: Column(
         children: <Widget>[
-          const TabBar(
+          TabBar(
             tabs: <Tab>[
-              Tab(text: 'Favorites', icon: Icon(Icons.favorite_outline)),
-              Tab(text: 'Collected', icon: Icon(Icons.task_alt_outlined)),
+              Tab(
+                text: context.tr('Favorites'),
+                icon: const Icon(Icons.favorite_outline),
+              ),
+              Tab(
+                text: context.tr('Collected'),
+                icon: const Icon(Icons.task_alt_outlined),
+              ),
             ],
           ),
           Expanded(
@@ -132,7 +139,9 @@ class _FavoritesList extends StatelessWidget {
     } on Object {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('The saved item could not be opened.')),
+          SnackBar(
+            content: Text(context.tr('The saved item could not be opened.')),
+          ),
         );
       }
     }
@@ -173,7 +182,7 @@ class _FavoritesList extends StatelessWidget {
                 leading: Icon(_objectIcon(item.object.objectType)),
                 title: Text(item.object.nameSnapshot),
                 subtitle: Text(
-                  '${item.object.objectType.label} · ${item.object.objectId}',
+                  '${context.tr(item.object.objectType.label)} · ${item.object.objectId}',
                 ),
                 trailing: const Icon(Icons.chevron_right_rounded),
                 onTap: () => _open(context, item),
@@ -238,8 +247,10 @@ class _CollectedList extends StatelessWidget {
     } on Object {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('The collected entry could not be opened.'),
+          SnackBar(
+            content: Text(
+              context.tr('The collected entry could not be opened.'),
+            ),
           ),
         );
       }
@@ -278,7 +289,7 @@ class _CollectedList extends StatelessWidget {
                 key: ValueKey('collected-${mark.handbookId}'),
                 leading: const Icon(Icons.task_alt_rounded),
                 title: Text(mark.nameSnapshot),
-                subtitle: Text('Handbook entry · ${mark.handbookId}'),
+                subtitle: Text(context.strings.handbookEntry(mark.handbookId)),
                 trailing: const Icon(Icons.chevron_right_rounded),
                 onTap: () => _open(context, mark),
               ),
@@ -335,7 +346,7 @@ class _UnavailableSavedItemPageState extends State<UnavailableSavedItemPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Saved item')),
+      appBar: AppBar(title: Text(context.tr('Saved item'))),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
         children: <Widget>[
@@ -352,10 +363,10 @@ class _UnavailableSavedItemPageState extends State<UnavailableSavedItemPage> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    '${widget.object.objectType.label} · ${widget.object.objectId}',
+                    '${context.tr(widget.object.objectType.label)} · ${widget.object.objectId}',
                   ),
                   const SizedBox(height: 12),
-                  const Text('Currently unavailable in this Catalog.'),
+                  Text(context.tr('Currently unavailable in this Catalog.')),
                   const SizedBox(height: 10),
                   Row(
                     children: <Widget>[
@@ -368,7 +379,7 @@ class _UnavailableSavedItemPageState extends State<UnavailableSavedItemPage> {
                       if (widget.object.objectType == UserObjectType.handbook)
                         FilterChip(
                           selected: _collected,
-                          label: const Text('Handbook entry collected'),
+                          label: Text(context.tr('Handbook entry collected')),
                           onSelected: _setCollected,
                         ),
                     ],
@@ -378,7 +389,10 @@ class _UnavailableSavedItemPageState extends State<UnavailableSavedItemPage> {
             ),
           ),
           const SizedBox(height: 18),
-          Text('Personal notes', style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            context.tr('Personal notes'),
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: 8),
           PersonalNotesSection(
             repository: widget.userRepository,
@@ -406,7 +420,7 @@ class _LibraryMessage extends StatelessWidget {
           children: <Widget>[
             Icon(icon, size: 48),
             const SizedBox(height: 12),
-            Text(text, textAlign: TextAlign.center),
+            Text(context.tr(text), textAlign: TextAlign.center),
           ],
         ),
       ),

@@ -8,6 +8,7 @@ An independent, non-commercial, offline-first reference application for iOS and 
 
 - Phases 0 through 6 are complete. Phase 6 closed under an explicit physical-device-test waiver; those tests remain unrun and store publication remains a separate unmet gate.
 - Phase 7 is temporarily closed under explicit live-update evidence deferral `PHASE7-LIVE-CATALOG-001`. Its complete-package GitHub Releases flow is implemented and passes local and hosted checks, but no genuine newer Catalog exists yet, so real package delivery remains unrun rather than simulated. No background update or logical patch path exists.
+- Phase 8 completes the formal App identity, `zh-CN` interface, frozen offline visual library, creature base-stat totals, source-backed type relationships, and reviewed iOS and Android store screenshot sets. Remaining store submission and release-account work is deferred.
 - A local Git repository exists. Completed delivery checkpoints use GitHub Desktop for commits and pushes unless the active user instruction explicitly defers that step.
 - The supplied technical baseline is preserved at [docs/technical-spec-v1.md](docs/technical-spec-v1.md).
 - The Catalog and User V1 SQL files are the current normative schema sources. Catalog V1 currently contains 20 tables and two query views.
@@ -15,7 +16,9 @@ An independent, non-commercial, offline-first reference application for iOS and 
 - The upstream rendered index verified all 442 display numbers and default handbook forms. Forty-eight ambiguous defaults use evidence-bound explicit overrides; `show_topics`, record order, and ID suffixes are not local default-selection rules.
 - Phase 2 generated normalized Catalog data and release data version 1 from the validated snapshot. The package contains a verified 3,424,256-byte SQLite database with 596 creatures, 442 handbook entries, 788 skills, 298 Learnsets, and 242 evolution groups.
 - The tracked release manifest records database SHA-256 `2c27ddc3cd36f543ea6319ea9878b4a3c8b8a9a89afad6bd6eaacfd9592ed8f2`. The identity registry locks 1,826 creature, handbook, and skill identities.
-- The Flutter App runs on iOS and Android, validates and installs the bundled Catalog without a first-launch download, opens it read-only, and provides paginated creature and skill browsing, exact form search, type filtering, whitelisted sorting, full form switching, skill-source separation, evolution evidence, and Catalog attribution. Its only production network source is the fixed GitHub Releases Catalog channel invoked from Settings.
+- The Flutter App runs on iOS and Android, validates and installs the bundled Catalog without a first-launch download, opens it read-only, and provides paginated creature and skill browsing, exact form search, type filtering, whitelisted sorting, full form switching, source-backed base-stat totals and type relationships, skill-source separation, evolution evidence, and Catalog attribution. Its only production network source is the fixed GitHub Releases Catalog channel invoked from Settings.
+- The App is named **Roco World Handbook** in English and uses the Chinese display name frozen by ADR-0015. It follows the device locale with `en-US` fallback, and its Chinese game-domain terms are frozen from the Wiki rather than inferred from English copy.
+- Versioned Wiki assets ship inside the App: 596 creature heads, 569 creature illustrations, 736 skill or feature icons, and 35 domain UI icons. The 1,936-file manifest records 2,015 Catalog references and 106,877,001 verified bytes; ordinary App browsing never loads those images from the network.
 - The App creates and validates an independent personal database from the normative User V1 schema. Creature and skill favorites, handbook-level collection marks, and device-local notes survive restart; missing Catalog objects retain their saved name and notes.
 - Startup now serializes Catalog installation, validates a new immutable whole-database candidate and its attribution before activation, keeps independent active and previous records, rolls back a failed post-activation open, and retains at most the current and previous validated Catalog and attribution files. A newer compatible local Catalog is not silently downgraded by an older bundled version.
 - The fixed bottom navigation provides Creatures, Skills, My Library, and Settings. Settings explains local-storage and uninstall risk, shows the effective Catalog, recovery outcome, and personal schema versions, provides an explicitly confirmed bundled-Catalog recovery action, and owns the user-triggered complete-Catalog update flow. Neither action modifies `user.db`.
@@ -26,7 +29,7 @@ An independent, non-commercial, offline-first reference application for iOS and 
 
 ## V1 boundary
 
-V1 includes offline creature and skill lookup, favorites, collection marks, notes, and safe whole-Catalog replacement with App updates. Phase 7 additionally enables an optional user-triggered authenticated complete-Catalog download. It excludes runtime BWIKI access, an application server, logical patch downloads, accounts, cloud synchronization, and bulk game-image acquisition.
+V1 includes offline creature and skill lookup, bundled creature and skill imagery, source-backed type relationships, favorites, collection marks, notes, and safe whole-Catalog replacement with App updates. Phase 7 additionally enables an optional user-triggered authenticated complete-Catalog download. It excludes runtime BWIKI access, runtime image acquisition, an application server, logical patch downloads, accounts, and cloud synchronization.
 
 The complete Catalog remains the first supported independent-update unit. The runtime transport, consent, progress, cancellation, and local activation paths are implemented, but no newer production Catalog Release exists yet. Physical-device and real-package network evidence remain absent, and logical patches remain later work. Temporary Phase 7 closure does not convert those deferred checks into passed evidence.
 
@@ -145,6 +148,35 @@ dart run tool/catalog_signing.dart sign-payload \
 
 The signing tool canonicalizes and validates the payload, checks the key range and private/public pair, and runs its output through the production verifier. The current production key already exists under the explicitly authorized Desktop custody path and must not be regenerated casually. The repository owner accepted its confirmed iCloud Desktop synchronization on 2026-09-10. `generate-key` is reserved for an explicit future rotation ceremony; an encrypted offline backup remains undecided.
 
+## Phase 8 visual asset tools
+
+A development import may validate the current Catalog's complete image scope before downloading anything:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m bwiki_import \
+  preflight-image-assets \
+  --catalog data/normalized/snapshot-19235f9b9b34dc4e/catalog-v1.json \
+  --config config/wiki_assets_v1.json
+```
+
+Freeze a new immutable image version and the matching type relationship contract:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m bwiki_import \
+  import-image-assets \
+  --catalog data/normalized/snapshot-19235f9b9b34dc4e/catalog-v1.json \
+  --config config/wiki_assets_v1.json \
+  --output app/assets/wiki/v1 \
+  --cache /path/outside-the-repository/wiki-image-cache
+
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m bwiki_import \
+  import-type-relations \
+  --config config/type_relations_v1.json \
+  --output app/assets/wiki/type-relations-v1.json
+```
+
+Both import commands refuse to replace a different existing version. Ordinary tests and App runtime never invoke them or access the Wiki.
+
 ## Flutter App
 
 Run the current offline client checks:
@@ -156,7 +188,7 @@ flutter analyze
 flutter test
 ```
 
-Launch on an available iOS or Android simulator with `flutter run`. The production client has no BWIKI or third-party HTTP dependency. Its `dart:io` network boundary is limited to the fixed GitHub Releases Catalog channel; canonical source names and descriptions may retain their upstream language while all App-authored copy remains English.
+Launch on an available iOS or Android simulator with `flutter run`. The production client has no runtime BWIKI or image-CDN dependency. Its `dart:io` network boundary is limited to the fixed GitHub Releases Catalog channel; canonical source names and descriptions may retain their upstream language, while controlled `zh-CN` App copy follows the frozen terminology contract and every other locale falls back to `en-US`.
 
 Favorites and notes are stored only in the private `user.db` on the device. They are not included in the replaceable Catalog database and are not synchronized to an account or cloud service.
 

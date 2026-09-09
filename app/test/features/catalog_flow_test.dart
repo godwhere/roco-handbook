@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:roco_handbook/catalog_app.dart';
 import 'package:roco_handbook/data/catalog/catalog_installer.dart';
 import 'package:roco_handbook/data/catalog/catalog_update_source.dart';
@@ -19,6 +20,8 @@ import 'package:roco_handbook/features/catalog/catalog_home_page.dart';
 import 'package:roco_handbook/features/personal/my_library_page.dart';
 import 'package:roco_handbook/features/personal/personal_controls.dart';
 import 'package:roco_handbook/features/pets/pet_catalog_page.dart';
+import 'package:roco_handbook/l10n/app_strings.dart';
+import 'package:roco_handbook/widgets/catalog_asset_image.dart';
 
 void main() {
   late SqliteCatalogRepository repository;
@@ -56,6 +59,9 @@ void main() {
   tearDown(() async {
     await userRepository.close();
     await temporary.delete(recursive: true);
+    PaintingBinding.instance.imageCache
+      ..clear()
+      ..clearLiveImages();
   });
 
   testWidgets('opens an exact special form and switches the complete detail', (
@@ -139,7 +145,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Roco Handbook'), findsOneWidget);
+    expect(find.text('Roco World Handbook'), findsOneWidget);
     expect(find.text('Creatures'), findsOneWidget);
     expect(find.text('Skills'), findsOneWidget);
     expect(find.text('My Library'), findsOneWidget);
@@ -155,6 +161,49 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('uses source-grounded Chinese UI and bundled visual assets', (
+    tester,
+  ) async {
+    await _setPhoneSurface(tester);
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('zh', 'CN'),
+        supportedLocales: AppStrings.supportedLocales,
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        home: CatalogHomePage(session: session),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('\u7cbe\u7075'), findsOneWidget);
+    expect(find.text('\u6280\u80fd'), findsOneWidget);
+    expect(find.text('\u6211\u7684\u6536\u85cf'), findsOneWidget);
+    expect(find.byType(CatalogAssetImage), findsWidgets);
+
+    final first = (await repository.searchHandbooks(const PetQuery(limit: 1)))
+        .single;
+    await tester.tap(find.byKey(ValueKey('pet-result-${first.petId}')));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('\u79cd\u65cf\u8d44\u8d28\u603b\u548c'),
+      350,
+      scrollable: find.byType(Scrollable).last,
+    );
+    expect(find.text('\u79cd\u65cf\u8d44\u8d28\u603b\u548c'), findsOneWidget);
+    expect(find.text('582'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('\u5c5e\u6027\u514b\u5236'),
+      350,
+      scrollable: find.byType(Scrollable).last,
+    );
+    expect(find.text('\u5c5e\u6027\u514b\u5236'), findsOneWidget);
+    expect(find.text('\u53d7\u5230\u4f24\u5bb3\u589e\u52a0'), findsOneWidget);
+  });
+
   testWidgets('bootstrap reports that preparation needs no download', (
     tester,
   ) async {
@@ -167,7 +216,7 @@ void main() {
     expect(find.text('No download is required.'), findsOneWidget);
     completer.complete(session);
     await tester.pumpAndSettle();
-    expect(find.text('Roco Handbook'), findsOneWidget);
+    expect(find.text('Roco World Handbook'), findsOneWidget);
   });
 
   testWidgets('an older search completion cannot replace a newer result', (
@@ -638,7 +687,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Licenses'), findsOneWidget);
-    expect(find.text('Roco Handbook'), findsOneWidget);
+    expect(find.text('Roco World Handbook'), findsOneWidget);
     expect(
       find.text('Independent, non-commercial, and unofficial.'),
       findsOneWidget,

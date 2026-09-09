@@ -1,0 +1,452 @@
+{
+  "contract_version": 1,
+  "dataset_id": "roco-world-zh-cn",
+  "imported_at_utc": "2026-09-09T18:50:27.968101Z",
+  "relations": {
+    "光": {
+      "resisted_by": [
+        "冰",
+        "草"
+      ],
+      "resists": [
+        "幻",
+        "恶"
+      ],
+      "strong_against": [
+        "幽",
+        "恶"
+      ],
+      "weak_to": [
+        "幽",
+        "草"
+      ]
+    },
+    "冰": {
+      "resisted_by": [
+        "冰",
+        "机械",
+        "火"
+      ],
+      "resists": [
+        "光",
+        "无系别",
+        "水"
+      ],
+      "strong_against": [
+        "地",
+        "翼",
+        "草",
+        "龙"
+      ],
+      "weak_to": [
+        "地",
+        "机械",
+        "武",
+        "火"
+      ]
+    },
+    "地": {
+      "resisted_by": [
+        "武",
+        "草"
+      ],
+      "resists": [
+        "普通",
+        "毒",
+        "火",
+        "电",
+        "翼"
+      ],
+      "strong_against": [
+        "冰",
+        "毒",
+        "火",
+        "电"
+      ],
+      "weak_to": [
+        "冰",
+        "机械",
+        "武",
+        "水",
+        "草"
+      ]
+    },
+    "幻": {
+      "resisted_by": [
+        "光",
+        "幻",
+        "机械"
+      ],
+      "resists": [
+        "武"
+      ],
+      "strong_against": [
+        "武",
+        "毒"
+      ],
+      "weak_to": [
+        "幽",
+        "虫"
+      ]
+    },
+    "幽": {
+      "resisted_by": [
+        "恶",
+        "普通"
+      ],
+      "resists": [
+        "普通",
+        "武",
+        "毒",
+        "虫"
+      ],
+      "strong_against": [
+        "光",
+        "幻",
+        "幽"
+      ],
+      "weak_to": [
+        "光",
+        "恶"
+      ]
+    },
+    "恶": {
+      "resisted_by": [
+        "光",
+        "恶",
+        "武"
+      ],
+      "resists": [
+        "幽"
+      ],
+      "strong_against": [
+        "幽",
+        "毒",
+        "萌"
+      ],
+      "weak_to": [
+        "光",
+        "武",
+        "萌",
+        "虫"
+      ]
+    },
+    "无系别": {
+      "resisted_by": [
+        "冰"
+      ],
+      "resists": [],
+      "strong_against": [],
+      "weak_to": []
+    },
+    "普通": {
+      "resisted_by": [
+        "地",
+        "幽",
+        "机械"
+      ],
+      "resists": [
+        "幽"
+      ],
+      "strong_against": [],
+      "weak_to": [
+        "武"
+      ]
+    },
+    "机械": {
+      "resisted_by": [
+        "机械",
+        "水",
+        "火",
+        "电"
+      ],
+      "resists": [
+        "冰",
+        "幻",
+        "普通",
+        "毒",
+        "翼",
+        "草",
+        "萌",
+        "虫",
+        "龙"
+      ],
+      "strong_against": [
+        "冰",
+        "地",
+        "萌"
+      ],
+      "weak_to": [
+        "武",
+        "水",
+        "火"
+      ]
+    },
+    "武": {
+      "resisted_by": [
+        "幻",
+        "幽",
+        "毒",
+        "翼",
+        "萌",
+        "虫"
+      ],
+      "resists": [
+        "地",
+        "恶",
+        "虫"
+      ],
+      "strong_against": [
+        "冰",
+        "地",
+        "恶",
+        "普通",
+        "机械"
+      ],
+      "weak_to": [
+        "幻",
+        "翼",
+        "萌"
+      ]
+    },
+    "毒": {
+      "resisted_by": [
+        "地",
+        "幽",
+        "机械",
+        "毒"
+      ],
+      "resists": [
+        "武",
+        "草",
+        "萌",
+        "虫"
+      ],
+      "strong_against": [
+        "草",
+        "萌"
+      ],
+      "weak_to": [
+        "地",
+        "幻",
+        "恶"
+      ]
+    },
+    "水": {
+      "resisted_by": [
+        "冰",
+        "草",
+        "龙"
+      ],
+      "resists": [
+        "机械",
+        "火"
+      ],
+      "strong_against": [
+        "地",
+        "机械",
+        "火"
+      ],
+      "weak_to": [
+        "电",
+        "草"
+      ]
+    },
+    "火": {
+      "resisted_by": [
+        "地",
+        "水",
+        "龙"
+      ],
+      "resists": [
+        "冰",
+        "机械",
+        "草",
+        "萌",
+        "虫"
+      ],
+      "strong_against": [
+        "冰",
+        "机械",
+        "草",
+        "虫"
+      ],
+      "weak_to": [
+        "地",
+        "水"
+      ]
+    },
+    "电": {
+      "resisted_by": [
+        "地",
+        "电",
+        "草",
+        "龙"
+      ],
+      "resists": [
+        "机械",
+        "翼"
+      ],
+      "strong_against": [
+        "水",
+        "翼"
+      ],
+      "weak_to": [
+        "地"
+      ]
+    },
+    "翼": {
+      "resisted_by": [
+        "地",
+        "机械",
+        "电",
+        "龙"
+      ],
+      "resists": [
+        "武",
+        "草",
+        "虫"
+      ],
+      "strong_against": [
+        "武",
+        "草",
+        "虫"
+      ],
+      "weak_to": [
+        "冰",
+        "电"
+      ]
+    },
+    "草": {
+      "resisted_by": [
+        "机械",
+        "毒",
+        "火",
+        "翼",
+        "虫",
+        "龙"
+      ],
+      "resists": [
+        "光",
+        "地",
+        "水",
+        "电"
+      ],
+      "strong_against": [
+        "光",
+        "地",
+        "水"
+      ],
+      "weak_to": [
+        "冰",
+        "毒",
+        "火",
+        "翼",
+        "虫"
+      ]
+    },
+    "萌": {
+      "resisted_by": [
+        "机械",
+        "毒",
+        "火"
+      ],
+      "resists": [
+        "武",
+        "虫"
+      ],
+      "strong_against": [
+        "恶",
+        "武",
+        "龙"
+      ],
+      "weak_to": [
+        "恶",
+        "机械",
+        "毒"
+      ]
+    },
+    "虫": {
+      "resisted_by": [
+        "幽",
+        "机械",
+        "武",
+        "毒",
+        "火",
+        "翼",
+        "萌"
+      ],
+      "resists": [
+        "武",
+        "草"
+      ],
+      "strong_against": [
+        "幻",
+        "恶",
+        "草"
+      ],
+      "weak_to": [
+        "火",
+        "翼"
+      ]
+    },
+    "龙": {
+      "resisted_by": [
+        "机械"
+      ],
+      "resists": [
+        "水",
+        "火",
+        "电",
+        "翼",
+        "草"
+      ],
+      "strong_against": [
+        "龙"
+      ],
+      "weak_to": [
+        "冰",
+        "萌"
+      ]
+    }
+  },
+  "reviewed_reciprocity_exceptions": [
+    "resisted_by:冰:冰",
+    "strong_against:龙:龙",
+    "resisted_by:电:电",
+    "resisted_by:毒:毒",
+    "strong_against:幽:幽",
+    "resisted_by:恶:恶",
+    "resisted_by:机械:机械",
+    "resisted_by:幻:幻"
+  ],
+  "source": {
+    "page_id": 12987,
+    "revised_at_utc": "2026-06-08T19:57:39Z",
+    "revision_id": 39538,
+    "source_sha1": "f44cdbb07c94454696c9e8560b53dd5cc12890ca",
+    "source_url": "https://wiki.biligame.com/rocom/index.php?title=Module%3ATypeRelation&oldid=39538",
+    "title": "Module:TypeRelation"
+  },
+  "type_order": [
+    "无系别",
+    "普通",
+    "草",
+    "火",
+    "水",
+    "光",
+    "地",
+    "冰",
+    "龙",
+    "电",
+    "毒",
+    "虫",
+    "武",
+    "翼",
+    "萌",
+    "幽",
+    "恶",
+    "机械",
+    "幻"
+  ]
+}

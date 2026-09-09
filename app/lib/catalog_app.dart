@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'app_version.dart';
@@ -15,6 +16,7 @@ import 'domain/catalog_repository.dart';
 import 'domain/user_models.dart';
 import 'domain/user_repository.dart';
 import 'features/catalog/catalog_home_page.dart';
+import 'l10n/app_strings.dart';
 
 final class CatalogSession {
   const CatalogSession({
@@ -256,16 +258,23 @@ class _CatalogBootstrapAppState extends State<CatalogBootstrapApp> {
   @override
   Widget build(BuildContext context) {
     final lightScheme = ColorScheme.fromSeed(
-      seedColor: const Color(0xFF2D6A4F),
+      seedColor: const Color(0xFF146FC7),
       brightness: Brightness.light,
     );
     final darkScheme = ColorScheme.fromSeed(
-      seedColor: const Color(0xFF74C69D),
+      seedColor: const Color(0xFF68B6FF),
       brightness: Brightness.dark,
     );
     return MaterialApp(
-      title: 'Roco Handbook',
+      title: 'Roco World Handbook',
+      onGenerateTitle: (context) => context.tr('Roco World Handbook'),
       debugShowCheckedModeBanner: false,
+      supportedLocales: AppStrings.supportedLocales,
+      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       themeMode: ThemeMode.system,
       theme: ThemeData(
         colorScheme: lightScheme,
@@ -325,15 +334,15 @@ class _CatalogPreparingScreen extends StatelessWidget {
         child: Center(
           child: Semantics(
             liveRegion: true,
-            label: 'Preparing the offline Catalog',
-            child: const Column(
+            label: context.tr('Preparing the offline Catalog'),
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                CircularProgressIndicator(),
-                SizedBox(height: 20),
-                Text('Preparing the offline Catalog...'),
-                SizedBox(height: 8),
-                Text('No download is required.'),
+                const CircularProgressIndicator(),
+                const SizedBox(height: 20),
+                Text(context.tr('Preparing the offline Catalog...')),
+                const SizedBox(height: 8),
+                Text(context.tr('No download is required.')),
               ],
             ),
           ),
@@ -358,7 +367,7 @@ class _CatalogFailureScreen extends StatelessWidget {
     };
     final personalFailure = error is UserDataException;
     return Scaffold(
-      appBar: AppBar(title: const Text('Roco Handbook')),
+      appBar: AppBar(title: Text(context.tr('Roco World Handbook'))),
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -376,25 +385,33 @@ class _CatalogFailureScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   Text(
                     personalFailure
-                        ? 'Your personal library could not be opened.'
-                        : 'The offline Catalog could not be opened.',
+                        ? context.tr(
+                            'Your personal library could not be opened.',
+                          )
+                        : context.tr(
+                            'The offline Catalog could not be opened.',
+                          ),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     personalFailure
-                        ? 'The existing personal database was preserved. Correct the storage problem, then try again.'
-                        : 'Your personal data was not changed. Try preparing the bundled Catalog again.',
+                        ? context.tr(
+                            'The existing personal database was preserved. Correct the storage problem, then try again.',
+                          )
+                        : context.tr(
+                            'Your personal data was not changed. Try preparing the bundled Catalog again.',
+                          ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
-                  Text('Error code: $code'),
+                  Text(context.strings.errorCode(code)),
                   const SizedBox(height: 20),
                   FilledButton.icon(
                     onPressed: onRetry,
                     icon: const Icon(Icons.refresh_rounded),
-                    label: const Text('Try again'),
+                    label: Text(context.tr('Try again')),
                   ),
                 ],
               ),

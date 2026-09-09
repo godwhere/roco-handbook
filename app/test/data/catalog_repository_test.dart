@@ -133,6 +133,8 @@ void main() {
       expect(base.summary.dexNo, '004');
       expect(special.summary.dexNo, '004');
       expect(base.stats, isNot(special.stats));
+      expect(base.illustrationKey, isNotNull);
+      expect(special.illustrationKey, isNotNull);
 
       final baseSkills = await repository.getSkillsForPet(base.summary.petId);
       final specialSkills = await repository.getSkillsForPet(
@@ -140,6 +142,7 @@ void main() {
       );
       expect(baseSkills.featureSkill?.skillId, 'skill_000003');
       expect(specialSkills.featureSkill?.skillId, 'skill_000226');
+      expect(baseSkills.featureSkill?.iconKey, isNotNull);
     },
   );
 

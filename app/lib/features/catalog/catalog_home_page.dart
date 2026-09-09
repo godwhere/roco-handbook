@@ -7,6 +7,7 @@ import '../pets/pet_catalog_page.dart';
 import '../personal/my_library_page.dart';
 import '../settings/settings_page.dart';
 import '../skills/skill_catalog_page.dart';
+import '../../l10n/app_strings.dart';
 
 class CatalogHomePage extends StatefulWidget {
   const CatalogHomePage({
@@ -50,31 +51,40 @@ class _CatalogHomePageState extends State<CatalogHomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'About this Catalog',
+                context.tr('About this Catalog'),
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 16),
-              _InfoRow(label: 'Data version', value: '${info.dataVersion}'),
-              _InfoRow(label: 'Catalog schema', value: '${info.schemaVersion}'),
-              _InfoRow(label: 'Snapshot', value: info.snapshotId),
-              _InfoRow(label: 'Built', value: info.builtAtUtc),
               _InfoRow(
-                label: 'Source revision range',
+                label: context.tr('Data version'),
+                value: '${info.dataVersion}',
+              ),
+              _InfoRow(
+                label: context.tr('Catalog schema'),
+                value: '${info.schemaVersion}',
+              ),
+              _InfoRow(label: context.tr('Snapshot'), value: info.snapshotId),
+              _InfoRow(label: context.tr('Built'), value: info.builtAtUtc),
+              _InfoRow(
+                label: context.tr('Source revision range'),
                 value:
                     '${info.earliestSourceRevisionUtc} — ${info.latestSourceRevisionUtc}',
               ),
               const SizedBox(height: 16),
-              Text('Coverage', style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                context.tr('Coverage'),
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               const SizedBox(height: 8),
               ...info.coverage.entries.map(
                 (entry) => _InfoRow(
-                  label: _coverageLabel(entry.key),
-                  value: entry.value ? 'Included' : 'Not included',
+                  label: context.tr(_coverageLabel(entry.key)),
+                  value: context.tr(entry.value ? 'Included' : 'Not included'),
                 ),
               ),
               const SizedBox(height: 16),
               Text(
-                'Attribution',
+                context.tr('Attribution'),
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
@@ -90,17 +100,19 @@ class _CatalogHomePageState extends State<CatalogHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Roco Handbook'),
+        title: Text(context.tr('Roco World Handbook')),
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Chip(
               visualDensity: VisualDensity.compact,
-              label: Text('Data v${widget.session.info.dataVersion}'),
+              label: Text(
+                context.strings.dataVersion(widget.session.info.dataVersion),
+              ),
             ),
           ),
           IconButton(
-            tooltip: 'Catalog information',
+            tooltip: context.tr('Catalog information'),
             onPressed: _showAbout,
             icon: const Icon(Icons.info_outline_rounded),
           ),
@@ -158,26 +170,36 @@ class _CatalogHomePageState extends State<CatalogHomePage> {
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
         onDestinationSelected: (index) => setState(() => _index = index),
-        destinations: const <NavigationDestination>[
+        destinations: <NavigationDestination>[
           NavigationDestination(
-            icon: Icon(Icons.pets_outlined),
-            selectedIcon: Icon(Icons.pets_rounded),
-            label: 'Creatures',
+            icon: Image.asset(
+              'assets/wiki/v1/ui/navigation/creatures.png',
+              width: 28,
+              height: 28,
+              semanticLabel: context.tr('Creatures'),
+            ),
+            selectedIcon: Image.asset(
+              'assets/wiki/v1/ui/navigation/creatures.png',
+              width: 32,
+              height: 32,
+              semanticLabel: context.tr('Creatures'),
+            ),
+            label: context.tr('Creatures'),
           ),
           NavigationDestination(
-            icon: Icon(Icons.auto_awesome_outlined),
-            selectedIcon: Icon(Icons.auto_awesome_rounded),
-            label: 'Skills',
+            icon: const Icon(Icons.auto_awesome_outlined),
+            selectedIcon: const Icon(Icons.auto_awesome_rounded),
+            label: context.tr('Skills'),
           ),
           NavigationDestination(
-            icon: Icon(Icons.bookmark_border_rounded),
-            selectedIcon: Icon(Icons.bookmark_rounded),
-            label: 'My Library',
+            icon: const Icon(Icons.bookmark_border_rounded),
+            selectedIcon: const Icon(Icons.bookmark_rounded),
+            label: context.tr('My Library'),
           ),
           NavigationDestination(
-            icon: Icon(Icons.settings_outlined),
-            selectedIcon: Icon(Icons.settings_rounded),
-            label: 'Settings',
+            icon: const Icon(Icons.settings_outlined),
+            selectedIcon: const Icon(Icons.settings_rounded),
+            label: context.tr('Settings'),
           ),
         ],
       ),

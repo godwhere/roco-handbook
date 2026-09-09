@@ -12,6 +12,8 @@ dependencies:
   cryptography: ^2.9.0
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   path: ^1.9.1
   path_provider: ^2.1.6
   sqlite3: ^3.5.2
@@ -26,3 +28,13 @@ flutter:
   assets:
     - assets/catalog/
     - assets/database/
+    - assets/wiki/type-relations-v1.json
+    - assets/wiki/v1/pets/heads/
+    - assets/wiki/v1/pets/illustrations/
+    - assets/wiki/v1/skills/
+    - assets/wiki/v1/ui/info/
+    - assets/wiki/v1/ui/navigation/
+    - assets/wiki/v1/ui/skill-categories/
+    - assets/wiki/v1/ui/sources/
+    - assets/wiki/v1/ui/stats/
+    - assets/wiki/v1/ui/types/
