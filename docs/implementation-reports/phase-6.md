@@ -51,6 +51,9 @@ Result: valid YAML mapping with two jobs, three current action releases pinned b
 
 GitHub Actions run 34352830184 at d3a5f6a
 Result: Catalog and release contracts passed; Flutter contracts passed; every reported step completed successfully.
+
+Read-only physical-device and signing preflight
+Result: the paired iPhone was available, the target bundle ID was not installed, one valid host code-signing identity existed, and the tracked Xcode Release configuration had no resolved development team. No device, App, keychain item, or project signing setting was changed.
 ```
 
 ## Not run
@@ -62,7 +65,7 @@ Result: Catalog and release contracts passed; Flutter contracts passed; every re
 
 ## Stopping condition and next boundary
 
-The local candidate, traceability, permission review, license review, and build materials are complete. Final Phase 6 acceptance cannot be claimed because no physical Android device is connected and the available physical iPhone has not received a separately authorized installation.
+The local candidate, traceability, permission review, license review, and build materials are complete. Final Phase 6 acceptance cannot be claimed because no physical Android device is connected and the available physical iPhone has not received a separately authorized installation. The iPhone preflight confirmed that the target bundle is not already installed, but a signed test build still requires an explicitly selected development team.
 
 The next allowed boundary is a manual device-acceptance run: connect a physical Android device and explicitly authorize installation on each target device, then prove offline first launch, upgrade/recovery behavior, and personal-data preservation. Signing, archive export, store upload, and publication remain later separately authorized actions even after device acceptance.
 

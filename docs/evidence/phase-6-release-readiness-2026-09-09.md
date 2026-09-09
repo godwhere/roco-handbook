@@ -86,6 +86,8 @@ This review is not legal advice, a rights clearance for artwork or trademarks, o
 
 The read-only device inventory showed an Android emulator, one physical iPhone, and an iOS simulator. No physical Android device was connected. No App was installed on the physical iPhone because a physical-device mutation was not separately authorized.
 
+A second read-only preflight at 20:54 CST confirmed that the physical iPhone remained paired and available. An exact bundle-ID query returned no installed `world.roco.rocoHandbook` application, so a future first test installation would not replace an existing installation of this App. The host reported one valid code-signing identity, but the tracked Xcode Release configuration does not resolve a development team. No certificate name, team identifier, device identifier, or other signing detail was written to the repository. Preparing a signed device build therefore remains a separately authorized action and must use an explicitly selected team without committing personal signing data.
+
 The following Phase 6 acceptance layers remain **not run**:
 
 - Physical Android first install, offline launch, update, recovery, interruption, and personal-data preservation
