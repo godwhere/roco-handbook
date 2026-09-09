@@ -1,11 +1,62 @@
 import 'package:flutter/material.dart';
 
 import '../../catalog_app.dart';
+import '../../data/catalog/catalog_installer.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({required this.session, super.key});
+  const SettingsPage({
+    required this.session,
+    this.onRestoreBundledCatalog,
+    super.key,
+  });
 
   final CatalogSession session;
+  final Future<void> Function()? onRestoreBundledCatalog;
+
+  Future<void> _confirmRestore(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Restore bundled Catalog?'),
+        content: const Text(
+          'This replaces only the offline Catalog with the version included '
+          'in this App. Favorites, collection marks, and notes are kept. The '
+          'bundled version may be older than the current Catalog.',
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            key: const ValueKey('confirm-catalog-restore'),
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Restore Catalog'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || onRestoreBundledCatalog == null) {
+      return;
+    }
+    try {
+      await onRestoreBundledCatalog!();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Bundled Catalog restored.')),
+        );
+      }
+    } on Object catch (error) {
+      if (context.mounted) {
+        final code = error is CatalogInstallException
+            ? error.code
+            : 'catalog_restore';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Catalog restore failed ($code).')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +86,33 @@ class SettingsPage extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 18),
+        Text('Catalog recovery', style: Theme.of(context).textTheme.titleLarge),
+        const SizedBox(height: 8),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Restore the complete read-only Catalog shipped with this '
+                  'App. Personal data is stored separately and is not removed.',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 12),
+                FilledButton.tonalIcon(
+                  key: const ValueKey('restore-bundled-catalog'),
+                  onPressed: onRestoreBundledCatalog == null
+                      ? null
+                      : () => _confirmRestore(context),
+                  icon: const Icon(Icons.restore_rounded),
+                  label: const Text('Restore bundled Catalog'),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 18),
         Text('About', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 8),
         Card(
@@ -49,6 +127,10 @@ class SettingsPage extends StatelessWidget {
                 subtitle: Text(
                   'Data ${info.dataVersion} · Schema ${info.schemaVersion}',
                 ),
+              ),
+              ListTile(
+                title: const Text('Last Catalog action'),
+                subtitle: Text(_catalogOutcomeLabel(session.catalogOutcome)),
               ),
               ListTile(
                 title: const Text('Personal database schema'),
@@ -79,4 +161,15 @@ class SettingsPage extends StatelessWidget {
       ],
     );
   }
+}
+
+String _catalogOutcomeLabel(CatalogOpenOutcome outcome) {
+  return switch (outcome) {
+    CatalogOpenOutcome.reused => 'Opened the current validated Catalog',
+    CatalogOpenOutcome.installedBundled => 'Installed bundled Catalog data',
+    CatalogOpenOutcome.recoveredPrevious =>
+      'Recovered the previous validated Catalog',
+    CatalogOpenOutcome.restoredBundled =>
+      'Restored the Catalog bundled with this App',
+  };
 }

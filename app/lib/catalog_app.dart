@@ -20,6 +20,7 @@ final class CatalogSession {
     required this.userRepository,
     required this.userDatabaseCreated,
     required this.userSchemaVersion,
+    this.catalogOutcome = CatalogOpenOutcome.reused,
   });
 
   final CatalogRepository repository;
@@ -29,17 +30,24 @@ final class CatalogSession {
   final UserRepository userRepository;
   final bool userDatabaseCreated;
   final int userSchemaVersion;
+  final CatalogOpenOutcome catalogOutcome;
 }
 
 final class ProductionCatalogBootstrap {
   const ProductionCatalogBootstrap();
 
-  Future<CatalogSession> load() async {
+  Future<CatalogSession> load() => _load(restoreBundled: false);
+
+  Future<CatalogSession> restoreBundledCatalog() => _load(restoreBundled: true);
+
+  Future<CatalogSession> _load({required bool restoreBundled}) async {
     const source = AssetBundledCatalogSource();
     final bundle = await source.load();
     final support = await getApplicationSupportDirectory();
-    final open = await LocalCatalogInstaller(support.path)
-        .prepareBundledCatalog(bundle);
+    final installer = LocalCatalogInstaller(support.path);
+    final open = restoreBundled
+        ? await installer.restoreBundledCatalog(bundle)
+        : await installer.prepareBundledCatalog(bundle);
     final repository = SqliteCatalogRepository(open.databasePath);
     final info = await repository.getCatalogInfo();
     const userSchemaSource = AssetUserSchemaSource();
@@ -54,14 +62,20 @@ final class ProductionCatalogBootstrap {
       userRepository: SqliteUserRepository(userOpen.databasePath),
       userDatabaseCreated: userOpen.created,
       userSchemaVersion: userOpen.schemaVersion,
+      catalogOutcome: open.outcome,
     );
   }
 }
 
 class CatalogBootstrapApp extends StatefulWidget {
-  const CatalogBootstrapApp({required this.bootstrap, super.key});
+  const CatalogBootstrapApp({
+    required this.bootstrap,
+    this.restoreBundledCatalog,
+    super.key,
+  });
 
   final Future<CatalogSession> Function() bootstrap;
+  final Future<CatalogSession> Function()? restoreBundledCatalog;
 
   @override
   State<CatalogBootstrapApp> createState() => _CatalogBootstrapAppState();
@@ -69,17 +83,44 @@ class CatalogBootstrapApp extends StatefulWidget {
 
 class _CatalogBootstrapAppState extends State<CatalogBootstrapApp> {
   late Future<CatalogSession> _session;
+  CatalogSession? _openedSession;
 
   @override
   void initState() {
     super.initState();
-    _session = widget.bootstrap();
+    _session = _load(widget.bootstrap);
   }
 
   void _retry() {
     setState(() {
-      _session = widget.bootstrap();
+      _session = _load(widget.bootstrap);
     });
+  }
+
+  Future<CatalogSession> _load(Future<CatalogSession> Function() loader) async {
+    final session = await loader();
+    _openedSession = session;
+    return session;
+  }
+
+  Future<void> _restoreBundledCatalog() async {
+    final loader = widget.restoreBundledCatalog;
+    if (loader == null) {
+      throw const CatalogInstallException(
+        'catalog_restore_unavailable',
+        'Bundled Catalog recovery is not available in this build.',
+      );
+    }
+    final previous = _openedSession;
+    _openedSession = null;
+    final replacement = () async {
+      await previous?.userRepository.close();
+      return _load(loader);
+    }();
+    setState(() {
+      _session = replacement;
+    });
+    await replacement;
   }
 
   @override
@@ -118,7 +159,12 @@ class _CatalogBootstrapAppState extends State<CatalogBootstrapApp> {
         future: _session,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return CatalogHomePage(session: snapshot.requireData);
+            return CatalogHomePage(
+              session: snapshot.requireData,
+              onRestoreBundledCatalog: widget.restoreBundledCatalog == null
+                  ? null
+                  : _restoreBundledCatalog,
+            );
           }
           if (snapshot.hasError) {
             return _CatalogFailureScreen(

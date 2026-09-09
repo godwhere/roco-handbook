@@ -4,10 +4,12 @@
 
 The App prepares the bundled Catalog before showing normal navigation. Preparation is a local copy and validation step; the screen explicitly states that no download is required. A startup failure shows a retry action and confirms that personal data was not changed.
 
-The bottom navigation has two destinations:
+The bottom navigation has four destinations:
 
 - **Creatures** opens the handbook browser.
 - **Skills** opens the skill browser.
+- **My Library** opens device-local favorites and handbook collection marks.
+- **Settings** shows local data versions, attribution, and the confirmed bundled-Catalog recovery action.
 
 The information action shows data version, Catalog schema, snapshot ID, build time, complete source revision time range, coverage flags, and the packaged attribution text.
 

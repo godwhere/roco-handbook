@@ -269,7 +269,9 @@ final class SqliteUserRepository implements UserRepository {
   }
 
   @override
-  Future<void> close() => _changes.close();
+  Future<void> close() {
+    return _changes.isClosed ? Future<void>.value() : _changes.close();
+  }
 
   Future<T> _read<T>(
     String operation,

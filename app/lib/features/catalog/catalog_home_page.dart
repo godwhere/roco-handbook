@@ -8,9 +8,14 @@ import '../settings/settings_page.dart';
 import '../skills/skill_catalog_page.dart';
 
 class CatalogHomePage extends StatefulWidget {
-  const CatalogHomePage({required this.session, super.key});
+  const CatalogHomePage({
+    required this.session,
+    this.onRestoreBundledCatalog,
+    super.key,
+  });
 
   final CatalogSession session;
+  final Future<void> Function()? onRestoreBundledCatalog;
 
   @override
   State<CatalogHomePage> createState() => _CatalogHomePageState();
@@ -122,7 +127,10 @@ class _CatalogHomePageState extends State<CatalogHomePage> {
                 userRepository: widget.session.userRepository,
                 datasetId: widget.session.info.datasetId,
               ),
-              SettingsPage(session: widget.session),
+              SettingsPage(
+                session: widget.session,
+                onRestoreBundledCatalog: widget.onRestoreBundledCatalog,
+              ),
             ],
           );
         },

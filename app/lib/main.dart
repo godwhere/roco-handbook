@@ -4,7 +4,11 @@ import 'catalog_app.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  const bootstrap = ProductionCatalogBootstrap();
   runApp(
-    CatalogBootstrapApp(bootstrap: const ProductionCatalogBootstrap().load),
+    CatalogBootstrapApp(
+      bootstrap: bootstrap.load,
+      restoreBundledCatalog: bootstrap.restoreBundledCatalog,
+    ),
   );
 }

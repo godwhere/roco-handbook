@@ -4,7 +4,7 @@ An independent, non-commercial offline reference application for iOS and Android
 
 ## Current project status
 
-- Phases 0 through 4 were completed on 2026-09-09, with the Python and Flutter test suites passing.
+- Phases 0 through 5 were completed on 2026-09-09, with the Python and Flutter test suites passing.
 - A local Git repository exists. Completed delivery checkpoints use GitHub Desktop for commits and pushes unless the active user instruction explicitly defers that step.
 - The supplied technical baseline is preserved at [docs/technical-spec-v1.md](docs/technical-spec-v1.md).
 - The Catalog and User V1 SQL files are the current normative schema sources. Catalog V1 currently contains 20 tables and two query views.
@@ -14,9 +14,10 @@ An independent, non-commercial offline reference application for iOS and Android
 - The tracked release manifest records database SHA-256 `2c27ddc3cd36f543ea6319ea9878b4a3c8b8a9a89afad6bd6eaacfd9592ed8f2`. The identity registry locks 1,826 creature, handbook, and skill identities.
 - The Flutter App now runs on iOS and Android with no runtime network data source. It validates and installs the bundled Catalog, opens it read-only, and provides paginated creature and skill browsing, exact form search, type filtering, whitelisted sorting, full form switching, skill-source separation, evolution evidence, and Catalog attribution.
 - The App creates and validates an independent personal database from the normative User V1 schema. Creature and skill favorites, handbook-level collection marks, and device-local notes survive restart; missing Catalog objects retain their saved name and notes.
-- The fixed bottom navigation provides Creatures, Skills, My Library, and Settings. Settings explains local-storage and uninstall risk and shows the effective Catalog and personal schema versions.
-- Android first launch and personal-data persistence passed in an emulator with airplane mode enabled and Wi-Fi disabled. iOS build, first launch, Catalog validation, personal-database creation, and restart reuse passed in an iPhone simulator. No physical-device, signing, upload, or store-release claim is made.
-- Phase 5 is the next implementation boundary: safe whole-Catalog replacement, rollback, bundled recovery, and retention cleanup without changing personal data.
+- Startup now serializes Catalog installation, validates a new immutable whole-database candidate before activation, keeps independent active and previous records, rolls back a failed post-activation open, and retains at most the current and previous validated Catalog files. A newer compatible local Catalog is not silently downgraded by an older bundled version.
+- The fixed bottom navigation provides Creatures, Skills, My Library, and Settings. Settings explains local-storage and uninstall risk, shows the effective Catalog, recovery outcome, and personal schema versions, and provides an explicitly confirmed bundled-Catalog recovery action that does not modify `user.db`.
+- Android first launch, personal-data persistence, legacy-pointer migration, and explicit bundled recovery passed in an emulator with airplane mode enabled and Wi-Fi disabled. iOS build, first launch, Catalog validation, personal-database creation, restart reuse, and legacy-pointer migration passed in an iPhone simulator. No physical-device, signing, upload, or store-release claim is made.
+- Phase 6 is the next implementation boundary: release metadata, permissions and license audit, CI and release checks, and physical-device update acceptance before any separately authorized store submission.
 
 ## V1 boundary
 
@@ -109,6 +110,8 @@ flutter test
 Launch on an available iOS or Android simulator with `flutter run`. The production client has no BWIKI or HTTP dependency; canonical source names and descriptions may retain their upstream language while all App-authored copy remains English.
 
 Favorites and notes are stored only in the private `user.db` on the device. They are not included in the replaceable Catalog database and are not synchronized to an account or cloud service.
+
+Catalog replacement runs only during startup or an explicit Settings recovery. The App does not download Catalog data. A candidate must pass manifest, hash, metadata, schema-object, integrity, foreign-key, and probe-query checks before its pointer is activated; failed updates retain the previous validated Catalog and personal database.
 
 ## Local verification
 

@@ -336,6 +336,49 @@ void main() {
     expect(find.text('Currently unavailable in this Catalog.'), findsOneWidget);
     expect(find.text('Retained personal note'), findsOneWidget);
   });
+
+  testWidgets('bundled Catalog recovery requires explicit confirmation', (
+    tester,
+  ) async {
+    await _setPhoneSurface(tester);
+    var restoreCalls = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: CatalogHomePage(
+          session: session,
+          onRestoreBundledCatalog: () async {
+            restoreCalls += 1;
+          },
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Settings'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.byKey(const ValueKey('restore-bundled-catalog')),
+      300,
+      scrollable: find.byType(Scrollable).last,
+    );
+    await tester.tap(find.byKey(const ValueKey('restore-bundled-catalog')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Restore bundled Catalog?'), findsOneWidget);
+    expect(
+      find.textContaining('Favorites, collection marks, and notes are kept.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(restoreCalls, 0);
+
+    await tester.tap(find.byKey(const ValueKey('restore-bundled-catalog')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('confirm-catalog-restore')));
+    await tester.pumpAndSettle();
+    expect(restoreCalls, 1);
+    expect(find.text('Bundled Catalog restored.'), findsOneWidget);
+  });
 }
 
 Future<void> _setPhoneSurface(WidgetTester tester) async {

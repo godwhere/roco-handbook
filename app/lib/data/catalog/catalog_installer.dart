@@ -176,18 +176,39 @@ final class AssetBundledCatalogSource implements BundledCatalogSource {
 
 abstract interface class CatalogInstaller {
   Future<CatalogOpenResult> prepareBundledCatalog(BundledCatalogBundle bundle);
+
+  Future<CatalogOpenResult> restoreBundledCatalog(BundledCatalogBundle bundle);
+}
+
+enum CatalogOpenOutcome {
+  reused,
+  installedBundled,
+  recoveredPrevious,
+  restoredBundled,
+}
+
+enum CatalogInstallerFaultPoint {
+  leaveStagingAfterCopy,
+  failStagingWrite,
+  failAfterPointerCommit,
 }
 
 final class CatalogOpenResult {
   const CatalogOpenResult({
     required this.databasePath,
     required this.manifest,
-    required this.installed,
+    required this.outcome,
+    this.previousDataVersion,
   });
 
   final String databasePath;
   final CatalogManifest manifest;
-  final bool installed;
+  final CatalogOpenOutcome outcome;
+  final int? previousDataVersion;
+
+  bool get installed =>
+      outcome == CatalogOpenOutcome.installedBundled ||
+      outcome == CatalogOpenOutcome.restoredBundled;
 }
 
 final class CatalogInstallException implements Exception {
@@ -201,80 +222,307 @@ final class CatalogInstallException implements Exception {
 }
 
 final class LocalCatalogInstaller implements CatalogInstaller {
-  const LocalCatalogInstaller(this.applicationSupportPath);
+  const LocalCatalogInstaller(
+    this.applicationSupportPath, {
+    this.backgroundWork = true,
+    this.faultPoint,
+  });
 
   final String applicationSupportPath;
+  final bool backgroundWork;
+  final CatalogInstallerFaultPoint? faultPoint;
 
   @override
   Future<CatalogOpenResult> prepareBundledCatalog(BundledCatalogBundle bundle) {
-    return Isolate.run(() => _prepareCatalog(applicationSupportPath, bundle));
+    return _run(bundle, _CatalogPreparationMode.startup);
+  }
+
+  @override
+  Future<CatalogOpenResult> restoreBundledCatalog(BundledCatalogBundle bundle) {
+    return _run(bundle, _CatalogPreparationMode.restoreBundled);
+  }
+
+  Future<CatalogOpenResult> _run(
+    BundledCatalogBundle bundle,
+    _CatalogPreparationMode mode,
+  ) {
+    CatalogOpenResult execute() =>
+        _prepareCatalog(applicationSupportPath, bundle, mode, faultPoint);
+    return backgroundWork ? Isolate.run(execute) : Future.sync(execute);
   }
 }
+
+enum _CatalogPreparationMode { startup, restoreBundled }
 
 CatalogOpenResult _prepareCatalog(
   String applicationSupportPath,
   BundledCatalogBundle bundle,
+  _CatalogPreparationMode mode,
+  CatalogInstallerFaultPoint? faultPoint,
 ) {
-  final manifest = CatalogManifest.fromJsonText(bundle.manifestText);
   final store = _CatalogFileStore(Directory(applicationSupportPath));
-  store.ensureDirectories();
-  final target = store.catalogFile(manifest);
-  final active = store.readActivePointer();
-
-  if (active != null && active.matches(manifest) && target.existsSync()) {
-    CatalogPackageValidator.validateFile(manifest, target);
-    return CatalogOpenResult(
-      databasePath: target.path,
-      manifest: manifest,
-      installed: false,
-    );
-  }
-
-  if (target.existsSync()) {
-    CatalogPackageValidator.validateFile(manifest, target);
-    store.commitActivePointer(manifest);
-    return CatalogOpenResult(
-      databasePath: target.path,
-      manifest: manifest,
-      installed: false,
-    );
-  }
-
-  final staging = store.newStagingFile(manifest);
-  var ownsStaging = false;
+  final CatalogManifest manifest;
   try {
-    if (bundle.databaseBytes.length != manifest.databaseBytes ||
-        sha256.convert(bundle.databaseBytes).toString() !=
-            manifest.databaseSha256) {
-      throw const CatalogInstallException(
-        'asset_hash',
-        'The bundled Catalog bytes do not match the manifest.',
-      );
-    }
-    staging.writeAsBytesSync(bundle.databaseBytes, flush: true);
-    ownsStaging = true;
-    CatalogPackageValidator.validateFile(manifest, staging);
-    staging.renameSync(target.path);
-    ownsStaging = false;
-    CatalogPackageValidator.validateFile(manifest, target);
-    store.commitActivePointer(manifest);
-    return CatalogOpenResult(
-      databasePath: target.path,
-      manifest: manifest,
-      installed: true,
-    );
-  } on CatalogInstallException {
+    manifest = CatalogManifest.fromJsonText(bundle.manifestText);
+  } on CatalogInstallException catch (error) {
+    store.writeFailureReport(error.code, 0);
+    rethrow;
+  }
+  store.ensureDirectories();
+  final lock = store.acquireOperationLock();
+  try {
+    store.cleanupTransientFiles();
+    return _prepareLocked(store, bundle, manifest, mode, faultPoint);
+  } on CatalogInstallException catch (error) {
+    store.writeFailureReport(error.code, manifest.dataVersion);
     rethrow;
   } on FileSystemException catch (error) {
-    throw CatalogInstallException(
+    final wrapped = CatalogInstallException(
       'catalog_file',
       'Cannot prepare the bundled Catalog: ${error.message}',
     );
+    store.writeFailureReport(wrapped.code, manifest.dataVersion);
+    throw wrapped;
   } finally {
-    if (ownsStaging && staging.existsSync()) {
-      staging.deleteSync();
+    lock.unlockSync();
+    lock.closeSync();
+  }
+}
+
+CatalogOpenResult _prepareLocked(
+  _CatalogFileStore store,
+  BundledCatalogBundle bundle,
+  CatalogManifest manifest,
+  _CatalogPreparationMode mode,
+  CatalogInstallerFaultPoint? faultPoint,
+) {
+  final activeRecord = store.readActivePointer(legacyManifest: manifest);
+  final previousRecord = store.readPreviousPointer();
+  final active = _validateDescriptor(store, activeRecord);
+  final previous = _validateDescriptor(store, previousRecord);
+
+  if (mode == _CatalogPreparationMode.startup && active != null) {
+    if (active.hasSameDataVersion(manifest) && !active.matches(manifest)) {
+      throw const CatalogInstallException(
+        'data_version_conflict',
+        'The bundled Catalog reuses an installed data version with different bytes.',
+      );
+    }
+    if (active.dataVersion >= manifest.dataVersion) {
+      store.commitActivePointer(active);
+      final retainedPrevious = _distinctDescriptor(previous, active);
+      store.commitPreviousPointer(retainedPrevious);
+      store.cleanupRetainedCatalogs(active, retainedPrevious);
+      store.clearFailureReport();
+      return CatalogOpenResult(
+        databasePath: store.fileFor(active).path,
+        manifest: active.toManifest(),
+        outcome: CatalogOpenOutcome.reused,
+        previousDataVersion: retainedPrevious?.dataVersion,
+      );
     }
   }
+
+  if (mode == _CatalogPreparationMode.startup &&
+      active == null &&
+      previous != null &&
+      previous.dataVersion >= manifest.dataVersion) {
+    if (previous.hasSameDataVersion(manifest) && !previous.matches(manifest)) {
+      throw const CatalogInstallException(
+        'data_version_conflict',
+        'The bundled Catalog reuses a recoverable data version with different bytes.',
+      );
+    }
+    store.commitActivePointer(previous);
+    store.commitPreviousPointer(null);
+    store.cleanupRetainedCatalogs(previous, null);
+    store.clearFailureReport();
+    return CatalogOpenResult(
+      databasePath: store.fileFor(previous).path,
+      manifest: previous.toManifest(),
+      outcome: CatalogOpenOutcome.recoveredPrevious,
+    );
+  }
+
+  final fallback = active ?? previous;
+  try {
+    return _activateBundledCatalog(
+      store,
+      bundle,
+      manifest,
+      fallback,
+      mode,
+      faultPoint,
+    );
+  } on Object catch (error) {
+    if (fallback == null) {
+      rethrow;
+    }
+    store.commitActivePointer(fallback);
+    store.commitPreviousPointer(null);
+    store.cleanupRetainedCatalogs(fallback, null);
+    final code = error is CatalogInstallException
+        ? error.code
+        : error is FileSystemException
+        ? 'catalog_file'
+        : 'catalog_activation';
+    store.writeFailureReport(code, manifest.dataVersion);
+    return CatalogOpenResult(
+      databasePath: store.fileFor(fallback).path,
+      manifest: fallback.toManifest(),
+      outcome: CatalogOpenOutcome.recoveredPrevious,
+    );
+  }
+}
+
+CatalogOpenResult _activateBundledCatalog(
+  _CatalogFileStore store,
+  BundledCatalogBundle bundle,
+  CatalogManifest manifest,
+  _CatalogDescriptor? fallback,
+  _CatalogPreparationMode mode,
+  CatalogInstallerFaultPoint? faultPoint,
+) {
+  if (fallback != null &&
+      fallback.hasSameDataVersion(manifest) &&
+      !fallback.matches(manifest)) {
+    throw const CatalogInstallException(
+      'data_version_conflict',
+      'The bundled Catalog reuses an installed data version with different bytes.',
+    );
+  }
+  if (bundle.databaseBytes.length != manifest.databaseBytes ||
+      sha256.convert(bundle.databaseBytes).toString() !=
+          manifest.databaseSha256) {
+    throw const CatalogInstallException(
+      'asset_hash',
+      'The bundled Catalog bytes do not match the manifest.',
+    );
+  }
+
+  var candidate = store.descriptorFor(manifest);
+  var target = store.fileFor(candidate);
+  var copied = false;
+  if (!target.existsSync() || !_isValidCatalogFile(manifest, target)) {
+    final staging = store.newStagingFile(manifest);
+    var ownsStaging = false;
+    try {
+      staging.writeAsBytesSync(bundle.databaseBytes, flush: true);
+      ownsStaging = true;
+      if (faultPoint == CatalogInstallerFaultPoint.leaveStagingAfterCopy) {
+        ownsStaging = false;
+        throw const CatalogInstallException(
+          'injected_copy_interruption',
+          'A test interruption occurred after the staging copy.',
+        );
+      }
+      if (faultPoint == CatalogInstallerFaultPoint.failStagingWrite) {
+        throw const FileSystemException(
+          'A test storage exhaustion occurred while writing staging.',
+        );
+      }
+      CatalogPackageValidator.validateFile(manifest, staging);
+      if (target.existsSync()) {
+        target.deleteSync();
+      }
+      staging.renameSync(target.path);
+      ownsStaging = false;
+      copied = true;
+    } finally {
+      if (ownsStaging && staging.existsSync()) {
+        staging.deleteSync();
+      }
+    }
+  }
+  CatalogPackageValidator.validateFile(manifest, target);
+
+  candidate = store.descriptorFor(
+    manifest,
+    fileName: paths.basename(target.path),
+  );
+  final retainedFallback = _distinctDescriptor(fallback, candidate);
+  store.commitPreviousPointer(retainedFallback);
+  store.commitActivePointer(candidate);
+
+  try {
+    if (faultPoint == CatalogInstallerFaultPoint.failAfterPointerCommit) {
+      throw const CatalogInstallException(
+        'injected_post_activation_open',
+        'A test failure occurred after the active pointer was committed.',
+      );
+    }
+    CatalogPackageValidator.validateFile(manifest, target);
+  } on Object catch (error) {
+    if (retainedFallback == null) {
+      store.commitActivePointer(null);
+      Error.throwWithStackTrace(error, StackTrace.current);
+    }
+    store.commitActivePointer(retainedFallback);
+    store.commitPreviousPointer(null);
+    store.cleanupRetainedCatalogs(retainedFallback, null);
+    final code = error is CatalogInstallException
+        ? error.code
+        : 'post_activation_open';
+    store.writeFailureReport(code, manifest.dataVersion);
+    return CatalogOpenResult(
+      databasePath: store.fileFor(retainedFallback).path,
+      manifest: retainedFallback.toManifest(),
+      outcome: CatalogOpenOutcome.recoveredPrevious,
+    );
+  }
+
+  store.cleanupRetainedCatalogs(candidate, retainedFallback);
+  store.clearFailureReport();
+  return CatalogOpenResult(
+    databasePath: target.path,
+    manifest: manifest,
+    outcome: mode == _CatalogPreparationMode.restoreBundled
+        ? CatalogOpenOutcome.restoredBundled
+        : copied
+        ? CatalogOpenOutcome.installedBundled
+        : CatalogOpenOutcome.reused,
+    previousDataVersion: retainedFallback?.dataVersion,
+  );
+}
+
+_CatalogDescriptor? _validateDescriptor(
+  _CatalogFileStore store,
+  _CatalogDescriptor? descriptor,
+) {
+  if (descriptor == null) {
+    return null;
+  }
+  try {
+    CatalogPackageValidator.validateFile(
+      descriptor.toManifest(),
+      store.fileFor(descriptor),
+    );
+    return descriptor;
+  } on CatalogInstallException {
+    return null;
+  } on FileSystemException {
+    return null;
+  }
+}
+
+bool _isValidCatalogFile(CatalogManifest manifest, File file) {
+  try {
+    CatalogPackageValidator.validateFile(manifest, file);
+    return true;
+  } on CatalogInstallException {
+    return false;
+  } on FileSystemException {
+    return false;
+  }
+}
+
+_CatalogDescriptor? _distinctDescriptor(
+  _CatalogDescriptor? candidate,
+  _CatalogDescriptor active,
+) {
+  return candidate != null && !candidate.sameArtifact(active)
+      ? candidate
+      : null;
 }
 
 final class CatalogPackageValidator {
@@ -395,25 +643,142 @@ final class CatalogPackageValidator {
   }
 }
 
-final class _ActiveCatalogPointer {
-  const _ActiveCatalogPointer({
+final class _CatalogDescriptor {
+  const _CatalogDescriptor({
     required this.datasetId,
     required this.schemaVersion,
     required this.dataVersion,
+    required this.snapshotId,
+    required this.databaseBytes,
     required this.databaseSha256,
+    required this.coverage,
+    required this.fileName,
   });
+
+  static const fields = <String>{
+    'pointer_version',
+    'dataset_id',
+    'schema_version',
+    'data_version',
+    'snapshot_id',
+    'database_bytes',
+    'database_sha256',
+    'coverage',
+    'file_name',
+  };
 
   final String datasetId;
   final int schemaVersion;
   final int dataVersion;
+  final String snapshotId;
+  final int databaseBytes;
   final String databaseSha256;
+  final Map<String, bool> coverage;
+  final String fileName;
 
   bool matches(CatalogManifest manifest) {
     return datasetId == manifest.datasetId &&
         schemaVersion == manifest.catalogSchemaVersion &&
         dataVersion == manifest.dataVersion &&
-        databaseSha256 == manifest.databaseSha256;
+        snapshotId == manifest.snapshotId &&
+        databaseBytes == manifest.databaseBytes &&
+        databaseSha256 == manifest.databaseSha256 &&
+        _sameCoverage(coverage, manifest.coverage);
   }
+
+  bool hasSameDataVersion(CatalogManifest manifest) {
+    return datasetId == manifest.datasetId &&
+        schemaVersion == manifest.catalogSchemaVersion &&
+        dataVersion == manifest.dataVersion;
+  }
+
+  bool sameArtifact(_CatalogDescriptor other) {
+    return datasetId == other.datasetId &&
+        schemaVersion == other.schemaVersion &&
+        dataVersion == other.dataVersion &&
+        databaseSha256 == other.databaseSha256;
+  }
+
+  CatalogManifest toManifest() {
+    final manifest = CatalogManifest(
+      manifestVersion: 1,
+      datasetId: datasetId,
+      catalogSchemaVersion: schemaVersion,
+      dataVersion: dataVersion,
+      snapshotId: snapshotId,
+      databaseAsset: 'assets/catalog/catalog.db',
+      databaseBytes: databaseBytes,
+      databaseSha256: databaseSha256,
+      coverage: coverage,
+    );
+    manifest._validateContract();
+    return manifest;
+  }
+
+  Map<String, Object> toJson() => <String, Object>{
+    'pointer_version': 1,
+    'dataset_id': datasetId,
+    'schema_version': schemaVersion,
+    'data_version': dataVersion,
+    'snapshot_id': snapshotId,
+    'database_bytes': databaseBytes,
+    'database_sha256': databaseSha256,
+    'coverage': coverage,
+    'file_name': fileName,
+  };
+
+  static _CatalogDescriptor? fromJson(Object? value) {
+    if (value is! Map<String, dynamic> ||
+        value.keys.toSet().length != fields.length ||
+        !value.keys.toSet().containsAll(fields) ||
+        value['pointer_version'] != 1) {
+      return null;
+    }
+    final coverageValue = value['coverage'];
+    if (coverageValue is! Map<String, dynamic> ||
+        coverageValue.length != CatalogManifest._coverageFields.length ||
+        !coverageValue.keys.toSet().containsAll(
+          CatalogManifest._coverageFields,
+        ) ||
+        coverageValue.values.any((entry) => entry is! bool)) {
+      return null;
+    }
+    final descriptor = _CatalogDescriptor(
+      datasetId: value['dataset_id'] is String
+          ? value['dataset_id'] as String
+          : '',
+      schemaVersion: value['schema_version'] is int
+          ? value['schema_version'] as int
+          : 0,
+      dataVersion: value['data_version'] is int
+          ? value['data_version'] as int
+          : 0,
+      snapshotId: value['snapshot_id'] is String
+          ? value['snapshot_id'] as String
+          : '',
+      databaseBytes: value['database_bytes'] is int
+          ? value['database_bytes'] as int
+          : 0,
+      databaseSha256: value['database_sha256'] is String
+          ? value['database_sha256'] as String
+          : '',
+      coverage: coverageValue.map((key, entry) => MapEntry(key, entry as bool)),
+      fileName: value['file_name'] is String
+          ? value['file_name'] as String
+          : '',
+    );
+    try {
+      descriptor.toManifest();
+    } on CatalogInstallException {
+      return null;
+    }
+    return descriptor;
+  }
+}
+
+bool _sameCoverage(Map<String, bool> left, Map<String, bool> right) {
+  return left.length == right.length &&
+      left.entries.every((entry) => right[entry.key] == entry.value);
 }
 
 final class _CatalogFileStore {
@@ -427,18 +792,57 @@ final class _CatalogFileStore {
 
   File get activePointer => File(paths.join(state.path, 'active_catalog.json'));
 
+  File get previousPointer =>
+      File(paths.join(state.path, 'previous_catalog.json'));
+
+  File get failureReport =>
+      File(paths.join(state.path, 'last_catalog_failure.json'));
+
+  File get operationLock =>
+      File(paths.join(state.path, 'catalog_install.lock'));
+
   void ensureDirectories() {
     catalogs.createSync(recursive: true);
     state.createSync(recursive: true);
   }
 
-  File catalogFile(CatalogManifest manifest) {
-    return File(
-      paths.join(
-        catalogs.path,
-        'catalog-v${manifest.dataVersion}-s${manifest.catalogSchemaVersion}.db',
-      ),
+  RandomAccessFile acquireOperationLock() {
+    final lock = operationLock.openSync(mode: FileMode.append);
+    try {
+      lock.lockSync(FileLock.exclusive);
+      return lock;
+    } on Object {
+      lock.closeSync();
+      rethrow;
+    }
+  }
+
+  _CatalogDescriptor descriptorFor(
+    CatalogManifest manifest, {
+    String? fileName,
+  }) {
+    return _CatalogDescriptor(
+      datasetId: manifest.datasetId,
+      schemaVersion: manifest.catalogSchemaVersion,
+      dataVersion: manifest.dataVersion,
+      snapshotId: manifest.snapshotId,
+      databaseBytes: manifest.databaseBytes,
+      databaseSha256: manifest.databaseSha256,
+      coverage: Map<String, bool>.unmodifiable(manifest.coverage),
+      fileName: fileName ?? _canonicalFileName(manifest),
     );
+  }
+
+  File fileFor(_CatalogDescriptor descriptor) {
+    final canonical = _canonicalFileName(descriptor.toManifest());
+    final legacy = _legacyFileName(descriptor.toManifest());
+    if (descriptor.fileName != canonical && descriptor.fileName != legacy) {
+      throw const CatalogInstallException(
+        'catalog_pointer_path',
+        'The Catalog pointer contains a file outside its allowlist.',
+      );
+    }
+    return File(paths.join(catalogs.path, descriptor.fileName));
   }
 
   File newStagingFile(CatalogManifest manifest) {
@@ -452,31 +856,44 @@ final class _CatalogFileStore {
     );
   }
 
-  _ActiveCatalogPointer? readActivePointer() {
-    if (!activePointer.existsSync()) {
+  _CatalogDescriptor? readActivePointer({CatalogManifest? legacyManifest}) {
+    final decoded = _readPointerJson(activePointer);
+    final descriptor = _CatalogDescriptor.fromJson(decoded);
+    if (descriptor != null) {
+      return _hasAllowedFileName(descriptor) ? descriptor : null;
+    }
+    if (decoded is! Map<String, dynamic> || legacyManifest == null) {
+      return null;
+    }
+    final legacyMatches =
+        decoded['dataset_id'] == legacyManifest.datasetId &&
+        decoded['schema_version'] == legacyManifest.catalogSchemaVersion &&
+        decoded['data_version'] == legacyManifest.dataVersion &&
+        decoded['database_sha256'] == legacyManifest.databaseSha256;
+    if (!legacyMatches) {
+      return null;
+    }
+    return descriptorFor(
+      legacyManifest,
+      fileName: _legacyFileName(legacyManifest),
+    );
+  }
+
+  _CatalogDescriptor? readPreviousPointer() {
+    final descriptor = _CatalogDescriptor.fromJson(
+      _readPointerJson(previousPointer),
+    );
+    return descriptor != null && _hasAllowedFileName(descriptor)
+        ? descriptor
+        : null;
+  }
+
+  Object? _readPointerJson(File pointer) {
+    if (!pointer.existsSync()) {
       return null;
     }
     try {
-      final decoded = jsonDecode(activePointer.readAsStringSync());
-      if (decoded is! Map<String, dynamic>) {
-        return null;
-      }
-      final datasetId = decoded['dataset_id'];
-      final schemaVersion = decoded['schema_version'];
-      final dataVersion = decoded['data_version'];
-      final databaseSha256 = decoded['database_sha256'];
-      if (datasetId is! String ||
-          schemaVersion is! int ||
-          dataVersion is! int ||
-          databaseSha256 is! String) {
-        return null;
-      }
-      return _ActiveCatalogPointer(
-        datasetId: datasetId,
-        schemaVersion: schemaVersion,
-        dataVersion: dataVersion,
-        databaseSha256: databaseSha256,
-      );
+      return jsonDecode(pointer.readAsStringSync());
     } on FileSystemException {
       return null;
     } on FormatException {
@@ -484,24 +901,41 @@ final class _CatalogFileStore {
     }
   }
 
-  void commitActivePointer(CatalogManifest manifest) {
-    final pointer = <String, Object>{
-      'dataset_id': manifest.datasetId,
-      'schema_version': manifest.catalogSchemaVersion,
-      'data_version': manifest.dataVersion,
-      'database_sha256': manifest.databaseSha256,
-    };
+  void commitActivePointer(_CatalogDescriptor? descriptor) {
+    _commitPointer(activePointer, descriptor, '.active');
+  }
+
+  void commitPreviousPointer(_CatalogDescriptor? descriptor) {
+    _commitPointer(previousPointer, descriptor, '.previous');
+  }
+
+  void _commitPointer(
+    File pointer,
+    _CatalogDescriptor? descriptor,
+    String temporaryPrefix,
+  ) {
+    if (descriptor == null) {
+      if (pointer.existsSync()) {
+        pointer.deleteSync();
+      }
+      return;
+    }
+    fileFor(descriptor);
     final temporary = File(
       paths.join(
         state.path,
-        '.active-$pid-${DateTime.now().microsecondsSinceEpoch}.tmp',
+        '$temporaryPrefix-$pid-'
+        '${DateTime.now().microsecondsSinceEpoch}.tmp',
       ),
     );
     var ownsTemporary = false;
     try {
-      temporary.writeAsStringSync('${jsonEncode(pointer)}\n', flush: true);
+      temporary.writeAsStringSync(
+        '${jsonEncode(descriptor.toJson())}\n',
+        flush: true,
+      );
       ownsTemporary = true;
-      temporary.renameSync(activePointer.path);
+      temporary.renameSync(pointer.path);
       ownsTemporary = false;
     } on FileSystemException catch (error) {
       throw CatalogInstallException(
@@ -513,5 +947,100 @@ final class _CatalogFileStore {
         temporary.deleteSync();
       }
     }
+  }
+
+  void cleanupTransientFiles() {
+    _deleteDirectMatches(
+      catalogs,
+      RegExp(r'^\.staging-v[1-9][0-9]*-s[1-9][0-9]*-[A-Za-z0-9-]+\.db$'),
+    );
+    _deleteDirectMatches(
+      state,
+      RegExp(r'^\.(active|previous|failure)-[A-Za-z0-9-]+\.tmp$'),
+    );
+  }
+
+  void cleanupRetainedCatalogs(
+    _CatalogDescriptor active,
+    _CatalogDescriptor? previous,
+  ) {
+    final retained = <String>{
+      active.fileName,
+      if (previous != null) previous.fileName,
+    };
+    final allowed = RegExp(
+      r'^catalog-v[1-9][0-9]*-s[1-9][0-9]*'
+      r'(?:-[0-9a-f]{12})?\.db$',
+    );
+    for (final entity in catalogs.listSync(followLinks: false)) {
+      if (entity is! File) {
+        continue;
+      }
+      final name = paths.basename(entity.path);
+      if (allowed.hasMatch(name) && !retained.contains(name)) {
+        entity.deleteSync();
+      }
+    }
+  }
+
+  void writeFailureReport(String code, int dataVersion) {
+    state.createSync(recursive: true);
+    final temporary = File(
+      paths.join(
+        state.path,
+        '.failure-$pid-${DateTime.now().microsecondsSinceEpoch}.tmp',
+      ),
+    );
+    var ownsTemporary = false;
+    try {
+      temporary.writeAsStringSync(
+        '${jsonEncode(<String, Object>{'report_version': 1, 'code': code, 'data_version': dataVersion})}\n',
+        flush: true,
+      );
+      ownsTemporary = true;
+      temporary.renameSync(failureReport.path);
+      ownsTemporary = false;
+    } on FileSystemException {
+      if (ownsTemporary && temporary.existsSync()) {
+        temporary.deleteSync();
+      }
+    }
+  }
+
+  void clearFailureReport() {
+    if (failureReport.existsSync()) {
+      failureReport.deleteSync();
+    }
+  }
+
+  void _deleteDirectMatches(Directory directory, RegExp pattern) {
+    if (!directory.existsSync()) {
+      return;
+    }
+    for (final entity in directory.listSync(followLinks: false)) {
+      if (entity is File && pattern.hasMatch(paths.basename(entity.path))) {
+        entity.deleteSync();
+      }
+    }
+  }
+
+  bool _hasAllowedFileName(_CatalogDescriptor descriptor) {
+    try {
+      fileFor(descriptor);
+      return true;
+    } on CatalogInstallException {
+      return false;
+    }
+  }
+
+  String _canonicalFileName(CatalogManifest manifest) {
+    return 'catalog-v${manifest.dataVersion}-s'
+        '${manifest.catalogSchemaVersion}-'
+        '${manifest.databaseSha256.substring(0, 12)}.db';
+  }
+
+  String _legacyFileName(CatalogManifest manifest) {
+    return 'catalog-v${manifest.dataVersion}-s'
+        '${manifest.catalogSchemaVersion}.db';
   }
 }
