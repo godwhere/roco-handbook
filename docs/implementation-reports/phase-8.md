@@ -35,7 +35,7 @@ cd app && flutter analyze --no-pub
 Result: no issues found.
 
 cd app && flutter test --no-pub
-Result: 102 tests passed, including complete active Catalog illustration packaging, accessible missing-asset fallbacks, compact creature and skill card copy, filter behavior, detail-only favorites, derived stage labels, modal sort interaction, base-stat totals, all active type combinations, the frozen terminology contract, literal Chinese UI-key completeness, fixed-copy localization-entry enforcement, and top-level Chinese navigation rendering.
+Result: 103 tests passed, including complete active Catalog illustration packaging, accessible missing-asset fallbacks, adaptive complete single-line creature form labels, compact creature and skill card copy, filter behavior, detail-only favorites, derived stage labels, modal sort interaction, base-stat totals, all active type combinations, the frozen terminology contract, literal Chinese UI-key completeness, fixed-copy localization-entry enforcement, and top-level Chinese navigation rendering.
 
 Image manifest verification
 Result: 1,340 unique files, 1,419 Catalog references, and 97,655,049 verified local bytes; manifest SHA-256 414ef24f292b70cf4e48f1cddc716d7b7bd47afb7bde735f2feafcb291749756.
@@ -53,7 +53,7 @@ Base-stat total verification
 Result: 595 active forms produced totals from six present values; `pet_000535` retained six null values and no fabricated total.
 
 cd app && flutter build ios --simulator --debug --no-pub
-Result: passed; the ADR-0017 App was rebuilt, installed, and launched on the iPhone 17 simulator. Creature catalog, creature header, skill catalog, and skill detail captures were visually reviewed against the supplied references. Earlier Phase 8 visual evidence also passed on the iPhone 17 Pro simulator.
+Result: passed; the ADR-0017 App was rebuilt, installed, and launched on the iPhone 17 simulator. Creature catalog, complete adaptive form subtitle, creature header, skill catalog, and skill detail captures were visually reviewed against the supplied references. Earlier Phase 8 visual evidence also passed on the iPhone 17 Pro simulator.
 
 cd app/ios && xcodebuild test -workspace Runner.xcworkspace -scheme Runner -destination 'id=4DCEC9FD-FE44-4047-AE85-D481E03AD9D0' -only-testing:RunnerTests
 Result: passed; the platform regression verified the published iOS display name and Bundle ID after replacing the generated empty example test.
@@ -68,7 +68,7 @@ cd app && flutter build ios --release --no-codesign --no-pub
 Result: passed; 122,644 KiB App reported as 122.8 MB by Flutter; embedded version 1.1.0 build 2; App framework SHA-256 6d0e0d6f848063dd9e5ea1397f91066d0378f7e09da28a9957a0a8abbdcd4b50.
 
 Virtual-platform visual review
-Result: the ADR-0017 source built, installed, and launched on the iOS simulator. The compact creature cards, inline form and number, unbacked detail type icons, derived stage and lord-evolution copy, detail-header favorites, skill handbook, and skill cards passed focused visual review. Earlier Phase 8 source built and launched on both iOS and Android virtual platforms and passed the store-capture checks.
+Result: the ADR-0017 source built, installed, and launched on the iOS simulator. The compact creature cards, adaptive complete single-line form label, fixed inline number, unbacked detail type icons, derived stage and lord-evolution copy, detail-header favorites, skill handbook, and skill cards passed focused visual review. Earlier Phase 8 source built and launched on both iOS and Android virtual platforms and passed the store-capture checks.
 
 git diff --check
 Result: passed.

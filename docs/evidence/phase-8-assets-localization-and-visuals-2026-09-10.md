@@ -61,7 +61,7 @@ After the iOS Simulator window was closed, the current working source was rebuil
 
 The current source was rebuilt, installed, and launched on the iPhone 17 simulator after the complete ADR-0017 presentation changes. The final 1206 x 2622 captures confirmed:
 
-- the denser creature catalog with a 100-logical-pixel full illustration, inline muted form, far-right `NO.<dex_no>`, accessible type icons, and no list favorite;
+- the denser creature catalog with a 100-logical-pixel full illustration, complete adaptive single-line form label, far-right `NO.<dex_no>`, accessible type icons, and no list favorite;
 - First, Second, Third, and Lord form detail labels derived from preserved fields, with a normal creature explicitly showing No for Lord evolution;
 - creature type icons directly after the detail name without a white chip background;
 - creature and skill favorite controls in their respective detail headers;
@@ -74,6 +74,7 @@ The skill filter regression covers the four declared skill types, 20 accepted la
 | Capture | SHA-256 |
 | --- | --- |
 | `phase-8-detail-redesign/ios-creature-catalog.png` | `b1b0e00a7bc08b5743a1a5fbe37a98c5e16519cc904b3039e978fb15ec3c9d17` |
+| `phase-8-detail-redesign/ios-creature-form-subtitle.png` | `97532a3fdf0bd30b06609a708c592d9c6db7673b3d562e93ab9fbe73e5fb6e5a` |
 | `phase-8-detail-redesign/ios-creature-header.png` | `6b4306901b9dead7f32756e59212065d0284f1909f485c7aa7fbc01fd9693573` |
 | `phase-8-detail-redesign/ios-skill-catalog.png` | `fa81a12f638c8908f5e2bb3c36c8b0c8340f2a306554f18ef12ca243989d8153` |
 | `phase-8-detail-redesign/ios-skill-detail.png` | `2d81d8e001451225deb820b529231b5edfea7d924c345d2b0bb156b117e35c08` |

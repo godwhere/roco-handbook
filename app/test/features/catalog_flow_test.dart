@@ -605,6 +605,16 @@ void main() {
     );
     expect(namedForm.style?.color, isNotNull);
     expect(namedForm.style?.fontSize, lessThan(16));
+    expect(namedForm.maxLines, 1);
+    expect(namedForm.softWrap, isFalse);
+    expect(
+      tester
+          .widget<FittedBox>(
+            find.byKey(const ValueKey('pet-title-fit-pet_000560')),
+          )
+          .fit,
+      BoxFit.scaleDown,
+    );
     expect(
       tester.getRect(find.text('圣光迪莫')).center.dy,
       closeTo(
@@ -657,6 +667,59 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('pet-types')));
     await tester.pumpAndSettle();
     expect(find.byType(FilterChip), findsNWidgets(18));
+  });
+
+  testWidgets('creature form subtitles stay complete on one adaptive line', (
+    tester,
+  ) async {
+    await _setPhoneSurface(tester);
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('zh', 'CN'),
+        supportedLocales: AppStrings.supportedLocales,
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        home: Scaffold(
+          body: PetCatalogPage(
+            repository: repository,
+            userRepository: userRepository,
+            datasetId: session.info.datasetId,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+      find.byKey(const ValueKey('pet-search')),
+      '\u677f\u677f\u58f3',
+    );
+    await tester.pumpAndSettle();
+
+    final subtitleFinder = find.byKey(const ValueKey('pet-form-pet_000409'));
+    expect(subtitleFinder, findsOneWidget);
+    final subtitle = tester.widget<Text>(subtitleFinder);
+    expect(subtitle.data, '\uff08\u8715\u76ae\u65f6\u7684\u6837\u5b50\uff09');
+    expect(subtitle.maxLines, 1);
+    expect(subtitle.softWrap, isFalse);
+    expect(subtitle.overflow, isNull);
+    expect(
+      tester
+          .widget<FittedBox>(
+            find.byKey(const ValueKey('pet-title-fit-pet_000409')),
+          )
+          .fit,
+      BoxFit.scaleDown,
+    );
+    expect(
+      tester.getRect(subtitleFinder).right,
+      lessThan(
+        tester.getRect(find.byKey(const ValueKey('pet-dex-pet_000409'))).left,
+      ),
+    );
   });
 
   testWidgets('localizes every top-level section and Catalog information', (

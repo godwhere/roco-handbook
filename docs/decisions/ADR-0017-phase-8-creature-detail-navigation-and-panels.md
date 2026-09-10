@@ -12,7 +12,7 @@ The first creature detail page exposed a form selector before the content and pr
 ## Decision
 
 - The primary detail order is Basic information, Feature, Base stats, Skills, and Evolution. Type relationships, My library, and Source remain available after the five primary sections.
-- Creature cards use a 100-logical-pixel contained full illustration with compact 10-pixel padding. The source name, a smaller muted parenthesized form label, and `NO.<dex_no>` share the title row. Type names are represented by their accessible frozen icons below it. Catalog cards no longer contain favorite controls.
+- Creature cards use a 100-logical-pixel contained full illustration with compact 10-pixel padding. The source name, a smaller muted parenthesized form label, and `NO.<dex_no>` share one title row. The name-and-form group scales down when its natural width would collide with the fixed number, preserving the complete single-line label without wrapping or ellipsis. Type names are represented by their accessible frozen icons below it. Catalog cards no longer contain favorite controls.
 - The Displayed form selector is removed. Each concrete form remains directly reachable from the creature catalog, and selecting an evolution relation opens a new detail route for the related concrete `pet_id` so Back returns to the previous form.
 - The detail header derives its visible stage label from the preserved stage value: First, Second, Third, or Lord form. A true lord-evolution flag or source stage 4 displays Lord form. Non-lord records explicitly display No for the Lord evolution fact. Creature type icons follow the name directly without a chip background.
 - Creature and skill favorite controls are placed in their detail headers. My Library continues to own the resulting device-local list, while catalog result cards remain dedicated navigation targets.
@@ -37,7 +37,7 @@ Catalog and User schemas, source import, identity rules, Learnset preservation, 
 - No Displayed form selector is rendered on creature detail.
 - The five primary sections render in the declared order, followed by the three preserved utility sections.
 - Feature description and skill damage class come from existing Catalog fields.
-- Creature cards keep the form label, `NO.<dex_no>`, type icons, and navigation affordance on a compact layout without a favorite control.
+- Creature cards keep the complete single-line form label, fixed `NO.<dex_no>`, type icons, and navigation affordance on a compact layout without a favorite control. Long name-and-form combinations scale down to fit rather than wrap or truncate.
 - Detail headers show the derived stage label, unbacked type icons, and the only detail-level favorite control. Non-lord creatures display No for Lord evolution.
 - The three skill-source controls show the correct relations, and category plus element filters can be combined, cleared, cancelled, and applied. Skill element icons follow their names.
 - The skill browser excludes features, renders the three-part toolbar and source-backed result fields, offers all 42 declared filter chips, combines filter groups deterministically, and keeps favorites on detail only.

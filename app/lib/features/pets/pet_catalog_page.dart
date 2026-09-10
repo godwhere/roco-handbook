@@ -471,24 +471,26 @@ class _PetResultCard extends StatelessWidget {
                     Row(
                       children: <Widget>[
                         Expanded(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            textBaseline: TextBaseline.alphabetic,
-                            children: <Widget>[
-                              Flexible(
-                                child: Text(
+                          child: FittedBox(
+                            key: ValueKey('pet-title-fit-${pet.petId}'),
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerLeft,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: <Widget>[
+                                Text(
                                   pet.name,
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium,
                                   maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
                                 ),
-                              ),
-                              if (form != null) ...<Widget>[
-                                const SizedBox(width: 6),
-                                Flexible(
-                                  child: Text(
+                                if (form != null) ...<Widget>[
+                                  const SizedBox(width: 6),
+                                  Text(
                                     form,
                                     key: ValueKey('pet-form-${pet.petId}'),
                                     style: Theme.of(context).textTheme.bodySmall
@@ -498,11 +500,11 @@ class _PetResultCard extends StatelessWidget {
                                               .onSurfaceVariant,
                                         ),
                                     maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                    softWrap: false,
                                   ),
-                                ),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
                         ),
                         const SizedBox(width: 8),
