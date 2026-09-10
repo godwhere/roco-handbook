@@ -242,6 +242,39 @@ final class SqliteCatalogRepository implements CatalogRepository {
         case SkillFilter.all:
           break;
       }
+      if (query.skillTypes.isNotEmpty) {
+        final skillTypeConditions = <String>[];
+        for (final skillType in query.skillTypes) {
+          if (skillType == '\u7269\u653b' || skillType == '\u9b54\u653b') {
+            skillTypeConditions.add(
+              "json_extract(s.extra_json, '\$.damage_class') = ?",
+            );
+          } else if (skillType == '\u9632\u5fa1' ||
+              skillType == '\u72b6\u6001') {
+            skillTypeConditions.add('s.category = ?');
+          } else {
+            skillTypeConditions.add('0 = 1');
+            continue;
+          }
+          arguments.add(skillType);
+        }
+        conditions.add('(${skillTypeConditions.join(' OR ')})');
+      }
+      if (query.typeIds.isNotEmpty) {
+        conditions.add(
+          's.type_id IN (${List.filled(query.typeIds.length, '?').join(', ')})',
+        );
+        arguments.addAll(query.typeIds);
+      }
+      if (query.tags.isNotEmpty) {
+        final tagConditions = <String>[];
+        for (final tag in query.tags) {
+          final tagCondition = _skillTagCondition(tag);
+          tagConditions.add(tagCondition.sql);
+          arguments.addAll(tagCondition.arguments);
+        }
+        conditions.add('(${tagConditions.join(' OR ')})');
+      }
       final rows = database.select(
         'SELECT s.*, EXISTS(SELECT 1 FROM pet_feature_skills f '
         'WHERE f.skill_id = s.skill_id) AS is_feature '
@@ -550,10 +583,15 @@ PetSummary _petSummary(Database database, Row row) {
 }
 
 SkillSummary _skillSummary(Row row) {
+  final extra = jsonDecode(row['extra_json'] as String);
   return SkillSummary(
     skillId: row['skill_id'] as String,
     name: row['name'] as String,
     category: row['category'] as String?,
+    damageClass: extra is Map<String, dynamic>
+        ? extra['damage_class'] as String?
+        : null,
+    description: row['description'] as String?,
     iconKey: row['icon_key'] as String?,
     element: row['element_raw'] as String?,
     energyValue: row['energy_value'] as num?,
@@ -563,6 +601,64 @@ SkillSummary _skillSummary(Row row) {
     isFeature: row['is_feature'] == 1,
   );
 }
+
+({String sql, List<Object?> arguments}) _skillTagCondition(String tag) {
+  return switch (tag) {
+    '\u5f02\u5e38' => (
+      sql:
+          'EXISTS(SELECT 1 FROM skill_description_notes n '
+          "WHERE n.skill_id = s.skill_id AND n.note_id IN ('1001', '1002', '1004', '1008'))",
+      arguments: const <Object?>[],
+    ),
+    '\u56de\u8840' => (
+      sql: "(s.description LIKE ? OR s.description LIKE ?)",
+      arguments: const <Object?>[
+        '%\u56de\u590d%\u751f\u547d%',
+        '%\u5438\u8840%',
+      ],
+    ),
+    '\u56de\u80fd' => (
+      sql: 's.description LIKE ?',
+      arguments: const <Object?>['%\u56de\u590d%\u80fd\u91cf%'],
+    ),
+    '\u5e94\u5bf9' => (
+      sql:
+          'EXISTS(SELECT 1 FROM skill_description_notes n '
+          "WHERE n.skill_id = s.skill_id AND n.note_id IN ('1015', '1017'))",
+      arguments: const <Object?>[],
+    ),
+    '\u5370\u8bb0' => _descriptionTag('%\u5370\u8bb0%'),
+    '\u9a71\u6563' => _descriptionTag('%\u9a71\u6563%'),
+    '\u5148\u624b' => (
+      sql: "(s.description LIKE ? AND s.category <> '\u9632\u5fa1')",
+      arguments: const <Object?>['%\u5148\u624b%'],
+    ),
+    '\u79bb\u573a' => (
+      sql: '(s.description LIKE ? OR s.description LIKE ? OR s.description LIKE ?)',
+      arguments: const <Object?>[
+        '%\u79bb\u573a%',
+        '%\u8131\u79bb%',
+        '%\u8fd4\u573a%',
+      ],
+    ),
+    '\u5929\u6c14' => _descriptionTag('%\u5929\u6c14%'),
+    '\u9009\u62e9' => _descriptionTag('%\u9009\u62e9%'),
+    '\u5de7\u53d8' => _descriptionTag('%\u5de7\u53d8%'),
+    '\u5f3a\u5316' => _descriptionTag('%\u6c38\u4e45%'),
+    '\u8fde\u51fb' => _descriptionTag('%\u8fde\u51fb%'),
+    '\u840c\u5316' => _descriptionTag('%\u840c\u5316%'),
+    '\u5f15\u7535' => _descriptionTag('%\u5f15\u7535%'),
+    '\u8fc5\u6377' => _descriptionTag('%\u8fc5\u6377%'),
+    '\u4f20\u52a8' => _descriptionTag('%\u4f20\u52a8%'),
+    '\u8ff8\u53d1' => _descriptionTag('%\u8ff8\u53d1%'),
+    '\u5949\u732e' => _descriptionTag('%\u5949\u732e%'),
+    '\u6253\u65ad' => _descriptionTag('%\u6253\u65ad%'),
+    _ => (sql: '0 = 1', arguments: const <Object?>[]),
+  };
+}
+
+({String sql, List<Object?> arguments}) _descriptionTag(String pattern) =>
+    (sql: 's.description LIKE ?', arguments: <Object?>[pattern]);
 
 List<SourceReference> _sourceReferences(
   Database database,

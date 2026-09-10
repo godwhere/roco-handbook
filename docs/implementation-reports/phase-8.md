@@ -1,25 +1,25 @@
 # Phase 8 implementation report
 
-- Status: implementation complete for the ADR-0015 and ADR-0016 scopes; all other Phase 8 release work deferred
+- Status: implementation complete for the ADR-0015 through ADR-0017 scopes; all other Phase 8 release work deferred
 - Date: 2026-09-10
 - Workspace: `/Users/ethan/Documents/ChatGPT/roco-handbook`
 
 ## Declared boundary
 
-Phase 8 is limited to the formal App identity and launch experience, bilingual `en-US` and `zh-CN` UI, frozen offline Wiki images for creatures, skills, features, and selected domain controls, the full-illustration concrete-form catalog defined by ADR-0016, source-backed total base stats and type relationships, plus iOS and Android store screenshots. ADR-0015 and ADR-0016 define the ownership, source, offline, accessibility, and acceptance boundaries.
+Phase 8 is limited to the formal App identity and launch experience, bilingual `en-US` and `zh-CN` UI, frozen offline Wiki images for creatures, skills, features, and selected domain controls, the full-illustration concrete-form catalog defined by ADR-0016, the creature and skill handbook presentation defined by ADR-0017, source-backed total base stats and type relationships, plus iOS and Android store screenshots. ADR-0015 through ADR-0017 define the ownership, source, offline, accessibility, and acceptance boundaries.
 
 App signing, store account configuration, listing submission, upload, publication, logical patches, Catalog V2, live Phase 7 update evidence, and other release work are deferred.
 
 ## Changed files
 
-- Governance and current-state documentation: `AGENTS.md`, root and App READMEs, ADR-0015, ADR-0016, `docs/features/localized-visual-handbook.md`, the Phase 8 evidence record, this report, and focused structure checks
+- Governance and current-state documentation: `AGENTS.md`, root and App READMEs, ADR-0015 through ADR-0017, `docs/features/localized-visual-handbook.md`, `docs/features/offline-catalog-browser.md`, `design-qa.md`, the Phase 8 evidence record, this report, and focused structure checks
 - Frozen source contracts: `config/ui_terminology_zh_cn.json`, `config/wiki_assets_v1.json`, `config/type_relations_v1.json`, `app/assets/wiki/type-relations-v1.json`, and `app/assets/wiki/v1/asset-manifest.json`
 - Frozen visual library: 569 creature illustrations covering all 596 active forms, 736 skill or feature icons, and 35 type, stat, or skill-category icons under `app/assets/wiki/v1/`; 596 unused head files and their Flutter asset declaration were removed
 - Import and generation tools: `tools/bwiki_import/image_assets.py`, `tools/bwiki_import/type_relations.py`, their CLI commands, `tools/brand/generate_brand_assets.swift`, and the atomic RGB store-screenshot normalizer
 - App domain and data: the existing illustration key is projected into creature summaries and all summary queries, the upstream head key remains preserved in Catalog data, a null-preserving `PetDetail.totalBaseStats` contract, plus the type-relationship contract and bundled-asset repository
-- App presentation: centralized `en-US` and `zh-CN` strings; localized startup, navigation, Catalog, personal library, and Settings flows; a compact Sort/Types/Search row with a rounded placeholder-only Search field; modal sort and type selectors; exact default and named-form card copy with the handbook number below each illustration; enlarged full illustrations; accessible skill, feature, type, stat, and category images; total base stats; incoming and outgoing type relationships
+- App presentation: centralized `en-US` and `zh-CN` strings; localized startup, navigation, Catalog, personal library, and Settings flows; compact Sort/Types/Search and Skill handbook/Skill filters/Skill query rows; modal catalog filters; 100-pixel contained full creature illustrations; inline muted form and `NO.<dex_no>` copy; accessible type icons; derived stage labels; detail-header favorites; categorized creature skills; a learnable-skill handbook with 42 combined filter choices; accessible skill, feature, type, stat, and category images; total base stats; and compact incoming type relationships
 - Platform identity: Android and iOS display names, launcher and App icons, branded launch resources, and regenerated platform image slots
-- Tests: focused image manifest, complete Catalog-to-Flutter illustration resolution, exact creature control-row geometry and card copy, modal sort interaction, complete Catalog base-stat and type-combination audits, type relation, repository, source-grounded terminology, literal UI-key completeness, fixed-copy localization-entry enforcement, Chinese top-level navigation rendering, frozen brand-source and output identities, store-screenshot eligibility, widget, and iOS platform-identity coverage; the generated empty iOS example test was replaced
+- Tests: focused image manifest, complete Catalog-to-Flutter illustration resolution, exact creature and skill toolbar geometry and card copy, detail-only favorite placement, derived stage and lord-evolution copy, combined skill filters, detail navigation, modal sort interaction, complete Catalog base-stat and type-combination audits, type relation, repository, source-grounded terminology, literal UI-key completeness, fixed-copy localization-entry enforcement, Chinese top-level navigation rendering, frozen brand-source and output identities, store-screenshot eligibility, widget, and iOS platform-identity coverage; the generated empty iOS example test was replaced
 - Store evidence: four iOS screenshots at 1206 × 2622 and four Android screenshots at 1080 × 1920 under `docs/evidence/phase-8-store-screenshots/`; all eight are 8-bit RGB PNGs without alpha
 
 ## Verification performed
@@ -35,7 +35,7 @@ cd app && flutter analyze --no-pub
 Result: no issues found.
 
 cd app && flutter test --no-pub
-Result: 100 tests passed, including complete active Catalog illustration packaging, accessible missing-asset fallbacks, exact creature card copy and control-row geometry, modal sort interaction, base-stat totals, all active type combinations, the frozen terminology contract, literal Chinese UI-key completeness, fixed-copy localization-entry enforcement, and top-level Chinese navigation rendering.
+Result: 102 tests passed, including complete active Catalog illustration packaging, accessible missing-asset fallbacks, compact creature and skill card copy, filter behavior, detail-only favorites, derived stage labels, modal sort interaction, base-stat totals, all active type combinations, the frozen terminology contract, literal Chinese UI-key completeness, fixed-copy localization-entry enforcement, and top-level Chinese navigation rendering.
 
 Image manifest verification
 Result: 1,340 unique files, 1,419 Catalog references, and 97,655,049 verified local bytes; manifest SHA-256 414ef24f292b70cf4e48f1cddc716d7b7bd47afb7bde735f2feafcb291749756.
@@ -53,7 +53,7 @@ Base-stat total verification
 Result: 595 active forms produced totals from six present values; `pet_000535` retained six null values and no fabricated total.
 
 cd app && flutter build ios --simulator --debug --no-pub
-Result: passed; the rebuilt App was installed and launched on the iPhone 17 simulator. Earlier Phase 8 visual evidence also passed on the iPhone 17 Pro simulator.
+Result: passed; the ADR-0017 App was rebuilt, installed, and launched on the iPhone 17 simulator. Creature catalog, creature header, skill catalog, and skill detail captures were visually reviewed against the supplied references. Earlier Phase 8 visual evidence also passed on the iPhone 17 Pro simulator.
 
 cd app/ios && xcodebuild test -workspace Runner.xcworkspace -scheme Runner -destination 'id=4DCEC9FD-FE44-4047-AE85-D481E03AD9D0' -only-testing:RunnerTests
 Result: passed; the platform regression verified the published iOS display name and Bundle ID after replacing the generated empty example test.
@@ -68,13 +68,13 @@ cd app && flutter build ios --release --no-codesign --no-pub
 Result: passed; 122,644 KiB App reported as 122.8 MB by Flutter; embedded version 1.1.0 build 2; App framework SHA-256 6d0e0d6f848063dd9e5ea1397f91066d0378f7e09da28a9957a0a8abbdcd4b50.
 
 Virtual-platform visual review
-Result: the current source built, installed, and launched on the iOS simulator and Android emulator, and updated Catalog captures passed the measured dimensions and RGB normalization checks. Final subjective acceptance of the Sort/Types/Search layout and number placement remains with the repository owner. Earlier Phase 8 review covered localized navigation, imagery, base stats, the calculated total, and type relationships.
+Result: the ADR-0017 source built, installed, and launched on the iOS simulator. The compact creature cards, inline form and number, unbacked detail type icons, derived stage and lord-evolution copy, detail-header favorites, skill handbook, and skill cards passed focused visual review. Earlier Phase 8 source built and launched on both iOS and Android virtual platforms and passed the store-capture checks.
 
 git diff --check
 Result: passed.
 
 GitHub Actions `Offline validation`
-Result: passed for the earlier Phase 8 commit `94ee692d9fc30ef33f9937116c891773d425a489`; hosted run 34400308182 completed successfully. Hosted validation of the current ADR-0016 UI revision is reserved for repository-owner confirmation.
+Result: passed for the earlier Phase 8 commit `94ee692d9fc30ef33f9937116c891773d425a489`; hosted run 34400308182 completed successfully. Hosted validation of the current ADR-0017 UI revision is reserved for repository-owner confirmation.
 
 shasum -a 256 docs/technical-spec-v1.md
 Result: 343618b414b7b8d6262dd58f82010bfefb2f3fdb29711a9e86428e042dd81876; the provenance baseline is unchanged.
@@ -86,8 +86,9 @@ Result: 343618b414b7b8d6262dd58f82010bfefb2f3fdb29711a9e86428e042dd81876; the pr
 - Physical-device visual, accessibility, launch, memory, and storage validation
 - Real Catalog V2 import or Phase 7 production package update
 - Logical incremental patch generation or installation
-- Any Phase 8 work outside ADR-0015 and ADR-0016
-- Hosted validation for the current ADR-0016 UI revision; the repository owner will confirm it separately
+- Android visual or build validation of the current ADR-0017 presentation revision
+- Any Phase 8 work outside ADR-0015 through ADR-0017
+- Hosted validation for the current ADR-0017 UI revision; the repository owner will confirm it separately
 
 ## Remaining risks and next boundary
 

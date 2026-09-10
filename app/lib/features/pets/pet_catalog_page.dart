@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/catalog_models.dart';
 import '../../domain/catalog_repository.dart';
-import '../../domain/user_models.dart';
 import '../../domain/user_repository.dart';
-import '../personal/personal_controls.dart';
 import 'pet_detail_page.dart';
 import '../../l10n/app_strings.dart';
 import '../../widgets/catalog_asset_image.dart';
@@ -16,14 +14,12 @@ class PetCatalogPage extends StatefulWidget {
     required this.repository,
     required this.userRepository,
     required this.datasetId,
-    required this.favoriteKeys,
     super.key,
   });
 
   final CatalogRepository repository;
   final UserRepository userRepository;
   final String datasetId;
-  final Set<String> favoriteKeys;
 
   @override
   State<PetCatalogPage> createState() => _PetCatalogPageState();
@@ -420,19 +416,10 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
             );
           }
           final pet = _results[index];
-          final object = ObjectRef(
-            datasetId: widget.datasetId,
-            objectType: UserObjectType.pet,
-            objectId: pet.petId,
-            nameSnapshot: pet.name,
-          );
           return _PetResultCard(
             key: ValueKey('pet-result-${pet.petId}'),
             pet: pet,
             onTap: () => _open(pet),
-            favorite: widget.favoriteKeys.contains(object.key),
-            onFavoriteChanged: (enabled) =>
-                widget.userRepository.setFavorite(object, enabled),
           );
         },
       ),
@@ -451,78 +438,111 @@ String _sortLabel(BuildContext context, PetSort sort) {
 }
 
 class _PetResultCard extends StatelessWidget {
-  const _PetResultCard({
-    required this.pet,
-    required this.onTap,
-    required this.favorite,
-    required this.onFavoriteChanged,
-    super.key,
-  });
+  const _PetResultCard({required this.pet, required this.onTap, super.key});
 
   final PetSummary pet;
   final VoidCallback onTap;
-  final bool favorite;
-  final Future<void> Function(bool enabled) onFavoriteChanged;
 
   @override
   Widget build(BuildContext context) {
     final form = !pet.isDefaultForm && pet.form?.trim().isNotEmpty == true
         ? '\uff08${pet.form!.trim()}\uff09'
-        : '';
-    final title = '${pet.name}$form';
+        : null;
     return Card(
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(10),
           child: Row(
             children: <Widget>[
-              SizedBox(
-                width: 112,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    CatalogAssetImage(
-                      assetPath: petIllustrationAsset(pet.illustrationKey),
-                      semanticLabel: pet.name,
-                      width: 112,
-                      height: 112,
-                      fit: BoxFit.contain,
-                      fallbackIcon: Icons.pets_outlined,
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      pet.dexNo,
-                      key: ValueKey('pet-dex-${pet.petId}'),
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                  ],
-                ),
+              CatalogAssetImage(
+                assetPath: petIllustrationAsset(pet.illustrationKey),
+                semanticLabel: pet.name,
+                width: 100,
+                height: 100,
+                fit: BoxFit.contain,
+                fallbackIcon: Icons.pets_outlined,
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleMedium,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 5),
                     Row(
                       children: <Widget>[
                         Expanded(
-                          child: Text(
-                            pet.types.join(' \u00b7 '),
-                            style: Theme.of(context).textTheme.bodyMedium,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
+                            children: <Widget>[
+                              Flexible(
+                                child: Text(
+                                  pet.name,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              if (form != null) ...<Widget>[
+                                const SizedBox(width: 6),
+                                Flexible(
+                                  child: Text(
+                                    form,
+                                    key: ValueKey('pet-form-${pet.petId}'),
+                                    style: Theme.of(context).textTheme.bodySmall
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant,
+                                        ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ],
                           ),
                         ),
-                        FavoriteIconButton(
-                          favorite: favorite,
-                          objectLabel: pet.petId,
-                          onChanged: onFavoriteChanged,
+                        const SizedBox(width: 8),
+                        Text(
+                          'NO.${pet.dexNo}',
+                          key: ValueKey('pet-dex-${pet.petId}'),
+                          style: Theme.of(context).textTheme.labelMedium
+                              ?.copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                              ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 7),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Wrap(
+                            spacing: 6,
+                            runSpacing: 6,
+                            children: <Widget>[
+                              for (final type in pet.types)
+                                Tooltip(
+                                  message: type,
+                                  child: CatalogAssetImage(
+                                    key: ValueKey(
+                                      'pet-type-${pet.petId}-$type',
+                                    ),
+                                    assetPath: typeIconAsset(type),
+                                    semanticLabel: type,
+                                    width: 28,
+                                    height: 28,
+                                    fallbackIcon: Icons.circle_outlined,
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                ),
+                            ],
+                          ),
                         ),
                         const Icon(Icons.chevron_right_rounded),
                       ],

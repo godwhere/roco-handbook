@@ -35,11 +35,11 @@ An App-side packaging regression reads the active records from the real bundled 
 
 The creature catalog always returns concrete forms and no longer exposes a Handbook/All forms mode switch. Sort and Types lead the compact control row with one width unit each; Search follows with two units and uses a rounded outline without a floating label. Sort uses the same modal-bottom-sheet pattern as type filtering, with a visible selected chip and explicit Cancel and Apply actions.
 
-Cards render the frozen 512-pixel-source illustration inside a 112-logical-pixel contain box and center the handbook number immediately below it. Default forms display `<name>` and omit a form label. Named non-default forms display `<name>（<form>）`. Type names appear as a separate text line, preserving exact Catalog terminology while leaving more space for the full creature art.
+Cards render the frozen 512-pixel-source illustration inside a compact 100-logical-pixel contain box. The source name, a smaller muted parenthesized form label when present, and `NO.<dex_no>` share the title row. Default forms omit the form label. Accessible frozen type icons appear below the name without repeating a text-only type row. The catalog card is a single navigation target and no longer contains a favorite control.
 
 ## Base-stat total
 
-The detail page displays all six stored base-stat values. `PetDetail.totalBaseStats` calculates the total only when HP, attack, defense, magic attack, magic defense, and speed are all present. Partial source data displays no fabricated total. The Chinese label is `种族资质总和`.
+The detail page presents the exact total in a full-width summary bar, the six stored values as labeled progress rows, and height, weight, review gold, and starlight as supporting fact pills. The progress bars use a bounded 300-point visual scale and never replace the exact numeric copy. `PetDetail.totalBaseStats` calculates the total only when HP, attack, defense, magic attack, magic defense, and speed are all present. Partial source data displays no fabricated total. The Chinese label is `种族资质总和`.
 
 The current Catalog contains 595 active forms with all six values and one source-incomplete form, `pet_000535`, with all six values absent. The complete forms produce their exact totals; the incomplete form reports an unknown total rather than treating nulls as zero.
 
@@ -51,7 +51,23 @@ For each creature form, the detail page shows:
 
 - incoming attacker types that increase or reduce damage, with multipliers;
 - a maximum `×3` result when both creature types would otherwise produce `×4`; and
-- each creature type's outgoing strong-against and resisted-by lists.
+- the concrete form's own type chips above paired increased and reduced panels.
+
+The domain contract continues to preserve each creature type's outgoing strong-against and resisted-by lists, but ADR-0017 removes that duplicate matrix from the compact detail presentation.
+
+## Creature detail navigation and skills
+
+The current form selector is absent. The primary hierarchy is Basic information, Feature, Base stats, Skills, and Evolution; Type relationships, My library, and Source follow. The detail header shows First, Second, Third, or Lord form from the preserved stage and lord-evolution fields. Type icons follow the source name without a chip background, and the creature favorite control is placed at the far end of that header row. Non-lord records show No for the Lord evolution fact. Feature cards use the frozen icon, source name, and stored description.
+
+The Skills section uses three equal source controls plus one icon-only filter control. Pet skills, Bloodline effects, and Learnable skills map to native, bloodline, and skill-stone relations. Legendary relations remain preserved under Learnable skills. The filter combines source-backed physical attack, magic attack, defense, or status classification with any element available to the creature. Each result places its element icon immediately after the name, then shows Energy, Category, and Power with the source description below.
+
+Evolution rows display the related creature illustration and open the stored destination identity on a new detail route. A fixed eight-dot navigator overlays the full-width content without a reserved gutter, highlights the section nearest the reading anchor, jumps on tap, and exposes the localized active skill category or section name in a rounded outlined long-press tooltip.
+
+## Skill catalog presentation
+
+The Skills destination is a learnable-skill handbook. Its compact toolbar contains Skill handbook, Skill filters, and Skill query at a one-to-one-to-two width ratio. Feature records are reached through creature feature relationships rather than mixed into this handbook. Each result displays the frozen skill icon, name followed by the stored element icon, category, energy, power, description, and a detail affordance. Favorite controls are confined to the skill detail header.
+
+The filter sheet contains four skill types, the 20 accepted labels, and all 18 combat elements. Skill type and element predicates use stored columns. Labels that are not stored as first-class fields use frozen read-only matches over preserved source descriptions or description-note identifiers. Selections use OR within one group and AND between the selected type, label, and element groups; no inferred tag is persisted into the Catalog.
 
 The source module contains eight redundant same-type inverse-list differences. The frozen contract preserves those differences as reviewed exceptions. Runtime calculation uses the forward strong-against and resisted-by matrix, matching the module's damage-calculator semantics instead of rewriting source relations.
 

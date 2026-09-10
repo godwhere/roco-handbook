@@ -1,7 +1,7 @@
 # Phase 8 assets, localization, and visual evidence
 
 - Evidence date: 2026-09-10
-- Decisions: ADR-0015 and ADR-0016
+- Decisions: ADR-0015 through ADR-0017
 - Devices: iPhone 17 and iPhone 17 Pro simulators on iOS 26.5; Roco API 36 Android emulator
 
 ## Frozen source contracts
@@ -21,9 +21,9 @@ The complete-Catalog stat audit found 595 active forms with all six base-stat va
 
 The type relationship contract freezes `Module:TypeRelation` page ID 12987, revision 39538, timestamp `2026-06-08T19:57:39Z`, and source SHA-1 `f44cdbb07c94454696c9e8560b53dd5cc12890ca`. Its local SHA-256 is `72ceba2bf9d149a6a162a7a4dbca9215e61718f39ff54daee98b2fbf35f1f07b`. It preserves 19 source type records and eight reviewed inverse-list exceptions.
 
-The Flutter localization suite compares the UI's source-grounded domain vocabulary with every applicable entry in `config/ui_terminology_zh_cn.json` and accounts for the source-page-only `creature_handbook` term. It also checks every literal BuildContext `.tr(...)` call for a distinct Chinese mapping and rejects fixed visible copy that bypasses the localization entry point. All three regressions passed as part of the current 100-test Flutter suite.
+The Flutter localization suite compares the UI's source-grounded domain vocabulary with every applicable entry in `config/ui_terminology_zh_cn.json` and accounts for the source-page-only `creature_handbook` term. It also checks every literal BuildContext `.tr(...)` call for a distinct Chinese mapping and rejects fixed visible copy that bypasses the localization entry point. All three regressions passed as part of the current 102-test Flutter suite.
 
-The Chinese-locale top-level smoke test rendered and navigated the creature search, skill search, personal library, Settings, and Catalog information interfaces. It observed localized labels in every section and passed as part of the current 100-test Flutter suite. A separate widget regression confirms that both an absent asset path and a failed bundled-asset load retain the declared accessible image label while showing the local fallback icon. The ADR-0016 regression renders the exact default and named-form card copy, checks the handbook number below the 112-logical-pixel illustration, locks the one-to-one-to-two Sort/Types/Search order and widths, verifies the rounded placeholder-only Search field, and applies a choice from the sort bottom sheet.
+The Chinese-locale top-level smoke test rendered and navigated the creature search, skill search, personal library, Settings, and Catalog information interfaces. It observed localized labels in every section and passed as part of the current 102-test Flutter suite. A separate widget regression confirms that both an absent asset path and a failed bundled-asset load retain the declared accessible image label while showing the local fallback icon. The ADR-0017 regression renders exact default and named-form card copy, checks the inline form and `NO.<dex_no>` row, locks the 100-logical-pixel illustration and compact padding, confirms list favorites are absent and detail favorites are present, locks both one-to-one-to-two toolbars, exercises the modal filters, and verifies derived stage plus lord-evolution copy.
 
 ## Brand asset identity
 
@@ -56,6 +56,29 @@ The current Phase 8 source was rebuilt and installed on both virtual platforms. 
 The repository owner separately observed the implemented skill imagery in the iOS simulator. No additional skill-image observation is claimed here.
 
 After the iOS Simulator window was closed, the current working source was rebuilt, installed, and launched on the still-booted iPhone 17 simulator. A fresh 1206 × 2622 capture confirmed the localized creature Catalog and bundled creature imagery, distinguishing a successful reinstall from a cached home-screen icon. The ADR-0016 build was then installed again on the same simulator and on the Android API 36 emulator. Fresh capture artifacts record the Sort/Types/Search row, rounded Search field, handbook number below each illustration, and enlarged full illustrations. Final subjective acceptance of this revision remains with the repository owner.
+
+## ADR-0017 handbook and detail review
+
+The current source was rebuilt, installed, and launched on the iPhone 17 simulator after the complete ADR-0017 presentation changes. The final 1206 x 2622 captures confirmed:
+
+- the denser creature catalog with a 100-logical-pixel full illustration, inline muted form, far-right `NO.<dex_no>`, accessible type icons, and no list favorite;
+- First, Second, Third, and Lord form detail labels derived from preserved fields, with a normal creature explicitly showing No for Lord evolution;
+- creature type icons directly after the detail name without a white chip background;
+- creature and skill favorite controls in their respective detail headers;
+- skill element icons immediately after skill names;
+- the Skill handbook, Skill filters, and Skill query toolbar; and
+- skill cards with category, energy, power, source description, element icon, and no list favorite.
+
+The skill filter regression covers the four declared skill types, 20 accepted labels, and 18 combat elements. Type and element values use preserved Catalog fields. The 20 labels are read-only filter projections over preserved source descriptions or description-note identifiers where no first-class tag field exists; no inferred value is written back to the Catalog. Values use OR inside one group and the selected groups combine with AND.
+
+| Capture | SHA-256 |
+| --- | --- |
+| `phase-8-detail-redesign/ios-creature-catalog.png` | `b1b0e00a7bc08b5743a1a5fbe37a98c5e16519cc904b3039e978fb15ec3c9d17` |
+| `phase-8-detail-redesign/ios-creature-header.png` | `6b4306901b9dead7f32756e59212065d0284f1909f485c7aa7fbc01fd9693573` |
+| `phase-8-detail-redesign/ios-skill-catalog.png` | `fa81a12f638c8908f5e2bb3c36c8b0c8340f2a306554f18ef12ca243989d8153` |
+| `phase-8-detail-redesign/ios-skill-detail.png` | `2d81d8e001451225deb820b529231b5edfea7d924c345d2b0bb156b117e35c08` |
+
+`design-qa.md` records the side-by-side reference comparison and final checklist. The current ADR-0017 revision was not re-reviewed on Android or a physical device.
 
 ## Store screenshot set
 

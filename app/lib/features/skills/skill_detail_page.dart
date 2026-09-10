@@ -100,7 +100,11 @@ class _SkillDetailPageState extends State<SkillDetailPage> {
               key: ValueKey('skill-detail-${data.detail.summary.skillId}'),
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
               children: <Widget>[
-                _SkillHeader(detail: data.detail),
+                _SkillHeader(
+                  detail: data.detail,
+                  userRepository: widget.userRepository,
+                  datasetId: widget.datasetId,
+                ),
                 const SizedBox(height: 18),
                 _Section(
                   title: context.tr('Values'),
@@ -252,35 +256,6 @@ class _SkillPersonalData extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        StreamBuilder<List<FavoriteItem>>(
-          initialData: const <FavoriteItem>[],
-          stream: userRepository.watchFavorites(),
-          builder: (context, snapshot) {
-            final favorite =
-                snapshot.data?.any(
-                  (item) =>
-                      item.object.datasetId == datasetId &&
-                      item.object.key == object.key,
-                ) ??
-                false;
-            return Row(
-              children: <Widget>[
-                FavoriteIconButton(
-                  favorite: favorite,
-                  objectLabel: detail.summary.skillId,
-                  onChanged: (enabled) =>
-                      userRepository.setFavorite(object, enabled),
-                ),
-                Text(
-                  context.tr(
-                    favorite ? 'Skill favorite' : 'Add skill favorite',
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-        const SizedBox(height: 10),
         PersonalNotesSection(repository: userRepository, object: object),
       ],
     );
@@ -288,9 +263,15 @@ class _SkillPersonalData extends StatelessWidget {
 }
 
 class _SkillHeader extends StatelessWidget {
-  const _SkillHeader({required this.detail});
+  const _SkillHeader({
+    required this.detail,
+    required this.userRepository,
+    required this.datasetId,
+  });
 
   final SkillDetail detail;
+  final UserRepository userRepository;
+  final String datasetId;
 
   @override
   Widget build(BuildContext context) {
@@ -332,6 +313,11 @@ class _SkillHeader extends StatelessWidget {
                     ],
                   ),
                 ),
+                _SkillFavoriteButton(
+                  userRepository: userRepository,
+                  datasetId: datasetId,
+                  summary: detail.summary,
+                ),
               ],
             ),
             if (detail.description != null) ...<Widget>[
@@ -341,6 +327,46 @@ class _SkillHeader extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _SkillFavoriteButton extends StatelessWidget {
+  const _SkillFavoriteButton({
+    required this.userRepository,
+    required this.datasetId,
+    required this.summary,
+  });
+
+  final UserRepository userRepository;
+  final String datasetId;
+  final SkillSummary summary;
+
+  @override
+  Widget build(BuildContext context) {
+    final object = ObjectRef(
+      datasetId: datasetId,
+      objectType: UserObjectType.skill,
+      objectId: summary.skillId,
+      nameSnapshot: summary.name,
+    );
+    return StreamBuilder<List<FavoriteItem>>(
+      initialData: const <FavoriteItem>[],
+      stream: userRepository.watchFavorites(),
+      builder: (context, snapshot) {
+        final favorite =
+            snapshot.data?.any(
+              (item) =>
+                  item.object.datasetId == datasetId &&
+                  item.object.key == object.key,
+            ) ??
+            false;
+        return FavoriteIconButton(
+          favorite: favorite,
+          objectLabel: summary.skillId,
+          onChanged: (enabled) => userRepository.setFavorite(object, enabled),
+        );
+      },
     );
   }
 }

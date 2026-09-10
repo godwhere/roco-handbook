@@ -29,6 +29,15 @@ String? skillCategoryIconAsset(String? category) {
   return file == null ? null : '$_assetRoot/ui/skill-categories/$file.png';
 }
 
+String? skillSourceIconAsset(String sourceKind) {
+  final file = switch (sourceKind) {
+    'native' || 'blood' => 'bloodline',
+    'stone' || 'legendary' => 'skill-stone',
+    _ => null,
+  };
+  return file == null ? null : '$_assetRoot/ui/sources/$file.png';
+}
+
 const _typeIconFiles = <String, String>{
   '\u666e\u901a': 'normal',
   '\u8349': 'grass',

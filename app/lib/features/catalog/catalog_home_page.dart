@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../catalog_app.dart';
 import '../../data/catalog/catalog_update_source.dart';
-import '../../domain/user_models.dart';
 import '../pets/pet_catalog_page.dart';
 import '../personal/my_library_page.dart';
 import '../settings/settings_page.dart';
@@ -119,53 +118,34 @@ class _CatalogHomePageState extends State<CatalogHomePage> {
           const SizedBox(width: 4),
         ],
       ),
-      body: StreamBuilder<List<FavoriteItem>>(
-        initialData: const <FavoriteItem>[],
-        stream: widget.session.userRepository.watchFavorites(),
-        builder: (context, snapshot) {
-          final favoriteKeys =
-              snapshot.data
-                  ?.where(
-                    (item) =>
-                        item.object.datasetId == widget.session.info.datasetId,
-                  )
-                  .map((item) => item.object.key)
-                  .toSet() ??
-              <String>{};
-          return IndexedStack(
-            index: _index,
-            children: <Widget>[
-              PetCatalogPage(
-                key: ValueKey('pet-catalog-${widget.session.info.dataVersion}'),
-                repository: widget.session.repository,
-                userRepository: widget.session.userRepository,
-                datasetId: widget.session.info.datasetId,
-                favoriteKeys: favoriteKeys,
-              ),
-              SkillCatalogPage(
-                key: ValueKey(
-                  'skill-catalog-${widget.session.info.dataVersion}',
-                ),
-                repository: widget.session.repository,
-                userRepository: widget.session.userRepository,
-                datasetId: widget.session.info.datasetId,
-                favoriteKeys: favoriteKeys,
-              ),
-              MyLibraryPage(
-                key: ValueKey('my-library-${widget.session.info.dataVersion}'),
-                catalogRepository: widget.session.repository,
-                userRepository: widget.session.userRepository,
-                datasetId: widget.session.info.datasetId,
-              ),
-              SettingsPage(
-                session: widget.session,
-                onRestoreBundledCatalog: widget.onRestoreBundledCatalog,
-                onCheckCatalogUpdate: widget.onCheckCatalogUpdate,
-                onInstallCatalogUpdate: widget.onInstallCatalogUpdate,
-              ),
-            ],
-          );
-        },
+      body: IndexedStack(
+        index: _index,
+        children: <Widget>[
+          PetCatalogPage(
+            key: ValueKey('pet-catalog-${widget.session.info.dataVersion}'),
+            repository: widget.session.repository,
+            userRepository: widget.session.userRepository,
+            datasetId: widget.session.info.datasetId,
+          ),
+          SkillCatalogPage(
+            key: ValueKey('skill-catalog-${widget.session.info.dataVersion}'),
+            repository: widget.session.repository,
+            userRepository: widget.session.userRepository,
+            datasetId: widget.session.info.datasetId,
+          ),
+          MyLibraryPage(
+            key: ValueKey('my-library-${widget.session.info.dataVersion}'),
+            catalogRepository: widget.session.repository,
+            userRepository: widget.session.userRepository,
+            datasetId: widget.session.info.datasetId,
+          ),
+          SettingsPage(
+            session: widget.session,
+            onRestoreBundledCatalog: widget.onRestoreBundledCatalog,
+            onCheckCatalogUpdate: widget.onCheckCatalogUpdate,
+            onInstallCatalogUpdate: widget.onInstallCatalogUpdate,
+          ),
+        ],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,

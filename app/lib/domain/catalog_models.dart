@@ -29,12 +29,18 @@ class SkillQuery {
   const SkillQuery({
     this.keyword = '',
     this.filter = SkillFilter.all,
+    this.skillTypes = const <String>[],
+    this.tags = const <String>[],
+    this.typeIds = const <String>[],
     this.limit = 80,
     this.offset = 0,
   });
 
   final String keyword;
   final SkillFilter filter;
+  final List<String> skillTypes;
+  final List<String> tags;
+  final List<String> typeIds;
   final int limit;
   final int offset;
 }
@@ -123,6 +129,8 @@ class SkillSummary {
     required this.name,
     required this.isFeature,
     this.category,
+    this.damageClass,
+    this.description,
     this.iconKey,
     this.element,
     this.energyValue,
@@ -134,6 +142,8 @@ class SkillSummary {
   final String skillId;
   final String name;
   final String? category;
+  final String? damageClass;
+  final String? description;
   final String? iconKey;
   final String? element;
   final num? energyValue;

@@ -64,47 +64,248 @@ void main() {
       ..clearLiveImages();
   });
 
-  testWidgets('opens an exact special form and switches the complete detail', (
-    tester,
-  ) async {
-    await _setPhoneSurface(tester);
-    await tester.pumpWidget(
-      MaterialApp(home: CatalogHomePage(session: session)),
-    );
-    await tester.pumpAndSettle();
+  testWidgets(
+    'creature detail sections, skill filters, and evolution navigate',
+    (tester) async {
+      await _setPhoneSurface(tester);
+      await tester.pumpWidget(
+        MaterialApp(home: CatalogHomePage(session: session)),
+      );
+      await tester.pumpAndSettle();
 
-    await tester.enterText(find.byKey(const ValueKey('pet-search')), '武斗酷猫');
-    await tester.pump(const Duration(milliseconds: 300));
-    await tester.pumpAndSettle();
-    expect(find.byKey(const ValueKey('pet-result-pet_000595')), findsOneWidget);
+      await tester.enterText(find.byKey(const ValueKey('pet-search')), '武斗酷猫');
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('pet-result-pet_000595')),
+        findsOneWidget,
+      );
 
-    await tester.tap(find.byKey(const ValueKey('pet-result-pet_000595')));
-    await tester.pumpAndSettle();
-    expect(find.byKey(const ValueKey('pet-detail-pet_000595')), findsOneWidget);
-    expect(find.text('#004'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('pet-result-pet_000595')));
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('pet-detail-pet_000595')),
+        findsOneWidget,
+      );
+      expect(find.text('#004'), findsOneWidget);
+      final nameBounds = tester.getRect(find.text('武斗酷猫'));
+      final typeBounds = tester.getRect(
+        find.byKey(const ValueKey('pet-detail-type-草系')),
+      );
+      expect(typeBounds.left, greaterThan(nameBounds.right));
+      expect(typeBounds.center.dy, closeTo(nameBounds.center.dy, 8));
+      expect(find.text('Lord form'), findsOneWidget);
+      expect(
+        find.ancestor(
+          of: find.byKey(const ValueKey('pet-detail-type-草系')),
+          matching: find.byType(Chip),
+        ),
+        findsNothing,
+      );
+      expect(find.text('Displayed form'), findsNothing);
+      expect(
+        find.byKey(const ValueKey('form-selector-pet_000595')),
+        findsNothing,
+      );
+      final headerBounds = tester.getRect(find.byType(Card).first);
+      final dotBounds = tester.getRect(
+        find.byKey(const ValueKey('section-dot-basic-information')),
+      );
+      expect(headerBounds.right, closeTo(414, 0.1));
+      expect(dotBounds.left, lessThan(headerBounds.right));
+      for (final section in <String>[
+        'basic-information',
+        'feature',
+        'base-stats',
+        'skills',
+        'evolution',
+        'type-relationships',
+        'library',
+        'source',
+      ]) {
+        expect(find.byKey(ValueKey('section-dot-$section')), findsOneWidget);
+      }
+      expect(
+        tester.getTopLeft(find.text('Basic information')).dy,
+        lessThan(tester.getTopLeft(find.text('Feature')).dy),
+      );
+      expect(
+        tester.getTopLeft(find.text('Feature')).dy,
+        lessThan(tester.getTopLeft(find.text('Base stats')).dy),
+      );
+      expect(
+        tester.getTopLeft(find.text('Base stats')).dy,
+        lessThan(tester.getTopLeft(find.text('Skills')).dy),
+      );
+      expect(
+        tester.getTopLeft(find.text('Skills')).dy,
+        lessThan(tester.getTopLeft(find.text('Evolution')).dy),
+      );
 
-    await tester.tap(find.byKey(const ValueKey('form-selector-pet_000595')));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('魔力猫 — Default form').last);
-    await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('section-dot-evolution')));
+      await tester.pumpAndSettle();
+      expect(
+        tester
+            .getSize(find.byKey(const ValueKey('section-dot-mark-evolution')))
+            .width,
+        12,
+      );
+      final baseBranch = find.byKey(
+        const ValueKey('evolution-edge-pet_000007-pet_000595'),
+      );
+      expect(baseBranch, findsOneWidget);
+      await tester.tap(baseBranch);
+      await tester.pumpAndSettle();
 
-    expect(find.byKey(const ValueKey('pet-detail-pet_000007')), findsOneWidget);
-    expect(find.text('#004'), findsOneWidget);
-    await tester.scrollUntilVisible(
-      find.text('Feature'),
-      300,
-      scrollable: find.byType(Scrollable).last,
-    );
-    await tester.pumpAndSettle();
-    expect(find.text('氧循环'), findsOneWidget);
-    expect(find.text('Feature relationship'), findsOneWidget);
-    await tester.scrollUntilVisible(
-      find.text('Learnable skills'),
-      300,
-      scrollable: find.byType(Scrollable).last,
-    );
-    expect(find.text('Learnable skills'), findsOneWidget);
-  });
+      expect(
+        find.byKey(const ValueKey('pet-detail-pet_000007')),
+        findsOneWidget,
+      );
+      expect(find.text('#004'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.text('Feature'),
+        300,
+        scrollable: find.byType(Scrollable).last,
+      );
+      await tester.pumpAndSettle();
+      final classFact = tester.getRect(
+        find.byKey(const ValueKey('basic-fact-Class')),
+      );
+      final stageFact = tester.getRect(
+        find.byKey(const ValueKey('basic-fact-Stage')),
+      );
+      expect(classFact.width, closeTo(stageFact.width, 0.1));
+      expect(stageFact.left, greaterThan(classFact.right));
+      expect(find.text('Third stage'), findsOneWidget);
+      final lordEvolution = find.byKey(
+        const ValueKey('basic-fact-Lord evolution'),
+      );
+      expect(
+        find.descendant(of: lordEvolution, matching: find.text('No')),
+        findsOneWidget,
+      );
+      expect(find.text('氧循环'), findsOneWidget);
+      expect(find.text('使用草系技能后，回复10%生命。'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.text('Skills'),
+        300,
+        scrollable: find.byType(Scrollable).last,
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Pet skills'), findsOneWidget);
+      expect(find.text('Bloodline effects'), findsOneWidget);
+      expect(find.text('Learnable skills'), findsOneWidget);
+      expect(find.text('休息回复'), findsOneWidget);
+      expect(find.textContaining('Source stage'), findsNothing);
+      final nativeSkillCard = find.byKey(
+        const ValueKey('pet-skill-skill_000345'),
+      );
+      expect(nativeSkillCard, findsOneWidget);
+      expect(
+        find.descendant(of: nativeSkillCard, matching: find.text('Unlock：lv6')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: nativeSkillCard, matching: find.text('3')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: nativeSkillCard, matching: find.text('100')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: nativeSkillCard,
+          matching: find.text('对敌方精灵造成魔法伤害。'),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: nativeSkillCard,
+          matching: find.byType(CatalogAssetImage),
+        ),
+        findsNWidgets(3),
+      );
+      final nativeElement = find.byKey(
+        const ValueKey('pet-skill-element-skill_000345'),
+      );
+      expect(nativeElement, findsOneWidget);
+      final nativeHeading = find.byKey(
+        const ValueKey('pet-skill-heading-skill_000345'),
+      );
+      expect(
+        find.descendant(of: nativeHeading, matching: find.text('棘突')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: nativeHeading, matching: nativeElement),
+        findsOneWidget,
+      );
+      final nativeSkillIcon = find
+          .descendant(
+            of: nativeSkillCard,
+            matching: find.byType(CatalogAssetImage),
+          )
+          .first;
+      expect(
+        tester.getRect(nativeSkillIcon).center.dy,
+        closeTo(tester.getRect(nativeSkillCard).center.dy, 0.1),
+      );
+      const categoryAssets = <String, String>{
+        'native': 'assets/wiki/v1/ui/sources/bloodline.png',
+        'blood': 'assets/wiki/v1/ui/sources/bloodline.png',
+        'stone': 'assets/wiki/v1/ui/sources/skill-stone.png',
+      };
+      for (final category in categoryAssets.keys) {
+        final categoryButton = find.byKey(
+          ValueKey('pet-skill-category-$category'),
+        );
+        final imageFinder = find.descendant(
+          of: categoryButton,
+          matching: find.byType(CatalogAssetImage),
+        );
+        expect(imageFinder, findsOneWidget);
+        expect(
+          tester.widget<CatalogAssetImage>(imageFinder).assetPath,
+          categoryAssets[category],
+        );
+      }
+
+      await tester.tap(find.byKey(const ValueKey('pet-skill-category-blood')));
+      await tester.pumpAndSettle();
+      expect(find.text('星星撞击'), findsOneWidget);
+      expect(find.text('休息回复'), findsNothing);
+
+      await tester.tap(find.byKey(const ValueKey('pet-skill-category-stone')));
+      await tester.pumpAndSettle();
+      expect(find.text('毒沼'), findsOneWidget);
+      final skillTooltip = tester.widget<Tooltip>(
+        find.byKey(const ValueKey('section-tooltip-skills')),
+      );
+      expect(skillTooltip.message, 'Learnable skills');
+      expect(skillTooltip.triggerMode, TooltipTriggerMode.longPress);
+      expect(skillTooltip.decoration, isA<ShapeDecoration>());
+      expect(
+        (skillTooltip.decoration! as ShapeDecoration).shape,
+        isA<RoundedRectangleBorder>(),
+      );
+
+      await tester.tap(find.byKey(const ValueKey('pet-skill-filter')));
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('pet-skill-filter-sheet')),
+        findsOneWidget,
+      );
+      expect(find.byType(FilterChip), findsWidgets);
+      await tester.tap(find.byKey(const ValueKey('skill-type-filter-物攻')));
+      await tester.tap(find.byKey(const ValueKey('skill-element-filter-毒系')));
+      await tester.tap(find.text('Apply'));
+      await tester.pumpAndSettle();
+      expect(find.text('毒沼'), findsOneWidget);
+      expect(find.text('瘴气喷射'), findsNothing);
+    },
+  );
 
   testWidgets('skill detail labels feature ownership separately', (
     tester,
@@ -115,18 +316,144 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Skills'));
-    await tester.pumpAndSettle();
-    await tester.enterText(find.byKey(const ValueKey('skill-search')), '氧循环');
+    await tester.enterText(find.byKey(const ValueKey('pet-search')), '魔力猫');
     await tester.pump(const Duration(milliseconds: 300));
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey('skill-result-skill_000003')));
+    await tester.tap(find.byKey(const ValueKey('pet-result-pet_000007')));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('氧循环'),
+      300,
+      scrollable: find.byType(Scrollable).last,
+    );
+    await tester.tap(find.text('氧循环'));
     await tester.pumpAndSettle();
 
     expect(find.text('Creatures with this feature'), findsOneWidget);
     expect(find.text('Feature relationship'), findsWidgets);
     expect(find.text('魔力猫'), findsOneWidget);
   });
+
+  testWidgets(
+    'skill handbook uses one toolbar, source filters, and detail cards',
+    (tester) async {
+      await _setPhoneSurface(tester);
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('zh', 'CN'),
+          supportedLocales: AppStrings.supportedLocales,
+          localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          home: CatalogHomePage(session: session),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('\u6280\u80fd').last);
+      await tester.pumpAndSettle();
+      expect(find.text('\u5168\u90e8'), findsNothing);
+      expect(find.text('\u7279\u6027'), findsNothing);
+      expect(find.text('\u53ef\u5b66\u4e60'), findsNothing);
+      expect(find.text('\u6280\u80fd\u56fe\u9274'), findsOneWidget);
+      expect(find.text('\u6280\u80fd\u7b5b\u9009'), findsOneWidget);
+      final search = tester.widget<TextField>(
+        find.byKey(const ValueKey('skill-search')),
+      );
+      expect(search.decoration?.labelText, isNull);
+      expect(search.decoration?.hintText, '\u6280\u80fd\u67e5\u8be2');
+      final handbookRect = tester.getRect(
+        find.byKey(const ValueKey('skill-handbook')),
+      );
+      final filtersRect = tester.getRect(
+        find.byKey(const ValueKey('skill-filters')),
+      );
+      final searchRect = tester.getRect(
+        find.byKey(const ValueKey('skill-search')),
+      );
+      expect(handbookRect.center.dy, closeTo(filtersRect.center.dy, 0.1));
+      expect(filtersRect.center.dy, closeTo(searchRect.center.dy, 0.1));
+      expect(searchRect.width, greaterThan(filtersRect.width * 1.8));
+
+      await tester.enterText(
+        find.byKey(const ValueKey('skill-search')),
+        '\u4e00\u62f3',
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pumpAndSettle();
+      final onePunch = find.byKey(const ValueKey('skill-result-skill_000654'));
+      expect(onePunch, findsOneWidget);
+      expect(
+        find.descendant(of: onePunch, matching: find.text('\u7269\u653b')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: onePunch, matching: find.text('\u8017\u80fd 5')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: onePunch, matching: find.text('\u5a01\u529b 140')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: onePunch,
+          matching: find.text(
+            '\u5bf9\u654c\u65b9\u7cbe\u7075\u9020\u6210\u7269\u7406\u4f24\u5bb3\u3002',
+          ),
+        ),
+        findsOneWidget,
+      );
+      final elementIcon = tester.widget<CatalogAssetImage>(
+        find.byKey(const ValueKey('skill-result-element-skill_000654')),
+      );
+      expect(elementIcon.assetPath, 'assets/wiki/v1/ui/types/martial.png');
+      expect(
+        find.descendant(
+          of: onePunch,
+          matching: find.byKey(const ValueKey('favorite-skill_000654')),
+        ),
+        findsNothing,
+      );
+      await tester.tap(onePunch);
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('favorite-skill_000654')),
+        findsOneWidget,
+      );
+      Navigator.of(
+        tester.element(find.byKey(const ValueKey('skill-detail-skill_000654'))),
+      ).pop();
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(const ValueKey('skill-handbook')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('skill-filters')));
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('skill-catalog-filter-sheet')),
+        findsOneWidget,
+      );
+      expect(find.byType(FilterChip), findsNWidgets(42));
+      await tester.tap(
+        find.byKey(const ValueKey('skill-catalog-type-filter-\u7269\u653b')),
+      );
+      await tester.tap(
+        find.byKey(const ValueKey('skill-catalog-tag-filter-\u8fde\u51fb')),
+      );
+      await tester.tap(
+        find.byKey(
+          const ValueKey('skill-catalog-element-filter-type_8a5435d3dcd0'),
+        ),
+      );
+      await tester.tap(find.text('\u5e94\u7528'));
+      await tester.pumpAndSettle();
+      expect(find.text('\u8fde\u7eed\u6bd2\u9488'), findsOneWidget);
+      expect(find.text('\u6280\u80fd\u7b5b\u9009 (3)'), findsOneWidget);
+    },
+  );
 
   testWidgets('supports dark theme and enlarged text without an exception', (
     tester,
@@ -147,6 +474,16 @@ void main() {
 
     expect(find.text('Roco World Handbook'), findsOneWidget);
     expect(find.text('Creatures'), findsOneWidget);
+    final first = (await repository.searchPets(const PetQuery(limit: 1)))
+        .single;
+    await tester.tap(find.byKey(ValueKey('pet-result-${first.petId}')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(ValueKey('pet-detail-${first.petId}')), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    Navigator.of(
+      tester.element(find.byKey(ValueKey('pet-detail-${first.petId}'))),
+    ).pop();
+    await tester.pumpAndSettle();
     expect(find.text('Skills'), findsOneWidget);
     expect(find.text('My Library'), findsOneWidget);
     expect(find.text('Settings'), findsOneWidget);
@@ -188,6 +525,7 @@ void main() {
         .single;
     await tester.tap(find.byKey(ValueKey('pet-result-${first.petId}')));
     await tester.pumpAndSettle();
+    expect(find.text('一阶段'), findsOneWidget);
     await tester.scrollUntilVisible(
       find.text('\u79cd\u65cf\u8d44\u8d28\u603b\u548c'),
       350,
@@ -195,6 +533,27 @@ void main() {
     );
     expect(find.text('\u79cd\u65cf\u8d44\u8d28\u603b\u548c'), findsOneWidget);
     expect(find.text('582'), findsOneWidget);
+    expect(find.text('\u661f\u5149\u503c\uff1a\n80'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('section-dot-skills')));
+    await tester.pumpAndSettle();
+    final flashCard = find.byKey(const ValueKey('pet-skill-skill_000430'));
+    expect(flashCard, findsOneWidget);
+    expect(
+      find.descendant(
+        of: flashCard,
+        matching: find.text('\u89e3\u9501\uff1alv1'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: flashCard,
+        matching: find.text(
+          '\u5bf9\u654c\u65b9\u7cbe\u7075\u9020\u6210\u9b54\u6cd5\u4f24\u5bb3\u3002',
+        ),
+      ),
+      findsOneWidget,
+    );
     await tester.scrollUntilVisible(
       find.text('\u5c5e\u6027\u514b\u5236'),
       350,
@@ -222,7 +581,6 @@ void main() {
             repository: repository,
             userRepository: userRepository,
             datasetId: session.info.datasetId,
-            favoriteKeys: const <String>{},
           ),
         ),
       ),
@@ -232,13 +590,32 @@ void main() {
     expect(find.text('\u5168\u90e8\u5f62\u6001'), findsNothing);
     expect(find.text('\u9ed8\u8ba4\u5f62\u6001'), findsNothing);
     expect(find.text('\u8fea\u83ab'), findsOneWidget);
-    expect(
-      find.text('\u5723\u5149\u8fea\u83ab\uff08\u9996\u9886\u5f62\u6001\uff09'),
-      findsOneWidget,
-    );
+    expect(find.text('\u5723\u5149\u8fea\u83ab'), findsOneWidget);
+    expect(find.text('\uff08\u9996\u9886\u5f62\u6001\uff09'), findsNWidgets(4));
     expect(find.byKey(const ValueKey('pet-dex-pet_000004')), findsOneWidget);
     expect(find.byKey(const ValueKey('pet-dex-pet_000560')), findsOneWidget);
-    expect(find.text('\u5149\u7cfb'), findsWidgets);
+    expect(find.text('NO.001'), findsNWidgets(5));
+    expect(find.text('\u5149\u7cfb'), findsNothing);
+    final dimoType = tester.widget<CatalogAssetImage>(
+      find.byKey(const ValueKey('pet-type-pet_000004-\u5149\u7cfb')),
+    );
+    expect(dimoType.assetPath, 'assets/wiki/v1/ui/types/light.png');
+    final namedForm = tester.widget<Text>(
+      find.byKey(const ValueKey('pet-form-pet_000560')),
+    );
+    expect(namedForm.style?.color, isNotNull);
+    expect(namedForm.style?.fontSize, lessThan(16));
+    expect(
+      tester.getRect(find.text('圣光迪莫')).center.dy,
+      closeTo(
+        tester
+            .getRect(find.byKey(const ValueKey('pet-form-pet_000560')))
+            .center
+            .dy,
+        4,
+      ),
+    );
+    expect(find.byKey(const ValueKey('favorite-pet_000004')), findsNothing);
 
     final searchRect = tester.getRect(find.byKey(const ValueKey('pet-search')));
     final sortRect = tester.getRect(find.byKey(const ValueKey('pet-sort')));
@@ -258,14 +635,16 @@ void main() {
 
     final dimoCard = find.byKey(const ValueKey('pet-result-pet_000004'));
     final dimoImage = tester.widget<CatalogAssetImage>(
-      find.descendant(of: dimoCard, matching: find.byType(CatalogAssetImage)),
+      find
+          .descendant(of: dimoCard, matching: find.byType(CatalogAssetImage))
+          .first,
     );
     expect(
       dimoImage.assetPath,
       'assets/wiki/v1/pets/illustrations/JL_dimo.png',
     );
-    expect(dimoImage.width, 112);
-    expect(dimoImage.height, 112);
+    expect(dimoImage.width, 100);
+    expect(dimoImage.height, 100);
 
     await tester.tap(find.byKey(const ValueKey('pet-sort')));
     await tester.pumpAndSettle();
@@ -318,8 +697,9 @@ void main() {
     final skillSearch = tester.widget<TextField>(
       find.byKey(const ValueKey('skill-search')),
     );
-    expect(skillSearch.decoration?.labelText, '\u641c\u7d22\u6280\u80fd');
-    expect(find.text('\u7279\u6027'), findsOneWidget);
+    expect(skillSearch.decoration?.labelText, isNull);
+    expect(skillSearch.decoration?.hintText, '\u6280\u80fd\u67e5\u8be2');
+    expect(find.text('\u6280\u80fd\u56fe\u9274'), findsOneWidget);
 
     await tester.tap(find.text('\u6211\u7684\u6536\u85cf').last);
     await tester.pumpAndSettle();
@@ -360,7 +740,6 @@ void main() {
             repository: fake,
             userRepository: userRepository,
             datasetId: session.info.datasetId,
-            favoriteKeys: const <String>{},
           ),
         ),
       ),
@@ -389,6 +768,9 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    expect(find.byKey(const ValueKey('favorite-pet_000004')), findsNothing);
+    await tester.tap(find.byKey(const ValueKey('pet-result-pet_000004')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('favorite-pet_000004')));
     await tester.pumpAndSettle();
     expect(
@@ -403,6 +785,10 @@ void main() {
       isTrue,
     );
 
+    Navigator.of(
+      tester.element(find.byKey(const ValueKey('pet-detail-pet_000004'))),
+    ).pop();
+    await tester.pumpAndSettle();
     await tester.tap(find.text('My Library'));
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('saved-pet:pet_000004')), findsOneWidget);

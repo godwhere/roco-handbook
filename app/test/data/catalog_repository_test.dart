@@ -107,6 +107,35 @@ void main() {
     expect(attacks.cast<int>(), orderedEquals(sortedAttacks));
   });
 
+  test('filters learnable skills by type, tag, and element', () async {
+    final poison = (await repository.getTypes()).singleWhere(
+      (type) => type.name == '\u6bd2\u7cfb',
+    );
+    final filtered = await repository.searchSkills(
+      SkillQuery(
+        filter: SkillFilter.learnable,
+        skillTypes: const <String>['\u7269\u653b'],
+        tags: const <String>['\u8fde\u51fb'],
+        typeIds: <String>[poison.typeId],
+        limit: 100,
+      ),
+    );
+    final featureOnly = await repository.searchSkills(
+      const SkillQuery(
+        keyword: '\u6c27\u5faa\u73af',
+        filter: SkillFilter.learnable,
+      ),
+    );
+
+    expect(
+      filtered.map((skill) => skill.name),
+      orderedEquals(<String>['\u8fde\u7eed\u6bd2\u9488']),
+    );
+    expect(filtered.single.damageClass, '\u7269\u653b');
+    expect(filtered.single.element, '\u6bd2\u7cfb');
+    expect(featureOnly, isEmpty);
+  });
+
   test(
     'calculates complete base stats without filling missing source data',
     () async {
@@ -162,6 +191,7 @@ void main() {
     final bundle = await repository.getSkillsForPet('pet_000007');
 
     expect(bundle.featureSkill?.skillId, 'skill_000003');
+    expect(bundle.featureSkill?.description, '使用草系技能后，回复10%生命。');
     expect(bundle.learnableSkills, isNotEmpty);
     expect(
       bundle.learnableSkills.map((skill) => skill.sourceKind).toSet(),
@@ -170,6 +200,13 @@ void main() {
     expect(
       bundle.learnableSkills.any((skill) => skill.sourceKind == 'feature'),
       isFalse,
+    );
+    expect(
+      bundle.learnableSkills
+          .firstWhere((skill) => skill.skill.name == '抓挠')
+          .skill
+          .damageClass,
+      '物攻',
     );
   });
 
