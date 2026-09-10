@@ -79,8 +79,8 @@ final class AppStrings {
   }
 
   static const _zhCn = <String, String>{
-    'Roco World Handbook': '洛克王国：世界图鉴',
-    'Roco Handbook': '洛克王国：世界图鉴',
+    'Roco World Handbook': '洛克手册',
+    'Roco Handbook': '洛克手册',
     'About this Catalog': '关于图鉴数据',
     'Data version': '数据版本',
     'Catalog schema': '图鉴数据库结构',
@@ -298,12 +298,12 @@ final class AppStrings {
     'How to obtain': '获取方式',
     'Personal library': '个人收藏',
     'Open favorites, collection marks, and notes.': '查看收藏、收集标记和笔记。',
-    'Catalog tool': '图鉴工具',
-    'Personal tool': '个人工具',
     'Creatures in this season': '本赛季精灵',
     'No creatures are included for this season yet.': '当前图鉴尚未收录本赛季精灵。',
     'Feature handbook could not be loaded.': '无法加载特性图鉴。',
     'Egg groups could not be loaded.': '无法加载孵蛋组别。',
+    'Egg-group filters': '孵蛋组别筛选',
+    'A creature may match any selected egg group.': '精灵符合任一已选孵蛋组别即可显示。',
     'No creatures are included in this egg group.': '当前图鉴未收录该孵蛋组别的精灵。',
     'members': '只精灵',
     'Undiscovered': '未发现',

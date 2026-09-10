@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 
 from .errors import ImportToolError
+from .font_assets import import_font_assets
 from .game_descriptions import import_game_descriptions
 from .image_assets import asset_preflight, import_image_assets
 from .rendered_snapshot import import_rendered_index_response
@@ -81,6 +82,12 @@ def _parser() -> argparse.ArgumentParser:
     tool_assets.add_argument("--config", type=Path, required=True)
     tool_assets.add_argument("--output", type=Path, required=True)
     tool_assets.add_argument("--cache", type=Path)
+    font_assets = subparsers.add_parser(
+        "import-font-assets",
+        help="Validate, download, and freeze the offline Wiki font set.",
+    )
+    font_assets.add_argument("--config", type=Path, required=True)
+    font_assets.add_argument("--output", type=Path, required=True)
     return parser
 
 
@@ -178,6 +185,22 @@ def main(argv: list[str] | None = None) -> int:
                         "manifest": str(frozen.manifest_path),
                         "path": str(frozen.path),
                         "reference_count": frozen.reference_count,
+                        "reused_existing": frozen.reused_existing,
+                        "total_bytes": frozen.total_bytes,
+                    },
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+            return 0
+        if args.command == "import-font-assets":
+            frozen = import_font_assets(args.config, args.output)
+            print(
+                json.dumps(
+                    {
+                        "font_count": frozen.font_count,
+                        "manifest": str(frozen.manifest_path),
+                        "path": str(frozen.path),
                         "reused_existing": frozen.reused_existing,
                         "total_bytes": frozen.total_bytes,
                     },

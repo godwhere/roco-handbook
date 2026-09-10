@@ -17,6 +17,7 @@ import 'domain/user_models.dart';
 import 'domain/user_repository.dart';
 import 'features/catalog/catalog_home_page.dart';
 import 'l10n/app_strings.dart';
+import 'theme/catalog_theme.dart';
 
 final class CatalogSession {
   const CatalogSession({
@@ -276,24 +277,8 @@ class _CatalogBootstrapAppState extends State<CatalogBootstrapApp> {
         GlobalCupertinoLocalizations.delegate,
       ],
       themeMode: ThemeMode.system,
-      theme: ThemeData(
-        colorScheme: lightScheme,
-        useMaterial3: true,
-        inputDecorationTheme: const InputDecorationTheme(filled: true),
-        cardTheme: const CardThemeData(
-          clipBehavior: Clip.antiAlias,
-          margin: EdgeInsets.zero,
-        ),
-      ),
-      darkTheme: ThemeData(
-        colorScheme: darkScheme,
-        useMaterial3: true,
-        inputDecorationTheme: const InputDecorationTheme(filled: true),
-        cardTheme: const CardThemeData(
-          clipBehavior: Clip.antiAlias,
-          margin: EdgeInsets.zero,
-        ),
-      ),
+      theme: buildCatalogTheme(lightScheme),
+      darkTheme: buildCatalogTheme(darkScheme),
       home: FutureBuilder<CatalogSession>(
         future: _session,
         builder: (context, snapshot) {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../data/catalog/asset_game_description_repository.dart';
@@ -131,7 +133,6 @@ class ToolsPage extends StatelessWidget {
         description: 'Open favorites, collection marks, and notes.',
         icon: Icons.bookmark_rounded,
         color: const Color(0xFF5F6279),
-        personal: true,
         onTap: () => _open(
           context,
           Scaffold(
@@ -170,7 +171,7 @@ class ToolsPage extends StatelessWidget {
               ),
             );
           }
-          return _ToolCard(index: index, data: cards[index - 1]);
+          return _ToolCard(data: cards[index - 1]);
         },
       ),
     );
@@ -185,7 +186,6 @@ class _ToolCardData {
     required this.icon,
     required this.color,
     required this.onTap,
-    this.personal = false,
   });
 
   final String keyName;
@@ -194,13 +194,11 @@ class _ToolCardData {
   final IconData icon;
   final Color color;
   final VoidCallback onTap;
-  final bool personal;
 }
 
 class _ToolCard extends StatelessWidget {
-  const _ToolCard({required this.index, required this.data});
+  const _ToolCard({required this.data});
 
-  final int index;
   final _ToolCardData data;
 
   @override
@@ -220,20 +218,21 @@ class _ToolCard extends StatelessWidget {
       child: InkWell(
         onTap: data.onTap,
         child: SizedBox(
-          height: 150,
+          height: 112,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 16, 16),
+            padding: const EdgeInsets.fromLTRB(20, 14, 16, 14),
             child: Stack(
               children: <Widget>[
-                Align(
-                  alignment: Alignment.topLeft,
+                Positioned(
+                  left: 0,
+                  right: 64,
+                  top: 0,
                   child: Text(
-                    '${context.tr(data.personal ? 'Personal tool' : 'Catalog tool')} / ${index.toString().padLeft(2, '0')}',
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color: foreground.withValues(alpha: 0.62),
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.8,
-                    ),
+                    context.tr(data.title),
+                    style: Theme.of(context).textTheme.titleLarge
+                        ?.copyWith(fontWeight: FontWeight.w800),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Align(
@@ -244,21 +243,9 @@ class _ToolCard extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: SizedBox.square(
-                      dimension: 64,
-                      child: Icon(data.icon, size: 32, color: data.color),
+                      dimension: 52,
+                      child: Icon(data.icon, size: 26, color: data.color),
                     ),
-                  ),
-                ),
-                Positioned(
-                  left: 0,
-                  right: 78,
-                  bottom: 24,
-                  child: Text(
-                    context.tr(data.title),
-                    style: Theme.of(context).textTheme.titleLarge
-                        ?.copyWith(fontWeight: FontWeight.w800),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Positioned(
@@ -470,7 +457,7 @@ class FeatureHandbookPage extends StatelessWidget {
   }
 }
 
-class EggGroupsPage extends StatelessWidget {
+class EggGroupsPage extends StatefulWidget {
   const EggGroupsPage({
     required this.repository,
     required this.userRepository,
@@ -483,62 +470,321 @@ class EggGroupsPage extends StatelessWidget {
   final String datasetId;
 
   @override
+  State<EggGroupsPage> createState() => _EggGroupsPageState();
+}
+
+class _EggGroupsPageState extends State<EggGroupsPage> {
+  static const _pageSize = 80;
+
+  final _searchController = TextEditingController();
+  final _selectedGroupIds = <int>{};
+  List<EggGroupSummary>? _groups;
+  List<PetSummary> _pets = const <PetSummary>[];
+  Timer? _searchDebounce;
+  Object? _error;
+  bool _loading = true;
+  bool _hasMore = false;
+  int _requestGeneration = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadGroups();
+  }
+
+  @override
+  void dispose() {
+    _searchDebounce?.cancel();
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadGroups() async {
+    try {
+      final groups = await widget.repository.getEggGroups();
+      if (!mounted) return;
+      setState(() => _groups = groups);
+      await _loadPets(reset: true);
+    } on Object catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _error = error;
+        _loading = false;
+      });
+    }
+  }
+
+  void _scheduleSearch(String _) {
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(
+      const Duration(milliseconds: 250),
+      () => _loadPets(reset: true),
+    );
+    setState(() {});
+  }
+
+  Future<void> _loadPets({required bool reset}) async {
+    final groups = _groups;
+    if (groups == null) return;
+    final generation = ++_requestGeneration;
+    setState(() {
+      _loading = true;
+      _error = null;
+      if (reset) {
+        _pets = const <PetSummary>[];
+        _hasMore = false;
+      }
+    });
+    try {
+      final allowedGroupIds =
+          _selectedGroupIds.isEmpty
+                ? groups
+                      .map((group) => group.eggGroupId)
+                      .toList(growable: false)
+                : _selectedGroupIds.toList(growable: false)
+            ..sort();
+      final offset = reset ? 0 : _pets.length;
+      final page = allowedGroupIds.isEmpty
+          ? const <PetSummary>[]
+          : await widget.repository.searchPets(
+              PetQuery(
+                keyword: _searchController.text.trim(),
+                eggGroupIds: allowedGroupIds,
+                limit: _pageSize,
+                offset: offset,
+              ),
+            );
+      if (!mounted || generation != _requestGeneration) return;
+      setState(() {
+        _pets = reset ? page : <PetSummary>[..._pets, ...page];
+        _hasMore = page.length == _pageSize;
+        _loading = false;
+      });
+    } on Object catch (error) {
+      if (!mounted || generation != _requestGeneration) return;
+      setState(() {
+        _error = error;
+        _loading = false;
+      });
+    }
+  }
+
+  Future<void> _showFilters() async {
+    final groups = _groups;
+    if (groups == null) return;
+    final selected = await showModalBottomSheet<Set<int>>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) {
+        final draft = Set<int>.of(_selectedGroupIds);
+        return StatefulBuilder(
+          builder: (context, setSheetState) => SafeArea(
+            key: const ValueKey('egg-group-filter-sheet'),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.fromLTRB(
+                20,
+                0,
+                20,
+                20 + MediaQuery.viewInsetsOf(context).bottom,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Text(
+                    context.tr('Egg-group filters'),
+                    style: Theme.of(context).textTheme.titleLarge
+                        ?.copyWith(fontWeight: FontWeight.w800),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    context.tr('A creature may match any selected egg group.'),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 16),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: <Widget>[
+                      for (final group in groups)
+                        FilterChip(
+                          key: ValueKey('egg-group-filter-${group.eggGroupId}'),
+                          selected: draft.contains(group.eggGroupId),
+                          label: Text(
+                            '${context.tr(_eggGroupName(group.eggGroupId))} '
+                            '${group.memberCount}',
+                          ),
+                          onSelected: (value) => setSheetState(() {
+                            if (value) {
+                              draft.add(group.eggGroupId);
+                            } else {
+                              draft.remove(group.eggGroupId);
+                            }
+                          }),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: <Widget>[
+                      TextButton(
+                        key: const ValueKey('egg-group-filters-clear'),
+                        onPressed: () => setSheetState(draft.clear),
+                        child: Text(context.tr('Clear')),
+                      ),
+                      const Spacer(),
+                      FilledButton(
+                        key: const ValueKey('egg-group-filters-apply'),
+                        onPressed: () => Navigator.of(context).pop(draft),
+                        child: Text(context.tr('Apply')),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+    if (selected == null || !mounted) return;
+    setState(() {
+      _selectedGroupIds
+        ..clear()
+        ..addAll(selected);
+    });
+    await _loadPets(reset: true);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.tr('Egg groups'))),
-      body: FutureBuilder<List<EggGroupSummary>>(
-        future: repository.getEggGroups(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(context.tr('Egg groups could not be loaded.')),
-            );
-          }
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          final groups = snapshot.requireData;
-          return ListView.separated(
-            key: const ValueKey('egg-groups-list'),
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-            itemCount: groups.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 8),
-            itemBuilder: (context, index) {
-              final group = groups[index];
-              final title = _eggGroupName(group.eggGroupId);
-              return Card(
-                child: ListTile(
-                  key: ValueKey('egg-group-${group.eggGroupId}'),
-                  leading: const CircleAvatar(
-                    child: Icon(Icons.egg_alt_rounded),
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: OutlinedButton.icon(
+                    key: const ValueKey('egg-group-filters'),
+                    onPressed: _groups == null ? null : _showFilters,
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(56),
+                      shape: const StadiumBorder(),
+                    ),
+                    icon: const Icon(Icons.filter_alt_outlined),
+                    label: Text(
+                      _selectedGroupIds.isEmpty
+                          ? context.tr('Filters')
+                          : '${context.tr('Filters')} '
+                                '(${_selectedGroupIds.length})',
+                    ),
                   ),
-                  title: Text(context.tr(title)),
-                  subtitle: Text(
-                    '${group.memberCount} ${context.tr('members')}',
-                  ),
-                  trailing: const Icon(Icons.chevron_right_rounded),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (context) => _PetListPage(
-                        title: context.tr(title),
-                        emptyMessage:
-                            'No creatures are included in this egg group.',
-                        repository: repository,
-                        userRepository: userRepository,
-                        datasetId: datasetId,
-                        query: PetQuery(
-                          eggGroupIds: <int>[group.eggGroupId],
-                          limit: 200,
-                        ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  flex: 2,
+                  child: TextField(
+                    key: const ValueKey('egg-group-search'),
+                    controller: _searchController,
+                    onChanged: _scheduleSearch,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.search,
+                    autocorrect: false,
+                    decoration: InputDecoration(
+                      hintText: context.tr('Search creatures'),
+                      prefixIcon: const Icon(Icons.search_rounded),
+                      suffixIcon: _searchController.text.isEmpty
+                          ? null
+                          : IconButton(
+                              tooltip: context.tr('Clear search'),
+                              onPressed: () {
+                                _searchController.clear();
+                                _loadPets(reset: true);
+                              },
+                              icon: const Icon(Icons.clear_rounded),
+                            ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(28),
                       ),
                     ),
                   ),
                 ),
-              );
-            },
-          );
-        },
+              ],
+            ),
+          ),
+          Expanded(child: _buildEggGroupResults(context)),
+        ],
       ),
+    );
+  }
+
+  Widget _buildEggGroupResults(BuildContext context) {
+    if (_groups == null && _loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (_error != null && _pets.isEmpty) {
+      return Center(child: Text(context.tr('Egg groups could not be loaded.')));
+    }
+    if (!_loading && _pets.isEmpty) {
+      return Center(child: Text(context.tr('No creatures match this search.')));
+    }
+    return ListView.separated(
+      key: const ValueKey('egg-groups-list'),
+      padding: const EdgeInsets.fromLTRB(16, 2, 16, 24),
+      itemCount: _pets.length + (_hasMore || _loading ? 1 : 0),
+      separatorBuilder: (_, _) => const SizedBox(height: 8),
+      itemBuilder: (context, index) {
+        if (index == _pets.length) {
+          return Center(
+            child: _loading
+                ? const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: CircularProgressIndicator(),
+                  )
+                : TextButton(
+                    key: const ValueKey('egg-groups-load-more'),
+                    onPressed: () => _loadPets(reset: false),
+                    child: Text(context.tr('Load more')),
+                  ),
+          );
+        }
+        final pet = _pets[index];
+        return Card(
+          child: ListTile(
+            key: ValueKey('egg-group-pet-${pet.petId}'),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 6,
+            ),
+            leading: CatalogAssetImage(
+              assetPath: petIllustrationAsset(pet.illustrationKey),
+              semanticLabel: pet.name,
+              width: 64,
+              height: 64,
+              fallbackIcon: Icons.pets_outlined,
+            ),
+            title: Text(
+              pet.name,
+              style: const TextStyle(fontWeight: FontWeight.w700),
+            ),
+            subtitle: Text('NO.${pet.dexNo}'),
+            trailing: const Icon(Icons.chevron_right_rounded),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (context) => PetDetailPage(
+                  repository: widget.repository,
+                  userRepository: widget.userRepository,
+                  datasetId: widget.datasetId,
+                  initialPetId: pet.petId,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -14,7 +14,7 @@ The repository owner directed Phase 8 to deliver a formal App identity, launch e
 
 Phase 8 uses the following bounded product contract:
 
-- The display name is **Roco World Handbook** in English and **洛克王国：世界图鉴** in Chinese. Platform home-screen labels use the Chinese display name.
+- The display name is **Roco World Handbook** in English and **洛克手册** in Chinese. Platform home-screen labels use the Chinese display name.
 - English remains available. `zh-CN` is selected for Chinese device locales, while every other locale falls back to `en-US`.
 - Chinese game-domain terms come from a frozen BWIKI terminology file. Generic actions and platform messages use concise native Chinese copy but do not redefine game semantics.
 - Creature heads and illustrations are resolved from the existing Catalog `head_key` and `illustration_key` values. Skill and feature icons are resolved from `icon_key` plus the preserved category.

@@ -2,7 +2,7 @@
 
 ## Product identity and locale
 
-The App is named **Roco World Handbook** in English and **洛克王国：世界图鉴** in Chinese. The iOS and Android home-screen label uses the Chinese display name. The App follows the device locale, supports `zh-CN` and `en-US`, and falls back to English for every other locale.
+The App is named **Roco World Handbook** in English and **洛克手册** in Chinese. The iOS and Android home-screen label uses the Chinese display name. The App follows the device locale, supports `zh-CN` and `en-US`, and falls back to English for every other locale.
 
 The iOS and Android App icons and launch marks are generated from the frozen Dimo illustration with the Phase 8 brand treatment. Regression checks freeze that source identity plus the exact inventory, dimensions, and hashes of all 24 platform output slots, so a default Flutter, missing size, or unrelated same-size image cannot silently replace the reviewed assets.
 
@@ -12,7 +12,13 @@ Focused localization tests compare every source-grounded domain term used by the
 
 A Chinese-locale navigation smoke test renders the creature and skill search fields, personal library tabs, Settings sections, and Catalog information sheet. It verifies the actual top-level interface instead of treating dictionary coverage as rendering evidence.
 
-The reviewed store evidence contains four iOS portrait PNGs at 1206 × 2622 and four Android portrait PNGs at 1080 × 1920. Every image is 8-bit RGB without an alpha channel. The screenshots preserve the rendered App content; the Android set removes only the measured emulator status bar before lossless RGB normalization.
+## Typography
+
+The App bundles immutable font asset version 1. `RocoDisplay` follows the Wiki's primary game-facing typeface for Material display, headline, title, and label roles. `RocoNumbers` supplies tabular handbook identifiers and selected creature, skill, and timeline values. Body roles retain the platform face so descriptions, search input, Settings explanations, and accessibility-scaled paragraphs remain clear.
+
+The frozen font contract locks the Wiki stylesheet, two exact source URLs, byte counts, SHA-256 values, and local paths. The development importer accepts only its configured HTTPS host and path, validates the SFNT container and exact payload identity, and never replaces an existing version. Both fonts ship inside the App; ordinary browsing performs no font request.
+
+The reviewed pre-typography store evidence contains four iOS portrait PNGs at 1206 × 2622 and four Android portrait PNGs at 1080 × 1920. Every image is 8-bit RGB without an alpha channel. The screenshots preserve the rendered App content; the Android set removes only the measured emulator status bar before lossless RGB normalization. ADR-0019 changes visible typography, so this historical set must be regenerated before store submission.
 
 ## Offline image library
 
@@ -76,7 +82,7 @@ The source module contains eight redundant same-type inverse-list differences. T
 
 ## Tools presentation
 
-The third bottom destination is Tools rather than a single-purpose library tab. Its cards use a compact overline, a large title, a real Material icon inside a circular field, an arrow affordance, muted source-aligned color surfaces, and vertical spacing modeled on the supplied tool-card reference. Season archive uses the captured Wiki season names and color families. Feature handbook and Egg groups open source-backed lists, while Personal library preserves favorites, collection marks, and notes.
+The third bottom destination is Tools rather than a single-purpose library tab. Its shorter cards place the functional title in the former upper-left overline position, omit numbered category labels, and retain a real Material icon inside a smaller circular field, an arrow affordance, and muted source-aligned color surfaces. Season archive uses the captured Wiki season names and color families. Feature handbook opens a source-backed list. Egg groups provides normal creature-name input plus a multi-select group sheet, with OR semantics between selected numeric source groups. Personal library preserves favorites, collection marks, and notes.
 
 Game descriptions presents 54 source-defined terms, six category filters, normal text search, and distinct related feature and skill links. Event timeline presents month navigation, five category filters, current-state badges, compact source icons, local UTC+8 windows, and activity details for 547 source occurrences. Outfit inspiration presents normal text search, grade filters, female and male previews, source descriptions, and acquisition details for 110 outfits. All three are bundled offline; the App does not fabricate entries or open an online fallback.
 

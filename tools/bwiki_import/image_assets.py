@@ -97,18 +97,36 @@ class UrlTransport:
             )
         return payload
 
+    def get_font(self, url: str) -> bytes:
+        payload, content_type = self._get(
+            url,
+            accept="application/octet-stream, font/ttf, font/sfnt",
+        )
+        accepted = {
+            "application/octet-stream",
+            "application/x-font-ttf",
+            "font/sfnt",
+            "font/ttf",
+        }
+        if content_type.lower() not in accepted:
+            raise ResponseValidationError(
+                f"Font response returned unexpected Content-Type {content_type!r}"
+            )
+        return payload
+
     def _get(
         self,
         url: str,
         *,
         data: bytes | None = None,
         content_type: str | None = None,
+        accept: str = "application/json, image/png",
     ) -> tuple[bytes, str]:
         last_error: Exception | None = None
         for attempt in range(self.max_retries):
             try:
                 headers = {
-                    "Accept": "application/json, image/png",
+                    "Accept": accept,
                     "User-Agent": (
                         "RocoWorldOfflineHandbook/1.0 (offline asset import)"
                     ),

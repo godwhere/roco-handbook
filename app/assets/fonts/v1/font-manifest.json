@@ -1,0 +1,29 @@
+{
+  "asset_version": 1,
+  "dataset_id": "roco-world-zh-cn",
+  "font_count": 2,
+  "fonts": [
+    {
+      "family": "RocoDisplay",
+      "font_id": "roco-display",
+      "local_bytes": 4563796,
+      "local_path": "roco-display.ttf",
+      "local_sha256": "88c062409b4d683dd0540dba50b06d7b425274e13430ec75112e0e4d1191a3e9",
+      "role": "display",
+      "source_url": "https://game.gtimg.cn/images/rocom/web202409/font-origin/MIANFEIZITI.ttf"
+    },
+    {
+      "family": "RocoNumbers",
+      "font_id": "roco-numbers",
+      "local_bytes": 4312,
+      "local_path": "roco-numbers.ttf",
+      "local_sha256": "5b0a03103847c60331290788168d564b384b60a9a134c8ec2b9f00c3cc410b0d",
+      "role": "numbers",
+      "source_url": "https://game.gtimg.cn/images/rocom/m/m202504/font-origin/MIANFEIZITI-NUM.ttf"
+    }
+  ],
+  "imported_at_utc": "2026-09-10T15:54:11.612832Z",
+  "manifest_version": 1,
+  "source_stylesheet": "https://wiki.biligame.com/rocom/load.php?lang=zh-cn&modules=site.styles&only=styles&skin=vector",
+  "total_bytes": 4568108
+}

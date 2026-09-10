@@ -1,265 +1,233 @@
-# Roco World Offline Handbook
+# 洛克手册
 
-[![Offline validation](https://github.com/godwhere/roco-handbook/actions/workflows/offline-validation.yml/badge.svg)](https://github.com/godwhere/roco-handbook/actions/workflows/offline-validation.yml)
+[![离线验证](https://github.com/godwhere/roco-handbook/actions/workflows/offline-validation.yml/badge.svg)](https://github.com/godwhere/roco-handbook/actions/workflows/offline-validation.yml)
 
-An independent, non-commercial, offline-first reference application for iOS and Android. Development tools convert validated BWIKI snapshots into a SQLite Catalog. The App ships with a complete local Catalog and can optionally install a newer authenticated complete Catalog after an explicit Settings action.
+一款面向 iOS 和 Android 的独立、非商业、离线优先游戏资料 App。项目使用 Python 将经过校验的 BWIKI 固定版本数据转换为结构化 SQLite 图鉴，并通过 Flutter 提供精灵、技能、特性、进化、属性克制、活动和个性化收藏等查询能力。
 
-## Current project status
+App 首次启动不需要下载数据，也不会在浏览过程中访问 Wiki。完整图鉴、图片和字体随安装包提供；后续数据更新必须由用户在设置页主动触发，并经过签名、哈希、压缩包、数据库和版本兼容性校验后才能启用。
 
-- Phases 0 through 6 are complete. Phase 6 closed under an explicit physical-device-test waiver; those tests remain unrun and store publication remains a separate unmet gate.
-- Phase 7 is temporarily closed under explicit live-update evidence deferral `PHASE7-LIVE-CATALOG-001`. Its complete-package GitHub Releases flow is implemented and passes local and hosted checks, but no genuine newer Catalog exists yet, so real package delivery remains unrun rather than simulated. No background update or logical patch path exists.
-- Phase 8 completes the formal App identity, `zh-CN` interface, frozen offline visual library, compact full-illustration creature and skill handbooks, source-backed creature filters and shiny switching, a vertical offline Tools destination with seven working tools, navigable detail panels, categorized skills, detail-owned favorites, creature base-stat totals, source-backed type relationships, and reviewed iOS and Android store screenshot sets. Remaining store submission and release-account work is deferred.
-- A local Git repository exists. Completed delivery checkpoints use GitHub Desktop for commits and pushes unless the active user instruction explicitly defers that step.
-- The supplied technical baseline is preserved at [docs/technical-spec-v1.md](docs/technical-spec-v1.md).
-- The Catalog and User V1 SQL files are the current normative schema sources. Catalog V1 currently contains 20 tables and two query views.
-- Phase 1 imported an immutable local snapshot, safely parsed all seven required data modules, and generated a complete structure and reference report for 596 creatures, 442 handbook entries, 788 skills, 298 learnsets, and 242 evolution groups.
-- The upstream rendered index verified all 442 display numbers and default handbook forms. Forty-eight ambiguous defaults use evidence-bound explicit overrides; `show_topics`, record order, and ID suffixes are not local default-selection rules.
-- Phase 2 generated normalized Catalog data and release data version 1 from the validated snapshot. The package contains a verified 3,424,256-byte SQLite database with 596 creatures, 442 handbook entries, 788 skills, 298 Learnsets, and 242 evolution groups.
-- The tracked release manifest records database SHA-256 `2c27ddc3cd36f543ea6319ea9878b4a3c8b8a9a89afad6bd6eaacfd9592ed8f2`. The identity registry locks 1,826 creature, handbook, and skill identities.
-- The Flutter App runs on iOS and Android, validates and installs the bundled Catalog without a first-launch download, opens it read-only, and provides paginated concrete-form and learnable-skill browsing, exact form search, combined shiny/stage/form/season/type filters, source-backed shiny-art switching, season, feature, egg-group, game-description, activity-timeline, outfit, and personal-library tools, source-backed base-stat totals and type relationships, categorized creature-skill and handbook filtering, detail-owned favorites, clickable evolution evidence, section shortcuts, and Catalog attribution. Its only production network source is the fixed GitHub Releases Catalog channel invoked from Settings.
-- The App is named **Roco World Handbook** in English and uses the Chinese display name frozen by ADR-0015. It follows the device locale with `en-US` fallback, and its Chinese game-domain terms are frozen from the Wiki rather than inferred from English copy.
-- Versioned Wiki assets ship inside the App: 569 distinct creature illustrations covering all 596 active forms, 144 shiny illustrations covering 146 shiny-capable references, 736 skill or feature icons, 35 domain UI icons, 53 activity icons, and 220 gender-specific outfit previews. The core asset-version-2 manifest records 1,484 files, 1,565 Catalog references, and 117,287,007 verified bytes; the tool-media-v1 manifest adds 273 files, 749 references, and 12,379,751 verified bytes. Ordinary App browsing never loads those images from the network. The Catalog retains upstream `head_key` data, but head images are not packaged or used at runtime.
-- The App creates and validates an independent personal database from the normative User V1 schema. Creature and skill favorites, handbook-level collection marks, and device-local notes survive restart; missing Catalog objects retain their saved name and notes.
-- Startup now serializes Catalog installation, validates a new immutable whole-database candidate and its attribution before activation, keeps independent active and previous records, rolls back a failed post-activation open, and retains at most the current and previous validated Catalog and attribution files. A newer compatible local Catalog is not silently downgraded by an older bundled version.
-- The fixed bottom navigation provides Creatures, Skills, My Library, and Settings. Settings explains local-storage and uninstall risk, shows the effective Catalog, recovery outcome, and personal schema versions, provides an explicitly confirmed bundled-Catalog recovery action, and owns the user-triggered complete-Catalog update flow. Neither action modifies `user.db`.
-- The preserved Phase 6 candidate is App version 1.0.0, build 1. The current Phase 7 source is version 1.1.0, build 2 so its network-enabled binary cannot collide with that candidate. Settings exposes the current version and Flutter's packaged open-source license registry.
-- The offline release validator rejects transaction sidecars, placeholder metadata, false coverage, source-lock or hash divergence, unreviewed removals, schema failures, and probe failures. Read-only CI runs the Python and Flutter gates without BWIKI, signing, or store credentials.
-- Android first launch, personal-data persistence, legacy-pointer migration, and explicit bundled recovery passed in an emulator with airplane mode enabled and Wi-Fi disabled. iOS build, first launch, Catalog validation, personal-database creation, restart reuse, and legacy-pointer migration passed in an iPhone simulator. No physical-device, signing, upload, or store-release claim is made.
-- Local unsigned Android and no-codesign iOS release candidates have been built and audited. Physical Android and iOS offline/update validation was explicitly waived for Phase 6 sequencing, not passed; no store upload or publication is authorized.
+> 当前开发版本为 `1.1.0+2`。项目尚未发布到应用商店，真机、正式签名、商店上传和审核仍属于独立的发布验收环节。
 
-## V1 boundary
+## 项目概览
 
-V1 includes offline creature and skill lookup, bundled creature and skill imagery, source-backed type relationships, favorites, collection marks, notes, and safe whole-Catalog replacement with App updates. Phase 7 additionally enables an optional user-triggered authenticated complete-Catalog download. It excludes runtime BWIKI access, runtime image acquisition, an application server, logical patch downloads, accounts, and cloud synchronization.
+| 项目 | 当前实现 |
+| --- | --- |
+| 客户端 | Flutter 跨平台 App，支持 iOS 与 Android |
+| 数据规模 | 596 个具体精灵形态、442 个图鉴条目、788 个技能、298 份技能学习表、242 组进化关系 |
+| 数据存储 | 只读 `catalog.db` 与独立可迁移 `user.db` |
+| 离线资源 | 精灵立绘、异色立绘、技能与特性图标、属性与分类图标、活动图标、时装预览和 Wiki 风格字体 |
+| 本地化 | `zh-CN` 与 `en-US`，其他语言回退到英文；游戏术语以冻结的 Wiki 词汇为准 |
+| 数据更新 | 设置页主动检查，使用 GitHub Releases 分发由 Ed25519 签名清单认证的完整图鉴包 |
+| 自动化验证 | 101 项 Python 测试、115 项 Flutter 测试、静态检查、格式检查和 GitHub Actions 离线持续集成 |
 
-The complete Catalog remains the first supported independent-update unit. The runtime transport, consent, progress, cancellation, and local activation paths are implemented, but no newer production Catalog Release exists yet. Physical-device and real-package network evidence remain absent, and logical patches remain later work. Temporary Phase 7 closure does not convert those deferred checks into passed evidence.
+## 核心功能
 
-`catalog.db` and `user.db` remain physically separate: the Catalog is replaceable, while personal data changes only through an independent migration.
+### 精灵图鉴
 
-## Repository structure
+- 按名称、称号、别名或图鉴编号搜索具体精灵形态。
+- 支持图鉴编号、名称、物攻、魔攻和速度排序。
+- 支持系别、阶数、主形态／地区形态／首领形态、归属赛季和有无异色的组合筛选。
+- 列表直接显示完整立绘、形态副标题、`NO.<编号>` 和系别图标。
+- 有异色资源的精灵可在详情页切换原始立绘与异色立绘。
 
-- `docs/`: baseline specification, decisions, evidence, and implementation reports
-- `config/`: source, identity, display, and reviewed-exception configuration
-- `schemas/`: normative Catalog, User, bundled-manifest, and signed remote-manifest structures
-- `tools/`: project configuration for later import and build tools
-- `tests/`: offline, repeatable structure and contract tests
-- `app/`: Flutter iOS and Android client, bundled Catalog assets, and App tests
-- `data/raw/`: ignored immutable response bodies plus tracked provenance locks
-- `data/reports/`: tracked structure, reference, source-field, and sample-mapping reports
-- `data/normalized/`: deterministic normalized build input with preserved source extras
-- `data/release/`: immutable versioned Catalog database, manifest, attribution, and build report
-- `licenses/`: Catalog attribution boundary and resolved runtime dependency notices
-- `release/`: versioned release-candidate checks, metadata, notes, and known limitations; generated App binaries remain untracked
-- `.github/workflows/`: credential-free offline project and Flutter validation
+### 精灵详情
 
-## Phase 1 tools
+- 按“基本信息、特性、种族资质、技能、进化”的顺序组织核心资料。
+- 展示六项种族资质、完整数据下的总和、身高、体重、回顾洛克贝、星光值和首领进化状态。
+- 区分精灵技能、血脉影响和可学技能，并支持技能类型与属性筛选。
+- 进化分支可直接跳转到对应精灵详情，不根据名称或编号后缀推断关系。
+- 根据冻结的属性关系表计算单系和双系受到的伤害倍率。
+- 右侧章节导航点随滚动高亮，支持点击跳转和长按查看章节名称。
 
-Import previously downloaded MediaWiki revision responses:
+### 技能图鉴
 
-```bash
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m bwiki_import import-local \
-  --input-dir /path/to/responses \
-  --output data/raw \
-  --config config/bwiki_sources.json
+- 独立展示可学习技能，特性通过精灵关系和特性图鉴访问。
+- 支持正常文字输入查询，以及技能类型、技能标签和技能属性组合筛选。
+- 技能卡展示图标、名称、属性、分类、耗能、威力和效果说明。
+- 技能详情保留来源修订、关联精灵和收藏入口。
+
+### 图鉴工具
+
+工具页使用紧凑的纵向卡片提供七个离线入口：
+
+| 工具 | 功能 |
+| --- | --- |
+| 赛季档案 | 按图鉴中保存的归属赛季查看精灵 |
+| 特性图鉴 | 浏览已收录特性及其关联精灵 |
+| 孵蛋组别 | 使用正常文字搜索精灵，并按一个或多个孵蛋组别筛选 |
+| 游戏描述 | 查询 54 条状态、印记、天气、战斗动作和规则说明 |
+| 活动时间轴 | 按月份、分类和状态浏览 547 条活动记录 |
+| 穿搭灵感 | 搜索与筛选 110 套时装，并切换 220 个男女款预览 |
+| 个人收藏 | 管理精灵与技能收藏、图鉴收集标记和本地笔记 |
+
+### 个人数据
+
+- 收藏、收集状态和笔记保存在设备私有目录中的 `user.db`。
+- `user.db` 与可替换的图鉴数据库完全分离，图鉴更新、恢复或回滚不会覆盖个人数据。
+- 图鉴对象在新版本中缺失时，个人收藏仍保留保存时的名称快照和笔记。
+- 当前版本不提供账号、云同步或跨设备个人数据迁移。
+
+## 技术架构
+
+项目将开发期数据生产与运行期离线查询分开，App 不直接消费 Wiki 原始字段，也不在运行时解析 Lua。
+
+```text
+开发期数据链路
+
+BWIKI 固定修订响应
+        ↓
+来源身份、修订号与内容哈希校验
+        ↓
+只解析 data-only Lua 的安全解析器
+        ↓
+字段适配、引用闭包检查与稳定 ID 注册表
+        ↓
+规范化 JSON
+        ↓
+Catalog Builder
+        ↓
+版本化 catalog.db + manifest + attribution
+
+运行期数据链路
+
+Flutter 页面
+    ↓
+Controller / Domain DTO
+    ↓
+Repository
+    ├── 只读 catalog.db：精灵、技能、进化和图鉴工具
+    └── 独立 user.db：收藏、收集状态、笔记和设置
 ```
 
-Inspect a frozen source snapshot together with a frozen rendered-index response:
+Flutter 页面只通过 Repository 和领域 DTO 读取数据。SQLite 连接、文件复制、哈希计算和完整性检查不会进入 Widget 构建过程；所有搜索输入使用参数绑定，排序字段由受控枚举选择。
 
-```bash
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m catalog_builder inspect \
-  --snapshot data/raw/snapshot-19235f9b9b34dc4e \
-  --output data/reports \
-  --display-overrides config/handbook_display_overrides.json \
-  --rendered-index-response \
-    data/raw/rendered-index-55e8fc070aec7c28/responses/pet_index.json
+## 关键工程设计
+
+### 1. 可追溯的数据生产管线
+
+- 固定上游模块修订、响应哈希和来源身份，避免数据在构建过程中静默变化。
+- 自定义解析器只接受受支持的 data-only Lua 语法，不执行下载的 Lua，也不调用 `require`。
+- 对空响应、解析失败、未知字段、引用缺失和身份冲突采取失败关闭策略，不会把失败误写成空版本。
+- 原始修订、上游数字 ID、空值、未知字段和需要人工复核的冲突会被保留，方便回溯。
+
+### 2. 稳定身份与关系完整性
+
+- 使用独立的 `handbook_id`、`pet_id` 和上游数字 ID，避免把图鉴条目、具体形态和源数据编号混为一体。
+- 首版注册表锁定 1,826 个精灵、图鉴和技能身份，并检查缺失、复用和未审核变更。
+- 通过渲染后的上游索引确认 442 个默认图鉴形态；48 个存在歧义的默认形态使用带证据的显式覆盖。
+- 原生技能、血脉技能、技能石技能和传奇技能关系分别保留，避免在规范化时相互覆盖。
+
+### 3. 图鉴与个人数据双数据库
+
+- `catalog.db` 是不可变、版本化、只读的内容数据库，可以整体替换和回滚。
+- `user.db` 使用独立结构和迁移流程，只保存个人数据，图鉴安装器无权重建或删除它。
+- Catalog 打开时启用 SQLite 只读和 `query_only`，同步查询在后台 Isolate 中执行。
+
+### 4. 可恢复的完整图鉴更新
+
+- App 启动时串行完成图鉴选择、校验和 Repository 创建，避免页面读取到半安装状态。
+- 新图鉴先写入调用方拥有的暂存文件，通过全部校验后再切换活动指针。
+- 保留当前版本和一个已验证的上一版本；激活后打开失败会自动回滚。
+- 远端更新使用 Ed25519 验证发布者身份，并检查固定 HTTPS 主机、版本兼容、防重放、文件长度、SHA-256、ZIP 结构、SQLite 完整性、外键和探针查询。
+- 当前只支持完整 Catalog 包，不支持逻辑增量补丁、后台更新或 App 二进制更新。
+
+### 5. 完整离线视觉资源
+
+- 569 张原始精灵立绘覆盖全部 596 个具体形态。
+- 144 张去重异色立绘覆盖 146 个可切换引用。
+- 736 个技能或特性图标、35 个属性与分类图标随 App 打包。
+- 图鉴视觉资源清单包含 1,484 个文件、1,565 个引用和 117,287,007 字节，并记录来源与本地哈希。
+- 工具资源包含 53 个活动图标和 220 个时装预览，共 273 个文件、12,379,751 字节。
+- 标题、标签和数值使用离线字体角色，长说明和输入框保留平台字体及缺字回退。
+
+### 6. 自动化质量门禁
+
+- Python 测试覆盖来源契约、安全解析、规范化、身份稳定、引用闭包、数据库构建、资源清单和发布检查。
+- Flutter 测试覆盖 Repository、双数据库生命周期、更新与回滚、搜索筛选、详情导航、本地化、视觉资源和主要交互。
+- GitHub Actions 在无 Wiki、无签名私钥、无商店凭据的 Ubuntu 环境中重建离线验证边界。
+- 发布检查会拒绝 SQLite 事务边车、占位元数据、错误覆盖声明、哈希漂移、来源锁不一致、未审核删除和结构探针失败。
+
+## 技术栈
+
+| 层级 | 技术 |
+| --- | --- |
+| 跨平台客户端 | Flutter 3.47.2、Dart、Material 3 |
+| 本地数据 | SQLite、`sqlite3`、JSON |
+| 数据工具 | Python 3.11、标准库单元测试、确定性构建脚本 |
+| 安全更新 | Ed25519、SHA-256、规范化 Base64url、ZIP 完整包 |
+| 平台能力 | iOS、Android、应用私有存储、后台 Isolate |
+| 工程质量 | Flutter Test、Integration Test、静态分析、GitHub Actions |
+
+## 仓库结构
+
+```text
+app/                    Flutter 客户端、iOS/Android 工程和离线资源
+config/                 来源、身份、术语、关系和资源清单配置
+data/raw/               本地冻结响应；正文忽略提交，来源锁可追溯
+data/normalized/        确定性的 Catalog 构建输入
+data/release/           不可变版本数据库、清单、署名和构建报告
+docs/                   技术规格、决策记录、功能文档、证据和阶段报告
+licenses/               数据署名边界和运行依赖许可清单
+release/                发布候选检查、说明和已知限制
+schemas/                Catalog、User 和远端清单的规范结构
+tests/                  Python 离线契约与构建回归测试
+tools/                  BWIKI 导入、规范化、构建、签名和发布检查工具
+.github/workflows/      无凭据离线持续集成
 ```
 
-Raw response and Lua bodies are not committed. Their tracked locks and generated reports preserve revision IDs and hashes; recreating a report requires the matching original responses.
+## 本地运行
 
-## Phase 2 tools
-
-Normalize the validated snapshot into the Catalog V1 contract:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m catalog_builder normalize \
-  --snapshot data/raw/snapshot-19235f9b9b34dc4e \
-  --rendered-index-response \
-    data/raw/rendered-index-55e8fc070aec7c28/responses/pet_index.json \
-  --display-overrides config/handbook_display_overrides.json \
-  --type-aliases config/type_aliases.json \
-  --data-version 1 \
-  --built-at-utc 2026-09-09T08:11:51Z \
-  --output \
-    data/normalized/snapshot-19235f9b9b34dc4e/catalog-v1.json
-```
-
-The checked-in identity registry is already initialized. `initialize-identity` exists only for an explicit first registry lock and refuses to replace an initialized registry.
-
-Build and verify a new immutable release version:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m catalog_builder build-release \
-  --normalized \
-    data/normalized/snapshot-19235f9b9b34dc4e/catalog-v1.json \
-  --schema schemas/catalog_v1.sql \
-  --manifest-schema schemas/manifests/bundled_catalog_v1.schema.json \
-  --identity-registry config/identity_registry.json \
-  --reviewed-exceptions config/reviewed_exceptions.json \
-  --output data/release
-```
-
-The builder refuses to overwrite an existing data version. A later release must use a new positive data version and compare against the previous Catalog database.
-
-## Phase 7 complete-Catalog update packaging
-
-Build the exact complete-Catalog ZIP from an already validated immutable release:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m catalog_builder \
-  build-complete-update \
-  --release data/release/1 \
-  --output /path/outside-the-repository/catalog-v1.zip
-```
-
-The command reruns the complete release check, includes only the manifest, database, and attribution paths accepted by the App, verifies its own output, prints the archive length and SHA-256, and refuses to overwrite an existing file. It does not sign, publish, upload, or place an update artifact in the repository.
-
-Build the canonical unsigned payload with the exact approved GitHub Release URL for data version `N`:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m catalog_builder \
-  build-update-payload \
-  --release /path/to/release/N \
-  --archive /path/outside-the-repository/catalog-vN.zip \
-  --package-url https://github.com/godwhere/roco-handbook/releases/download/catalog-data-vN/catalog-vN.zip \
-  --release-sequence N \
-  --minimum-app-version 1.1.0 \
-  --published-at-utc 2026-09-09T23:45:00Z \
-  --output /path/outside-the-repository/catalog-payload-vN.json
-```
-
-Sign only a reviewed payload, using a private key outside the repository:
-
-```bash
-cd app
-dart run tool/catalog_signing.dart sign-payload \
-  --private-key /path/outside-the-repository/catalog-signing.private.json \
-  --payload /path/outside-the-repository/catalog-payload-vN.json \
-  --output /path/outside-the-repository/catalog-manifest-vN.json
-```
-
-The signing tool canonicalizes and validates the payload, checks the key range and private/public pair, and runs its output through the production verifier. The current production key already exists under the explicitly authorized Desktop custody path and must not be regenerated casually. The repository owner accepted its confirmed iCloud Desktop synchronization on 2026-09-10. `generate-key` is reserved for an explicit future rotation ceremony; an encrypted offline backup remains undecided.
-
-## Phase 8 visual asset tools
-
-A development import may validate the current Catalog's complete image scope before downloading anything:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m bwiki_import \
-  preflight-image-assets \
-  --catalog data/normalized/snapshot-19235f9b9b34dc4e/catalog-v1.json \
-  --config config/wiki_assets_v2.json
-```
-
-Freeze a new immutable image version and the matching type relationship contract:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m bwiki_import \
-  import-image-assets \
-  --catalog data/normalized/snapshot-19235f9b9b34dc4e/catalog-v1.json \
-  --config config/wiki_assets_v2.json \
-  --output app/assets/wiki \
-  --cache /path/outside-the-repository/wiki-image-cache
-
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m bwiki_import \
-  import-type-relations \
-  --config config/type_relations_v1.json \
-  --output app/assets/wiki/type-relations-v1.json
-```
-
-Freeze the source-backed Tool contracts and their compact offline media set:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m bwiki_import \
-  import-game-descriptions \
-  --config config/game_descriptions_v1.json \
-  --output app/assets/wiki/game-descriptions-v1.json
-
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m bwiki_import \
-  import-activity-timeline \
-  --config config/activity_timeline_v1.json \
-  --output app/assets/wiki/activity-timeline-v1.json
-
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m bwiki_import \
-  import-fashion-catalog \
-  --config config/fashion_catalog_v1.json \
-  --output app/assets/wiki/fashion-catalog-v1.json
-
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m bwiki_import \
-  import-tool-assets \
-  --activity-catalog app/assets/wiki/activity-timeline-v1.json \
-  --fashion-catalog app/assets/wiki/fashion-catalog-v1.json \
-  --config config/wiki_tool_assets_v1.json \
-  --output app/assets/wiki/tools \
-  --cache /path/outside-the-repository/wiki-tool-image-cache
-```
-
-The import commands refuse to replace a different existing contract or version. Ordinary tests and App runtime never invoke them or access the Wiki.
-
-Normalize reviewed virtual-device captures to store-ready RGB PNGs without an alpha channel:
-
-```bash
-swift tools/brand/normalize_store_screenshots.swift \
-  --crop-top 137 /path/to/android-screenshot.png
-
-swift tools/brand/normalize_store_screenshots.swift \
-  /path/to/ios-screenshot.png
-```
-
-The optional `--crop-top` value removes a measured system status bar before conversion. The tool accepts one or more paths and atomically replaces only those files; it does not add frames, captions, or resize App content.
-
-## Flutter App
-
-Run the current offline client checks:
+安装 Flutter 环境后进入客户端目录：
 
 ```bash
 cd app
 flutter pub get
 flutter analyze
 flutter test
+flutter run
 ```
 
-Launch on an available iOS or Android simulator with `flutter run`. The production client has no runtime BWIKI or image-CDN dependency. Its `dart:io` network boundary is limited to the fixed GitHub Releases Catalog channel; canonical source names and descriptions may retain their upstream language, while controlled `zh-CN` App copy follows the frozen terminology contract and every other locale falls back to `en-US`.
+App 会从 `app/assets/catalog/` 安装内置图鉴。普通浏览不需要网络；只有设置页中由用户主动确认的图鉴更新会连接固定的 GitHub Releases 地址。
 
-Favorites and notes are stored only in the private `user.db` on the device. They are not included in the replaceable Catalog database and are not synchronized to an account or cloud service.
+## 本地验证
 
-Catalog replacement runs during startup, explicit Settings recovery, or an explicitly confirmed Settings update. The App never checks or downloads in the background. A remote candidate must pass signed-manifest, exact-host and redirect, byte-length, hash, archive, metadata, schema-object, integrity, foreign-key, and probe-query checks before its pointer is activated; failed updates retain the previous validated Catalog and personal database.
+从仓库根目录运行数据与项目契约测试：
 
-## Release candidate validation
+```bash
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m unittest discover -s tests -p 'test_*.py'
+```
 
-Validate the immutable Catalog release from the repository root:
+验证不可变 Catalog 发布内容：
 
 ```bash
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 tools/release/check_catalog.py \
   --release data/release/1
 ```
 
-The tracked candidate record, release notes, and known limitations are in `release/1.0.0+1/`. The checked-in workflow runs this gate plus the complete Python and Flutter suites without contacting BWIKI or any application store.
-
-Local Android and iOS candidate build commands are:
+验证 Flutter 客户端：
 
 ```bash
 cd app
-flutter build appbundle --release
-flutter build ios --release --no-codesign
+dart format --output=none --set-exit-if-changed lib test integration_test test_driver tool
+flutter analyze --no-pub
+flutter test --no-pub
 ```
 
-These commands intentionally do not produce a signed, exported, or store-ready submission. Signing and publication require separate credentials, platform checks, and explicit authorization.
+## 当前状态与验收边界
 
-## Local verification
+- 阶段 0—6 已完成；阶段 6 根据明确决策跳过真机测试，因此真机结果仍记录为未运行。
+- 阶段 7 已实现完整图鉴包构建、签名、GitHub Releases 传输、前台下载和安全安装；由于尚无真实的新版本 Catalog，V1 到新版本的实际增量场景暂时推迟。
+- 阶段 8 已完成正式 App 身份、中英文界面、离线图片与字体、图鉴与详情页重构、筛选、异色切换和七个工具入口；应用商店截图需要在最终视觉确定后重新生成。
+- Android 模拟器已验证飞行模式首次启动、个人数据持久化、旧指针迁移和恢复流程。
+- iOS 模拟器已验证构建、首次启动、数据库创建与复用、旧指针迁移以及当前主要界面流程。
+- 真机离线测试、正式签名、商店账户配置、上传、审核和发布均未完成，README 不将这些环节描述为已通过。
 
-Run from the repository root:
+## 相关文档
 
-```bash
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m unittest discover -s tests -p 'test_*.py'
-```
-
-The default tests do not use the network, read personal credentials, or change system networking. Physical-device, signing, store, and App release verification are recorded separately in their owning phases.
+- [技术规格基线](docs/technical-spec-v1.md)：项目范围、数据契约和阶段验收基础。
+- [离线图鉴功能](docs/features/offline-catalog-browser.md)：搜索、筛选、详情和工具页行为。
+- [个人数据](docs/features/personal-library.md)：收藏、收集标记、笔记和数据库隔离。
+- [图鉴更新与恢复](docs/features/catalog-update-and-recovery.md)：安装、指针切换、回滚与清理边界。
+- [独立图鉴更新](docs/features/independent-catalog-updates.md)：签名清单、GitHub Releases 和前台更新流程。
+- [视觉与本地化](docs/features/localized-visual-handbook.md)：中文术语、图片、字体和页面呈现。
+- [Phase 8 实施报告](docs/implementation-reports/phase-8.md)：当前 UI、资源、验证结果和剩余风险。

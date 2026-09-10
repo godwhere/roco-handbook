@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/tool_catalogs.dart';
 import '../../l10n/app_strings.dart';
+import '../../theme/catalog_theme.dart';
 import '../../widgets/catalog_asset_image.dart';
 
 class ActivityTimelinePage extends StatefulWidget {
@@ -183,8 +184,10 @@ class _ActivityTimelineCard extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         '${_sourceTime(anchor).day}',
-                        style: Theme.of(context).textTheme.titleLarge
-                            ?.copyWith(fontWeight: FontWeight.w900),
+                        style: CatalogTypography.numbers(
+                          Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(fontWeight: FontWeight.w900),
+                        ),
                       ),
                       Text(
                         context.tr('day'),

@@ -7,6 +7,7 @@ import '../../domain/user_repository.dart';
 import '../pets/pet_detail_page.dart';
 import '../personal/personal_controls.dart';
 import '../../l10n/app_strings.dart';
+import '../../theme/catalog_theme.dart';
 import '../../widgets/catalog_asset_image.dart';
 
 class SkillDetailPage extends StatefulWidget {
@@ -126,6 +127,7 @@ class _SkillDetailPageState extends State<SkillDetailPage> {
                           data.detail.summary.energyValue,
                           data.detail.summary.energyText,
                         ),
+                        numeric: true,
                       ),
                       _Fact(
                         label: 'Power',
@@ -133,6 +135,7 @@ class _SkillDetailPageState extends State<SkillDetailPage> {
                           data.detail.summary.powerValue,
                           data.detail.summary.powerText,
                         ),
+                        numeric: true,
                       ),
                       _Fact(label: 'Target', value: data.detail.targetText),
                     ],
@@ -396,10 +399,11 @@ class _Section extends StatelessWidget {
 }
 
 class _Fact extends StatelessWidget {
-  const _Fact({required this.label, this.value});
+  const _Fact({required this.label, this.value, this.numeric = false});
 
   final String label;
   final String? value;
+  final bool numeric;
 
   @override
   Widget build(BuildContext context) {
@@ -413,7 +417,14 @@ class _Fact extends StatelessWidget {
             style: Theme.of(context).textTheme.labelMedium,
           ),
           const SizedBox(height: 2),
-          Text(value ?? context.tr('Not provided')),
+          Text(
+            value ?? context.tr('Not provided'),
+            style: numeric
+                ? CatalogTypography.numbers(
+                    Theme.of(context).textTheme.bodyMedium,
+                  )
+                : null,
+          ),
         ],
       ),
     );

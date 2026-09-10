@@ -7,6 +7,7 @@ import '../../domain/user_models.dart';
 import '../../domain/user_repository.dart';
 import '../../data/catalog/asset_type_relation_repository.dart';
 import '../../l10n/app_strings.dart';
+import '../../theme/catalog_theme.dart';
 import '../../widgets/catalog_asset_image.dart';
 import '../personal/personal_controls.dart';
 import '../skills/skill_detail_page.dart';
@@ -914,8 +915,10 @@ class _SkillMetric extends StatelessWidget {
               displayedValue,
               key: valueKey,
               maxLines: 1,
-              style: Theme.of(context).textTheme.titleSmall
-                  ?.copyWith(fontWeight: FontWeight.w700),
+              style: CatalogTypography.numbers(
+                Theme.of(context).textTheme.titleSmall
+                    ?.copyWith(fontWeight: FontWeight.w700),
+              ),
             ),
         ],
       ),
@@ -1116,7 +1119,9 @@ class _Header extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               '#${summary.dexNo}',
-              style: Theme.of(context).textTheme.labelLarge,
+              style: CatalogTypography.numbers(
+                Theme.of(context).textTheme.labelLarge,
+              ),
             ),
             const SizedBox(height: 4),
             Row(
@@ -1345,7 +1350,9 @@ class _Stats extends StatelessWidget {
               Expanded(child: Text(context.tr('Total base stats'))),
               Text(
                 detail.totalBaseStats?.toString() ?? context.tr('Unknown'),
-                style: Theme.of(context).textTheme.titleLarge,
+                style: CatalogTypography.numbers(
+                  Theme.of(context).textTheme.titleLarge,
+                ),
               ),
             ],
           ),
@@ -1447,8 +1454,10 @@ class _StatBar extends StatelessWidget {
           child: Text(
             value?.toString() ?? context.tr('Unknown'),
             textAlign: TextAlign.end,
-            style: Theme.of(context).textTheme.titleMedium
-                ?.copyWith(fontWeight: FontWeight.w700),
+            style: CatalogTypography.numbers(
+              Theme.of(context).textTheme.titleMedium
+                  ?.copyWith(fontWeight: FontWeight.w700),
+            ),
           ),
         ),
       ],
@@ -1711,7 +1720,12 @@ class _EvolutionList extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               title: Text(node.name),
-              subtitle: Text('#${node.dexNo}'),
+              subtitle: Text(
+                '#${node.dexNo}',
+                style: CatalogTypography.numbers(
+                  Theme.of(context).textTheme.bodyMedium,
+                ),
+              ),
               trailing: node.petId == currentPetId
                   ? null
                   : const Icon(Icons.chevron_right_rounded),

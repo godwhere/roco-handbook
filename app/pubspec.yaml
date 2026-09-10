@@ -45,3 +45,11 @@ flutter:
     - assets/wiki/v2/ui/sources/
     - assets/wiki/v2/ui/stats/
     - assets/wiki/v2/ui/types/
+    - assets/fonts/v1/font-manifest.json
+  fonts:
+    - family: RocoDisplay
+      fonts:
+        - asset: assets/fonts/v1/roco-display.ttf
+    - family: RocoNumbers
+      fonts:
+        - asset: assets/fonts/v1/roco-numbers.ttf

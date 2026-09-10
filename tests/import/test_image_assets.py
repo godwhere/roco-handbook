@@ -297,7 +297,7 @@ class ImageAssetTests(unittest.TestCase):
             ),
         )
 
-        display_name = "\u6d1b\u514b\u738b\u56fd\uff1a\u4e16\u754c\u56fe\u9274"
+        display_name = "\u6d1b\u514b\u624b\u518c"
         self.assertIn(
             display_name,
             (ROOT / "app/ios/Runner/Info.plist").read_text(encoding="utf-8"),

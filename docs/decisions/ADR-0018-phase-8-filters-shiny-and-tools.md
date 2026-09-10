@@ -26,7 +26,7 @@ No suffix, list-order, or name-only inference is introduced. S4 remains a valid 
 
 Shiny-capable records receive an Original/Shiny control in the creature detail header. Image asset version 2 adds one deduplicated full-body shiny file for each source illustration key whose active record has `has_shiny = 1`. The App resolves those files only from its bundled assets. Catalog creature names with a shiny form use the season color family observed in the Wiki season archive; records without a stored season use the App primary color.
 
-The third bottom destination becomes Tools. Its vertical card layout exposes Season archive, Feature handbook, Egg groups, Game descriptions, Event timeline, Outfit inspiration, and the existing Personal library. All seven routes are functional without a runtime Wiki request.
+The third bottom destination becomes Tools. Its compact vertical cards expose Season archive, Feature handbook, Egg groups, Game descriptions, Event timeline, Outfit inspiration, and the existing Personal library. Cards place the functional title at the upper left and do not render a numbered tool-category overline. Egg groups combines normal creature-name text input with a multi-select sheet over preserved numeric group identifiers; an empty selection includes every stored group, and multiple selections use OR semantics. All seven routes are functional without a runtime Wiki request.
 
 Game descriptions freeze `Module:Pets/data/Terms` revision 7078, retain the reviewed six-category mapping, and resolve related skills and features through distinct Catalog note relationships. Activity timeline freezes all 547 records from `Module:Activities/data/Catalog` revision 10044, preserves each complete source record, normalizes its UTC+8 window, and provides month, category, current-status, and detail views. Outfit inspiration freezes all 110 groups and 220 gender variants from `Module:Fashions/data/Catalog` revision 12224, preserves each complete source record, and provides search, grade, gender, acquisition, and detail views.
 
@@ -48,6 +48,6 @@ The skill search field explicitly requests normal text input and disables autoco
 
 - Repository tests prove combined shiny, stage, form, season, type, and egg-group predicates against the real bundled Catalog.
 - Import tests prove the complete 54-description, 547-activity, 110-outfit, and 220-variant source contracts, executable-Lua rejection, exact source identities, and tool-media reference closure.
-- Widget tests prove the grouped filter controls, shiny-art switch, all seven Tools routes, game-description relationships, activity filtering, outfit variants, and normal skill text-input contract.
+- Widget tests prove the grouped filter controls, shiny-art switch, compact unnumbered Tool cards, searchable and filterable Egg groups, all seven Tools routes, game-description relationships, activity filtering, outfit variants, and normal text-input contracts.
 - Image tests prove complete source derivation, frozen-manifest integrity, and Flutter packaging for original, shiny, activity, and outfit images.
 - Simulator review compares the implemented filter, shiny detail, Game descriptions, Event timeline, Outfit inspiration, and Tools screens with the supplied references and captured Wiki pages.

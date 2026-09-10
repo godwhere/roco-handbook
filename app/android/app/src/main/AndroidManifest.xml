@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="洛克王国：世界图鉴"
+        android:label="洛克手册"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

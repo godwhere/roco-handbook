@@ -43,7 +43,7 @@ Description-note identifiers remain stored in the Catalog. When their definition
 
 ## Tools
 
-Tools uses vertically stacked cards based on the supplied and captured Wiki navigation references. Season archive queries `belong_season_raw`, Feature handbook queries preserved feature relationships, and Egg groups queries numeric identifiers from `pets.extra_json`. Each result opens an existing concrete creature or skill detail route; no second identity or raw-field UI path is introduced.
+Tools uses compact vertically stacked cards based on the supplied and captured Wiki navigation references. Each card begins with its functional title at the upper left and omits the earlier numbered category overline. Season archive queries `belong_season_raw`, and Feature handbook queries preserved feature relationships. Egg groups combines normal text-input creature search with a multi-select sheet over the numeric identifiers in `pets.extra_json`; an empty group selection means every stored group, selected groups use OR semantics, and results open the matching concrete creature directly. No second identity or raw-field UI path is introduced.
 
 Personal library remains available as a Tools card. Game descriptions reads a separate bundled 54-term contract and joins each term to distinct Catalog skill or feature relationships. Event timeline reads 547 bundled activity occurrences, filters them by source category and selected month, derives Active, Upcoming, Ended, or Undated against the device clock, and opens preserved summaries and descriptions. Outfit inspiration reads 110 bundled outfits and 220 gender variants, supports text and grade filtering, switches the preview gender, and displays acquisition details.
 

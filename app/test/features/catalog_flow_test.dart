@@ -520,6 +520,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    expect(find.text('\u6d1b\u514b\u624b\u518c'), findsOneWidget);
     expect(find.text('\u7cbe\u7075'), findsOneWidget);
     expect(find.text('\u6280\u80fd'), findsOneWidget);
     expect(find.text('\u5de5\u5177'), findsOneWidget);
@@ -839,6 +840,15 @@ void main() {
       find.byKey(const ValueKey('tool-card-season-archive')),
       findsOneWidget,
     );
+    expect(find.textContaining('\u56fe\u9274\u5de5\u5177'), findsNothing);
+    final seasonCardBounds = tester.getRect(
+      find.byKey(const ValueKey('tool-card-season-archive')),
+    );
+    final seasonTitleBounds = tester.getRect(
+      find.text('\u8d5b\u5b63\u6863\u6848'),
+    );
+    expect(seasonCardBounds.height, lessThan(130));
+    expect(seasonTitleBounds.center.dy, lessThan(seasonCardBounds.center.dy));
     expect(
       find.byKey(const ValueKey('tool-card-feature-handbook')),
       findsOneWidget,
@@ -861,7 +871,36 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('tool-card-egg-groups')));
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('egg-groups-list')), findsOneWidget);
-    expect(find.byKey(const ValueKey('egg-group-1')), findsOneWidget);
+    expect(find.byKey(const ValueKey('egg-group-filters')), findsOneWidget);
+    final eggGroupSearch = tester.widget<TextField>(
+      find.byKey(const ValueKey('egg-group-search')),
+    );
+    expect(eggGroupSearch.keyboardType, TextInputType.text);
+    expect(eggGroupSearch.autocorrect, isFalse);
+    await tester.enterText(
+      find.byKey(const ValueKey('egg-group-search')),
+      '\u8fea\u83ab',
+    );
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.pumpAndSettle();
+    expect(
+      find.byKey(const ValueKey('egg-group-pet-pet_000004')),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.byKey(const ValueKey('egg-group-filters')));
+    await tester.pumpAndSettle();
+    expect(
+      find.byKey(const ValueKey('egg-group-filter-sheet')),
+      findsOneWidget,
+    );
+    await tester.tap(find.byKey(const ValueKey('egg-group-filter-3')));
+    await tester.tap(find.byKey(const ValueKey('egg-group-filters-apply')));
+    await tester.pumpAndSettle();
+    expect(
+      find.text('\u6ca1\u6709\u7b26\u5408\u6761\u4ef6\u7684\u7cbe\u7075\u3002'),
+      findsOneWidget,
+    );
     Navigator.of(tester.element(find.text('\u5b75\u86cb\u7ec4\u522b'))).pop();
     await tester.pumpAndSettle();
 

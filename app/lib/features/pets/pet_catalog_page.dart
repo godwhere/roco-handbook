@@ -7,6 +7,7 @@ import '../../domain/catalog_repository.dart';
 import '../../domain/user_repository.dart';
 import 'pet_detail_page.dart';
 import '../../l10n/app_strings.dart';
+import '../../theme/catalog_theme.dart';
 import '../../widgets/catalog_asset_image.dart';
 
 class PetCatalogPage extends StatefulWidget {
@@ -686,12 +687,13 @@ class _PetResultCard extends StatelessWidget {
                         Text(
                           'NO.${pet.dexNo}',
                           key: ValueKey('pet-dex-${pet.petId}'),
-                          style: Theme.of(context).textTheme.labelMedium
-                              ?.copyWith(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
-                              ),
+                          style: CatalogTypography.numbers(
+                            Theme.of(context).textTheme.labelMedium?.copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                            ),
+                          ),
                         ),
                       ],
                     ),

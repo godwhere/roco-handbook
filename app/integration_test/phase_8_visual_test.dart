@@ -25,6 +25,20 @@ void main() {
     await tester.pumpAndSettle();
     await binding.takeScreenshot('phase8-tools');
 
+    await tester.tap(find.byKey(const ValueKey('tool-card-egg-groups')));
+    await tester.pumpAndSettle();
+    await binding.takeScreenshot('phase8-egg-groups');
+    await tester.tap(find.byKey(const ValueKey('egg-group-filters')));
+    await tester.pumpAndSettle();
+    await binding.takeScreenshot('phase8-egg-group-filters');
+    Navigator.of(
+      tester.element(find.byKey(const ValueKey('egg-group-filter-sheet'))),
+    ).pop();
+    await tester.pumpAndSettle();
+    Navigator.of(tester.element(find.byKey(const ValueKey('egg-groups-list'))))
+        .pop();
+    await tester.pumpAndSettle();
+
     await tester.drag(
       find.byKey(const ValueKey('tools-page')),
       const Offset(0, -420),
