@@ -1,0 +1,22 @@
+{
+  "config_version": 1,
+  "catalog_kind": "activity",
+  "dataset_id": "roco-world-zh-cn",
+  "api_endpoint": "https://wiki.biligame.com/nrc/api.php",
+  "source_title": "Module:Activities/data/Catalog",
+  "source_page_id": 8501,
+  "source_url_prefix": "https://wiki.biligame.com/nrc/index.php?title=Module%3AActivities%2Fdata%2FCatalog&oldid=",
+  "expected_count": 547,
+  "category_order": ["gifts", "pets", "challenge", "fashion", "events"],
+  "category_labels": {
+    "gifts": "签到与福利",
+    "pets": "精灵与探索",
+    "challenge": "对战与试炼",
+    "fashion": "时装与摄影",
+    "events": "节庆与日常"
+  },
+  "request_policy": {
+    "timeout_seconds": 60,
+    "max_retries": 3
+  }
+}

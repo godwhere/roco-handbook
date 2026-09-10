@@ -11,7 +11,7 @@ void main() {
   ) async {
     final semantics = tester.ensureSemantics();
     try {
-      for (final path in <String?>[null, 'assets/wiki/v1/does-not-exist.png']) {
+      for (final path in <String?>[null, 'assets/wiki/v2/does-not-exist.png']) {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(

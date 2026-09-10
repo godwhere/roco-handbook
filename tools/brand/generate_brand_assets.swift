@@ -160,7 +160,7 @@ func writePNG(_ image: CGImage, to url: URL) throws {
 
 let root = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
 let source = try loadImage(
-    root.appendingPathComponent("app/assets/wiki/v1/pets/illustrations/JL_dimo.png")
+    root.appendingPathComponent("app/assets/wiki/v2/pets/illustrations/JL_dimo.png")
 )
 let icon = try makeIcon(source: source, size: 1024)
 let launch = try makeLaunchMark(source: source, size: 600)

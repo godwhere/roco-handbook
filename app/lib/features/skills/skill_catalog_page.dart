@@ -339,6 +339,9 @@ class _SkillCatalogPageState extends State<SkillCatalogPage> {
                     key: const ValueKey('skill-search'),
                     controller: _searchController,
                     onChanged: _scheduleSearch,
+                    keyboardType: TextInputType.text,
+                    textCapitalization: TextCapitalization.none,
+                    autocorrect: false,
                     textInputAction: TextInputAction.search,
                     decoration: InputDecoration(
                       hintText: context.tr('Search skills'),

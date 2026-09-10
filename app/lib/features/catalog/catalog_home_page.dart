@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../../catalog_app.dart';
 import '../../data/catalog/catalog_update_source.dart';
 import '../pets/pet_catalog_page.dart';
-import '../personal/my_library_page.dart';
 import '../settings/settings_page.dart';
 import '../skills/skill_catalog_page.dart';
+import '../tools/tools_page.dart';
 import '../../l10n/app_strings.dart';
 
 class CatalogHomePage extends StatefulWidget {
@@ -133,8 +133,8 @@ class _CatalogHomePageState extends State<CatalogHomePage> {
             userRepository: widget.session.userRepository,
             datasetId: widget.session.info.datasetId,
           ),
-          MyLibraryPage(
-            key: ValueKey('my-library-${widget.session.info.dataVersion}'),
+          ToolsPage(
+            key: ValueKey('tools-${widget.session.info.dataVersion}'),
             catalogRepository: widget.session.repository,
             userRepository: widget.session.userRepository,
             datasetId: widget.session.info.datasetId,
@@ -153,13 +153,13 @@ class _CatalogHomePageState extends State<CatalogHomePage> {
         destinations: <NavigationDestination>[
           NavigationDestination(
             icon: Image.asset(
-              'assets/wiki/v1/ui/navigation/creatures.png',
+              'assets/wiki/v2/ui/navigation/creatures.png',
               width: 28,
               height: 28,
               semanticLabel: context.tr('Creatures'),
             ),
             selectedIcon: Image.asset(
-              'assets/wiki/v1/ui/navigation/creatures.png',
+              'assets/wiki/v2/ui/navigation/creatures.png',
               width: 32,
               height: 32,
               semanticLabel: context.tr('Creatures'),
@@ -172,9 +172,9 @@ class _CatalogHomePageState extends State<CatalogHomePage> {
             label: context.tr('Skills'),
           ),
           NavigationDestination(
-            icon: const Icon(Icons.bookmark_border_rounded),
-            selectedIcon: const Icon(Icons.bookmark_rounded),
-            label: context.tr('My Library'),
+            icon: const Icon(Icons.dashboard_customize_outlined),
+            selectedIcon: const Icon(Icons.dashboard_customize_rounded),
+            label: context.tr('Tools'),
           ),
           NavigationDestination(
             icon: const Icon(Icons.settings_outlined),

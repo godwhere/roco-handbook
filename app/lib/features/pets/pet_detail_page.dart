@@ -43,6 +43,7 @@ class _PetDetailPageState extends State<PetDetailPage> {
   _PetSkillCategory _skillCategory = _PetSkillCategory.native;
   Set<String> _skillTypes = <String>{};
   Set<String> _skillElements = <String>{};
+  var _showShiny = false;
 
   @override
   void initState() {
@@ -344,6 +345,10 @@ class _PetDetailPageState extends State<PetDetailPage> {
                         detail: data.detail,
                         userRepository: widget.userRepository,
                         datasetId: widget.datasetId,
+                        showShiny: _showShiny,
+                        onShinyChanged: (value) {
+                          setState(() => _showShiny = value);
+                        },
                       ),
                       const SizedBox(height: 24),
                       _Section(
@@ -1048,11 +1053,15 @@ class _Header extends StatelessWidget {
     required this.detail,
     required this.userRepository,
     required this.datasetId,
+    required this.showShiny,
+    required this.onShinyChanged,
   });
 
   final PetDetail detail;
   final UserRepository userRepository;
   final String datasetId;
+  final bool showShiny;
+  final ValueChanged<bool> onShinyChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -1066,7 +1075,12 @@ class _Header extends StatelessWidget {
           children: <Widget>[
             Center(
               child: CatalogAssetImage(
-                assetPath: petIllustrationAsset(detail.illustrationKey),
+                key: ValueKey(
+                  'pet-detail-art-${summary.petId}-${showShiny ? 'shiny' : 'original'}',
+                ),
+                assetPath: showShiny
+                    ? petShinyIllustrationAsset(detail.illustrationKey)
+                    : petIllustrationAsset(detail.illustrationKey),
                 semanticLabel: summary.name,
                 width: 280,
                 height: 260,
@@ -1074,6 +1088,31 @@ class _Header extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
+            if (detail.hasShiny == true) ...<Widget>[
+              const SizedBox(height: 12),
+              Center(
+                child: SegmentedButton<bool>(
+                  key: const ValueKey('pet-shiny-toggle'),
+                  showSelectedIcon: false,
+                  segments: <ButtonSegment<bool>>[
+                    ButtonSegment<bool>(
+                      value: false,
+                      icon: const Icon(Icons.pets_outlined),
+                      label: Text(context.tr('Original form')),
+                    ),
+                    ButtonSegment<bool>(
+                      value: true,
+                      icon: const Icon(Icons.auto_awesome_rounded),
+                      label: Text(context.tr('Shiny form')),
+                    ),
+                  ],
+                  selected: <bool>{showShiny},
+                  onSelectionChanged: (selection) {
+                    onShinyChanged(selection.single);
+                  },
+                ),
+              ),
+            ],
             const SizedBox(height: 12),
             Text(
               '#${summary.dexNo}',
@@ -1330,25 +1369,25 @@ class _Stats extends StatelessWidget {
                   width: width,
                   label: 'Height',
                   value: detail.heightText,
-                  assetPath: 'assets/wiki/v1/ui/info/height.png',
+                  assetPath: 'assets/wiki/v2/ui/info/height.png',
                 ),
                 _StatFactPill(
                   width: width,
                   label: 'Weight',
                   value: detail.weightText,
-                  assetPath: 'assets/wiki/v1/ui/info/weight.png',
+                  assetPath: 'assets/wiki/v2/ui/info/weight.png',
                 ),
                 _StatFactPill(
                   width: width,
                   label: 'Review gold',
                   value: detail.reviewGold?.toString(),
-                  assetPath: 'assets/wiki/v1/ui/info/review-gold.png',
+                  assetPath: 'assets/wiki/v2/ui/info/review-gold.png',
                 ),
                 _StatFactPill(
                   width: width,
                   label: 'Starlight',
                   value: detail.starlight?.toString(),
-                  assetPath: 'assets/wiki/v1/ui/info/starlight.png',
+                  assetPath: 'assets/wiki/v2/ui/info/starlight.png',
                 ),
               ],
             );
@@ -1473,7 +1512,7 @@ String? _statIconAsset(String key) {
     'Speed': 'speed',
   };
   final file = files[key];
-  return file == null ? null : 'assets/wiki/v1/ui/stats/$file.png';
+  return file == null ? null : 'assets/wiki/v2/ui/stats/$file.png';
 }
 
 class _TypeRelationships extends StatelessWidget {

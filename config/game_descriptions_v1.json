@@ -1,0 +1,39 @@
+{
+  "config_version": 1,
+  "dataset_id": "roco-world-zh-cn",
+  "api_endpoint": "https://wiki.biligame.com/nrc/api.php",
+  "source_title": "Module:Pets/data/Terms",
+  "source_page_id": 6401,
+  "source_url_prefix": "https://wiki.biligame.com/nrc/index.php?title=Module%3APets%2Fdata%2FTerms&oldid=",
+  "category_order": ["status", "mark", "weather", "action", "rule", "other"],
+  "category_labels": {
+    "status": "状态",
+    "mark": "印记",
+    "weather": "天气",
+    "action": "战斗动作",
+    "rule": "战斗规则",
+    "other": "其他"
+  },
+  "category_terms": {
+    "status": [
+      "中毒", "灼烧", "冻结", "萌化", "寄生", "增益", "减益", "中毒效果",
+      "属性增益", "属性减益", "引电", "禁足", "木桶状态", "月陨星状态"
+    ],
+    "mark": [
+      "中毒印记", "攻击印记", "棘刺印记", "光合印记", "湿润印记", "蓄电印记",
+      "风起印记", "降灵印记", "蓄势印记", "龙噬印记", "减速印记", "星陨印记",
+      "印记", "萌芽印记", "暗涌印记"
+    ],
+    "weather": ["沙暴", "暴风雪", "雨天", "雷鸣"],
+    "action": [
+      "脱离", "蓄力", "打断", "应对状态", "应对攻击", "应对防御", "返场",
+      "紧急脱离", "吸血", "离场", "选择"
+    ],
+    "rule": ["迅捷", "奉献", "先手", "传动", "连击数", "巧变", "附加中毒"],
+    "other": ["迸发", "混血精灵", "透射"]
+  },
+  "request_policy": {
+    "timeout_seconds": 60,
+    "max_retries": 3
+  }
+}

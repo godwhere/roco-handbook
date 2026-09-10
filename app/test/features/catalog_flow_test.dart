@@ -20,6 +20,7 @@ import 'package:roco_handbook/features/catalog/catalog_home_page.dart';
 import 'package:roco_handbook/features/personal/my_library_page.dart';
 import 'package:roco_handbook/features/personal/personal_controls.dart';
 import 'package:roco_handbook/features/pets/pet_catalog_page.dart';
+import 'package:roco_handbook/features/pets/pet_detail_page.dart';
 import 'package:roco_handbook/l10n/app_strings.dart';
 import 'package:roco_handbook/widgets/catalog_asset_image.dart';
 
@@ -253,9 +254,9 @@ void main() {
         closeTo(tester.getRect(nativeSkillCard).center.dy, 0.1),
       );
       const categoryAssets = <String, String>{
-        'native': 'assets/wiki/v1/ui/sources/bloodline.png',
-        'blood': 'assets/wiki/v1/ui/sources/bloodline.png',
-        'stone': 'assets/wiki/v1/ui/sources/skill-stone.png',
+        'native': 'assets/wiki/v2/ui/sources/bloodline.png',
+        'blood': 'assets/wiki/v2/ui/sources/bloodline.png',
+        'stone': 'assets/wiki/v2/ui/sources/skill-stone.png',
       };
       for (final category in categoryAssets.keys) {
         final categoryButton = find.byKey(
@@ -364,6 +365,9 @@ void main() {
       );
       expect(search.decoration?.labelText, isNull);
       expect(search.decoration?.hintText, '\u6280\u80fd\u67e5\u8be2');
+      expect(search.keyboardType, TextInputType.text);
+      expect(search.autocorrect, isFalse);
+      expect(search.readOnly, isFalse);
       final handbookRect = tester.getRect(
         find.byKey(const ValueKey('skill-handbook')),
       );
@@ -409,7 +413,7 @@ void main() {
       final elementIcon = tester.widget<CatalogAssetImage>(
         find.byKey(const ValueKey('skill-result-element-skill_000654')),
       );
-      expect(elementIcon.assetPath, 'assets/wiki/v1/ui/types/martial.png');
+      expect(elementIcon.assetPath, 'assets/wiki/v2/ui/types/martial.png');
       expect(
         find.descendant(
           of: onePunch,
@@ -485,7 +489,7 @@ void main() {
     ).pop();
     await tester.pumpAndSettle();
     expect(find.text('Skills'), findsOneWidget);
-    expect(find.text('My Library'), findsOneWidget);
+    expect(find.text('Tools'), findsOneWidget);
     expect(find.text('Settings'), findsOneWidget);
     await tester.tap(find.text('Settings'));
     await tester.pumpAndSettle();
@@ -518,7 +522,7 @@ void main() {
 
     expect(find.text('\u7cbe\u7075'), findsOneWidget);
     expect(find.text('\u6280\u80fd'), findsOneWidget);
-    expect(find.text('\u6211\u7684\u6536\u85cf'), findsOneWidget);
+    expect(find.text('\u5de5\u5177'), findsOneWidget);
     expect(find.byType(CatalogAssetImage), findsWidgets);
 
     final first = (await repository.searchHandbooks(const PetQuery(limit: 1)))
@@ -599,7 +603,7 @@ void main() {
     final dimoType = tester.widget<CatalogAssetImage>(
       find.byKey(const ValueKey('pet-type-pet_000004-\u5149\u7cfb')),
     );
-    expect(dimoType.assetPath, 'assets/wiki/v1/ui/types/light.png');
+    expect(dimoType.assetPath, 'assets/wiki/v2/ui/types/light.png');
     final namedForm = tester.widget<Text>(
       find.byKey(const ValueKey('pet-form-pet_000560')),
     );
@@ -629,7 +633,7 @@ void main() {
 
     final searchRect = tester.getRect(find.byKey(const ValueKey('pet-search')));
     final sortRect = tester.getRect(find.byKey(const ValueKey('pet-sort')));
-    final typesRect = tester.getRect(find.byKey(const ValueKey('pet-types')));
+    final typesRect = tester.getRect(find.byKey(const ValueKey('pet-filters')));
     expect(searchRect.center.dy, closeTo(sortRect.center.dy, 0.1));
     expect(sortRect.center.dy, closeTo(typesRect.center.dy, 0.1));
     expect(searchRect.width, greaterThan(sortRect.width * 1.8));
@@ -651,7 +655,7 @@ void main() {
     );
     expect(
       dimoImage.assetPath,
-      'assets/wiki/v1/pets/illustrations/JL_dimo.png',
+      'assets/wiki/v2/pets/illustrations/JL_dimo.png',
     );
     expect(dimoImage.width, 100);
     expect(dimoImage.height, 100);
@@ -664,9 +668,14 @@ void main() {
     await tester.tap(find.text('\u5e94\u7528'));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const ValueKey('pet-types')));
+    await tester.tap(find.byKey(const ValueKey('pet-filters')));
     await tester.pumpAndSettle();
-    expect(find.byType(FilterChip), findsNWidgets(18));
+    expect(find.byKey(const ValueKey('pet-filter-sheet')), findsOneWidget);
+    expect(find.byType(FilterChip), findsNWidgets(28));
+    expect(
+      find.byKey(const ValueKey('pet-shiny-filter-hasShiny')),
+      findsOneWidget,
+    );
   });
 
   testWidgets('creature form subtitles stay complete on one adaptive line', (
@@ -722,6 +731,217 @@ void main() {
     );
   });
 
+  testWidgets('combines shiny, stage, form, and season creature filters', (
+    tester,
+  ) async {
+    await _setPhoneSurface(tester);
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('zh', 'CN'),
+        supportedLocales: AppStrings.supportedLocales,
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        home: Scaffold(
+          body: PetCatalogPage(
+            repository: repository,
+            userRepository: userRepository,
+            datasetId: session.info.datasetId,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey('pet-filters')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('pet-shiny-filter-hasShiny')));
+    await tester.tap(find.byKey(const ValueKey('pet-stage-filter-1')));
+    await tester.tap(find.byKey(const ValueKey('pet-form-filter-main')));
+    await tester.tap(find.byKey(const ValueKey('pet-season-filter-3')));
+    await tester.tap(find.text('\u5e94\u7528'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('\u7b5b\u9009 (4)'), findsOneWidget);
+    expect(find.byKey(const ValueKey('pet-result-pet_000040')), findsOneWidget);
+    expect(find.byKey(const ValueKey('pet-result-pet_000004')), findsNothing);
+    final shinyName = tester.widget<Text>(find.text('\u4f0a\u8d1d\u513f'));
+    expect(shinyName.style?.color, const Color(0xFF2F7C6C));
+  });
+
+  testWidgets('switches a source-backed shiny creature illustration', (
+    tester,
+  ) async {
+    await _setPhoneSurface(tester);
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('zh', 'CN'),
+        supportedLocales: AppStrings.supportedLocales,
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        home: PetDetailPage(
+          repository: repository,
+          userRepository: userRepository,
+          datasetId: session.info.datasetId,
+          initialPetId: 'pet_000009',
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final original = tester.widget<CatalogAssetImage>(
+      find.byKey(const ValueKey('pet-detail-art-pet_000009-original')),
+    );
+    expect(
+      original.assetPath,
+      'assets/wiki/v2/pets/illustrations/JL_emoding.png',
+    );
+
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const ValueKey('pet-shiny-toggle')),
+        matching: find.text('\u5f02\u8272\u5f62\u6001'),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final shiny = tester.widget<CatalogAssetImage>(
+      find.byKey(const ValueKey('pet-detail-art-pet_000009-shiny')),
+    );
+    expect(shiny.assetPath, 'assets/wiki/v2/pets/shiny/JL_emoding_yise.png');
+  });
+
+  testWidgets('opens every source-backed offline tool', (tester) async {
+    await _setPhoneSurface(tester);
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('zh', 'CN'),
+        supportedLocales: AppStrings.supportedLocales,
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        home: CatalogHomePage(session: session),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('\u5de5\u5177'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('tools-page')), findsOneWidget);
+    expect(find.text('\u6570\u636e\u5f85\u8865'), findsNothing);
+    expect(
+      find.byKey(const ValueKey('tool-card-season-archive')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('tool-card-feature-handbook')),
+      findsOneWidget,
+    );
+    expect(find.byKey(const ValueKey('tool-card-egg-groups')), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('tool-card-season-archive')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('season-archive-s1')), findsOneWidget);
+    expect(find.byKey(const ValueKey('season-archive-s4')), findsOneWidget);
+    Navigator.of(tester.element(find.text('\u8d5b\u5b63\u6863\u6848'))).pop();
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey('tool-card-feature-handbook')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('feature-handbook-list')), findsOneWidget);
+    Navigator.of(tester.element(find.text('\u7279\u6027\u56fe\u9274'))).pop();
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey('tool-card-egg-groups')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('egg-groups-list')), findsOneWidget);
+    expect(find.byKey(const ValueKey('egg-group-1')), findsOneWidget);
+    Navigator.of(tester.element(find.text('\u5b75\u86cb\u7ec4\u522b'))).pop();
+    await tester.pumpAndSettle();
+
+    await tester.drag(
+      find.byKey(const ValueKey('tools-page')),
+      const Offset(0, -320),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('tool-card-game-descriptions')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('game-description-list')), findsOneWidget);
+    expect(find.text('54 \u6761\u63cf\u8ff0'), findsOneWidget);
+    await tester.enterText(
+      find.byKey(const ValueKey('game-description-search')),
+      '\u4e2d\u6bd2',
+    );
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('game-description-1001')), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('game-description-1001')));
+    await tester.pumpAndSettle();
+    expect(
+      find.byKey(const ValueKey('game-description-detail-1001')),
+      findsOneWidget,
+    );
+    expect(find.text('\u5173\u8054\u7279\u6027 (10)'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('\u5173\u8054\u6280\u80fd (10)'),
+      400,
+      scrollable: find.byType(Scrollable).last,
+    );
+    expect(find.text('\u5173\u8054\u6280\u80fd (10)'), findsOneWidget);
+    Navigator.of(
+      tester.element(
+        find.byKey(const ValueKey('game-description-detail-1001')),
+      ),
+    ).pop();
+    await tester.pumpAndSettle();
+    Navigator.of(
+      tester.element(find.byKey(const ValueKey('game-description-list'))),
+    ).pop();
+    await tester.pumpAndSettle();
+
+    await tester.drag(
+      find.byKey(const ValueKey('tools-page')),
+      const Offset(0, -420),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('tool-card-event-timeline')));
+    await tester.pump();
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 250)),
+    );
+    await tester.pump();
+    expect(
+      find.byKey(const ValueKey('activity-timeline-list')),
+      findsOneWidget,
+    );
+    Navigator.of(
+      tester.element(find.byKey(const ValueKey('activity-timeline-page'))),
+    ).pop();
+    await tester.pumpAndSettle();
+
+    await tester.tap(
+      find.byKey(const ValueKey('tool-card-outfit-inspiration')),
+    );
+    await tester.pump();
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 150)),
+    );
+    await tester.pump();
+    expect(find.byKey(const ValueKey('outfit-grid')), findsOneWidget);
+    expect(find.text('110 \u5957\u65f6\u88c5'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('outfit-fashion_000001')));
+    await tester.pumpAndSettle();
+    expect(
+      find.byKey(const ValueKey('outfit-detail-fashion_000001')),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('localizes every top-level section and Catalog information', (
     tester,
   ) async {
@@ -764,10 +984,11 @@ void main() {
     expect(skillSearch.decoration?.hintText, '\u6280\u80fd\u67e5\u8be2');
     expect(find.text('\u6280\u80fd\u56fe\u9274'), findsOneWidget);
 
-    await tester.tap(find.text('\u6211\u7684\u6536\u85cf').last);
+    await tester.tap(find.text('\u5de5\u5177').last);
     await tester.pumpAndSettle();
-    expect(find.text('\u6536\u85cf'), findsOneWidget);
-    expect(find.text('\u5df2\u6536\u96c6'), findsOneWidget);
+    expect(find.text('\u8d5b\u5b63\u6863\u6848'), findsOneWidget);
+    expect(find.text('\u7279\u6027\u56fe\u9274'), findsOneWidget);
+    expect(find.text('\u5b75\u86cb\u7ec4\u522b'), findsOneWidget);
 
     await tester.tap(find.text('\u8bbe\u7f6e').last);
     await tester.pumpAndSettle();
@@ -822,44 +1043,57 @@ void main() {
     expect(find.text('Stale result'), findsNothing);
   });
 
-  testWidgets('favorites a concrete creature and shows it in My Library', (
-    tester,
-  ) async {
-    await _setPhoneSurface(tester);
-    await tester.pumpWidget(
-      MaterialApp(home: CatalogHomePage(session: session)),
-    );
-    await tester.pumpAndSettle();
+  testWidgets(
+    'favorites a concrete creature and shows it in the Tools library',
+    (tester) async {
+      await _setPhoneSurface(tester);
+      await tester.pumpWidget(
+        MaterialApp(home: CatalogHomePage(session: session)),
+      );
+      await tester.pumpAndSettle();
 
-    expect(find.byKey(const ValueKey('favorite-pet_000004')), findsNothing);
-    await tester.tap(find.byKey(const ValueKey('pet-result-pet_000004')));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey('favorite-pet_000004')));
-    await tester.pumpAndSettle();
-    expect(
-      await userRepository.isFavorite(
-        const ObjectRef(
-          datasetId: 'roco-world-zh-cn',
-          objectType: UserObjectType.pet,
-          objectId: 'pet_000004',
-          nameSnapshot: '迪莫',
+      expect(find.byKey(const ValueKey('favorite-pet_000004')), findsNothing);
+      await tester.tap(find.byKey(const ValueKey('pet-result-pet_000004')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('favorite-pet_000004')));
+      await tester.pumpAndSettle();
+      expect(
+        await userRepository.isFavorite(
+          const ObjectRef(
+            datasetId: 'roco-world-zh-cn',
+            objectType: UserObjectType.pet,
+            objectId: 'pet_000004',
+            nameSnapshot: '迪莫',
+          ),
         ),
-      ),
-      isTrue,
-    );
+        isTrue,
+      );
 
-    Navigator.of(
-      tester.element(find.byKey(const ValueKey('pet-detail-pet_000004'))),
-    ).pop();
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('My Library'));
-    await tester.pumpAndSettle();
-    expect(find.byKey(const ValueKey('saved-pet:pet_000004')), findsOneWidget);
-    expect(
-      (await userRepository.listFavorites()).single.object.nameSnapshot,
-      '迪莫',
-    );
-  });
+      Navigator.of(
+        tester.element(find.byKey(const ValueKey('pet-detail-pet_000004'))),
+      ).pop();
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Tools'));
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        find.byKey(const ValueKey('tool-card-personal-library')),
+        300,
+        scrollable: find.byType(Scrollable).last,
+      );
+      await tester.tap(
+        find.byKey(const ValueKey('tool-card-personal-library')),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('saved-pet:pet_000004')),
+        findsOneWidget,
+      );
+      expect(
+        (await userRepository.listFavorites()).single.object.nameSnapshot,
+        '迪莫',
+      );
+    },
+  );
 
   testWidgets('saves a handbook collection mark and a creature note', (
     tester,

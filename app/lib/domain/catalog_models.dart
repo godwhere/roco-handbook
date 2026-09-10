@@ -1,11 +1,20 @@
 enum PetSort { handbook, name, attack, magicAttack, speed }
 
+enum PetShinyFilter { any, hasShiny, noShiny }
+
+enum PetFormFilter { main, regional, lord }
+
 enum SkillFilter { all, features, learnable }
 
 class PetQuery {
   const PetQuery({
     this.keyword = '',
     this.typeIds = const <String>[],
+    this.stages = const <int>[],
+    this.forms = const <PetFormFilter>[],
+    this.shiny = PetShinyFilter.any,
+    this.seasons = const <String>[],
+    this.eggGroupIds = const <int>[],
     this.sort = PetSort.handbook,
     this.limit = 80,
     this.offset = 0,
@@ -13,6 +22,11 @@ class PetQuery {
 
   final String keyword;
   final List<String> typeIds;
+  final List<int> stages;
+  final List<PetFormFilter> forms;
+  final PetShinyFilter shiny;
+  final List<String> seasons;
+  final List<int> eggGroupIds;
   final PetSort sort;
   final int limit;
   final int offset;
@@ -56,6 +70,10 @@ class PetSummary {
     required this.isDefaultForm,
     this.form,
     this.illustrationKey,
+    this.stage,
+    this.hasShiny = false,
+    this.belongSeason,
+    this.isLordEvolution = false,
   });
 
   final String petId;
@@ -67,6 +85,17 @@ class PetSummary {
   final List<String> types;
   final String? illustrationKey;
   final bool isDefaultForm;
+  final int? stage;
+  final bool hasShiny;
+  final String? belongSeason;
+  final bool isLordEvolution;
+}
+
+class EggGroupSummary {
+  const EggGroupSummary({required this.eggGroupId, required this.memberCount});
+
+  final int eggGroupId;
+  final int memberCount;
 }
 
 class PetDetail {
@@ -85,6 +114,7 @@ class PetDetail {
     this.canDoubleRide,
     this.hasShiny,
     this.isLordEvolution,
+    this.belongSeason,
   });
 
   final PetSummary summary;
@@ -99,6 +129,7 @@ class PetDetail {
   final bool? canDoubleRide;
   final bool? hasShiny;
   final bool? isLordEvolution;
+  final String? belongSeason;
   final Map<String, int?> stats;
   final List<SourceReference> sourceReferences;
 

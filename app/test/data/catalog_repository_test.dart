@@ -107,6 +107,97 @@ void main() {
     expect(attacks.cast<int>(), orderedEquals(sortedAttacks));
   });
 
+  test(
+    'combines source-backed creature filters without inferring forms',
+    () async {
+      final shiny = await repository.searchPets(
+        const PetQuery(shiny: PetShinyFilter.hasShiny, limit: 200),
+      );
+      final firstStage = await repository.searchPets(
+        const PetQuery(stages: <int>[1], limit: 200),
+      );
+      final mainForms = await repository.searchPets(
+        const PetQuery(forms: <PetFormFilter>[PetFormFilter.main], limit: 200),
+      );
+      final regionalForms = await repository.searchPets(
+        const PetQuery(
+          forms: <PetFormFilter>[PetFormFilter.regional],
+          limit: 200,
+        ),
+      );
+      final lordForms = await repository.searchPets(
+        const PetQuery(forms: <PetFormFilter>[PetFormFilter.lord], limit: 200),
+      );
+      final seasonThree = await repository.searchPets(
+        const PetQuery(seasons: <String>['3'], limit: 200),
+      );
+
+      expect(shiny, isNotEmpty);
+      expect(shiny.every((pet) => pet.hasShiny), isTrue);
+      expect(firstStage.every((pet) => pet.stage == 1), isTrue);
+      expect(mainForms.every((pet) => pet.isDefaultForm), isTrue);
+      expect(regionalForms, isNotEmpty);
+      expect(
+        regionalForms.every(
+          (pet) =>
+              !pet.isLordEvolution &&
+              pet.stage != 4 &&
+              pet.form != null &&
+              pet.form != '本来的样子' &&
+              pet.form != '原本的样子' &&
+              pet.form != '首领形态',
+        ),
+        isTrue,
+      );
+      expect(lordForms, isNotEmpty);
+      expect(
+        lordForms.every((pet) => pet.isLordEvolution || pet.form == '首领形态'),
+        isTrue,
+      );
+      expect(seasonThree, isNotEmpty);
+      expect(seasonThree.every((pet) => pet.belongSeason == '3'), isTrue);
+    },
+  );
+
+  test('loads every source egg group and filters its members', () async {
+    final groups = await repository.getEggGroups();
+    final undiscovered = await repository.searchPets(
+      const PetQuery(eggGroupIds: <int>[1], limit: 200),
+    );
+
+    expect(
+      groups.map((group) => group.eggGroupId),
+      orderedEquals(<int>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]),
+    );
+    expect(groups.every((group) => group.memberCount > 0), isTrue);
+    expect(undiscovered.map((pet) => pet.name), contains('迪莫'));
+  });
+
+  test('pages through the complete feature handbook', () async {
+    final firstPage = await repository.searchSkills(
+      const SkillQuery(filter: SkillFilter.features, limit: 200),
+    );
+    final secondPage = await repository.searchSkills(
+      const SkillQuery(filter: SkillFilter.features, limit: 200, offset: 200),
+    );
+
+    expect(firstPage, hasLength(200));
+    expect(secondPage, hasLength(31));
+    expect(<String>{
+      ...firstPage.map((skill) => skill.skillId),
+      ...secondPage.map((skill) => skill.skillId),
+    }, hasLength(231));
+  });
+
+  test('loads deduplicated skills related to a game description', () async {
+    final related = await repository.getSkillsForDescriptionNote('1001');
+
+    expect(related.where((skill) => skill.isFeature), hasLength(10));
+    expect(related.where((skill) => !skill.isFeature), hasLength(10));
+    expect(related.map((skill) => skill.skillId).toSet(), hasLength(20));
+    expect(related.map((skill) => skill.name), contains('连续毒针'));
+  });
+
   test('filters learnable skills by type, tag, and element', () async {
     final poison = (await repository.getTypes()).singleWhere(
       (type) => type.name == '\u6bd2\u7cfb',

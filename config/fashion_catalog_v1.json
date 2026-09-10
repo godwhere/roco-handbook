@@ -1,0 +1,20 @@
+{
+  "config_version": 1,
+  "catalog_kind": "fashion",
+  "dataset_id": "roco-world-zh-cn",
+  "api_endpoint": "https://wiki.biligame.com/nrc/api.php",
+  "source_title": "Module:Fashions/data/Catalog",
+  "source_page_id": 9495,
+  "source_url_prefix": "https://wiki.biligame.com/nrc/index.php?title=Module%3AFashions%2Fdata%2FCatalog&oldid=",
+  "expected_count": 110,
+  "gender_order": ["female", "male"],
+  "image_overrides": {
+    "fashion_000037:male": "FashionPose_fashion_000037_Male.png",
+    "fashion_000076:female": "FashionPose_fashion_000076_Female.png",
+    "fashion_000076:male": "FashionPose_fashion_000076_Male.png"
+  },
+  "request_policy": {
+    "timeout_seconds": 60,
+    "max_retries": 3
+  }
+}

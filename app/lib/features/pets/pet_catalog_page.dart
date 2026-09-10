@@ -30,6 +30,10 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
   Timer? _debounce;
   var _sort = PetSort.handbook;
   var _selectedTypeIds = <String>{};
+  var _selectedStages = <int>{};
+  var _selectedForms = <PetFormFilter>{};
+  var _shinyFilter = PetShinyFilter.any;
+  var _selectedSeasons = <String>{};
   var _results = const <PetSummary>[];
   Object? _error;
   var _loading = true;
@@ -75,6 +79,11 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
     final query = PetQuery(
       keyword: _searchController.text,
       typeIds: _selectedTypeIds.toList()..sort(),
+      stages: _selectedStages.toList()..sort(),
+      forms: _selectedForms.toList()
+        ..sort((left, right) => left.index.compareTo(right.index)),
+      shiny: _shinyFilter,
+      seasons: _selectedSeasons.toList()..sort(),
       sort: _sort,
       limit: _pageSize,
       offset: append ? _results.length : 0,
@@ -171,7 +180,7 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
     }
   }
 
-  Future<void> _showTypeFilters() async {
+  Future<void> _showFilters() async {
     final List<CatalogType> types;
     try {
       types = await widget.repository.getTypes();
@@ -189,73 +198,219 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
       return;
     }
     final selected = Set<String>.from(_selectedTypeIds);
-    final result = await showModalBottomSheet<Set<String>>(
+    final result = await showModalBottomSheet<_PetCatalogFilterSelection>(
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setSheetState) => SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  context.tr('Filter by type'),
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 6),
-                Text(context.tr('A creature may match any selected type.')),
-                const SizedBox(height: 16),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: types
-                      .map(
-                        (type) => FilterChip(
-                          label: TypeIconLabel(
-                            typeName: type.name,
-                            compact: true,
+      builder: (context) {
+        var selectedStages = Set<int>.from(_selectedStages);
+        var selectedForms = Set<PetFormFilter>.from(_selectedForms);
+        var shinyFilter = _shinyFilter;
+        var selectedSeasons = Set<String>.from(_selectedSeasons);
+        return StatefulBuilder(
+          builder: (context, setSheetState) => SafeArea(
+            child: SingleChildScrollView(
+              key: const ValueKey('pet-filter-sheet'),
+              padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    context.tr('Creature filters'),
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 16),
+                  _PetFilterHeading(label: context.tr('Shiny form')),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: <Widget>[
+                      for (final filter in <PetShinyFilter>[
+                        PetShinyFilter.hasShiny,
+                        PetShinyFilter.noShiny,
+                      ])
+                        ChoiceChip(
+                          key: ValueKey('pet-shiny-filter-${filter.name}'),
+                          label: Text(
+                            context.tr(
+                              filter == PetShinyFilter.hasShiny
+                                  ? 'Has shiny'
+                                  : 'No shiny',
+                            ),
                           ),
-                          selected: selected.contains(type.typeId),
+                          selected: shinyFilter == filter,
                           onSelected: (enabled) {
                             setSheetState(() {
-                              if (enabled) {
-                                selected.add(type.typeId);
-                              } else {
-                                selected.remove(type.typeId);
-                              }
+                              shinyFilter = enabled
+                                  ? filter
+                                  : PetShinyFilter.any;
                             });
                           },
                         ),
-                      )
-                      .toList(),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, <String>{}),
-                      child: Text(context.tr('Clear')),
-                    ),
-                    const SizedBox(width: 8),
-                    FilledButton(
-                      onPressed: () => Navigator.pop(context, selected),
-                      child: Text(context.tr('Apply')),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  _PetFilterHeading(label: context.tr('Creature stage')),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: <Widget>[
+                      for (final stage in const <int>[1, 2, 3])
+                        FilterChip(
+                          key: ValueKey('pet-stage-filter-$stage'),
+                          label: Text(
+                            context.tr(switch (stage) {
+                              1 => 'First stage',
+                              2 => 'Second stage',
+                              _ => 'Third stage',
+                            }),
+                          ),
+                          selected: selectedStages.contains(stage),
+                          onSelected: (enabled) {
+                            setSheetState(() {
+                              enabled
+                                  ? selectedStages.add(stage)
+                                  : selectedStages.remove(stage);
+                            });
+                          },
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  _PetFilterHeading(label: context.tr('Creature form')),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: <Widget>[
+                      for (final form in PetFormFilter.values)
+                        FilterChip(
+                          key: ValueKey('pet-form-filter-${form.name}'),
+                          label: Text(
+                            context.tr(switch (form) {
+                              PetFormFilter.main => 'Main form',
+                              PetFormFilter.regional => 'Regional form',
+                              PetFormFilter.lord => 'Lord form',
+                            }),
+                          ),
+                          selected: selectedForms.contains(form),
+                          onSelected: (enabled) {
+                            setSheetState(() {
+                              enabled
+                                  ? selectedForms.add(form)
+                                  : selectedForms.remove(form);
+                            });
+                          },
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  _PetFilterHeading(label: context.tr('Owning season')),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: <Widget>[
+                      for (final season in const <String>['1', '2', '3', '4'])
+                        FilterChip(
+                          key: ValueKey('pet-season-filter-$season'),
+                          label: Text('S$season'),
+                          selected: selectedSeasons.contains(season),
+                          onSelected: (enabled) {
+                            setSheetState(() {
+                              enabled
+                                  ? selectedSeasons.add(season)
+                                  : selectedSeasons.remove(season);
+                            });
+                          },
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  _PetFilterHeading(label: context.tr('Creature type')),
+                  const SizedBox(height: 6),
+                  Text(context.tr('A creature may match any selected type.')),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: types
+                        .map(
+                          (type) => FilterChip(
+                            label: TypeIconLabel(
+                              typeName: type.name,
+                              compact: true,
+                            ),
+                            selected: selected.contains(type.typeId),
+                            onSelected: (enabled) {
+                              setSheetState(() {
+                                if (enabled) {
+                                  selected.add(type.typeId);
+                                } else {
+                                  selected.remove(type.typeId);
+                                }
+                              });
+                            },
+                          ),
+                        )
+                        .toList(),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          setSheetState(() {
+                            selected.clear();
+                            selectedStages.clear();
+                            selectedForms.clear();
+                            shinyFilter = PetShinyFilter.any;
+                            selectedSeasons.clear();
+                          });
+                        },
+                        child: Text(context.tr('Clear')),
+                      ),
+                      const Spacer(),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(context.tr('Cancel')),
+                      ),
+                      const SizedBox(width: 8),
+                      FilledButton(
+                        onPressed: () => Navigator.pop(
+                          context,
+                          _PetCatalogFilterSelection(
+                            typeIds: selected,
+                            stages: selectedStages,
+                            forms: selectedForms,
+                            shiny: shinyFilter,
+                            seasons: selectedSeasons,
+                          ),
+                        ),
+                        child: Text(context.tr('Apply')),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
     if (result == null || !mounted) {
       return;
     }
-    setState(() => _selectedTypeIds = result);
+    setState(() {
+      _selectedTypeIds = result.typeIds;
+      _selectedStages = result.stages;
+      _selectedForms = result.forms;
+      _shinyFilter = result.shiny;
+      _selectedSeasons = result.seasons;
+    });
     _load();
   }
 
@@ -298,12 +453,12 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: _CompactFilterButton(
-                        key: const ValueKey('pet-types'),
+                        key: const ValueKey('pet-filters'),
                         icon: Icons.filter_alt_outlined,
-                        label: _selectedTypeIds.isEmpty
-                            ? context.tr('Types')
-                            : '${context.tr('Types')} (${_selectedTypeIds.length})',
-                        onPressed: _showTypeFilters,
+                        label: _selectedFilterCount == 0
+                            ? context.tr('Filters')
+                            : '${context.tr('Filters')} ($_selectedFilterCount)',
+                        onPressed: _showFilters,
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -358,6 +513,13 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
     );
   }
 
+  int get _selectedFilterCount =>
+      _selectedTypeIds.length +
+      _selectedStages.length +
+      _selectedForms.length +
+      _selectedSeasons.length +
+      (_shinyFilter == PetShinyFilter.any ? 0 : 1);
+
   Widget _buildResults() {
     if (_loading) {
       return const Center(child: CircularProgressIndicator());
@@ -382,9 +544,16 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
               TextButton(
                 onPressed: () {
                   _searchController.clear();
+                  setState(() {
+                    _selectedTypeIds.clear();
+                    _selectedStages.clear();
+                    _selectedForms.clear();
+                    _shinyFilter = PetShinyFilter.any;
+                    _selectedSeasons.clear();
+                  });
                   _load();
                 },
-                child: Text(context.tr('Clear search')),
+                child: Text(context.tr('Clear search and filters')),
               ),
             ],
           ),
@@ -482,9 +651,15 @@ class _PetResultCard extends StatelessWidget {
                               children: <Widget>[
                                 Text(
                                   pet.name,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium,
+                                  style: Theme.of(context).textTheme.titleMedium
+                                      ?.copyWith(
+                                        color: pet.hasShiny
+                                            ? _seasonColor(
+                                                context,
+                                                pet.belongSeason,
+                                              )
+                                            : null,
+                                      ),
                                   maxLines: 1,
                                   softWrap: false,
                                 ),
@@ -558,6 +733,60 @@ class _PetResultCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class _PetCatalogFilterSelection {
+  const _PetCatalogFilterSelection({
+    required this.typeIds,
+    required this.stages,
+    required this.forms,
+    required this.shiny,
+    required this.seasons,
+  });
+
+  final Set<String> typeIds;
+  final Set<int> stages;
+  final Set<PetFormFilter> forms;
+  final PetShinyFilter shiny;
+  final Set<String> seasons;
+}
+
+class _PetFilterHeading extends StatelessWidget {
+  const _PetFilterHeading({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      label,
+      style: Theme.of(context).textTheme.titleMedium
+          ?.copyWith(fontWeight: FontWeight.w700),
+    );
+  }
+}
+
+Color _seasonColor(BuildContext context, String? season) {
+  final brightness = Theme.of(context).brightness;
+  return switch (season) {
+    '1' =>
+      brightness == Brightness.dark
+          ? const Color(0xFFA9B4FF)
+          : const Color(0xFF5869C2),
+    '2' =>
+      brightness == Brightness.dark
+          ? const Color(0xFFFFAEC3)
+          : const Color(0xFFB85E7A),
+    '3' =>
+      brightness == Brightness.dark
+          ? const Color(0xFF89D8C5)
+          : const Color(0xFF2F7C6C),
+    '4' =>
+      brightness == Brightness.dark
+          ? const Color(0xFFC3C4FF)
+          : const Color(0xFF6767A8),
+    _ => Theme.of(context).colorScheme.primary,
+  };
 }
 
 class _CompactFilterButton extends StatelessWidget {

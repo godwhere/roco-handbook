@@ -30,7 +30,7 @@ def _config() -> dict[str, object]:
     return {
         "config_version": 1,
         "dataset_id": "roco-world-zh-cn",
-        "asset_version": 1,
+        "asset_version": 2,
         "api_endpoint": "https://wiki.example.test/api.php",
         "asset_host": "assets.example.test",
         "asset_path_prefix": "/images/rocom/",
@@ -284,14 +284,14 @@ class ImageAssetTests(unittest.TestCase):
                 self.assertGreater(path.stat().st_size, 1000)
 
         brand_source = (
-            ROOT / "app/assets/wiki/v1/pets/illustrations/JL_dimo.png"
+            ROOT / "app/assets/wiki/v2/pets/illustrations/JL_dimo.png"
         ).read_bytes()
         self.assertEqual(
             "485d76e697b8f75d63a4036cf534c146b7d22addde663b831f80900e7018eb77",
             hashlib.sha256(brand_source).hexdigest(),
         )
         self.assertIn(
-            "app/assets/wiki/v1/pets/illustrations/JL_dimo.png",
+            "app/assets/wiki/v2/pets/illustrations/JL_dimo.png",
             (ROOT / "tools/brand/generate_brand_assets.swift").read_text(
                 encoding="utf-8"
             ),
@@ -310,14 +310,14 @@ class ImageAssetTests(unittest.TestCase):
         )
 
     def test_frozen_asset_manifest_matches_every_bundled_png(self) -> None:
-        root = ROOT / "app/assets/wiki/v1"
+        root = ROOT / "app/assets/wiki/v2"
         manifest = json.loads(
             (root / "asset-manifest.json").read_text(encoding="utf-8")
         )
         records = manifest["assets"]
 
-        self.assertEqual(1340, manifest["asset_count"])
-        self.assertEqual(1419, manifest["reference_count"])
+        self.assertEqual(1484, manifest["asset_count"])
+        self.assertEqual(1565, manifest["reference_count"])
         self.assertEqual(
             manifest["total_bytes"],
             sum(record["local_bytes"] for record in records),
@@ -338,7 +338,7 @@ class ImageAssetTests(unittest.TestCase):
     def test_derives_complete_current_catalog_scope(self) -> None:
         specs = derive_asset_specs(
             ROOT / "data/normalized/snapshot-19235f9b9b34dc4e/catalog-v1.json",
-            ROOT / "config/wiki_assets_v1.json",
+            ROOT / "config/wiki_assets_v2.json",
         )
 
         counts = {
@@ -348,14 +348,19 @@ class ImageAssetTests(unittest.TestCase):
         self.assertEqual(
             {
                 "pet_illustration": 569,
+                "pet_shiny_illustration": 144,
                 "skill_icon": 736,
                 "ui_icon": 35,
             },
             counts,
         )
-        self.assertEqual(1419, sum(len(item.catalog_ids) for item in specs))
+        self.assertEqual(1565, sum(len(item.catalog_ids) for item in specs))
         self.assertIn(
             "File:JL dimo.png",
+            {item.source_title for item in specs},
+        )
+        self.assertIn(
+            "File:JL emolang yise.png",
             {item.source_title for item in specs},
         )
         self.assertIn(
@@ -410,6 +415,7 @@ class ImageAssetTests(unittest.TestCase):
                     "pet_id": "pet_1",
                     "head_key": "Head_1",
                     "illustration_key": "JL_one",
+                    "has_shiny": 1,
                 }
             ],
             "skills": [
@@ -444,14 +450,19 @@ class ImageAssetTests(unittest.TestCase):
                 sleep=lambda _: None,
             )
 
-            self.assertEqual(3, frozen.asset_count)
-            self.assertEqual(3, frozen.reference_count)
+            self.assertEqual(4, frozen.asset_count)
+            self.assertEqual(4, frozen.reference_count)
             self.assertFalse(frozen.reused_existing)
             self.assertTrue(reused.reused_existing)
             manifest = json.loads(frozen.manifest_path.read_text(encoding="utf-8"))
-            self.assertEqual(3, manifest["asset_count"])
+            self.assertEqual(4, manifest["asset_count"])
             self.assertEqual(
-                {"pet_illustration", "skill_icon", "ui_icon"},
+                {
+                    "pet_illustration",
+                    "pet_shiny_illustration",
+                    "skill_icon",
+                    "ui_icon",
+                },
                 {item["kind"] for item in manifest["assets"]},
             )
 

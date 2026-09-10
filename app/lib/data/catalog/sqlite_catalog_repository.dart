@@ -30,6 +30,29 @@ final class SqliteCatalogRepository implements CatalogRepository {
     });
   }
 
+  @override
+  Future<List<EggGroupSummary>> getEggGroups() {
+    return _read('load egg groups', (database) {
+      return database
+          .select(
+            'SELECT CAST(groups.value AS INTEGER) AS egg_group_id, '
+            'COUNT(DISTINCT p.pet_id) AS member_count '
+            'FROM pets p, json_each(p.extra_json, ?) groups '
+            "WHERE p.status = 'active' "
+            'GROUP BY CAST(groups.value AS INTEGER) '
+            'ORDER BY egg_group_id',
+            const <Object?>[r'$.egg_group'],
+          )
+          .map(
+            (row) => EggGroupSummary(
+              eggGroupId: row['egg_group_id'] as int,
+              memberCount: row['member_count'] as int,
+            ),
+          )
+          .toList();
+    });
+  }
+
   Future<T> _read<T>(
     String operation,
     T Function(Database database) query,
@@ -58,19 +81,22 @@ final class SqliteCatalogRepository implements CatalogRepository {
     return _read('search handbooks', (database) {
       final search = _searchClause(query.keyword);
       final type = _typeClause(query.typeIds);
+      final filters = _petFilterClause(query);
       final rows = database.select(
         'SELECT p.pet_id, p.handbook_id, h.dex_no, p.name, p.title, '
-        'p.form, p.illustration_key, 1 AS is_default '
+        'p.form, p.illustration_key, p.stage, p.has_shiny, '
+        'p.belong_season_raw, p.is_lord_evolution, 1 AS is_default '
         'FROM handbook_entries h '
         'JOIN handbook_display d ON d.handbook_id = h.handbook_id '
         'JOIN pets p ON p.pet_id = d.default_pet_id '
         "WHERE h.status = 'active' AND p.status = 'active' "
-        '${search.sql} ${type.sql} '
+        '${search.sql} ${type.sql} ${filters.sql} '
         'ORDER BY ${_petOrder(query.sort)} '
         'LIMIT ? OFFSET ?',
         <Object?>[
           ...search.arguments,
           ...type.arguments,
+          ...filters.arguments,
           _limit(query.limit),
           _offset(query.offset),
         ],
@@ -84,21 +110,24 @@ final class SqliteCatalogRepository implements CatalogRepository {
     return _read('search creatures', (database) {
       final search = _searchClause(query.keyword);
       final type = _typeClause(query.typeIds);
+      final filters = _petFilterClause(query);
       final rows = database.select(
         'SELECT p.pet_id, p.handbook_id, h.dex_no, p.name, p.title, '
-        'p.form, p.illustration_key, '
+        'p.form, p.illustration_key, p.stage, p.has_shiny, '
+        'p.belong_season_raw, p.is_lord_evolution, '
         'CASE WHEN d.default_pet_id = p.pet_id THEN 1 ELSE 0 END AS is_default '
         'FROM pets p '
         'JOIN handbook_entries h ON h.handbook_id = p.handbook_id '
         'JOIN handbook_display d ON d.handbook_id = p.handbook_id '
         "WHERE p.status = 'active' AND h.status = 'active' "
-        '${search.sql} ${type.sql} '
+        '${search.sql} ${type.sql} ${filters.sql} '
         'ORDER BY CASE WHEN p.name = ? OR p.title = ? THEN 0 ELSE 1 END, '
         '${_petOrder(query.sort)} '
         'LIMIT ? OFFSET ?',
         <Object?>[
           ...search.arguments,
           ...type.arguments,
+          ...filters.arguments,
           query.keyword.trim(),
           query.keyword.trim(),
           _limit(query.limit),
@@ -138,6 +167,7 @@ final class SqliteCatalogRepository implements CatalogRepository {
         canDoubleRide: _nullableBool(row['can_double_ride']),
         hasShiny: _nullableBool(row['has_shiny']),
         isLordEvolution: _nullableBool(row['is_lord_evolution']),
+        belongSeason: row['belong_season_raw'] as String?,
         stats: <String, int?>{
           'HP': row['hp'] as int?,
           'Attack': row['atk'] as int?,
@@ -156,7 +186,8 @@ final class SqliteCatalogRepository implements CatalogRepository {
     return _read('load creature forms', (database) {
       final rows = database.select(
         'SELECT p.pet_id, p.handbook_id, h.dex_no, p.name, p.title, '
-        'p.form, p.illustration_key, '
+        'p.form, p.illustration_key, p.stage, p.has_shiny, '
+        'p.belong_season_raw, p.is_lord_evolution, '
         'CASE WHEN d.default_pet_id = p.pet_id THEN 1 ELSE 0 END AS is_default '
         'FROM pets p '
         'JOIN handbook_entries h ON h.handbook_id = p.handbook_id '
@@ -293,6 +324,22 @@ final class SqliteCatalogRepository implements CatalogRepository {
   }
 
   @override
+  Future<List<SkillSummary>> getSkillsForDescriptionNote(String noteId) {
+    return _read('load game description relationships', (database) {
+      final rows = database.select(
+        'SELECT DISTINCT s.*, EXISTS(SELECT 1 FROM pet_feature_skills f '
+        'WHERE f.skill_id = s.skill_id) AS is_feature '
+        'FROM skill_description_notes n '
+        'JOIN skills s ON s.skill_id = n.skill_id '
+        "WHERE n.note_id = ? AND s.status = 'active' "
+        'ORDER BY is_feature DESC, s.name, s.skill_id',
+        <Object?>[noteId],
+      );
+      return rows.map(_skillSummary).toList();
+    });
+  }
+
+  @override
   Future<SkillDetail> getSkillDetail(String skillId) {
     return _read('load skill detail', (database) {
       final rows = database.select(
@@ -334,7 +381,8 @@ final class SqliteCatalogRepository implements CatalogRepository {
       final rows = feature
           ? database.select(
               'SELECT p.pet_id, p.handbook_id, h.dex_no, p.name, p.title, '
-              'p.form, p.illustration_key, '
+              'p.form, p.illustration_key, p.stage, p.has_shiny, '
+              'p.belong_season_raw, p.is_lord_evolution, '
               'CASE WHEN d.default_pet_id = p.pet_id THEN 1 ELSE 0 END '
               'AS is_default, NULL AS source_kind, NULL AS learn_level, '
               'NULL AS source_stage, NULL AS blood_raw, '
@@ -348,7 +396,8 @@ final class SqliteCatalogRepository implements CatalogRepository {
             )
           : database.select(
               'SELECT p.pet_id, p.handbook_id, h.dex_no, p.name, p.title, '
-              'p.form, p.illustration_key, '
+              'p.form, p.illustration_key, p.stage, p.has_shiny, '
+              'p.belong_season_raw, p.is_lord_evolution, '
               'CASE WHEN d.default_pet_id = p.pet_id THEN 1 ELSE 0 END '
               'AS is_default, x.source_kind, x.learn_level, x.source_stage, '
               'x.blood_raw, x.requirement_text '
@@ -401,7 +450,8 @@ final class SqliteCatalogRepository implements CatalogRepository {
       final placeholders = List.filled(groupIds.length, '?').join(', ');
       final nodeRows = database.select(
         'SELECT DISTINCT p.pet_id, p.handbook_id, h.dex_no, p.name, p.title, '
-        'p.form, p.illustration_key, '
+        'p.form, p.illustration_key, p.stage, p.has_shiny, '
+        'p.belong_season_raw, p.is_lord_evolution, '
         'CASE WHEN d.default_pet_id = p.pet_id THEN 1 ELSE 0 END AS is_default '
         'FROM pet_evolution_groups m '
         'JOIN pets p ON p.pet_id = m.pet_id '
@@ -579,6 +629,66 @@ PetSummary _petSummary(Database database, Row row) {
     types: types,
     illustrationKey: row['illustration_key'] as String?,
     isDefaultForm: row['is_default'] == 1,
+    stage: row['stage'] as int?,
+    hasShiny: _nullableBool(row['has_shiny']) ?? false,
+    belongSeason: row['belong_season_raw'] as String?,
+    isLordEvolution: _nullableBool(row['is_lord_evolution']) ?? false,
+  );
+}
+
+({String sql, List<Object?> arguments}) _petFilterClause(PetQuery query) {
+  final conditions = <String>[];
+  final arguments = <Object?>[];
+  if (query.stages.isNotEmpty) {
+    conditions.add(
+      'p.stage IN (${List.filled(query.stages.length, '?').join(', ')})',
+    );
+    arguments.addAll(query.stages);
+  }
+  if (query.forms.isNotEmpty) {
+    const lord =
+        "(COALESCE(p.is_lord_evolution, 0) = 1 OR p.form = '\u9996\u9886\u5f62\u6001')";
+    final formConditions = <String>[];
+    for (final form in query.forms) {
+      formConditions.add(switch (form) {
+        PetFormFilter.main => 'd.default_pet_id = p.pet_id',
+        PetFormFilter.regional =>
+          "(COALESCE(TRIM(p.form), '') <> '' "
+              "AND p.form NOT IN ('\u672c\u6765\u7684\u6837\u5b50', '\u539f\u672c\u7684\u6837\u5b50') "
+              'AND NOT $lord)',
+        PetFormFilter.lord => lord,
+      });
+    }
+    conditions.add('(${formConditions.join(' OR ')})');
+  }
+  switch (query.shiny) {
+    case PetShinyFilter.hasShiny:
+      conditions.add('p.has_shiny = 1');
+    case PetShinyFilter.noShiny:
+      conditions.add('COALESCE(p.has_shiny, 0) = 0');
+    case PetShinyFilter.any:
+      break;
+  }
+  if (query.seasons.isNotEmpty) {
+    conditions.add(
+      'p.belong_season_raw IN '
+      '(${List.filled(query.seasons.length, '?').join(', ')})',
+    );
+    arguments.addAll(query.seasons);
+  }
+  if (query.eggGroupIds.isNotEmpty) {
+    conditions.add(
+      'EXISTS(SELECT 1 FROM json_each(p.extra_json, ?) groups '
+      'WHERE CAST(groups.value AS INTEGER) IN '
+      '(${List.filled(query.eggGroupIds.length, '?').join(', ')}))',
+    );
+    arguments
+      ..add(r'$.egg_group')
+      ..addAll(query.eggGroupIds);
+  }
+  return (
+    sql: conditions.isEmpty ? '' : 'AND ${conditions.join(' AND ')}',
+    arguments: arguments,
   );
 }
 

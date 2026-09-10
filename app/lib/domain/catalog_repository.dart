@@ -3,6 +3,8 @@ import 'catalog_models.dart';
 abstract interface class CatalogRepository {
   Future<List<CatalogType>> getTypes();
 
+  Future<List<EggGroupSummary>> getEggGroups();
+
   Future<List<PetSummary>> searchHandbooks(PetQuery query);
 
   Future<List<PetSummary>> searchPets(PetQuery query);
@@ -14,6 +16,8 @@ abstract interface class CatalogRepository {
   Future<PetSkillBundle> getSkillsForPet(String petId);
 
   Future<List<SkillSummary>> searchSkills(SkillQuery query);
+
+  Future<List<SkillSummary>> getSkillsForDescriptionNote(String noteId);
 
   Future<SkillDetail> getSkillDetail(String skillId);
 

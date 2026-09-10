@@ -1,0 +1,25 @@
+{
+  "config_version": 1,
+  "dataset_id": "roco-world-zh-cn",
+  "asset_version": 1,
+  "api_endpoint": "https://wiki.biligame.com/nrc/api.php",
+  "asset_host": "patchwiki.biligame.com",
+  "asset_path_prefix": "/images/nrc/",
+  "thumbnail_widths": {
+    "pet_illustration": 512,
+    "skill_icon": 192,
+    "ui_icon": 96,
+    "activity_icon": 96,
+    "fashion_card": 256
+  },
+  "ui_assets": [],
+  "request_policy": {
+    "api_batch_size": 40,
+    "api_minimum_interval_seconds": 0.1,
+    "download_minimum_interval_seconds": 0.02,
+    "connect_timeout_seconds": 20,
+    "read_timeout_seconds": 60,
+    "max_retries": 3,
+    "max_asset_bytes": 8388608
+  }
+}

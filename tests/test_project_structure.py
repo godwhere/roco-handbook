@@ -37,8 +37,12 @@ class ProjectStructureTests(unittest.TestCase):
             "config/handbook_display_overrides.json",
             "config/reviewed_exceptions.json",
             "config/ui_terminology_zh_cn.json",
-            "config/wiki_assets_v1.json",
+            "config/wiki_assets_v2.json",
             "config/type_relations_v1.json",
+            "config/game_descriptions_v1.json",
+            "config/activity_timeline_v1.json",
+            "config/fashion_catalog_v1.json",
+            "config/wiki_tool_assets_v1.json",
             "schemas/catalog_v1.sql",
             "schemas/user_v1.sql",
             "schemas/manifests/bundled_catalog_v1.schema.json",
@@ -297,12 +301,20 @@ class ProjectStructureTests(unittest.TestCase):
             ROOT / "docs/technical-spec-v1.md",
             ROOT / "config/ui_terminology_zh_cn.json",
             ROOT / "config/wiki_assets_v1.json",
+            ROOT / "config/wiki_assets_v2.json",
             ROOT / "config/type_relations_v1.json",
+            ROOT / "config/game_descriptions_v1.json",
+            ROOT / "config/activity_timeline_v1.json",
+            ROOT / "config/fashion_catalog_v1.json",
             ROOT / "app/lib/l10n/app_strings.dart",
             ROOT
             / "docs/decisions/ADR-0015-phase-8-brand-localization-and-wiki-assets.md",
             ROOT
             / "docs/evidence/phase-8-assets-localization-and-visuals-2026-09-10.md",
+            ROOT
+            / "docs/decisions/ADR-0018-phase-8-filters-shiny-and-tools.md",
+            ROOT
+            / "docs/evidence/phase-8-filters-shiny-tools-2026-09-10.md",
         }
         violations: list[str] = []
 

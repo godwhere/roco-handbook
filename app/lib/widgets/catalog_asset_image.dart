@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../domain/catalog_models.dart';
 
-const _assetRoot = 'assets/wiki/v1';
+const _assetRoot = 'assets/wiki/v2';
 
 String? petIllustrationAsset(String? key) =>
     key == null ? null : '$_assetRoot/pets/illustrations/$key.png';
+
+String? petShinyIllustrationAsset(String? key) =>
+    key == null ? null : '$_assetRoot/pets/shiny/${key}_yise.png';
 
 String? skillIconAsset(SkillSummary skill) {
   final key = skill.iconKey;

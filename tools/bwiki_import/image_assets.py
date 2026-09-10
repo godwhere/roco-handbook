@@ -260,6 +260,16 @@ def derive_asset_specs(catalog_path: Path, config_path: Path) -> list[AssetSpec]
             width=widths["pet_illustration"],
             catalog_id=pet_id,
         )
+        if raw.get("has_shiny") in (True, 1):
+            shiny_key = f"{illustration}_yise"
+            add(
+                asset_id=f"pet_shiny_illustration:{shiny_key}",
+                kind="pet_shiny_illustration",
+                source_title=_source_title("", shiny_key),
+                local_path=f"pets/shiny/{shiny_key}.png",
+                width=widths["pet_illustration"],
+                catalog_id=pet_id,
+            )
     for raw in skills:
         if not isinstance(raw, dict) or raw.get("status") != "active":
             continue
@@ -627,8 +637,38 @@ def import_image_assets(
     transport: UrlTransport | None = None,
     sleep: Callable[[float], None] = time.sleep,
 ) -> FrozenAssetSet:
-    config = _config(config_path)
     specs = derive_asset_specs(catalog_path, config_path)
+    return freeze_asset_specs(
+        specs,
+        config_path,
+        output_root,
+        cache_root=cache_root,
+        transport=transport,
+        sleep=sleep,
+    )
+
+
+def freeze_asset_specs(
+    specs: Iterable[AssetSpec],
+    config_path: Path,
+    output_root: Path,
+    *,
+    cache_root: Path | None = None,
+    transport: UrlTransport | None = None,
+    sleep: Callable[[float], None] = time.sleep,
+) -> FrozenAssetSet:
+    config = _config(config_path)
+    specs = sorted(specs, key=lambda item: item.asset_id)
+    if not specs:
+        raise InputError("Image asset request is empty")
+    if len({spec.asset_id for spec in specs}) != len(specs):
+        raise InputError("Image asset IDs must be unique")
+    if len({spec.local_path for spec in specs}) != len(specs):
+        raise InputError("Image asset paths must be unique")
+    for spec in specs:
+        path = PurePosixPath(spec.local_path)
+        if path.is_absolute() or ".." in path.parts or path.suffix.lower() != ".png":
+            raise InputError(f"Unsafe image asset path: {spec.local_path}")
     target = output_root / f"v{config['asset_version']}"
     if target.exists():
         return _verify_existing(target, specs, config)
