@@ -107,6 +107,18 @@ void main() {
     expect(attacks.cast<int>(), orderedEquals(sortedAttacks));
   });
 
+  test(
+    'calculates complete base stats without filling missing source data',
+    () async {
+      final complete = await repository.getPetDetail('pet_000004');
+      final incomplete = await repository.getPetDetail('pet_000535');
+
+      expect(complete.totalBaseStats, 582);
+      expect(incomplete.stats.values, everyElement(isNull));
+      expect(incomplete.totalBaseStats, isNull);
+    },
+  );
+
   test('escapes SQL wildcard characters in user search', () async {
     final percent = await repository.searchPets(const PetQuery(keyword: '%'));
     final underscore = await repository.searchPets(

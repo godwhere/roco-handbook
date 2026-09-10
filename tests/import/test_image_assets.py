@@ -44,7 +44,6 @@ def _config() -> dict[str, object]:
             "max_asset_bytes": 100000,
         },
         "thumbnail_widths": {
-            "pet_head": 128,
             "pet_illustration": 512,
             "skill_icon": 128,
             "ui_icon": 64,
@@ -103,33 +102,200 @@ class _Transport:
 
 
 class ImageAssetTests(unittest.TestCase):
+    def test_store_screenshots_are_submission_eligible_rgb_pngs(self) -> None:
+        screenshot_root = ROOT / "docs/evidence/phase-8-store-screenshots"
+        expected = {
+            "ios": {
+                "dimensions": (1206, 2622),
+                "names": {
+                    "01-creature-catalog.png",
+                    "02-creature-detail-stats.png",
+                    "03-type-relationships.png",
+                    "04-skill-catalog.png",
+                },
+            },
+            "android": {
+                "dimensions": (1080, 1920),
+                "names": {
+                    "01-creature-catalog.png",
+                    "02-creature-detail-stats.png",
+                    "03-type-relationships.png",
+                    "04-skill-catalog.png",
+                },
+            },
+        }
+
+        for platform, contract in expected.items():
+            paths = sorted((screenshot_root / platform).glob("*.png"))
+            self.assertEqual(contract["names"], {path.name for path in paths})
+            for path in paths:
+                with self.subTest(platform=platform, path=path.name):
+                    payload = path.read_bytes()
+                    dimensions = _png_dimensions(payload)
+                    self.assertEqual(contract["dimensions"], dimensions)
+                    self.assertEqual(8, payload[24], "PNG must use 8-bit channels")
+                    self.assertEqual(2, payload[25], "PNG must be RGB without alpha")
+                    self.assertLessEqual(len(payload), 8 * 1024 * 1024)
+                    if platform == "android":
+                        self.assertLessEqual(max(dimensions), 2 * min(dimensions))
+
     def test_platform_brand_assets_replace_flutter_placeholders(self) -> None:
         cases = {
             ROOT
+            / "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png": (
+                (20, 20),
+                "3b8334e60415e87b76a88fb73291d282bba0c96c4aa49fad068c2794358d3673",
+            ),
+            ROOT
+            / "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png": (
+                (40, 40),
+                "bc49fecccb1cc89ddf84aea83911264b6c9ba140b2076794ea2353f35f15f267",
+            ),
+            ROOT
+            / "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png": (
+                (60, 60),
+                "e035e9aa734f2a6c1b1e472f9bd5d86622d5fbcccf8fd863da0c401701ae7e22",
+            ),
+            ROOT
+            / "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png": (
+                (29, 29),
+                "9ed785e8c71f689befa555c8c76f0e3bf5f331b6eb1b1ca3e6a34803b4ca92dd",
+            ),
+            ROOT
+            / "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png": (
+                (58, 58),
+                "fc063794049f6ed1754085d2afd029b5814f8646635b6253ead94d02a70e1278",
+            ),
+            ROOT
+            / "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png": (
+                (87, 87),
+                "fc0bd89031b58f9b8c09306d8e15c41fb114ec5500849e1b28b9d8f33c330b86",
+            ),
+            ROOT
+            / "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png": (
+                (40, 40),
+                "bc49fecccb1cc89ddf84aea83911264b6c9ba140b2076794ea2353f35f15f267",
+            ),
+            ROOT
+            / "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png": (
+                (80, 80),
+                "f38796252485ad58dbe207a3bff706ba75923121479a74302b36234696fa32c7",
+            ),
+            ROOT
+            / "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png": (
+                (120, 120),
+                "d24c3aba70954261d7ca9b06249912099c669f1d8fd9b5b8b75c121e4b0b32ed",
+            ),
+            ROOT
+            / "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png": (
+                (120, 120),
+                "d24c3aba70954261d7ca9b06249912099c669f1d8fd9b5b8b75c121e4b0b32ed",
+            ),
+            ROOT
+            / "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png": (
+                (180, 180),
+                "37ff2f8251e95b738444a79c1a49434d21ee1a7bfc85e7144412f71d16b52c57",
+            ),
+            ROOT
+            / "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png": (
+                (76, 76),
+                "3094dbb43384ea5900b6a451b1c01165470ee565c71b3c22e081bd749cd7691d",
+            ),
+            ROOT
+            / "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png": (
+                (152, 152),
+                "394d6048a2e1edb960d2fe39889fc9ce54f9dee734d6aaccfbe2d1a51f9b360d",
+            ),
+            ROOT
+            / "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png": (
+                (167, 167),
+                "1c4eb88b619ec452588d58de4d0f0951e13a9edc6bb69333866c310849c91fb0",
+            ),
+            ROOT
             / "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png": (
-                1024,
-                1024,
+                (1024, 1024),
+                "b6d3277e8eba499b6d81a47108f5959b283b01e7755b80051e515f7dace4ab89",
+            ),
+            ROOT
+            / "app/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png": (
+                (200, 200),
+                "b3d667c107248482e4d9726a0fa05bfffd6d7d253c98f4d2ae0df5691806d49e",
+            ),
+            ROOT
+            / "app/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png": (
+                (400, 400),
+                "294d51f1669dd234de4f46117323ddeaa4ad989e6e49b2e1c1f5df97f369bda1",
             ),
             ROOT
             / "app/ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png": (
-                600,
-                600,
+                (600, 600),
+                "29750876e644a50ebb4fc830f0eec2251c8340ccde2a70af66f910a6bd51d24a",
+            ),
+            ROOT
+            / "app/android/app/src/main/res/mipmap-mdpi/ic_launcher.png": (
+                (48, 48),
+                "c4d710a857ffefc7e9f8fec1956c89bf9d054d68ffdbe802435d965b0844ab54",
+            ),
+            ROOT
+            / "app/android/app/src/main/res/mipmap-hdpi/ic_launcher.png": (
+                (72, 72),
+                "c1a082911f64d1714f124e82800a1360763f635e4477d4080e6a81a3c7403a4c",
+            ),
+            ROOT
+            / "app/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png": (
+                (96, 96),
+                "d41f74055c558ae20f55c2f7cd9d039a531b7014b77e98e22b50a0e05de1a45a",
+            ),
+            ROOT
+            / "app/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png": (
+                (144, 144),
+                "ab9f7f057e64f9613e187f59747920965ed8eaf1f3cb0a67b14539e133c9b462",
             ),
             ROOT
             / "app/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png": (
-                192,
-                192,
+                (192, 192),
+                "b6c9d5481836160ed5af1ec73acb8914907b404381bff662aa47b54ddddb4076",
             ),
             ROOT
             / "app/android/app/src/main/res/drawable-nodpi/launch_image.png": (
-                384,
-                384,
+                (384, 384),
+                "062afaefdc8993ba61a5d30cbf014f947c7fa375da8a6c175c21f031fdd1eafe",
             ),
         }
-        for path, expected in cases.items():
+        actual_platform_pngs = {
+            *(
+                ROOT / "app/ios/Runner/Assets.xcassets/AppIcon.appiconset"
+            ).glob("*.png"),
+            *(
+                ROOT / "app/ios/Runner/Assets.xcassets/LaunchImage.imageset"
+            ).glob("*.png"),
+            *(
+                ROOT / "app/android/app/src/main/res"
+            ).glob("mipmap-*/ic_launcher.png"),
+            ROOT
+            / "app/android/app/src/main/res/drawable-nodpi/launch_image.png",
+        }
+        self.assertEqual(set(cases), actual_platform_pngs)
+        for path, (expected_dimensions, expected_sha256) in cases.items():
             with self.subTest(path=path):
-                self.assertEqual(expected, _png_dimensions(path.read_bytes()))
+                payload = path.read_bytes()
+                self.assertEqual(expected_dimensions, _png_dimensions(payload))
+                self.assertEqual(expected_sha256, hashlib.sha256(payload).hexdigest())
                 self.assertGreater(path.stat().st_size, 1000)
+
+        brand_source = (
+            ROOT / "app/assets/wiki/v1/pets/illustrations/JL_dimo.png"
+        ).read_bytes()
+        self.assertEqual(
+            "485d76e697b8f75d63a4036cf534c146b7d22addde663b831f80900e7018eb77",
+            hashlib.sha256(brand_source).hexdigest(),
+        )
+        self.assertIn(
+            "app/assets/wiki/v1/pets/illustrations/JL_dimo.png",
+            (ROOT / "tools/brand/generate_brand_assets.swift").read_text(
+                encoding="utf-8"
+            ),
+        )
 
         display_name = "\u6d1b\u514b\u738b\u56fd\uff1a\u4e16\u754c\u56fe\u9274"
         self.assertIn(
@@ -150,8 +316,8 @@ class ImageAssetTests(unittest.TestCase):
         )
         records = manifest["assets"]
 
-        self.assertEqual(1936, manifest["asset_count"])
-        self.assertEqual(2015, manifest["reference_count"])
+        self.assertEqual(1340, manifest["asset_count"])
+        self.assertEqual(1419, manifest["reference_count"])
         self.assertEqual(
             manifest["total_bytes"],
             sum(record["local_bytes"] for record in records),
@@ -181,30 +347,29 @@ class ImageAssetTests(unittest.TestCase):
         }
         self.assertEqual(
             {
-                "pet_head": 596,
                 "pet_illustration": 569,
                 "skill_icon": 736,
                 "ui_icon": 35,
             },
             counts,
         )
-        self.assertEqual(2015, sum(len(item.catalog_ids) for item in specs))
+        self.assertEqual(1419, sum(len(item.catalog_ids) for item in specs))
         self.assertIn(
-            "File:Head 3001.png",
+            "File:JL dimo.png",
             {item.source_title for item in specs},
         )
         self.assertIn(
             "File:Feature 200076.png",
             {item.source_title for item in specs},
         )
-        by_id = {item.asset_id: item for item in specs}
-        self.assertEqual(
-            "File:Head 4079.png",
-            by_id["pet_head:Head_5001"].source_title,
-        )
-        self.assertEqual(
-            "File:JL baomizai.png",
-            by_id["pet_head:Head_3759"].source_title,
+        self.assertIn(
+            "pet_000004",
+            {
+                catalog_id
+                for item in specs
+                if item.asset_id == "pet_illustration:JL_dimo"
+                for catalog_id in item.catalog_ids
+            },
         )
 
     def test_rejects_missing_and_non_allowlisted_metadata(self) -> None:
@@ -279,14 +444,14 @@ class ImageAssetTests(unittest.TestCase):
                 sleep=lambda _: None,
             )
 
-            self.assertEqual(4, frozen.asset_count)
-            self.assertEqual(4, frozen.reference_count)
+            self.assertEqual(3, frozen.asset_count)
+            self.assertEqual(3, frozen.reference_count)
             self.assertFalse(frozen.reused_existing)
             self.assertTrue(reused.reused_existing)
             manifest = json.loads(frozen.manifest_path.read_text(encoding="utf-8"))
-            self.assertEqual(4, manifest["asset_count"])
+            self.assertEqual(3, manifest["asset_count"])
             self.assertEqual(
-                {"pet_head", "pet_illustration", "skill_icon", "ui_icon"},
+                {"pet_illustration", "skill_icon", "ui_icon"},
                 {item["kind"] for item in manifest["assets"]},
             )
 

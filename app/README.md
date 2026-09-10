@@ -6,7 +6,7 @@ The production App does not request BWIKI, execute Lua, require an account, or d
 
 The current Phase 7 source is App version `1.1.0`, build `2`. The preserved Phase 6 candidate remains `1.0.0`, build `1` with its original artifact hashes.
 
-Creature details show the sum of all six base-stat values only when the complete set is present. Incoming and outgoing type relationships come from the frozen `assets/wiki/type-relations-v1.json` contract, including the source three-times cap for a dual-type four-times weakness. The frozen image manifest under `assets/wiki/v1/` covers all active Catalog creature and skill references.
+The creature catalog lists concrete forms with Search, Sort, and Types on one row, opens both selectors as modal bottom sheets, and uses full illustrations instead of head images. Default-form labels are omitted from cards; named non-default forms appear in full-width parentheses beside the source name and handbook number. Creature details show the sum of all six base-stat values only when the complete set is present. Incoming and outgoing type relationships come from the frozen `assets/wiki/type-relations-v1.json` contract, including the source three-times cap for a dual-type four-times weakness. The frozen image manifest under `assets/wiki/v1/` covers every active creature illustration and every active skill reference.
 
 ## Run locally
 

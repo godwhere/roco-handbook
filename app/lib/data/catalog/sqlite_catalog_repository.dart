@@ -60,7 +60,7 @@ final class SqliteCatalogRepository implements CatalogRepository {
       final type = _typeClause(query.typeIds);
       final rows = database.select(
         'SELECT p.pet_id, p.handbook_id, h.dex_no, p.name, p.title, '
-        'p.form, p.head_key, 1 AS is_default '
+        'p.form, p.illustration_key, 1 AS is_default '
         'FROM handbook_entries h '
         'JOIN handbook_display d ON d.handbook_id = h.handbook_id '
         'JOIN pets p ON p.pet_id = d.default_pet_id '
@@ -86,7 +86,7 @@ final class SqliteCatalogRepository implements CatalogRepository {
       final type = _typeClause(query.typeIds);
       final rows = database.select(
         'SELECT p.pet_id, p.handbook_id, h.dex_no, p.name, p.title, '
-        'p.form, p.head_key, '
+        'p.form, p.illustration_key, '
         'CASE WHEN d.default_pet_id = p.pet_id THEN 1 ELSE 0 END AS is_default '
         'FROM pets p '
         'JOIN handbook_entries h ON h.handbook_id = p.handbook_id '
@@ -156,7 +156,7 @@ final class SqliteCatalogRepository implements CatalogRepository {
     return _read('load creature forms', (database) {
       final rows = database.select(
         'SELECT p.pet_id, p.handbook_id, h.dex_no, p.name, p.title, '
-        'p.form, p.head_key, '
+        'p.form, p.illustration_key, '
         'CASE WHEN d.default_pet_id = p.pet_id THEN 1 ELSE 0 END AS is_default '
         'FROM pets p '
         'JOIN handbook_entries h ON h.handbook_id = p.handbook_id '
@@ -301,7 +301,7 @@ final class SqliteCatalogRepository implements CatalogRepository {
       final rows = feature
           ? database.select(
               'SELECT p.pet_id, p.handbook_id, h.dex_no, p.name, p.title, '
-              'p.form, p.head_key, '
+              'p.form, p.illustration_key, '
               'CASE WHEN d.default_pet_id = p.pet_id THEN 1 ELSE 0 END '
               'AS is_default, NULL AS source_kind, NULL AS learn_level, '
               'NULL AS source_stage, NULL AS blood_raw, '
@@ -315,7 +315,7 @@ final class SqliteCatalogRepository implements CatalogRepository {
             )
           : database.select(
               'SELECT p.pet_id, p.handbook_id, h.dex_no, p.name, p.title, '
-              'p.form, p.head_key, '
+              'p.form, p.illustration_key, '
               'CASE WHEN d.default_pet_id = p.pet_id THEN 1 ELSE 0 END '
               'AS is_default, x.source_kind, x.learn_level, x.source_stage, '
               'x.blood_raw, x.requirement_text '
@@ -368,7 +368,7 @@ final class SqliteCatalogRepository implements CatalogRepository {
       final placeholders = List.filled(groupIds.length, '?').join(', ');
       final nodeRows = database.select(
         'SELECT DISTINCT p.pet_id, p.handbook_id, h.dex_no, p.name, p.title, '
-        'p.form, p.head_key, '
+        'p.form, p.illustration_key, '
         'CASE WHEN d.default_pet_id = p.pet_id THEN 1 ELSE 0 END AS is_default '
         'FROM pet_evolution_groups m '
         'JOIN pets p ON p.pet_id = m.pet_id '
@@ -544,7 +544,7 @@ PetSummary _petSummary(Database database, Row row) {
     title: row['title'] as String,
     form: row['form'] as String?,
     types: types,
-    headKey: row['head_key'] as String?,
+    illustrationKey: row['illustration_key'] as String?,
     isDefaultForm: row['is_default'] == 1,
   );
 }

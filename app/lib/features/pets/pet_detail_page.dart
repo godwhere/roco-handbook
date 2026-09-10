@@ -142,7 +142,10 @@ class _PetDetailPageState extends State<PetDetailPage> {
                 const SizedBox(height: 18),
                 _Section(
                   title: context.tr('Base stats'),
-                  child: _Stats(stats: data.detail.stats),
+                  child: _Stats(
+                    stats: data.detail.stats,
+                    total: data.detail.totalBaseStats,
+                  ),
                 ),
                 const SizedBox(height: 18),
                 _Section(
@@ -455,26 +458,13 @@ class _Fact extends StatelessWidget {
 }
 
 class _Stats extends StatelessWidget {
-  const _Stats({required this.stats});
+  const _Stats({required this.stats, required this.total});
 
   final Map<String, int?> stats;
+  final int? total;
 
   @override
   Widget build(BuildContext context) {
-    const requiredStats = <String>[
-      'HP',
-      'Attack',
-      'Defense',
-      'Magic attack',
-      'Magic defense',
-      'Speed',
-    ];
-    final values = requiredStats
-        .map((key) => stats[key])
-        .toList(growable: false);
-    final total = values.every((value) => value != null)
-        ? values.fold<int>(0, (sum, value) => sum + value!)
-        : null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[

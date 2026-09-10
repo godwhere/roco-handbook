@@ -32,7 +32,6 @@ class PetCatalogPage extends StatefulWidget {
 class _PetCatalogPageState extends State<PetCatalogPage> {
   final _searchController = TextEditingController();
   Timer? _debounce;
-  var _mode = PetListMode.handbooks;
   var _sort = PetSort.handbook;
   var _selectedTypeIds = <String>{};
   var _results = const <PetSummary>[];
@@ -85,10 +84,7 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
       offset: append ? _results.length : 0,
     );
     try {
-      final results =
-          query.keyword.trim().isNotEmpty || _mode == PetListMode.allForms
-          ? await widget.repository.searchPets(query)
-          : await widget.repository.searchHandbooks(query);
+      final results = await widget.repository.searchPets(query);
       if (!mounted || generation != _generation) {
         return;
       }
@@ -110,20 +106,73 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
     }
   }
 
-  void _setMode(PetListMode mode) {
-    if (_mode == mode) {
-      return;
-    }
-    setState(() => _mode = mode);
-    _load();
-  }
-
   void _setSort(PetSort? sort) {
     if (sort == null || _sort == sort) {
       return;
     }
     setState(() => _sort = sort);
     _load();
+  }
+
+  Future<void> _showSortOptions() async {
+    var selected = _sort;
+    final result = await showModalBottomSheet<PetSort>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setSheetState) => SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
+            child: Column(
+              key: const ValueKey('pet-sort-sheet'),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  context.tr('Sort'),
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(height: 16),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: PetSort.values
+                      .map(
+                        (sort) => ChoiceChip(
+                          key: ValueKey('pet-sort-option-${sort.name}'),
+                          label: Text(_sortLabel(context, sort)),
+                          selected: selected == sort,
+                          onSelected: (_) {
+                            setSheetState(() => selected = sort);
+                          },
+                        ),
+                      )
+                      .toList(),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(context.tr('Cancel')),
+                    ),
+                    const SizedBox(width: 8),
+                    FilledButton(
+                      onPressed: () => Navigator.pop(context, selected),
+                      child: Text(context.tr('Apply')),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    if (result != null && mounted) {
+      _setSort(result);
+    }
   }
 
   Future<void> _showTypeFilters() async {
@@ -238,88 +287,54 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                TextField(
-                  key: const ValueKey('pet-search'),
-                  controller: _searchController,
-                  onChanged: _scheduleSearch,
-                  textInputAction: TextInputAction.search,
-                  decoration: InputDecoration(
-                    labelText: context.tr('Search creatures'),
-                    hintText: context.tr('Name, title, alias, or number'),
-                    prefixIcon: const Icon(Icons.search_rounded),
-                    suffixIcon: _searchController.text.isEmpty
-                        ? null
-                        : IconButton(
-                            tooltip: context.tr('Clear search'),
-                            onPressed: () {
-                              _searchController.clear();
-                              _load();
-                            },
-                            icon: const Icon(Icons.clear_rounded),
-                          ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                SegmentedButton<PetListMode>(
-                  segments: <ButtonSegment<PetListMode>>[
-                    ButtonSegment<PetListMode>(
-                      value: PetListMode.handbooks,
-                      icon: const Icon(Icons.menu_book_outlined),
-                      label: Text(context.tr('Handbook')),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 2,
+                      child: TextField(
+                        key: const ValueKey('pet-search'),
+                        controller: _searchController,
+                        onChanged: _scheduleSearch,
+                        textInputAction: TextInputAction.search,
+                        decoration: InputDecoration(
+                          labelText: context.tr('Search creatures'),
+                          prefixIcon: const Icon(Icons.search_rounded),
+                          suffixIcon: _searchController.text.isEmpty
+                              ? null
+                              : IconButton(
+                                  tooltip: context.tr('Clear search'),
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    _load();
+                                  },
+                                  icon: const Icon(Icons.clear_rounded),
+                                ),
+                        ),
+                      ),
                     ),
-                    ButtonSegment<PetListMode>(
-                      value: PetListMode.allForms,
-                      icon: const Icon(Icons.layers_outlined),
-                      label: Text(context.tr('All forms')),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _CompactFilterButton(
+                        key: const ValueKey('pet-sort'),
+                        icon: Icons.sort_rounded,
+                        label: context.tr('Sort'),
+                        semanticValue: _sortLabel(context, _sort),
+                        onPressed: _showSortOptions,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _CompactFilterButton(
+                        key: const ValueKey('pet-types'),
+                        icon: Icons.filter_alt_outlined,
+                        label: _selectedTypeIds.isEmpty
+                            ? context.tr('Types')
+                            : '${context.tr('Types')} (${_selectedTypeIds.length})',
+                        onPressed: _showTypeFilters,
+                      ),
                     ),
                   ],
-                  selected: <PetListMode>{_mode},
-                  onSelectionChanged: (selection) => _setMode(selection.single),
-                ),
-                const SizedBox(height: 10),
-                DropdownButtonFormField<PetSort>(
-                  initialValue: _sort,
-                  isExpanded: true,
-                  decoration: InputDecoration(
-                    labelText: context.tr('Sort'),
-                    prefixIcon: const Icon(Icons.sort_rounded),
-                    isDense: true,
-                  ),
-                  selectedItemBuilder: (context) => PetSort.values
-                      .map(
-                        (sort) => Text(
-                          _sortLabel(context, sort),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      )
-                      .toList(),
-                  items: PetSort.values
-                      .map(
-                        (sort) => DropdownMenuItem<PetSort>(
-                          value: sort,
-                          child: Text(
-                            _sortLabel(context, sort),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: _setSort,
-                ),
-                const SizedBox(height: 8),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: OutlinedButton.icon(
-                    onPressed: _showTypeFilters,
-                    icon: const Icon(Icons.filter_alt_outlined),
-                    label: Text(
-                      _selectedTypeIds.isEmpty
-                          ? context.tr('Types')
-                          : '${context.tr('Types')} (${_selectedTypeIds.length})',
-                    ),
-                  ),
                 ),
                 if (_searchController.text.isNotEmpty) ...<Widget>[
                   const SizedBox(height: 8),
@@ -443,9 +458,10 @@ class _PetResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final form =
-        pet.form ??
-        context.tr(pet.isDefaultForm ? 'Default form' : 'Form not provided');
+    final form = !pet.isDefaultForm && pet.form?.trim().isNotEmpty == true
+        ? '\uff08${pet.form!.trim()}\uff09'
+        : '';
+    final title = '${pet.name}$form ${pet.dexNo}';
     return Card(
       child: InkWell(
         onTap: onTap,
@@ -453,73 +469,89 @@ class _PetResultCard extends StatelessWidget {
           padding: const EdgeInsets.all(14),
           child: Row(
             children: <Widget>[
-              Stack(
-                alignment: Alignment.bottomCenter,
-                children: <Widget>[
-                  CatalogAssetImage(
-                    assetPath: petHeadAsset(pet.headKey),
-                    semanticLabel: pet.name,
-                    width: 68,
-                    height: 68,
-                    fit: BoxFit.cover,
-                    fallbackIcon: Icons.pets_outlined,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface
-                          .withAlpha(224),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Text(
-                        pet.dexNo,
-                        style: Theme.of(context).textTheme.labelSmall,
-                      ),
-                    ),
-                  ),
-                ],
+              CatalogAssetImage(
+                assetPath: petIllustrationAsset(pet.illustrationKey),
+                semanticLabel: pet.name,
+                width: 112,
+                height: 112,
+                fit: BoxFit.contain,
+                fallbackIcon: Icons.pets_outlined,
               ),
-              const SizedBox(width: 14),
+              const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      pet.name,
+                      title,
                       style: Theme.of(context).textTheme.titleMedium,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 3),
-                    Text(form),
-                    if (pet.types.isNotEmpty) ...<Widget>[
-                      const SizedBox(height: 7),
-                      Wrap(
-                        spacing: 6,
-                        runSpacing: 4,
-                        children: pet.types
-                            .map(
-                              (type) => Chip(
-                                visualDensity: VisualDensity.compact,
-                                label: TypeIconLabel(
-                                  typeName: type,
-                                  compact: true,
-                                ),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ],
+                    const SizedBox(height: 5),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            pet.types.join(' \u00b7 '),
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ),
+                        FavoriteIconButton(
+                          favorite: favorite,
+                          objectLabel: pet.petId,
+                          onChanged: onFavoriteChanged,
+                        ),
+                        const Icon(Icons.chevron_right_rounded),
+                      ],
+                    ),
                   ],
                 ),
               ),
-              FavoriteIconButton(
-                favorite: favorite,
-                objectLabel: pet.petId,
-                onChanged: onFavoriteChanged,
-              ),
-              const Icon(Icons.chevron_right_rounded),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CompactFilterButton extends StatelessWidget {
+  const _CompactFilterButton({
+    required this.icon,
+    required this.label,
+    required this.onPressed,
+    this.semanticValue,
+    super.key,
+  });
+
+  final IconData icon;
+  final String label;
+  final String? semanticValue;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      value: semanticValue,
+      button: true,
+      child: SizedBox(
+        height: 56,
+        child: OutlinedButton(
+          onPressed: onPressed,
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+          ),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Icon(icon, size: 20),
+                const SizedBox(width: 4),
+                Text(label, maxLines: 1),
+              ],
+            ),
           ),
         ),
       ),

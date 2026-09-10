@@ -8,7 +8,7 @@ An independent, non-commercial, offline-first reference application for iOS and 
 
 - Phases 0 through 6 are complete. Phase 6 closed under an explicit physical-device-test waiver; those tests remain unrun and store publication remains a separate unmet gate.
 - Phase 7 is temporarily closed under explicit live-update evidence deferral `PHASE7-LIVE-CATALOG-001`. Its complete-package GitHub Releases flow is implemented and passes local and hosted checks, but no genuine newer Catalog exists yet, so real package delivery remains unrun rather than simulated. No background update or logical patch path exists.
-- Phase 8 completes the formal App identity, `zh-CN` interface, frozen offline visual library, creature base-stat totals, source-backed type relationships, and reviewed iOS and Android store screenshot sets. Remaining store submission and release-account work is deferred.
+- Phase 8 completes the formal App identity, `zh-CN` interface, frozen offline visual library, full-illustration concrete-form catalog, creature base-stat totals, source-backed type relationships, and reviewed iOS and Android store screenshot sets. Remaining store submission and release-account work is deferred.
 - A local Git repository exists. Completed delivery checkpoints use GitHub Desktop for commits and pushes unless the active user instruction explicitly defers that step.
 - The supplied technical baseline is preserved at [docs/technical-spec-v1.md](docs/technical-spec-v1.md).
 - The Catalog and User V1 SQL files are the current normative schema sources. Catalog V1 currently contains 20 tables and two query views.
@@ -16,9 +16,9 @@ An independent, non-commercial, offline-first reference application for iOS and 
 - The upstream rendered index verified all 442 display numbers and default handbook forms. Forty-eight ambiguous defaults use evidence-bound explicit overrides; `show_topics`, record order, and ID suffixes are not local default-selection rules.
 - Phase 2 generated normalized Catalog data and release data version 1 from the validated snapshot. The package contains a verified 3,424,256-byte SQLite database with 596 creatures, 442 handbook entries, 788 skills, 298 Learnsets, and 242 evolution groups.
 - The tracked release manifest records database SHA-256 `2c27ddc3cd36f543ea6319ea9878b4a3c8b8a9a89afad6bd6eaacfd9592ed8f2`. The identity registry locks 1,826 creature, handbook, and skill identities.
-- The Flutter App runs on iOS and Android, validates and installs the bundled Catalog without a first-launch download, opens it read-only, and provides paginated creature and skill browsing, exact form search, type filtering, whitelisted sorting, full form switching, source-backed base-stat totals and type relationships, skill-source separation, evolution evidence, and Catalog attribution. Its only production network source is the fixed GitHub Releases Catalog channel invoked from Settings.
+- The Flutter App runs on iOS and Android, validates and installs the bundled Catalog without a first-launch download, opens it read-only, and provides paginated concrete-form and skill browsing, exact form search, compact modal type and sort controls, full form switching, source-backed base-stat totals and type relationships, skill-source separation, evolution evidence, and Catalog attribution. Its only production network source is the fixed GitHub Releases Catalog channel invoked from Settings.
 - The App is named **Roco World Handbook** in English and uses the Chinese display name frozen by ADR-0015. It follows the device locale with `en-US` fallback, and its Chinese game-domain terms are frozen from the Wiki rather than inferred from English copy.
-- Versioned Wiki assets ship inside the App: 596 creature heads, 569 creature illustrations, 736 skill or feature icons, and 35 domain UI icons. The 1,936-file manifest records 2,015 Catalog references and 106,877,001 verified bytes; ordinary App browsing never loads those images from the network.
+- Versioned Wiki assets ship inside the App: 569 distinct creature illustrations covering all 596 active forms, 736 skill or feature icons, and 35 domain UI icons. The 1,340-file manifest records 1,419 Catalog references and 97,655,049 verified bytes; ordinary App browsing never loads those images from the network. The Catalog retains upstream `head_key` data, but head images are not packaged or used at runtime.
 - The App creates and validates an independent personal database from the normative User V1 schema. Creature and skill favorites, handbook-level collection marks, and device-local notes survive restart; missing Catalog objects retain their saved name and notes.
 - Startup now serializes Catalog installation, validates a new immutable whole-database candidate and its attribution before activation, keeps independent active and previous records, rolls back a failed post-activation open, and retains at most the current and previous validated Catalog and attribution files. A newer compatible local Catalog is not silently downgraded by an older bundled version.
 - The fixed bottom navigation provides Creatures, Skills, My Library, and Settings. Settings explains local-storage and uninstall risk, shows the effective Catalog, recovery outcome, and personal schema versions, provides an explicitly confirmed bundled-Catalog recovery action, and owns the user-triggered complete-Catalog update flow. Neither action modifies `user.db`.
@@ -176,6 +176,18 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m bwiki_import \
 ```
 
 Both import commands refuse to replace a different existing version. Ordinary tests and App runtime never invoke them or access the Wiki.
+
+Normalize reviewed virtual-device captures to store-ready RGB PNGs without an alpha channel:
+
+```bash
+swift tools/brand/normalize_store_screenshots.swift \
+  --crop-top 137 /path/to/android-screenshot.png
+
+swift tools/brand/normalize_store_screenshots.swift \
+  /path/to/ios-screenshot.png
+```
+
+The optional `--crop-top` value removes a measured system status bar before conversion. The tool accepts one or more paths and atomically replaces only those files; it does not add frames, captions, or resize App content.
 
 ## Flutter App
 

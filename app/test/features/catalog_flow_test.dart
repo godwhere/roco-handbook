@@ -204,6 +204,127 @@ void main() {
     expect(find.text('\u53d7\u5230\u4f24\u5bb3\u589e\u52a0'), findsOneWidget);
   });
 
+  testWidgets('creature catalog uses one control row and full illustrations', (
+    tester,
+  ) async {
+    await _setPhoneSurface(tester);
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('zh', 'CN'),
+        supportedLocales: AppStrings.supportedLocales,
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        home: Scaffold(
+          body: PetCatalogPage(
+            repository: repository,
+            userRepository: userRepository,
+            datasetId: session.info.datasetId,
+            favoriteKeys: const <String>{},
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('\u5168\u90e8\u5f62\u6001'), findsNothing);
+    expect(find.text('\u9ed8\u8ba4\u5f62\u6001'), findsNothing);
+    expect(find.text('\u8fea\u83ab 001'), findsOneWidget);
+    expect(
+      find.text(
+        '\u5723\u5149\u8fea\u83ab\uff08\u9996\u9886\u5f62\u6001\uff09 001',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('\u5149\u7cfb'), findsWidgets);
+
+    final searchRect = tester.getRect(find.byKey(const ValueKey('pet-search')));
+    final sortRect = tester.getRect(find.byKey(const ValueKey('pet-sort')));
+    final typesRect = tester.getRect(find.byKey(const ValueKey('pet-types')));
+    expect(searchRect.center.dy, closeTo(sortRect.center.dy, 0.1));
+    expect(sortRect.center.dy, closeTo(typesRect.center.dy, 0.1));
+    expect(searchRect.width, greaterThan(sortRect.width * 1.8));
+    expect(sortRect.width, closeTo(typesRect.width, 0.1));
+
+    final dimoCard = find.byKey(const ValueKey('pet-result-pet_000004'));
+    final dimoImage = tester.widget<CatalogAssetImage>(
+      find.descendant(of: dimoCard, matching: find.byType(CatalogAssetImage)),
+    );
+    expect(
+      dimoImage.assetPath,
+      'assets/wiki/v1/pets/illustrations/JL_dimo.png',
+    );
+    expect(dimoImage.width, 112);
+    expect(dimoImage.height, 112);
+
+    await tester.tap(find.byKey(const ValueKey('pet-sort')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('pet-sort-sheet')), findsOneWidget);
+    expect(find.byType(ChoiceChip), findsNWidgets(PetSort.values.length));
+    await tester.tap(find.byKey(const ValueKey('pet-sort-option-name')));
+    await tester.tap(find.text('\u5e94\u7528'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey('pet-types')));
+    await tester.pumpAndSettle();
+    expect(find.byType(FilterChip), findsNWidgets(18));
+  });
+
+  testWidgets('localizes every top-level section and Catalog information', (
+    tester,
+  ) async {
+    await _setPhoneSurface(tester);
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('zh', 'CN'),
+        supportedLocales: AppStrings.supportedLocales,
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        home: CatalogHomePage(session: session),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final creatureSearch = tester.widget<TextField>(
+      find.byKey(const ValueKey('pet-search')),
+    );
+    expect(creatureSearch.decoration?.labelText, '\u641c\u7d22\u7cbe\u7075');
+
+    await tester.tap(find.byTooltip('\u56fe\u9274\u4fe1\u606f'));
+    await tester.pumpAndSettle();
+    expect(find.text('\u5173\u4e8e\u56fe\u9274\u6570\u636e'), findsOneWidget);
+    expect(find.text('\u6536\u5f55\u8303\u56f4'), findsOneWidget);
+    expect(find.text('\u6570\u636e\u6765\u6e90'), findsOneWidget);
+    Navigator.of(
+      tester.element(find.text('\u5173\u4e8e\u56fe\u9274\u6570\u636e')),
+    ).pop();
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('\u6280\u80fd').last);
+    await tester.pumpAndSettle();
+    final skillSearch = tester.widget<TextField>(
+      find.byKey(const ValueKey('skill-search')),
+    );
+    expect(skillSearch.decoration?.labelText, '\u641c\u7d22\u6280\u80fd');
+    expect(find.text('\u7279\u6027'), findsOneWidget);
+
+    await tester.tap(find.text('\u6211\u7684\u6536\u85cf').last);
+    await tester.pumpAndSettle();
+    expect(find.text('\u6536\u85cf'), findsOneWidget);
+    expect(find.text('\u5df2\u6536\u96c6'), findsOneWidget);
+
+    await tester.tap(find.text('\u8bbe\u7f6e').last);
+    await tester.pumpAndSettle();
+    expect(find.text('\u4e3b\u9898'), findsOneWidget);
+    expect(find.text('\u4e2a\u4eba\u6570\u636e'), findsOneWidget);
+    expect(find.text('\u56fe\u9274\u66f4\u65b0'), findsOneWidget);
+  });
+
   testWidgets('bootstrap reports that preparation needs no download', (
     tester,
   ) async {
@@ -243,12 +364,12 @@ void main() {
     await tester.enterText(find.byKey(const ValueKey('pet-search')), 'second');
     await tester.pump(const Duration(milliseconds: 300));
     await tester.pump();
-    expect(find.text('Second result'), findsOneWidget);
+    expect(find.text('Second result 001'), findsOneWidget);
 
     stale.complete(<PetSummary>[_summary('stale', 'Stale result')]);
     await tester.pumpAndSettle();
-    expect(find.text('Second result'), findsOneWidget);
-    expect(find.text('Stale result'), findsNothing);
+    expect(find.text('Second result 001'), findsOneWidget);
+    expect(find.text('Stale result 001'), findsNothing);
   });
 
   testWidgets('favorites a concrete creature and shows it in My Library', (
@@ -260,14 +381,14 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const ValueKey('favorite-pet_000001')));
+    await tester.tap(find.byKey(const ValueKey('favorite-pet_000004')));
     await tester.pumpAndSettle();
     expect(
       await userRepository.isFavorite(
         const ObjectRef(
           datasetId: 'roco-world-zh-cn',
           objectType: UserObjectType.pet,
-          objectId: 'pet_000001',
+          objectId: 'pet_000004',
           nameSnapshot: '迪莫',
         ),
       ),
@@ -276,10 +397,10 @@ void main() {
 
     await tester.tap(find.text('My Library'));
     await tester.pumpAndSettle();
-    expect(find.byKey(const ValueKey('saved-pet:pet_000001')), findsOneWidget);
+    expect(find.byKey(const ValueKey('saved-pet:pet_000004')), findsOneWidget);
     expect(
       (await userRepository.listFavorites()).single.object.nameSnapshot,
-      '喵喵',
+      '迪莫',
     );
   });
 

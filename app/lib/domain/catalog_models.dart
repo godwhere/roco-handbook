@@ -1,5 +1,3 @@
-enum PetListMode { handbooks, allForms }
-
 enum PetSort { handbook, name, attack, magicAttack, speed }
 
 enum SkillFilter { all, features, learnable }
@@ -51,7 +49,7 @@ class PetSummary {
     required this.types,
     required this.isDefaultForm,
     this.form,
-    this.headKey,
+    this.illustrationKey,
   });
 
   final String petId;
@@ -61,7 +59,7 @@ class PetSummary {
   final String title;
   final String? form;
   final List<String> types;
-  final String? headKey;
+  final String? illustrationKey;
   final bool isDefaultForm;
 }
 
@@ -97,6 +95,26 @@ class PetDetail {
   final bool? isLordEvolution;
   final Map<String, int?> stats;
   final List<SourceReference> sourceReferences;
+
+  int? get totalBaseStats {
+    const keys = <String>[
+      'HP',
+      'Attack',
+      'Defense',
+      'Magic attack',
+      'Magic defense',
+      'Speed',
+    ];
+    var total = 0;
+    for (final key in keys) {
+      final value = stats[key];
+      if (value == null) {
+        return null;
+      }
+      total += value;
+    }
+    return total;
+  }
 }
 
 class SkillSummary {

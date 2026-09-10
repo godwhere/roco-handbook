@@ -29,7 +29,6 @@ flutter:
     - assets/catalog/
     - assets/database/
     - assets/wiki/type-relations-v1.json
-    - assets/wiki/v1/pets/heads/
     - assets/wiki/v1/pets/illustrations/
     - assets/wiki/v1/skills/
     - assets/wiki/v1/ui/info/

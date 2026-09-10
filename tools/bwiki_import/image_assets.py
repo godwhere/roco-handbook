@@ -179,7 +179,7 @@ def _config(path: Path) -> dict[str, Any]:
         "download_minimum_interval_seconds",
     ):
         _positive_number(policy.get(key), f"request_policy.{key}")
-    for key in ("pet_head", "pet_illustration", "skill_icon", "ui_icon"):
+    for key in ("pet_illustration", "skill_icon", "ui_icon"):
         _positive_int(widths.get(key), f"thumbnail_widths.{key}")
     return config
 
@@ -201,20 +201,6 @@ def derive_asset_specs(catalog_path: Path, config_path: Path) -> list[AssetSpec]
     if catalog.get("dataset_id") != config["dataset_id"]:
         raise InputError("Catalog and image asset configuration dataset IDs differ")
     widths = config["thumbnail_widths"]
-    head_overrides = config.get("head_overrides", {})
-    head_fallbacks = config.get("head_illustration_fallbacks", {})
-    if not isinstance(head_overrides, dict) or not all(
-        isinstance(key, str) and isinstance(value, str)
-        for key, value in head_overrides.items()
-    ):
-        raise InputError("Image asset head_overrides must be a string map")
-    if not isinstance(head_fallbacks, dict) or not all(
-        isinstance(key, str) and isinstance(value, str)
-        for key, value in head_fallbacks.items()
-    ):
-        raise InputError(
-            "Image asset head_illustration_fallbacks must be a string map"
-        )
     grouped: dict[str, AssetSpec] = {}
 
     def add(
@@ -263,26 +249,8 @@ def derive_asset_specs(catalog_path: Path, config_path: Path) -> list[AssetSpec]
         if not isinstance(raw, dict) or raw.get("status") != "active":
             continue
         pet_id = _required_text(raw, "pet_id", "Active creature")
-        head = _required_text(raw, "head_key", f"Creature {pet_id}")
         illustration = _required_text(
             raw, "illustration_key", f"Creature {pet_id}"
-        )
-        resolved_head = head_overrides.get(head, head)
-        if head in head_fallbacks:
-            if head_fallbacks[head] != illustration:
-                raise InputError(
-                    f"Creature {pet_id} head fallback differs from its illustration"
-                )
-            head_title = _source_title("", illustration)
-        else:
-            head_title = _source_title("", resolved_head)
-        add(
-            asset_id=f"pet_head:{head}",
-            kind="pet_head",
-            source_title=head_title,
-            local_path=f"pets/heads/{head}.png",
-            width=widths["pet_head"],
-            catalog_id=pet_id,
         )
         add(
             asset_id=f"pet_illustration:{illustration}",

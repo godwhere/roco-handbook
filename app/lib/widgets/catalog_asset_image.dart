@@ -4,9 +4,6 @@ import '../domain/catalog_models.dart';
 
 const _assetRoot = 'assets/wiki/v1';
 
-String? petHeadAsset(String? key) =>
-    key == null ? null : '$_assetRoot/pets/heads/$key.png';
-
 String? petIllustrationAsset(String? key) =>
     key == null ? null : '$_assetRoot/pets/illustrations/$key.png';
 
@@ -93,20 +90,20 @@ class CatalogAssetImage extends StatelessWidget {
         child: Center(child: Icon(fallbackIcon)),
       ),
     );
-    if (assetPath == null) {
-      return Semantics(label: semanticLabel, image: true, child: fallback);
-    }
-    final image = Image.asset(
-      assetPath!,
-      width: width,
-      height: height,
-      fit: fit,
-      semanticLabel: semanticLabel,
-      errorBuilder: (_, _, _) => fallback,
-    );
-    return borderRadius == null
-        ? image
-        : ClipRRect(borderRadius: borderRadius!, child: image);
+    final content = assetPath == null
+        ? fallback
+        : Image.asset(
+            assetPath!,
+            width: width,
+            height: height,
+            fit: fit,
+            excludeFromSemantics: true,
+            errorBuilder: (_, _, _) => fallback,
+          );
+    final clipped = borderRadius == null
+        ? content
+        : ClipRRect(borderRadius: borderRadius!, child: content);
+    return Semantics(label: semanticLabel, image: true, child: clipped);
   }
 }
 

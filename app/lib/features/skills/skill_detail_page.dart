@@ -408,11 +408,11 @@ class _UserList extends StatelessWidget {
             (user) => ListTile(
               contentPadding: EdgeInsets.zero,
               leading: CatalogAssetImage(
-                assetPath: petHeadAsset(user.pet.headKey),
+                assetPath: petIllustrationAsset(user.pet.illustrationKey),
                 semanticLabel: user.pet.name,
                 width: 44,
                 height: 44,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
                 fallbackIcon: Icons.pets_outlined,
                 borderRadius: BorderRadius.circular(10),
               ),
