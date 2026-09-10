@@ -33,9 +33,9 @@ An App-side packaging regression reads the active records from the real bundled 
 
 ## Creature catalog presentation
 
-The creature catalog always returns concrete forms and no longer exposes a Handbook/All forms mode switch. Search occupies half of the compact control row; Sort and Types divide the remaining width with fixed spacing. Sort uses the same modal-bottom-sheet pattern as type filtering, with a visible selected chip and explicit Cancel and Apply actions.
+The creature catalog always returns concrete forms and no longer exposes a Handbook/All forms mode switch. Sort and Types lead the compact control row with one width unit each; Search follows with two units and uses a rounded outline without a floating label. Sort uses the same modal-bottom-sheet pattern as type filtering, with a visible selected chip and explicit Cancel and Apply actions.
 
-Cards render the frozen 512-pixel-source illustration inside a 112-logical-pixel contain box. Default forms display `<name> <dex number>` and omit a form label. Named non-default forms display `<name>（<form>） <dex number>`. Type names appear as a separate text line, preserving exact Catalog terminology while leaving more space for the full creature art.
+Cards render the frozen 512-pixel-source illustration inside a 112-logical-pixel contain box and center the handbook number immediately below it. Default forms display `<name>` and omit a form label. Named non-default forms display `<name>（<form>）`. Type names appear as a separate text line, preserving exact Catalog terminology while leaving more space for the full creature art.
 
 ## Base-stat total
 

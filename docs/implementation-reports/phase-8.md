@@ -1,6 +1,6 @@
 # Phase 8 implementation report
 
-- Status: implementation complete for the ADR-0015 and ADR-0016 scopes; GitHub Desktop checkpoint deferred while the host is locked; all other Phase 8 release work deferred
+- Status: implementation complete for the ADR-0015 and ADR-0016 scopes; all other Phase 8 release work deferred
 - Date: 2026-09-10
 - Workspace: `/Users/ethan/Documents/ChatGPT/roco-handbook`
 
@@ -17,7 +17,7 @@ App signing, store account configuration, listing submission, upload, publicatio
 - Frozen visual library: 569 creature illustrations covering all 596 active forms, 736 skill or feature icons, and 35 type, stat, or skill-category icons under `app/assets/wiki/v1/`; 596 unused head files and their Flutter asset declaration were removed
 - Import and generation tools: `tools/bwiki_import/image_assets.py`, `tools/bwiki_import/type_relations.py`, their CLI commands, `tools/brand/generate_brand_assets.swift`, and the atomic RGB store-screenshot normalizer
 - App domain and data: the existing illustration key is projected into creature summaries and all summary queries, the upstream head key remains preserved in Catalog data, a null-preserving `PetDetail.totalBaseStats` contract, plus the type-relationship contract and bundled-asset repository
-- App presentation: centralized `en-US` and `zh-CN` strings; localized startup, navigation, Catalog, personal library, and Settings flows; a compact same-row creature search/sort/type layout; modal sort and type selectors; exact default and named-form card copy; enlarged full illustrations; accessible skill, feature, type, stat, and category images; total base stats; incoming and outgoing type relationships
+- App presentation: centralized `en-US` and `zh-CN` strings; localized startup, navigation, Catalog, personal library, and Settings flows; a compact Sort/Types/Search row with a rounded placeholder-only Search field; modal sort and type selectors; exact default and named-form card copy with the handbook number below each illustration; enlarged full illustrations; accessible skill, feature, type, stat, and category images; total base stats; incoming and outgoing type relationships
 - Platform identity: Android and iOS display names, launcher and App icons, branded launch resources, and regenerated platform image slots
 - Tests: focused image manifest, complete Catalog-to-Flutter illustration resolution, exact creature control-row geometry and card copy, modal sort interaction, complete Catalog base-stat and type-combination audits, type relation, repository, source-grounded terminology, literal UI-key completeness, fixed-copy localization-entry enforcement, Chinese top-level navigation rendering, frozen brand-source and output identities, store-screenshot eligibility, widget, and iOS platform-identity coverage; the generated empty iOS example test was replaced
 - Store evidence: four iOS screenshots at 1206 × 2622 and four Android screenshots at 1080 × 1920 under `docs/evidence/phase-8-store-screenshots/`; all eight are 8-bit RGB PNGs without alpha
@@ -62,19 +62,19 @@ cd app && flutter build apk --debug
 Result: passed; the rebuilt APK was installed and launched on the Android API 36 emulator.
 
 cd app && flutter build appbundle --release --no-pub
-Result: passed; 158,118,017-byte AAB; SHA-256 f6b3452a1a637438a9b3f76790ccc751b61473f7a0e31a41ce44abec4b97c4ba.
+Result: passed; 158,152,015-byte AAB reported as 158.2 MB by Flutter; SHA-256 5ad3b961b314a2f6cbe6999e741554b92e5a5eab758d28d87f4bc8543ff16cd3.
 
 cd app && flutter build ios --release --no-codesign --no-pub
-Result: passed; 122,628 KiB App reported as 122.7 MB by Flutter; embedded version 1.1.0 build 2; App framework SHA-256 2a3c7467036bcd49a8251d7b2c3f851fecda2480a889eba25292b2b51159c046.
+Result: passed; 122,644 KiB App reported as 122.8 MB by Flutter; embedded version 1.1.0 build 2; App framework SHA-256 6d0e0d6f848063dd9e5ea1397f91066d0378f7e09da28a9957a0a8abbdcd4b50.
 
 Virtual-platform visual review
-Result: iOS and Android displayed localized navigation, enlarged creature illustrations, the compact creature control row, base stats, the calculated total, and type relationships. Four Android captures were reviewed after the measured status-bar crop; all eight store screenshots retained complete App content after RGB normalization. The repository owner separately observed the implemented skill imagery.
+Result: the current source built, installed, and launched on the iOS simulator and Android emulator, and updated Catalog captures passed the measured dimensions and RGB normalization checks. Final subjective acceptance of the Sort/Types/Search layout and number placement remains with the repository owner. Earlier Phase 8 review covered localized navigation, imagery, base stats, the calculated total, and type relationships.
 
 git diff --check
 Result: passed.
 
 GitHub Actions `Offline validation`
-Result: passed for the earlier Phase 8 commit `94ee692d9fc30ef33f9937116c891773d425a489`; hosted run 34400308182 completed successfully. ADR-0016 is not included in that hosted run.
+Result: passed for the earlier Phase 8 commit `94ee692d9fc30ef33f9937116c891773d425a489`; hosted run 34400308182 completed successfully. Hosted validation of the current ADR-0016 UI revision is reserved for repository-owner confirmation.
 
 shasum -a 256 docs/technical-spec-v1.md
 Result: 343618b414b7b8d6262dd58f82010bfefb2f3fdb29711a9e86428e042dd81876; the provenance baseline is unchanged.
@@ -87,11 +87,11 @@ Result: 343618b414b7b8d6262dd58f82010bfefb2f3fdb29711a9e86428e042dd81876; the pr
 - Real Catalog V2 import or Phase 7 production package update
 - Logical incremental patch generation or installation
 - Any Phase 8 work outside ADR-0015 and ADR-0016
-- GitHub Desktop commit, push, and hosted validation for ADR-0016; the host remained locked, so the active user instruction required work to continue without committing
+- Hosted validation for the current ADR-0016 UI revision; the repository owner will confirm it separately
 
 ## Remaining risks and next boundary
 
-The measured package cost remains material because the complete illustration, skill, and domain-icon library ships offline. Removing 596 unused heads reduces the source asset bundle by 9,221,952 bytes, the Android AAB from 167,411,147 to 158,118,017 bytes, and the iOS no-codesign App from 133,024 to 122,628 KiB. No runtime image download, on-demand resource, or logical asset patch protocol was introduced.
+The measured package cost remains material because the complete illustration, skill, and domain-icon library ships offline. Removing 596 unused heads reduces the source asset bundle by 9,221,952 bytes; the current Android AAB is 158,152,015 bytes and the iOS no-codesign App is 122,644 KiB. No runtime image download, on-demand resource, or logical asset patch protocol was introduced.
 
 A later Catalog or Wiki revision can add keys or change source files, but the installed App will not acquire them automatically; a new immutable image asset version and App release are required. The upstream `head_key` remains present only for source fidelity and is not a packaged runtime dependency.
 

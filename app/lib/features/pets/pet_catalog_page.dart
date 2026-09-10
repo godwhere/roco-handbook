@@ -291,30 +291,6 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Expanded(
-                      flex: 2,
-                      child: TextField(
-                        key: const ValueKey('pet-search'),
-                        controller: _searchController,
-                        onChanged: _scheduleSearch,
-                        textInputAction: TextInputAction.search,
-                        decoration: InputDecoration(
-                          labelText: context.tr('Search creatures'),
-                          prefixIcon: const Icon(Icons.search_rounded),
-                          suffixIcon: _searchController.text.isEmpty
-                              ? null
-                              : IconButton(
-                                  tooltip: context.tr('Clear search'),
-                                  onPressed: () {
-                                    _searchController.clear();
-                                    _load();
-                                  },
-                                  icon: const Icon(Icons.clear_rounded),
-                                ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
                       child: _CompactFilterButton(
                         key: const ValueKey('pet-sort'),
                         icon: Icons.sort_rounded,
@@ -332,6 +308,38 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
                             ? context.tr('Types')
                             : '${context.tr('Types')} (${_selectedTypeIds.length})',
                         onPressed: _showTypeFilters,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      flex: 2,
+                      child: TextField(
+                        key: const ValueKey('pet-search'),
+                        controller: _searchController,
+                        onChanged: _scheduleSearch,
+                        textInputAction: TextInputAction.search,
+                        decoration: InputDecoration(
+                          hintText: context.tr('Search creatures'),
+                          prefixIcon: const Icon(Icons.search_rounded),
+                          suffixIcon: _searchController.text.isEmpty
+                              ? null
+                              : IconButton(
+                                  tooltip: context.tr('Clear search'),
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    _load();
+                                  },
+                                  icon: const Icon(Icons.clear_rounded),
+                                ),
+                          filled: false,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(28),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 16,
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -461,7 +469,7 @@ class _PetResultCard extends StatelessWidget {
     final form = !pet.isDefaultForm && pet.form?.trim().isNotEmpty == true
         ? '\uff08${pet.form!.trim()}\uff09'
         : '';
-    final title = '${pet.name}$form ${pet.dexNo}';
+    final title = '${pet.name}$form';
     return Card(
       child: InkWell(
         onTap: onTap,
@@ -469,13 +477,27 @@ class _PetResultCard extends StatelessWidget {
           padding: const EdgeInsets.all(14),
           child: Row(
             children: <Widget>[
-              CatalogAssetImage(
-                assetPath: petIllustrationAsset(pet.illustrationKey),
-                semanticLabel: pet.name,
+              SizedBox(
                 width: 112,
-                height: 112,
-                fit: BoxFit.contain,
-                fallbackIcon: Icons.pets_outlined,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    CatalogAssetImage(
+                      assetPath: petIllustrationAsset(pet.illustrationKey),
+                      semanticLabel: pet.name,
+                      width: 112,
+                      height: 112,
+                      fit: BoxFit.contain,
+                      fallbackIcon: Icons.pets_outlined,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      pet.dexNo,
+                      key: ValueKey('pet-dex-${pet.petId}'),
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(width: 10),
               Expanded(

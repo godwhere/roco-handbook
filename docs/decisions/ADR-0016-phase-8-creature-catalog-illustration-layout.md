@@ -14,10 +14,10 @@ The Catalog already preserves stable concrete-form identity, default-form select
 ## Decision
 
 - The creature catalog always lists concrete forms. The Handbook/All forms mode control is removed, and the page uses the existing `searchPets` repository query for both empty and non-empty searches.
-- Search, Sort, and Types share one responsive row. Search receives two flexible width units; Sort and Types receive one unit each, with fixed gaps between controls.
+- Sort, Types, and Search share one responsive row in that order. Sort and Types receive one flexible width unit each; Search receives two units, with fixed gaps between controls. Search uses a rounded outlined field and a placeholder rather than a floating label.
 - Sort opens a modal bottom sheet with selectable chips and explicit Cancel and Apply actions. Its structure and surface treatment match the existing type-filter bottom sheet.
 - Creature cards use the frozen full illustration at 112 logical pixels with contain fitting. Head images are no longer used by App presentation or included in the bundled image library.
-- A default-form card displays `<name> <dex number>` followed by its type names. A non-default form displays `<name>（<form>） <dex number>` followed by its type names. The default-form label is intentionally omitted.
+- A default-form card displays `<name>` followed by its type names. A non-default form displays `<name>（<form>）` followed by its type names. The handbook number is centered below the illustration, and the default-form label is intentionally omitted.
 - The existing Catalog `head_key` field remains preserved as upstream data. This decision changes only the derived image-import scope, App DTO projection, runtime path helpers, and packaged files; it does not remove or reinterpret the source field.
 - Skill user lists use the same frozen illustration helper, so removal of packaged heads leaves no runtime head dependency.
 
@@ -30,9 +30,9 @@ Catalog and User schemas, source identity, default-form rules, detail-page seman
 ## Acceptance
 
 - The Handbook/All forms control is absent and an empty query returns concrete forms.
-- Search, Sort, and Types render on the same row with the intended two-to-one-to-one width relationship.
+- Sort, Types, and Search render in that order on the same row with the intended one-to-one-to-two width relationship, and Search has no floating label.
 - Sort and type selection use modal bottom sheets, and applying a selection reloads through the existing repository query contract.
-- Default and non-default card copy follows the declared exact structure without a default-form label.
+- Default and non-default card copy follows the declared exact structure without a default-form label, and the handbook number appears below the illustration rather than inside the title.
 - Every active form resolves to a bundled illustration through the production helper.
 - No App code or declared Flutter asset path refers to the removed head bundle.
 - The immutable image manifest exactly matches the remaining bundled PNG files and records their hashes and byte lengths.

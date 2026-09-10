@@ -231,13 +231,13 @@ void main() {
 
     expect(find.text('\u5168\u90e8\u5f62\u6001'), findsNothing);
     expect(find.text('\u9ed8\u8ba4\u5f62\u6001'), findsNothing);
-    expect(find.text('\u8fea\u83ab 001'), findsOneWidget);
+    expect(find.text('\u8fea\u83ab'), findsOneWidget);
     expect(
-      find.text(
-        '\u5723\u5149\u8fea\u83ab\uff08\u9996\u9886\u5f62\u6001\uff09 001',
-      ),
+      find.text('\u5723\u5149\u8fea\u83ab\uff08\u9996\u9886\u5f62\u6001\uff09'),
       findsOneWidget,
     );
+    expect(find.byKey(const ValueKey('pet-dex-pet_000004')), findsOneWidget);
+    expect(find.byKey(const ValueKey('pet-dex-pet_000560')), findsOneWidget);
     expect(find.text('\u5149\u7cfb'), findsWidgets);
 
     final searchRect = tester.getRect(find.byKey(const ValueKey('pet-search')));
@@ -247,6 +247,14 @@ void main() {
     expect(sortRect.center.dy, closeTo(typesRect.center.dy, 0.1));
     expect(searchRect.width, greaterThan(sortRect.width * 1.8));
     expect(sortRect.width, closeTo(typesRect.width, 0.1));
+    expect(sortRect.left, lessThan(typesRect.left));
+    expect(typesRect.left, lessThan(searchRect.left));
+    final search = tester.widget<TextField>(
+      find.byKey(const ValueKey('pet-search')),
+    );
+    expect(search.decoration?.labelText, isNull);
+    expect(search.decoration?.hintText, '\u641c\u7d22\u7cbe\u7075');
+    expect(search.decoration?.border, isA<OutlineInputBorder>());
 
     final dimoCard = find.byKey(const ValueKey('pet-result-pet_000004'));
     final dimoImage = tester.widget<CatalogAssetImage>(
@@ -293,7 +301,7 @@ void main() {
     final creatureSearch = tester.widget<TextField>(
       find.byKey(const ValueKey('pet-search')),
     );
-    expect(creatureSearch.decoration?.labelText, '\u641c\u7d22\u7cbe\u7075');
+    expect(creatureSearch.decoration?.hintText, '\u641c\u7d22\u7cbe\u7075');
 
     await tester.tap(find.byTooltip('\u56fe\u9274\u4fe1\u606f'));
     await tester.pumpAndSettle();
@@ -364,12 +372,12 @@ void main() {
     await tester.enterText(find.byKey(const ValueKey('pet-search')), 'second');
     await tester.pump(const Duration(milliseconds: 300));
     await tester.pump();
-    expect(find.text('Second result 001'), findsOneWidget);
+    expect(find.text('Second result'), findsOneWidget);
 
     stale.complete(<PetSummary>[_summary('stale', 'Stale result')]);
     await tester.pumpAndSettle();
-    expect(find.text('Second result 001'), findsOneWidget);
-    expect(find.text('Stale result 001'), findsNothing);
+    expect(find.text('Second result'), findsOneWidget);
+    expect(find.text('Stale result'), findsNothing);
   });
 
   testWidgets('favorites a concrete creature and shows it in My Library', (

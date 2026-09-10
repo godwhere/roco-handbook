@@ -23,7 +23,7 @@ The type relationship contract freezes `Module:TypeRelation` page ID 12987, revi
 
 The Flutter localization suite compares the UI's source-grounded domain vocabulary with every applicable entry in `config/ui_terminology_zh_cn.json` and accounts for the source-page-only `creature_handbook` term. It also checks every literal BuildContext `.tr(...)` call for a distinct Chinese mapping and rejects fixed visible copy that bypasses the localization entry point. All three regressions passed as part of the current 100-test Flutter suite.
 
-The Chinese-locale top-level smoke test rendered and navigated the creature search, skill search, personal library, Settings, and Catalog information interfaces. It observed localized labels in every section and passed as part of the current 100-test Flutter suite. A separate widget regression confirms that both an absent asset path and a failed bundled-asset load retain the declared accessible image label while showing the local fallback icon. The ADR-0016 regression renders the exact default and named-form card copy, checks 112-logical-pixel illustration use, locks the two-to-one-to-one control widths, and applies a choice from the sort bottom sheet.
+The Chinese-locale top-level smoke test rendered and navigated the creature search, skill search, personal library, Settings, and Catalog information interfaces. It observed localized labels in every section and passed as part of the current 100-test Flutter suite. A separate widget regression confirms that both an absent asset path and a failed bundled-asset load retain the declared accessible image label while showing the local fallback icon. The ADR-0016 regression renders the exact default and named-form card copy, checks the handbook number below the 112-logical-pixel illustration, locks the one-to-one-to-two Sort/Types/Search order and widths, verifies the rounded placeholder-only Search field, and applies a choice from the sort bottom sheet.
 
 ## Brand asset identity
 
@@ -55,7 +55,7 @@ The current Phase 8 source was rebuilt and installed on both virtual platforms. 
 
 The repository owner separately observed the implemented skill imagery in the iOS simulator. No additional skill-image observation is claimed here.
 
-After the iOS Simulator window was closed, the current working source was rebuilt, installed, and launched on the still-booted iPhone 17 simulator. A fresh 1206 × 2622 capture confirmed the localized creature Catalog and bundled creature imagery, distinguishing a successful reinstall from a cached home-screen icon. The ADR-0016 build was then installed again on the same simulator and on the Android API 36 emulator. Direct screenshots confirmed the final one-row controls, uninterrupted named-form title, enlarged full illustrations, and the matching chip-based sort and type bottom sheets.
+After the iOS Simulator window was closed, the current working source was rebuilt, installed, and launched on the still-booted iPhone 17 simulator. A fresh 1206 × 2622 capture confirmed the localized creature Catalog and bundled creature imagery, distinguishing a successful reinstall from a cached home-screen icon. The ADR-0016 build was then installed again on the same simulator and on the Android API 36 emulator. Fresh capture artifacts record the Sort/Types/Search row, rounded Search field, handbook number below each illustration, and enlarged full illustrations. Final subjective acceptance of this revision remains with the repository owner.
 
 ## Store screenshot set
 
@@ -68,11 +68,11 @@ The iOS captures retain their exact simulator dimensions. The Android captures u
 
 | Platform | File | Pixels | SHA-256 |
 | --- | --- | ---: | --- |
-| iOS | `phase-8-store-screenshots/ios/01-creature-catalog.png` | 1206 × 2622 | `c527baf91481cb99fb34b2d0f24c20d5c70c3fd5d2743d3bc36fa51a691a8edc` |
+| iOS | `phase-8-store-screenshots/ios/01-creature-catalog.png` | 1206 × 2622 | `cc96331a910aafa413fe0cf60e1a3f1268e0619fb6030bfb35a44f115bf72200` |
 | iOS | `phase-8-store-screenshots/ios/02-creature-detail-stats.png` | 1206 × 2622 | `df3e4086acaba4e7902af0b03bd052a03f144e47f67b408aff85dccf17380b20` |
 | iOS | `phase-8-store-screenshots/ios/03-type-relationships.png` | 1206 × 2622 | `e3f6599ab17d5b20aa9ddeed67e3e72d995f8c91c1efdc6e8004f4faf3458196` |
 | iOS | `phase-8-store-screenshots/ios/04-skill-catalog.png` | 1206 × 2622 | `c1c15da973bdcba0c09e99544f123abc6bb885b70def42a4f8e9338003de2931` |
-| Android | `phase-8-store-screenshots/android/01-creature-catalog.png` | 1080 × 1920 | `1b381a8da7e1d101d2c73da22b0b1b64a058f52a15905d86ce079840aab6f03b` |
+| Android | `phase-8-store-screenshots/android/01-creature-catalog.png` | 1080 × 1920 | `f79e85dd4627c680264fe0021ff30a44c7cfdee51958b5f5428a41741fe32cb2` |
 | Android | `phase-8-store-screenshots/android/02-creature-detail-stats.png` | 1080 × 1920 | `d8987442f5c01d6f3818dc678ec2567b8736f915cdccac13b17d4e3ba19c5fb9` |
 | Android | `phase-8-store-screenshots/android/03-type-relationships.png` | 1080 × 1920 | `26cc36d9091e39ce204b1beb30acd1d2b31f0f850b51d560b3c0f1b082c91d89` |
 | Android | `phase-8-store-screenshots/android/04-skill-catalog.png` | 1080 × 1920 | `bf9bd07db5b0412e8c3e110091fc2fc20c2774cf06f4766200b83cf5ed6f9ae1` |
@@ -83,8 +83,8 @@ The regression gate requires the exact four-file inventory for each platform, th
 
 The current `1.1.0` build `2` source built successfully with the complete frozen image set:
 
-- Android Release AAB: 158,118,017 bytes reported as 158.1 MB by Flutter; SHA-256 `f6b3452a1a637438a9b3f76790ccc751b61473f7a0e31a41ce44abec4b97c4ba`.
-- iOS no-codesign Release App: 122,628 KiB reported as 122.7 MB by Flutter; the embedded version remains 1.1.0 build 2, and the App framework binary SHA-256 is `2a3c7467036bcd49a8251d7b2c3f851fecda2480a889eba25292b2b51159c046`.
+- Android Release AAB: 158,152,015 bytes reported as 158.2 MB by Flutter; SHA-256 `5ad3b961b314a2f6cbe6999e741554b92e5a5eab758d28d87f4bc8543ff16cd3`.
+- iOS no-codesign Release App: 122,644 KiB reported as 122.8 MB by Flutter; the embedded version remains 1.1.0 build 2, and the App framework binary SHA-256 is `6d0e0d6f848063dd9e5ea1397f91066d0378f7e09da28a9957a0a8abbdcd4b50`.
 - iOS simulator App and Android debug APK: both built, installed, launched, and supplied the screenshot observations above.
 
 The generated build products remain ignored and untracked. The package sizes are the measured cost of shipping the complete offline image library; ADR-0016 reduces that library by 9,221,952 uncompressed bytes by removing unused heads.
