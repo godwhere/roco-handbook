@@ -36,6 +36,14 @@ The formal icon and launch generator reads the frozen Dimo illustration with SHA
 | Android xxxhdpi launcher icon | 192 × 192 | `b6c9d5481836160ed5af1ec73acb8914907b404381bff662aa47b54ddddb4076` |
 | Android launch mark | 384 × 384 | `062afaefdc8993ba61a5d30cbf014f947c7fa375da8a6c175c21f031fdd1eafe` |
 
+### Product rename verification on 2026-09-11
+
+The Chinese product name was shortened to **洛克手册** without changing the English name, Android application ID, iOS Bundle ID, App version, Catalog dataset, or personal-data identity. The same Chinese value now owns the Flutter `zh-CN` title, iOS `CFBundleDisplayName`, Android `application-label`, and root project heading.
+
+The complete 101-test Python suite and 115-test Flutter suite passed after the rename, and Flutter analysis reported no issues. The current iOS Simulator debug build succeeded; the focused Runner platform test passed on the iPhone 17 simulator, and the built App's `Info.plist` returned the new value. The current Android debug APK also built successfully, and Android build-tools inspection returned the new `application-label`. Reinstalling and launching the current iOS build showed the new title in the implemented creature Catalog header.
+
+The existing store screenshot set predates both this rename and the ADR-0019 typography revision. It remains historical evidence and must be regenerated before any store submission.
+
 ## Placeholder and temporary-content audit
 
 The tracked production Flutter source, iOS Runner resources, and Android main resources contain no Flutter counter-demo copy, Lorem Ipsum, sample-App text, temporary visual asset, or default Flutter logo. The App disables the debug banner. The exact 24-file brand inventory check prevents an unreviewed image or missing platform size from remaining in an icon or launch slot.

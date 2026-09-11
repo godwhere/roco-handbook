@@ -22,13 +22,13 @@ App signing, store account configuration, listing submission, upload, publicatio
 - App presentation: centralized `en-US` and `zh-CN` strings; localized startup, navigation, Catalog, Tools, personal library, and Settings flows; Wiki-matched display typography for headings, titles, and labels; a dedicated tabular numeric role for selected handbook values; platform body typography for long text; compact Sort/Filters/Search and Skill handbook/Skill filters/Skill query rows; a vertically grouped shiny/stage/form/season/type filter sheet; season-colored shiny-capable names; original/shiny detail art switching; 100-pixel contained full creature illustrations; inline muted form and `NO.<dex_no>` copy; accessible type icons; derived stage labels; detail-header favorites; categorized creature skills; a learnable-skill handbook with 42 combined filter choices; seven functional compact and unnumbered Tools cards, searchable and multi-select-filterable Egg groups, 54 game descriptions with relationships, a 547-occurrence activity timeline, and 110 gender-switchable outfits; accessible skill, feature, type, stat, category, activity, and outfit images; total base stats; and compact incoming type relationships
 - Platform identity: the current ADR-0015 English and Chinese display names across Flutter, Android, and iOS; launcher and App icons; branded launch resources; and regenerated platform image slots
 - Tests: focused core, Tool media, and font manifests; complete Catalog-to-Flutter original and shiny illustration resolution; exact creature and skill toolbar geometry and card copy; compact unnumbered Tools cards; combined source-backed creature filters; egg-group queries plus normal text search and multi-select filtering; shiny detail switching; every Tools route; game-description relationship closure; activity windows and categories; outfit variants and images; normal skill text input; detail-only favorite placement; derived stage and lord-evolution copy; combined skill filters; detail navigation; modal sort interaction; complete Catalog base-stat and type-combination audits; data-only Lua rejection; type relation; repository; source-grounded terminology; typography role separation; packaged font loading; literal UI-key completeness; fixed-copy localization-entry enforcement; Chinese top-level navigation rendering; frozen brand-source and output identities; store-screenshot eligibility; widget, integration, and iOS platform-identity coverage; the generated empty iOS example test was replaced
-- Store evidence: four pre-typography iOS screenshots at 1206 × 2622 and four pre-typography Android screenshots at 1080 × 1920 under `docs/evidence/phase-8-store-screenshots/`; all eight are 8-bit RGB PNGs without alpha but must be regenerated before submission after ADR-0019
+- Store evidence: four pre-typography and pre-rename iOS screenshots at 1206 × 2622 and four pre-typography and pre-rename Android screenshots at 1080 × 1920 under `docs/evidence/phase-8-store-screenshots/`; all eight are 8-bit RGB PNGs without alpha but must be regenerated before submission after ADR-0019 and the current ADR-0015 product-name revision
 
 ## Verification performed
 
 ```text
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m unittest discover -s tests -p 'test_*.py'
-Result: 101 tests passed, including the immutable font import, source-host confinement, changed-payload and tamper rejection, complete Tool source contracts, Tool media reference closure, executable-Lua rejection, exact screenshot inventory, dimensions, RGB color type, byte limit, and Android aspect-ratio checks.
+Result: 101 tests passed, including the current Android and iOS Chinese display-name contract, immutable font import, source-host confinement, changed-payload and tamper rejection, complete Tool source contracts, Tool media reference closure, executable-Lua rejection, exact screenshot inventory, dimensions, RGB color type, byte limit, and Android aspect-ratio checks.
 
 cd app && dart format --output=none --set-exit-if-changed lib test integration_test test_driver tool
 Result: 54 files checked; no changes required.
@@ -37,7 +37,7 @@ cd app && flutter analyze --no-pub
 Result: no issues found.
 
 cd app && flutter test --no-pub
-Result: 115 tests passed, including display/body/number typography separation, packaged font loading, complete active Catalog original, shiny, activity, and outfit image packaging; accessible missing-asset fallbacks; adaptive complete single-line creature form labels; compact creature and skill card copy; compact unnumbered Tools cards; combined filter behavior; searchable and multi-select-filterable Egg groups; shiny detail switching; complete paged feature loading; all seven Tools routes; game-description relationships; activity and outfit repositories; normal text input; detail-only favorites; derived stage labels; modal sort interaction; base-stat totals; all active type combinations; the frozen terminology contract; literal Chinese UI-key completeness; fixed-copy localization-entry enforcement; and top-level Chinese navigation rendering.
+Result: 115 tests passed, including the current Chinese product title, display/body/number typography separation, packaged font loading, complete active Catalog original, shiny, activity, and outfit image packaging; accessible missing-asset fallbacks; adaptive complete single-line creature form labels; compact creature and skill card copy; compact unnumbered Tools cards; combined filter behavior; searchable and multi-select-filterable Egg groups; shiny detail switching; complete paged feature loading; all seven Tools routes; game-description relationships; activity and outfit repositories; normal text input; detail-only favorites; derived stage labels; modal sort interaction; base-stat totals; all active type combinations; the frozen terminology contract; literal Chinese UI-key completeness; fixed-copy localization-entry enforcement; and top-level Chinese navigation rendering.
 
 Image manifest verification
 Result: 1,484 unique files, 1,565 Catalog references, and 117,287,007 verified local bytes; manifest SHA-256 8e942ab4fa1c1c4f7b803454984009823bad4e20b240cc458c3e93bb0973a278.
@@ -61,16 +61,16 @@ Base-stat total verification
 Result: 595 active forms produced totals from six present values; `pet_000535` retained six null values and no fabricated total.
 
 cd app && flutter build ios --simulator --debug --no-pub
-Result: passed; the current ADR-0019 App was rebuilt, installed, and launched on the iPhone 17 simulator. The bundled display and numeric fonts rendered successfully.
+Result: passed; the current ADR-0019 App was rebuilt, installed, and launched on the iPhone 17 simulator after the Chinese product rename. The built `CFBundleDisplayName` and rendered Catalog title matched the current ADR-0015 name, while the bundled display and numeric fonts rendered successfully.
 
 cd app && flutter drive --driver=test_driver/integration_test.dart --target=integration_test/phase_8_visual_test.dart -d 22A24FD1-B554-4683-A1A0-E454020C8F08 --no-pub
 Result: passed; two integration-test results completed. The run captured the grouped creature filter sheet, compact unnumbered Tools destination, searchable Egg groups browser, complete 15-choice Egg-group filter sheet, Game descriptions and detail, Event timeline and detail, Outfit inspiration and detail, and shiny creature detail at 1206 x 2622. Headings, filters, card titles, labels, and bottom navigation used the display face without clipping; descriptions and explanatory copy retained the platform body face.
 
-cd app/ios && xcodebuild test -workspace Runner.xcworkspace -scheme Runner -destination 'id=4DCEC9FD-FE44-4047-AE85-D481E03AD9D0' -only-testing:RunnerTests
-Result: passed; the platform regression verified the published iOS display name and Bundle ID after replacing the generated empty example test.
+cd app/ios && xcodebuild test -workspace Runner.xcworkspace -scheme Runner -destination 'id=22A24FD1-B554-4683-A1A0-E454020C8F08' -only-testing:RunnerTests
+Result: passed; the platform regression verified the current iOS Chinese display name and unchanged Bundle ID after replacing the generated empty example test.
 
-cd app && flutter build apk --debug
-Result: passed for the current ADR-0019 source; the bundled font files were accepted by the Android debug packaging path. Gradle emitted non-failing native-access and SDK XML tool-version warnings. Android visual review was not run because no Android emulator was connected.
+cd app && flutter build apk --debug --no-pub
+Result: passed for the current ADR-0019 source after the Chinese product rename; Android build-tools inspection returned the current ADR-0015 `application-label`. The bundled font files were accepted by the Android debug packaging path. Gradle emitted non-failing native-access and SDK XML tool-version warnings. Android visual review was not run because no Android emulator was connected.
 
 cd app && flutter build appbundle --release --no-pub
 Result: passed for the pre-Tool-media Phase 8 baseline; 158,152,015-byte AAB reported as 158.2 MB by Flutter; SHA-256 5ad3b961b314a2f6cbe6999e741554b92e5a5eab758d28d87f4bc8543ff16cd3. The current package requires a new release-size measurement.
@@ -98,7 +98,7 @@ Result: 343618b414b7b8d6262dd58f82010bfefb2f3fdb29711a9e86428e042dd81876; the pr
 - Real Catalog V2 import or Phase 7 production package update
 - Logical incremental patch generation or installation
 - Android visual validation of the current ADR-0019 presentation revision
-- Store screenshot regeneration after the ADR-0019 typography change
+- Store screenshot regeneration after the ADR-0019 typography change and current ADR-0015 product rename
 - Any Phase 8 work outside ADR-0015 through ADR-0019
 - Hosted validation for the current ADR-0019 typography revision
 
