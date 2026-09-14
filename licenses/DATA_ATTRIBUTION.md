@@ -4,15 +4,15 @@ Roco World Offline Handbook is an independent, non-commercial, unofficial projec
 
 ## Source and license
 
-The Catalog uses structured data from the Roco World BWIKI and its contributors. The relevant BWIKI page displayed the **CC BY-NC-SA 4.0** notice when checked on 2026-09-09:
+The Catalog uses structured data from the Roco World BWIKI and its contributors. The relevant BWIKI page displayed the **CC BY-NC-SA 4.0** notice when checked on 2026-09-14:
 
-- Source page: <https://wiki.biligame.com/rocom/%E6%A8%A1%E5%9D%97%3APet>
+- Source page: <https://wiki.biligame.com/nrc/%E6%A8%A1%E5%9D%97%3APets/data/Catalog>
 - License deed: <https://creativecommons.org/licenses/by-nc-sa/4.0/>
 - License legal code: <https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode>
 
 CC BY-NC-SA 4.0 requires appropriate credit, a license link, an indication of changes, non-commercial use, and ShareAlike treatment for applicable adaptations. The license notice must not imply upstream endorsement.
 
-The exact frozen pages, revision IDs, original page URLs, response hashes, and source-content hashes for Catalog data version 1 are recorded in `data/raw/snapshot-19235f9b9b34dc4e/sources.lock.json`. The packaged attribution that accompanies the database is `data/release/1/assets/catalog/ATTRIBUTION.txt`.
+The exact frozen pages, revision IDs, original page URLs, response hashes, and source-content hashes for active Catalog data version 2 are recorded in `data/raw/snapshot-dad7cd7d5ce73236/sources.lock.json`. The packaged attribution that accompanies the database is `data/release/2/assets/catalog/ATTRIBUTION.txt`. Data version 1 and its source lock remain historical pre-release evidence.
 
 ## Changes made by this project
 
@@ -22,4 +22,4 @@ The transformed Catalog data and applicable data-derived material are distribute
 
 ## Material boundary
 
-V1 does not bulk acquire or package game images. A data-page license does not establish rights to all game artwork, trademarks, publicity rights, or unrelated third-party content. This notice is not legal advice, a rights clearance, or a promise of store approval. A release owner must review the actual submission contents and current platform requirements before publication.
+The App packages separately frozen game image assets for offline use. A data-page license does not by itself establish rights to all game artwork, trademarks, publicity rights, or unrelated third-party content. This notice is not legal advice, a rights clearance, or a promise of store approval. A release owner must review the actual submission contents and current platform requirements before publication.

@@ -306,9 +306,14 @@ def _validate_attribution(
     source_lock: dict[str, Any],
 ) -> None:
     attribution = attribution_path.read_text(encoding="utf-8")
+    source_statement = (
+        "Roco Kingdom World BWIKI contributors"
+        if source_lock.get("source_system") == "bwiki.nrc"
+        else "Roco World BWIKI contributors"
+    )
     required_statements = {
         "independent, non-commercial, unofficial",
-        "Roco World BWIKI contributors",
+        source_statement,
         "CC BY-NC-SA 4.0",
         "https://creativecommons.org/licenses/by-nc-sa/4.0/",
         "validated, safely parsed, normalized",

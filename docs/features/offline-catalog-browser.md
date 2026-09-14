@@ -21,7 +21,7 @@ Search supports canonical name, title, alias, and exact handbook number. Pure nu
 
 The grouped filter sheet combines shiny availability, First/Second/Third stage, Main/Regional/Lord form, S1 through S4 owning season, and creature type. Choices use OR within a group and AND between groups. Main forms use the reviewed `handbook_display.default_pet_id`; regional and lord predicates use preserved source fields rather than suffix or list-order inference. The current Catalog has no independent shiny-season field, so the App does not present a misleading nested shiny-season filter. Sorting is limited to the visible enum choices: handbook number, name, attack, magic attack, or speed. Results load 60 at a time through an explicit **Load more** action.
 
-Shiny-capable creature names use the stored season's Wiki-aligned color family. Records without an owning season use the App primary color. The S4 filter remains visible for forward compatibility even though data version 1 contains no S4 creature records.
+Shiny-capable creature names use the stored season's Wiki-aligned color family. Records without an owning season use the App primary color. The S4 filter resolves the owning-season values now present in NRC Catalog data version 2.
 
 ## Creature detail
 

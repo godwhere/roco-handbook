@@ -39,6 +39,14 @@ def _revision_by_source(normalized: dict[str, Any]) -> dict[str, int]:
 
 def identity_candidates(normalized: dict[str, Any]) -> list[dict[str, Any]]:
     revisions = _revision_by_source(normalized)
+    source_refs = {
+        source["source_key"]: source.get("source_ref")
+        for source in normalized["source_revisions"]
+    }
+    entity_sources = {
+        (row["entity_kind"], row["entity_id"]): row["source_record_key"]
+        for row in normalized.get("entity_sources", [])
+    }
     candidates: list[dict[str, Any]] = []
     definitions = (
         (
@@ -75,12 +83,19 @@ def identity_candidates(normalized: dict[str, Any]) -> list[dict[str, Any]]:
             raise AdapterError(f"No source revision for identity kind {entity_kind}")
         for row in rows:
             local_id = row[id_key]
+            source_ref = source_refs.get(source_key)
+            source_system = (
+                source_ref.rsplit(":", 2)[0]
+                if isinstance(source_ref, str) and source_ref.count(":") >= 2
+                else "bwiki.rocom"
+            )
+            source_record_key = entity_sources.get((entity_kind, local_id), local_id)
             candidates.append(
                 {
                     "entity_kind": entity_kind,
                     "local_id": local_id,
-                    "source_system": "bwiki.rocom",
-                    "source_record_key": local_id,
+                    "source_system": source_system,
+                    "source_record_key": source_record_key,
                     "first_revision_id": revision_id,
                     "fingerprint_sha256": _fingerprint(fingerprint_value(row)),
                     "remapped_from": [],

@@ -1376,25 +1376,25 @@ class _Stats extends StatelessWidget {
                   width: width,
                   label: 'Height',
                   value: detail.heightText,
-                  assetPath: 'assets/wiki/v2/ui/info/height.png',
+                  assetPath: 'assets/wiki/v3/ui/info/height.png',
                 ),
                 _StatFactPill(
                   width: width,
                   label: 'Weight',
                   value: detail.weightText,
-                  assetPath: 'assets/wiki/v2/ui/info/weight.png',
+                  assetPath: 'assets/wiki/v3/ui/info/weight.png',
                 ),
                 _StatFactPill(
                   width: width,
                   label: 'Review gold',
                   value: detail.reviewGold?.toString(),
-                  assetPath: 'assets/wiki/v2/ui/info/review-gold.png',
+                  assetPath: 'assets/wiki/v3/ui/info/review-gold.png',
                 ),
                 _StatFactPill(
                   width: width,
                   label: 'Starlight',
                   value: detail.starlight?.toString(),
-                  assetPath: 'assets/wiki/v2/ui/info/starlight.png',
+                  assetPath: 'assets/wiki/v3/ui/info/starlight.png',
                 ),
               ],
             );
@@ -1521,7 +1521,7 @@ String? _statIconAsset(String key) {
     'Speed': 'speed',
   };
   final file = files[key];
-  return file == null ? null : 'assets/wiki/v2/ui/stats/$file.png';
+  return file == null ? null : 'assets/wiki/v3/ui/stats/$file.png';
 }
 
 class _TypeRelationships extends StatelessWidget {

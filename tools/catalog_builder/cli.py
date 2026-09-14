@@ -10,6 +10,7 @@ from .errors import CatalogToolError
 from .identity_resolver import initialize_identity_registry
 from .inspection import write_inspection_report
 from .normalizer import normalize_snapshot
+from .nrc_normalizer import normalize_nrc_snapshot
 from .package_writer import (
     build_release_package,
     read_normalized_catalog,
@@ -44,6 +45,17 @@ def _parser() -> argparse.ArgumentParser:
     normalize.add_argument("--data-version", type=int, required=True)
     normalize.add_argument("--built-at-utc")
     normalize.add_argument("--output", type=Path, required=True)
+
+    normalize_nrc = subparsers.add_parser(
+        "normalize-nrc",
+        help="Normalize the current NRC BWIKI snapshot into Catalog V1.",
+    )
+    normalize_nrc.add_argument("--snapshot", type=Path, required=True)
+    normalize_nrc.add_argument("--type-aliases", type=Path, required=True)
+    normalize_nrc.add_argument("--previous-catalog", type=Path)
+    normalize_nrc.add_argument("--data-version", type=int, required=True)
+    normalize_nrc.add_argument("--built-at-utc")
+    normalize_nrc.add_argument("--output", type=Path, required=True)
 
     identity = subparsers.add_parser(
         "initialize-identity",
@@ -121,6 +133,30 @@ def main(argv: list[str] | None = None) -> int:
                 rendered_index_response_path=args.rendered_index_response,
                 display_overrides_path=args.display_overrides,
                 type_aliases_path=args.type_aliases,
+                data_version=args.data_version,
+                built_at_utc=built_at_utc,
+            )
+            write_normalized_catalog(normalized, args.output)
+            print(
+                json.dumps(
+                    {
+                        "output": str(args.output),
+                        "snapshot_id": normalized["snapshot_id"],
+                        "data_version": normalized["data_version"],
+                    },
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+            return 0
+        if args.command == "normalize-nrc":
+            built_at_utc = args.built_at_utc or datetime.now(timezone.utc).isoformat().replace(
+                "+00:00", "Z"
+            )
+            normalized = normalize_nrc_snapshot(
+                args.snapshot,
+                type_aliases_path=args.type_aliases,
+                previous_catalog_path=args.previous_catalog,
                 data_version=args.data_version,
                 built_at_utc=built_at_utc,
             )

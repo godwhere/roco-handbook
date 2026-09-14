@@ -9,6 +9,7 @@ from .errors import ImportToolError
 from .font_assets import import_font_assets
 from .game_descriptions import import_game_descriptions
 from .image_assets import asset_preflight, import_image_assets
+from .live_snapshot import import_live_snapshot
 from .rendered_snapshot import import_rendered_index_response
 from .snapshot_store import import_local_snapshot
 from .tool_catalogs import (
@@ -29,6 +30,12 @@ def _parser() -> argparse.ArgumentParser:
     local.add_argument("--input-dir", type=Path, required=True)
     local.add_argument("--output", type=Path, required=True)
     local.add_argument("--config", type=Path, required=True)
+    live = subparsers.add_parser(
+        "import-live",
+        help="Fetch, validate, and freeze an immutable MediaWiki snapshot.",
+    )
+    live.add_argument("--output", type=Path, required=True)
+    live.add_argument("--config", type=Path, required=True)
     rendered = subparsers.add_parser(
         "import-rendered-index",
         help="Validate and freeze a rendered MediaWiki pet-index response.",
@@ -49,6 +56,11 @@ def _parser() -> argparse.ArgumentParser:
     image_import.add_argument("--config", type=Path, required=True)
     image_import.add_argument("--output", type=Path, required=True)
     image_import.add_argument("--cache", type=Path)
+    image_import.add_argument(
+        "--reuse-assets",
+        type=Path,
+        help="Reuse verified local PNGs whose upstream SHA-1 is unchanged.",
+    )
     type_relations = subparsers.add_parser(
         "import-type-relations",
         help="Validate and freeze the Wiki type relationship contract.",
@@ -109,6 +121,21 @@ def main(argv: list[str] | None = None) -> int:
                 )
             )
             return 0
+        if args.command == "import-live":
+            snapshot = import_live_snapshot(args.output, args.config)
+            print(
+                json.dumps(
+                    {
+                        "snapshot_id": snapshot.snapshot_id,
+                        "path": str(snapshot.path),
+                        "source_keys": list(snapshot.source_keys),
+                        "reused_existing": snapshot.reused_existing,
+                    },
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+            return 0
         if args.command == "import-rendered-index":
             snapshot = import_rendered_index_response(args.input, args.output)
             print(
@@ -138,6 +165,7 @@ def main(argv: list[str] | None = None) -> int:
                 args.config,
                 args.output,
                 cache_root=args.cache,
+                reuse_root=args.reuse_assets,
             )
             print(
                 json.dumps(

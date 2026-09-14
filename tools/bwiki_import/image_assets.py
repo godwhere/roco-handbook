@@ -174,12 +174,24 @@ def _config(path: Path) -> dict[str, Any]:
     endpoint = config.get("api_endpoint")
     host = config.get("asset_host")
     prefix = config.get("asset_path_prefix")
+    prefixes = config.get("asset_path_prefixes", [prefix])
     if not isinstance(endpoint, str) or urlparse(endpoint).scheme != "https":
         raise InputError("Image asset API endpoint must use HTTPS")
     if not isinstance(host, str) or not host:
         raise InputError("Image asset host must be non-empty")
-    if not isinstance(prefix, str) or not prefix.startswith("/"):
-        raise InputError("Image asset path prefix must be absolute")
+    if (
+        not isinstance(prefix, str)
+        or not prefix.startswith("/")
+        or not isinstance(prefixes, list)
+        or not prefixes
+        or not all(isinstance(item, str) and item.startswith("/") for item in prefixes)
+    ):
+        raise InputError("Image asset path prefixes must be absolute")
+    preserved_kinds = config.get("preserved_asset_kinds", [])
+    if not isinstance(preserved_kinds, list) or not all(
+        isinstance(item, str) and item for item in preserved_kinds
+    ):
+        raise InputError("Preserved image asset kinds must be strings")
     policy = config.get("request_policy")
     widths = config.get("thumbnail_widths")
     if not isinstance(policy, dict) or not isinstance(widths, dict):
@@ -270,20 +282,32 @@ def derive_asset_specs(catalog_path: Path, config_path: Path) -> list[AssetSpec]
         illustration = _required_text(
             raw, "illustration_key", f"Creature {pet_id}"
         )
+        extra = raw.get("extra_json")
+        if not isinstance(extra, dict):
+            extra = {}
+        source_illustration = extra.get("source_illustration_key", illustration)
+        if not isinstance(source_illustration, str) or not source_illustration:
+            raise InputError(f"Creature {pet_id} has an invalid source illustration")
         add(
             asset_id=f"pet_illustration:{illustration}",
             kind="pet_illustration",
-            source_title=_source_title("", illustration),
+            source_title=_source_title("", source_illustration),
             local_path=f"pets/illustrations/{illustration}.png",
             width=widths["pet_illustration"],
             catalog_id=pet_id,
         )
         if raw.get("has_shiny") in (True, 1):
             shiny_key = f"{illustration}_yise"
+            source_shiny = extra.get(
+                "source_shiny_illustration_key",
+                f"{source_illustration}_yise",
+            )
+            if not isinstance(source_shiny, str) or not source_shiny:
+                raise InputError(f"Creature {pet_id} has no shiny illustration source")
             add(
                 asset_id=f"pet_shiny_illustration:{shiny_key}",
                 kind="pet_shiny_illustration",
-                source_title=_source_title("", shiny_key),
+                source_title=_source_title("", source_shiny),
                 local_path=f"pets/shiny/{shiny_key}.png",
                 width=widths["pet_illustration"],
                 catalog_id=pet_id,
@@ -340,7 +364,9 @@ def _validate_asset_url(url: Any, config: dict[str, Any]) -> str:
     if (
         parsed.scheme != "https"
         or parsed.hostname != config["asset_host"]
-        or not parsed.path.startswith(config["asset_path_prefix"])
+        or not any(parsed.path.startswith(prefix) for prefix in config.get(
+            "asset_path_prefixes", [config["asset_path_prefix"]]
+        ))
         or parsed.query
         or parsed.fragment
     ):
@@ -446,8 +472,11 @@ def fetch_asset_metadata(
         ),
         max_retries=policy["max_retries"],
     )
+    preserved_kinds = set(config.get("preserved_asset_kinds", []))
     by_width: dict[int, set[str]] = {}
     for spec in specs:
+        if spec.kind in preserved_kinds:
+            continue
         by_width.setdefault(spec.width, set()).add(spec.source_title)
     metadata: dict[str, ImageMetadata] = {}
     first_request = True
@@ -502,11 +531,15 @@ def asset_preflight(
     metadata = fetch_asset_metadata(
         specs, config_path, transport=transport, sleep=sleep
     )
+    preserved_kinds = set(_config(config_path).get("preserved_asset_kinds", []))
+    live_specs = [spec for spec in specs if spec.kind not in preserved_kinds]
     return {
         "asset_count": len(specs),
+        "live_asset_count": len(live_specs),
+        "preserved_asset_count": len(specs) - len(live_specs),
         "reference_count": sum(len(spec.catalog_ids) for spec in specs),
         "original_bytes": sum(
-            metadata[spec.source_title].original_bytes for spec in specs
+            metadata[spec.source_title].original_bytes for spec in live_specs
         ),
         "kinds": {
             kind: sum(1 for spec in specs if spec.kind == kind)
@@ -652,6 +685,7 @@ def import_image_assets(
     output_root: Path,
     *,
     cache_root: Path | None = None,
+    reuse_root: Path | None = None,
     transport: UrlTransport | None = None,
     sleep: Callable[[float], None] = time.sleep,
 ) -> FrozenAssetSet:
@@ -661,6 +695,7 @@ def import_image_assets(
         config_path,
         output_root,
         cache_root=cache_root,
+        reuse_root=reuse_root,
         transport=transport,
         sleep=sleep,
     )
@@ -672,6 +707,7 @@ def freeze_asset_specs(
     output_root: Path,
     *,
     cache_root: Path | None = None,
+    reuse_root: Path | None = None,
     transport: UrlTransport | None = None,
     sleep: Callable[[float], None] = time.sleep,
 ) -> FrozenAssetSet:
@@ -693,7 +729,24 @@ def freeze_asset_specs(
     metadata = fetch_asset_metadata(
         specs, config_path, transport=transport, sleep=sleep
     )
+    reusable: dict[str, dict[str, Any]] = {}
+    if reuse_root is not None:
+        try:
+            prior_manifest = json.loads(
+                (reuse_root / "asset-manifest.json").read_text(encoding="utf-8")
+            )
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+            raise InputError(f"Cannot read reusable image assets: {error}") from error
+        prior_records = prior_manifest.get("assets")
+        if not isinstance(prior_records, list):
+            raise InputError("Reusable image asset manifest has no assets array")
+        reusable = {
+            record["local_path"]: record
+            for record in prior_records
+            if isinstance(record, dict) and isinstance(record.get("local_path"), str)
+        }
     policy = config["request_policy"]
+    preserved_kinds = set(config.get("preserved_asset_kinds", []))
     client = transport or UrlTransport(
         timeout_seconds=max(
             policy["connect_timeout_seconds"], policy["read_timeout_seconds"]
@@ -707,16 +760,53 @@ def freeze_asset_specs(
     records: list[dict[str, Any]] = []
     try:
         for index, spec in enumerate(specs):
-            info = metadata[spec.source_title]
+            info = metadata.get(spec.source_title)
             cache_path = None
-            if cache_root is not None:
+            if cache_root is not None and info is not None:
                 cache_path = cache_root / hashlib.sha256(
                     info.download_url.encode("utf-8")
                 ).hexdigest()
             payload: bytes
-            if cache_path is not None and cache_path.is_file():
+            prior = reusable.get(spec.local_path)
+            reusable_path = reuse_root / spec.local_path if reuse_root is not None else None
+            if spec.kind in preserved_kinds:
+                if prior is None or reusable_path is None or not reusable_path.is_file():
+                    raise InputError(
+                        f"Preserved image asset is unavailable: {spec.local_path}"
+                    )
+                payload = reusable_path.read_bytes()
+                if (
+                    hashlib.sha256(payload).hexdigest() != prior.get("local_sha256")
+                    or _png_dimensions(payload)
+                    != (prior.get("local_width"), prior.get("local_height"))
+                ):
+                    raise SnapshotWriteError(
+                        f"Preserved image asset changed: {reusable_path}"
+                    )
+            elif (
+                prior is not None
+                and reusable_path is not None
+                and reusable_path.is_file()
+                and info is not None
+                and prior.get("source_sha1") == info.source_sha1
+                and prior.get("requested_width") == spec.width
+            ):
+                payload = reusable_path.read_bytes()
+                if (
+                    hashlib.sha256(payload).hexdigest() != prior.get("local_sha256")
+                    or _png_dimensions(payload)
+                    != (prior.get("local_width"), prior.get("local_height"))
+                ):
+                    raise SnapshotWriteError(
+                        f"Reusable image asset changed: {reusable_path}"
+                    )
+            elif cache_path is not None and cache_path.is_file():
                 payload = cache_path.read_bytes()
             else:
+                if info is None:
+                    raise ResponseValidationError(
+                        f"Image metadata is missing: {spec.source_title}"
+                    )
                 if index:
                     sleep(policy["download_minimum_interval_seconds"])
                 payload = client.get_png(info.download_url)
@@ -730,8 +820,21 @@ def freeze_asset_specs(
             destination = stage / spec.local_path
             destination.parent.mkdir(parents=True, exist_ok=True)
             destination.write_bytes(payload)
-            records.append(
-                {
+            if spec.kind in preserved_kinds:
+                record = {
+                    **prior,
+                    "asset_id": spec.asset_id,
+                    "kind": spec.kind,
+                    "catalog_ids": list(spec.catalog_ids),
+                    "local_path": spec.local_path,
+                    "requested_width": spec.width,
+                }
+            else:
+                if info is None:
+                    raise ResponseValidationError(
+                        f"Image metadata is missing: {spec.source_title}"
+                    )
+                record = {
                     "asset_id": spec.asset_id,
                     "kind": spec.kind,
                     "catalog_ids": list(spec.catalog_ids),
@@ -751,7 +854,7 @@ def freeze_asset_specs(
                     "local_height": local_height,
                     "local_sha256": hashlib.sha256(payload).hexdigest(),
                 }
-            )
+            records.append(record)
         manifest = _manifest_without_time(specs, records, config)
         manifest["imported_at_utc"] = datetime.now(timezone.utc).isoformat().replace(
             "+00:00", "Z"

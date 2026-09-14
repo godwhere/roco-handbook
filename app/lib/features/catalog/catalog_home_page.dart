@@ -153,13 +153,13 @@ class _CatalogHomePageState extends State<CatalogHomePage> {
         destinations: <NavigationDestination>[
           NavigationDestination(
             icon: Image.asset(
-              'assets/wiki/v2/ui/navigation/creatures.png',
+              'assets/wiki/v3/ui/navigation/creatures.png',
               width: 28,
               height: 28,
               semanticLabel: context.tr('Creatures'),
             ),
             selectedIcon: Image.asset(
-              'assets/wiki/v2/ui/navigation/creatures.png',
+              'assets/wiki/v3/ui/navigation/creatures.png',
               width: 32,
               height: 32,
               semanticLabel: context.tr('Creatures'),

@@ -22,6 +22,7 @@ class ProjectStructureTests(unittest.TestCase):
             "docs/decisions/ADR-0012-phase-7-offline-package-installation.md",
             "docs/decisions/ADR-0015-phase-8-brand-localization-and-wiki-assets.md",
             "docs/decisions/ADR-0019-phase-8-wiki-typography.md",
+            "docs/decisions/ADR-0020-nrc-catalog-source-baseline.md",
             "docs/features/independent-catalog-updates.md",
             "docs/features/localized-visual-handbook.md",
             "docs/implementation-reports/phase-7.md",
@@ -30,16 +31,20 @@ class ProjectStructureTests(unittest.TestCase):
             "docs/evidence/phase-7-signed-manifest-2026-09-09.md",
             "docs/evidence/phase-8-assets-localization-and-visuals-2026-09-10.md",
             "docs/evidence/phase-8-typography-2026-09-11.md",
+            "docs/evidence/phase-8-nrc-catalog-refresh-2026-09-14.md",
             "docs/evidence/phase-7-offline-package-2026-09-09.md",
             "docs/evidence/phase-7-hosting-policy-2026-09-09.md",
             "docs/evidence/phase-7-signing-custody-2026-09-09.md",
             "config/bwiki_sources.json",
+            "config/bwiki_sources_nrc_v1.json",
             "config/identity_registry.json",
+            "config/identity_registry_nrc_v1.json",
             "config/type_aliases.json",
             "config/handbook_display_overrides.json",
             "config/reviewed_exceptions.json",
             "config/ui_terminology_zh_cn.json",
             "config/wiki_assets_v2.json",
+            "config/wiki_assets_v3.json",
             "config/wiki_fonts_v1.json",
             "config/type_relations_v1.json",
             "config/game_descriptions_v1.json",
@@ -178,7 +183,7 @@ class ProjectStructureTests(unittest.TestCase):
         names = ["catalog.db", "bundled_catalog.json", "ATTRIBUTION.txt"]
         for name in names:
             with self.subTest(name=name):
-                released = ROOT / "data" / "release" / "1" / "assets" / "catalog" / name
+                released = ROOT / "data" / "release" / "2" / "assets" / "catalog" / name
                 bundled = ROOT / "app" / "assets" / "catalog" / name
                 self.assertEqual(released.read_bytes(), bundled.read_bytes())
 
@@ -307,6 +312,7 @@ class ProjectStructureTests(unittest.TestCase):
             ROOT / "config/ui_terminology_zh_cn.json",
             ROOT / "config/wiki_assets_v1.json",
             ROOT / "config/wiki_assets_v2.json",
+            ROOT / "config/wiki_assets_v3.json",
             ROOT / "config/type_relations_v1.json",
             ROOT / "config/game_descriptions_v1.json",
             ROOT / "config/activity_timeline_v1.json",

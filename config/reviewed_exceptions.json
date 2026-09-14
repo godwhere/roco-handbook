@@ -11,6 +11,16 @@
       "pair_set_sha256": "1456a9b7beee2c79268d301391f933e15b150d3df2a6780bf99892b43e22f07e",
       "resolution": "use_core_pet_types",
       "reason": "Core owns canonical pet attributes. Evolution owns membership, direction, and conditions; its duplicated type snapshots are retained in the normalized audit but are not written over Core types."
+    },
+    {
+      "exception_id": "evolution-member-types-nrc-core-13095-evolution-7267",
+      "exception_type": "evolution_member_type_snapshot_mismatch",
+      "core_revision_id": 13095,
+      "evolution_revision_id": 7267,
+      "pair_count": 38,
+      "pair_set_sha256": "a71114693e32e01b59a6fb7d42b83da4e57a85b23af71e2409bd2383e1408bcd",
+      "resolution": "use_core_pet_types",
+      "reason": "The NRC Catalog remains authoritative for current creature types. Evolution variants preserve their duplicated type snapshots for review but cannot overwrite Catalog attributes."
     }
   ]
 }

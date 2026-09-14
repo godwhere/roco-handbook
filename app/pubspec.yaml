@@ -36,15 +36,15 @@ flutter:
     - assets/wiki/fashion-catalog-v1.json
     - assets/wiki/tools/v1/activities/icons/
     - assets/wiki/tools/v1/fashions/cards/
-    - assets/wiki/v2/pets/illustrations/
-    - assets/wiki/v2/pets/shiny/
-    - assets/wiki/v2/skills/
-    - assets/wiki/v2/ui/info/
-    - assets/wiki/v2/ui/navigation/
-    - assets/wiki/v2/ui/skill-categories/
-    - assets/wiki/v2/ui/sources/
-    - assets/wiki/v2/ui/stats/
-    - assets/wiki/v2/ui/types/
+    - assets/wiki/v3/pets/illustrations/
+    - assets/wiki/v3/pets/shiny/
+    - assets/wiki/v3/skills/
+    - assets/wiki/v3/ui/info/
+    - assets/wiki/v3/ui/navigation/
+    - assets/wiki/v3/ui/skill-categories/
+    - assets/wiki/v3/ui/sources/
+    - assets/wiki/v3/ui/stats/
+    - assets/wiki/v3/ui/types/
     - assets/fonts/v1/font-manifest.json
   fonts:
     - family: RocoDisplay

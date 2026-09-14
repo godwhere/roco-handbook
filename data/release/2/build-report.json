@@ -1,0 +1,102 @@
+{
+  "data_version": 2,
+  "database": {
+    "database_bytes": 4657152,
+    "database_path": "assets/catalog/catalog.db",
+    "database_sha256": "dce0d3376611adc151f8e2abe1f74185d19c94f61a3d0d2fade98a188dae9d61",
+    "foreign_key_check_count": 0,
+    "integrity_check": "ok",
+    "table_counts": {
+      "catalog_meta": 1,
+      "entity_sources": 2495,
+      "evolution_edges": 502,
+      "evolution_groups": 273,
+      "handbook_display": 466,
+      "handbook_entries": 466,
+      "learnset_blood_skills": 5598,
+      "learnset_legendary_skills": 7,
+      "learnset_native_skills": 4408,
+      "learnset_skill_stones": 5548,
+      "learnsets": 311,
+      "pet_aliases": 161,
+      "pet_evolution_groups": 775,
+      "pet_learnsets": 621,
+      "pet_types": 948,
+      "pets": 621,
+      "skill_description_notes": 554,
+      "skills": 824,
+      "source_revisions": 8,
+      "types": 18
+    }
+  },
+  "difference": {
+    "additions": {},
+    "baseline": true,
+    "previous_database": null,
+    "removals": {},
+    "unreviewed_removal_count": 0
+  },
+  "identity_audit": {
+    "blocking_issues": [],
+    "candidate_count": 1911,
+    "fingerprint_changes": [],
+    "mapping_count": 1911,
+    "status": "passed",
+    "unreviewed_removal_count": 0
+  },
+  "manifest": {
+    "catalog_schema_version": 1,
+    "coverage": {
+      "description_note_definitions": false,
+      "evolutions": true,
+      "pets": true,
+      "skill_stone_topics": false,
+      "skills": true,
+      "topic_rewards": false
+    },
+    "data_version": 2,
+    "database_asset": "assets/catalog/catalog.db",
+    "database_bytes": 4657152,
+    "database_sha256": "dce0d3376611adc151f8e2abe1f74185d19c94f61a3d0d2fade98a188dae9d61",
+    "dataset_id": "roco-world-zh-cn",
+    "manifest_version": 1,
+    "snapshot_id": "snapshot-dad7cd7d5ce73236"
+  },
+  "normalized_snapshot_id": "snapshot-dad7cd7d5ce73236",
+  "status": "passed_with_warnings",
+  "validation": {
+    "blocking_issues": [],
+    "counts": {
+      "evolution_edges": 502,
+      "evolution_groups": 273,
+      "handbooks": 466,
+      "learnsets": 311,
+      "legendary_skill_sources": 7,
+      "pets": 621,
+      "skills": 824,
+      "types": 18
+    },
+    "reviewed_evolution_type_exception_id": "evolution-member-types-nrc-core-13095-evolution-7267",
+    "status": "passed_with_warnings",
+    "warnings": [
+      {
+        "code": "handbook_fields_outside_v1_database",
+        "fields": [
+          "areas",
+          "habitat",
+          "title",
+          "topics"
+        ],
+        "preserved_in_normalized_source_extra": true
+      },
+      {
+        "code": "disabled_coverage",
+        "features": [
+          "description_note_definitions",
+          "skill_stone_topics",
+          "topic_rewards"
+        ]
+      }
+    ]
+  }
+}

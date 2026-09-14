@@ -78,14 +78,14 @@ void main() {
       await tester.pump(const Duration(milliseconds: 300));
       await tester.pumpAndSettle();
       expect(
-        find.byKey(const ValueKey('pet-result-pet_000595')),
+        find.byKey(const ValueKey('pet-result-pet_000593')),
         findsOneWidget,
       );
 
-      await tester.tap(find.byKey(const ValueKey('pet-result-pet_000595')));
+      await tester.tap(find.byKey(const ValueKey('pet-result-pet_000593')));
       await tester.pumpAndSettle();
       expect(
-        find.byKey(const ValueKey('pet-detail-pet_000595')),
+        find.byKey(const ValueKey('pet-detail-pet_000593')),
         findsOneWidget,
       );
       expect(find.text('#004'), findsOneWidget);
@@ -105,7 +105,7 @@ void main() {
       );
       expect(find.text('Displayed form'), findsNothing);
       expect(
-        find.byKey(const ValueKey('form-selector-pet_000595')),
+        find.byKey(const ValueKey('form-selector-pet_000593')),
         findsNothing,
       );
       final headerBounds = tester.getRect(find.byType(Card).first);
@@ -152,7 +152,7 @@ void main() {
         12,
       );
       final baseBranch = find.byKey(
-        const ValueKey('evolution-edge-pet_000007-pet_000595'),
+        const ValueKey('evolution-edge-pet_000007-pet_000593'),
       );
       expect(baseBranch, findsOneWidget);
       await tester.tap(baseBranch);
@@ -199,7 +199,7 @@ void main() {
       expect(find.text('休息回复'), findsOneWidget);
       expect(find.textContaining('Source stage'), findsNothing);
       final nativeSkillCard = find.byKey(
-        const ValueKey('pet-skill-skill_000345'),
+        const ValueKey('pet-skill-skill_000359'),
       );
       expect(nativeSkillCard, findsOneWidget);
       expect(
@@ -229,11 +229,11 @@ void main() {
         findsNWidgets(3),
       );
       final nativeElement = find.byKey(
-        const ValueKey('pet-skill-element-skill_000345'),
+        const ValueKey('pet-skill-element-skill_000359'),
       );
       expect(nativeElement, findsOneWidget);
       final nativeHeading = find.byKey(
-        const ValueKey('pet-skill-heading-skill_000345'),
+        const ValueKey('pet-skill-heading-skill_000359'),
       );
       expect(
         find.descendant(of: nativeHeading, matching: find.text('棘突')),
@@ -254,9 +254,9 @@ void main() {
         closeTo(tester.getRect(nativeSkillCard).center.dy, 0.1),
       );
       const categoryAssets = <String, String>{
-        'native': 'assets/wiki/v2/ui/sources/bloodline.png',
-        'blood': 'assets/wiki/v2/ui/sources/bloodline.png',
-        'stone': 'assets/wiki/v2/ui/sources/skill-stone.png',
+        'native': 'assets/wiki/v3/ui/sources/bloodline.png',
+        'blood': 'assets/wiki/v3/ui/sources/bloodline.png',
+        'stone': 'assets/wiki/v3/ui/sources/skill-stone.png',
       };
       for (final category in categoryAssets.keys) {
         final categoryButton = find.byKey(
@@ -387,7 +387,7 @@ void main() {
       );
       await tester.pump(const Duration(milliseconds: 300));
       await tester.pumpAndSettle();
-      final onePunch = find.byKey(const ValueKey('skill-result-skill_000654'));
+      final onePunch = find.byKey(const ValueKey('skill-result-skill_000678'));
       expect(onePunch, findsOneWidget);
       expect(
         find.descendant(of: onePunch, matching: find.text('\u7269\u653b')),
@@ -411,24 +411,24 @@ void main() {
         findsOneWidget,
       );
       final elementIcon = tester.widget<CatalogAssetImage>(
-        find.byKey(const ValueKey('skill-result-element-skill_000654')),
+        find.byKey(const ValueKey('skill-result-element-skill_000678')),
       );
-      expect(elementIcon.assetPath, 'assets/wiki/v2/ui/types/martial.png');
+      expect(elementIcon.assetPath, 'assets/wiki/v3/ui/types/martial.png');
       expect(
         find.descendant(
           of: onePunch,
-          matching: find.byKey(const ValueKey('favorite-skill_000654')),
+          matching: find.byKey(const ValueKey('favorite-skill_000678')),
         ),
         findsNothing,
       );
       await tester.tap(onePunch);
       await tester.pumpAndSettle();
       expect(
-        find.byKey(const ValueKey('favorite-skill_000654')),
+        find.byKey(const ValueKey('favorite-skill_000678')),
         findsOneWidget,
       );
       Navigator.of(
-        tester.element(find.byKey(const ValueKey('skill-detail-skill_000654'))),
+        tester.element(find.byKey(const ValueKey('skill-detail-skill_000678'))),
       ).pop();
       await tester.pumpAndSettle();
 
@@ -541,7 +541,7 @@ void main() {
     expect(find.text('\u661f\u5149\u503c\uff1a\n80'), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('section-dot-skills')));
     await tester.pumpAndSettle();
-    final flashCard = find.byKey(const ValueKey('pet-skill-skill_000430'));
+    final flashCard = find.byKey(const ValueKey('pet-skill-skill_000448'));
     expect(flashCard, findsOneWidget);
     expect(
       find.descendant(
@@ -598,15 +598,15 @@ void main() {
     expect(find.text('\u5723\u5149\u8fea\u83ab'), findsOneWidget);
     expect(find.text('\uff08\u9996\u9886\u5f62\u6001\uff09'), findsNWidgets(4));
     expect(find.byKey(const ValueKey('pet-dex-pet_000004')), findsOneWidget);
-    expect(find.byKey(const ValueKey('pet-dex-pet_000560')), findsOneWidget);
+    expect(find.byKey(const ValueKey('pet-dex-pet_000558')), findsOneWidget);
     expect(find.text('NO.001'), findsNWidgets(5));
     expect(find.text('\u5149\u7cfb'), findsNothing);
     final dimoType = tester.widget<CatalogAssetImage>(
       find.byKey(const ValueKey('pet-type-pet_000004-\u5149\u7cfb')),
     );
-    expect(dimoType.assetPath, 'assets/wiki/v2/ui/types/light.png');
+    expect(dimoType.assetPath, 'assets/wiki/v3/ui/types/light.png');
     final namedForm = tester.widget<Text>(
-      find.byKey(const ValueKey('pet-form-pet_000560')),
+      find.byKey(const ValueKey('pet-form-pet_000558')),
     );
     expect(namedForm.style?.color, isNotNull);
     expect(namedForm.style?.fontSize, lessThan(16));
@@ -615,7 +615,7 @@ void main() {
     expect(
       tester
           .widget<FittedBox>(
-            find.byKey(const ValueKey('pet-title-fit-pet_000560')),
+            find.byKey(const ValueKey('pet-title-fit-pet_000558')),
           )
           .fit,
       BoxFit.scaleDown,
@@ -624,7 +624,7 @@ void main() {
       tester.getRect(find.text('圣光迪莫')).center.dy,
       closeTo(
         tester
-            .getRect(find.byKey(const ValueKey('pet-form-pet_000560')))
+            .getRect(find.byKey(const ValueKey('pet-form-pet_000558')))
             .center
             .dy,
         4,
@@ -656,7 +656,7 @@ void main() {
     );
     expect(
       dimoImage.assetPath,
-      'assets/wiki/v2/pets/illustrations/JL_dimo.png',
+      'assets/wiki/v3/pets/illustrations/JL_dimo.png',
     );
     expect(dimoImage.width, 100);
     expect(dimoImage.height, 100);
@@ -800,7 +800,7 @@ void main() {
     );
     expect(
       original.assetPath,
-      'assets/wiki/v2/pets/illustrations/JL_emoding.png',
+      'assets/wiki/v3/pets/illustrations/JL_emoding.png',
     );
 
     await tester.tap(
@@ -813,7 +813,7 @@ void main() {
     final shiny = tester.widget<CatalogAssetImage>(
       find.byKey(const ValueKey('pet-detail-art-pet_000009-shiny')),
     );
-    expect(shiny.assetPath, 'assets/wiki/v2/pets/shiny/JL_emoding_yise.png');
+    expect(shiny.assetPath, 'assets/wiki/v3/pets/shiny/JL_emoding_yise.png');
   });
 
   testWidgets('opens every source-backed offline tool', (tester) async {
@@ -1377,7 +1377,7 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
 
-      expect(find.text('Download Catalog data 2?'), findsOneWidget);
+      expect(find.text('Download Catalog data 3?'), findsOneWidget);
       expect(find.textContaining('Download 5.0 MiB'), findsOneWidget);
       expect(
         find.textContaining('Favorites, collection marks, and notes are kept.'),
@@ -1402,7 +1402,7 @@ void main() {
         find.text('Catalog update cancelled. Current Catalog unchanged.'),
         findsOneWidget,
       );
-      expect(find.text('Data v1'), findsOneWidget);
+      expect(find.text('Data v2'), findsOneWidget);
     },
   );
 
@@ -1412,7 +1412,7 @@ void main() {
       await _setPhoneSurface(tester);
       final candidate = _updateCandidate();
       final installation = Completer<void>();
-      final updated = _sessionWithDataVersion(session, 2);
+      final updated = _sessionWithDataVersion(session, 3);
       await tester.pumpWidget(
         CatalogBootstrapApp(
           bootstrap: () async => session,
@@ -1453,8 +1453,8 @@ void main() {
 
       installation.complete();
       await tester.pumpAndSettle();
-      expect(find.text('Data v2'), findsOneWidget);
-      expect(find.text('Catalog data 2 installed.'), findsOneWidget);
+      expect(find.text('Data v3'), findsOneWidget);
+      expect(find.text('Catalog data 3 installed.'), findsOneWidget);
     },
   );
 
@@ -1512,7 +1512,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
     expect(checkCalls, 2);
-    expect(find.text('Download Catalog data 2?'), findsOneWidget);
+    expect(find.text('Download Catalog data 3?'), findsOneWidget);
   });
 
   testWidgets('settings exposes the locked App version and licenses', (
@@ -1569,7 +1569,7 @@ CatalogUpdateCandidate _updateCandidate() {
   final package = RemoteCatalogPackage(
     url: Uri.parse(
       'https://github.com/godwhere/roco-handbook/releases/download/'
-      'catalog-data-v2/catalog-v2.zip',
+      'catalog-data-v3/catalog-v3.zip',
     ),
     archiveBytes: 5 * 1024 * 1024,
     archiveSha256: '0' * 64,
@@ -1580,11 +1580,11 @@ CatalogUpdateCandidate _updateCandidate() {
     minimumProtocolVersion: 1,
     datasetId: 'roco-world-zh-cn',
     catalogSchemaVersion: 1,
-    dataVersion: 2,
-    releaseSequence: 2,
+    dataVersion: 3,
+    releaseSequence: 3,
     minimumAppVersion: '1.0.0',
     publishedAtUtc: DateTime.utc(2026, 9, 10),
-    snapshotId: 'snapshot-widget-test-v2',
+    snapshotId: 'snapshot-widget-test-v3',
     coverage: const <String, bool>{
       'pets': true,
       'skills': true,

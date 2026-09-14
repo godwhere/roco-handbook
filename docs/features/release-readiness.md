@@ -4,7 +4,7 @@
 
 The first candidate uses App version `1.0.0`, build number `1`, Catalog schema version `1`, Catalog data version `1`, and User schema version `1`. Settings displays the App version and the installed data versions independently.
 
-The current Phase 7 source uses App version `1.1.0`, build number `2`. This prevents the network-enabled source from producing a different binary under the preserved Phase 6 candidate identity. It is not yet a signed or store-submittable candidate.
+The current Phase 7 source uses App version `1.1.0`, build number `2`, Catalog schema version `1`, and the pre-release NRC Catalog data version `2`. This prevents the network-enabled source from producing a different binary under the preserved Phase 6 candidate identity. It is not yet a signed or store-submittable candidate.
 
 ## Offline release gate
 
@@ -12,7 +12,7 @@ Run the Catalog release check from the repository root:
 
 ```bash
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 tools/release/check_catalog.py \
-  --release data/release/1
+  --release data/release/2
 ```
 
 The validator reads only tracked local inputs. It checks package shape, hashes, complete source traceability, schema objects, SQLite integrity and foreign keys, stable probe results, truthful coverage, reviewed removals, and the absence of transaction sidecars or placeholder metadata. It never imports from BWIKI, writes the release database, signs an App, or uploads anything.

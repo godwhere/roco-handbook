@@ -15,6 +15,7 @@ void main() {
   late String manifestText;
   late Uint8List databaseBytes;
   late String attributionText;
+  late int bundledVersion;
 
   setUp(() {
     temporary = Directory.systemTemp.createTempSync('roco-installer-test-');
@@ -22,6 +23,9 @@ void main() {
         .readAsStringSync();
     databaseBytes = File('assets/catalog/catalog.db').readAsBytesSync();
     attributionText = File('assets/catalog/ATTRIBUTION.txt').readAsStringSync();
+    bundledVersion =
+        (jsonDecode(manifestText) as Map<String, dynamic>)['data_version']
+            as int;
   });
 
   tearDown(() {
@@ -40,18 +44,16 @@ void main() {
     );
   }
 
-  BundledCatalogBundle updatedBundle({
-    int dataVersion = 2,
-    String? attribution,
-  }) {
-    final fixture = File('${temporary.path}/fixture-v$dataVersion.db');
+  BundledCatalogBundle updatedBundle({int? dataVersion, String? attribution}) {
+    final version = dataVersion ?? bundledVersion + 1;
+    final fixture = File('${temporary.path}/fixture-v$version.db');
     fixture.writeAsBytesSync(databaseBytes, flush: true);
     final database = sqlite3.open(fixture.path, mode: OpenMode.readWrite);
     database.execute('PRAGMA foreign_keys = ON');
     database.execute(
       'UPDATE catalog_meta SET data_version = ?, snapshot_id = ? '
       'WHERE singleton = 1',
-      <Object?>[dataVersion, 'snapshot-phase-5-v$dataVersion'],
+      <Object?>[version, 'snapshot-phase-5-v$version'],
     );
     database.execute(
       "UPDATE pets SET name = 'Updated creature' WHERE pet_id = 'pet_000001'",
@@ -77,8 +79,8 @@ void main() {
     database.close();
     final bytes = fixture.readAsBytesSync();
     final manifest = jsonDecode(manifestText) as Map<String, dynamic>;
-    manifest['data_version'] = dataVersion;
-    manifest['snapshot_id'] = 'snapshot-phase-5-v$dataVersion';
+    manifest['data_version'] = version;
+    manifest['snapshot_id'] = 'snapshot-phase-5-v$version';
     manifest['database_bytes'] = bytes.length;
     manifest['database_sha256'] = sha256.convert(bytes).toString();
     return bundle(
@@ -96,7 +98,7 @@ void main() {
 
       expect(first.installed, isTrue);
       expect(first.outcome, CatalogOpenOutcome.installedBundled);
-      expect(first.manifest.dataVersion, 1);
+      expect(first.manifest.dataVersion, bundledVersion);
       expect(first.attributionText, attributionText);
       expect(File(first.databasePath).existsSync(), isTrue);
       expect(
@@ -140,8 +142,9 @@ void main() {
   test('migrates the Phase 3 active pointer without recopying its database', () async {
     final catalogs = Directory('${temporary.path}/catalogs')..createSync();
     final state = Directory('${temporary.path}/catalog-state')..createSync();
-    final legacyDatabase = File('${catalogs.path}/catalog-v1-s1.db')
-      ..writeAsBytesSync(databaseBytes, flush: true);
+    final legacyDatabase = File(
+      '${catalogs.path}/catalog-v$bundledVersion-s1.db',
+    )..writeAsBytesSync(databaseBytes, flush: true);
     final manifest = jsonDecode(manifestText) as Map<String, dynamic>;
     File('${state.path}/active_catalog.json').writeAsStringSync(
       '${jsonEncode(<String, Object?>{'dataset_id': manifest['dataset_id'], 'schema_version': manifest['catalog_schema_version'], 'data_version': manifest['data_version'], 'database_sha256': manifest['database_sha256']})}\n',
@@ -157,10 +160,11 @@ void main() {
     expect(result.databasePath, legacyDatabase.path);
     final migrated = _readJson('${state.path}/active_catalog.json');
     expect(migrated['pointer_version'], 2);
-    expect(migrated['file_name'], 'catalog-v1-s1.db');
+    expect(migrated['file_name'], 'catalog-v$bundledVersion-s1.db');
     expect(migrated['attribution_bytes'], utf8.encode(attributionText).length);
     expect(
-      File('${catalogs.path}/catalog-v1-s1.attribution.txt').readAsStringSync(),
+      File('${catalogs.path}/catalog-v$bundledVersion-s1.attribution.txt')
+          .readAsStringSync(),
       attributionText,
     );
   });
@@ -204,14 +208,15 @@ void main() {
       backgroundWork: false,
     );
     await installer.prepareBundledCatalog(bundle());
-    final updatedAttribution = '$attributionText\nPackage: Phase 7 version 2\n';
+    final updatedAttribution =
+        '$attributionText\nPackage: Phase 7 version ${bundledVersion + 1}\n';
     final updated = await installer.prepareBundledCatalog(
       updatedBundle(attribution: updatedAttribution),
     );
 
     expect(updated.attributionText, updatedAttribution);
     final reused = await installer.prepareBundledCatalog(bundle());
-    expect(reused.manifest.dataVersion, 2);
+    expect(reused.manifest.dataVersion, bundledVersion + 1);
     expect(reused.attributionText, updatedAttribution);
     final active = _readJson(
       '${temporary.path}/catalog-state/active_catalog.json',
@@ -311,8 +316,8 @@ void main() {
       final second = await installer.prepareBundledCatalog(updatedBundle());
 
       expect(second.outcome, CatalogOpenOutcome.installedBundled);
-      expect(second.manifest.dataVersion, 2);
-      expect(second.previousDataVersion, 1);
+      expect(second.manifest.dataVersion, bundledVersion + 1);
+      expect(second.previousDataVersion, bundledVersion);
       final database = sqlite3.open(
         second.databasePath,
         mode: OpenMode.readOnly,
@@ -343,8 +348,8 @@ void main() {
       final previous = _readJson(
         '${temporary.path}/catalog-state/previous_catalog.json',
       );
-      expect(active['data_version'], 2);
-      expect(previous['data_version'], 1);
+      expect(active['data_version'], bundledVersion + 1);
+      expect(previous['data_version'], bundledVersion);
       expect(
         Directory('${temporary.path}/catalogs')
             .listSync()
@@ -355,7 +360,7 @@ void main() {
 
       final noDowngrade = await installer.prepareBundledCatalog(bundle());
       expect(noDowngrade.outcome, CatalogOpenOutcome.reused);
-      expect(noDowngrade.manifest.dataVersion, 2);
+      expect(noDowngrade.manifest.dataVersion, bundledVersion + 1);
       expect(noDowngrade.databasePath, second.databasePath);
       expect(first.databasePath, isNot(second.databasePath));
     },
@@ -429,7 +434,7 @@ void main() {
       );
 
       final retry = await normal.prepareBundledCatalog(updatedBundle());
-      expect(retry.manifest.dataVersion, 2);
+      expect(retry.manifest.dataVersion, bundledVersion + 1);
       expect(
         Directory('${temporary.path}/catalogs')
             .listSync()
@@ -500,7 +505,7 @@ void main() {
         _readJson(
           '${temporary.path}/catalog-state/active_catalog.json',
         )['data_version'],
-        1,
+        bundledVersion,
       );
       expect(
         File('${temporary.path}/catalog-state/previous_catalog.json')
@@ -562,7 +567,7 @@ void main() {
 
       final recovered = await installer.prepareBundledCatalog(bundle());
       expect(recovered.outcome, CatalogOpenOutcome.recoveredPrevious);
-      expect(recovered.manifest.dataVersion, 1);
+      expect(recovered.manifest.dataVersion, bundledVersion);
       expect(
         File('${temporary.path}/catalog-state/previous_catalog.json')
             .existsSync(),
@@ -602,7 +607,7 @@ void main() {
           .writeAsStringSync('remove', flush: true);
 
       final recovered = await installer.prepareBundledCatalog(bundle());
-      expect(recovered.manifest.dataVersion, 1);
+      expect(recovered.manifest.dataVersion, bundledVersion);
       expect(outside.readAsStringSync(), 'preserve');
       expect(unrelated.readAsStringSync(), 'preserve');
       expect(
@@ -739,8 +744,8 @@ void main() {
 
       final restored = await installer.restoreBundledCatalog(bundle());
       expect(restored.outcome, CatalogOpenOutcome.restoredBundled);
-      expect(restored.manifest.dataVersion, 1);
-      expect(restored.previousDataVersion, 2);
+      expect(restored.manifest.dataVersion, bundledVersion);
+      expect(restored.previousDataVersion, bundledVersion + 1);
       expect(_logicalUserSnapshot(userOpen.databasePath), before);
       await users.close();
     },

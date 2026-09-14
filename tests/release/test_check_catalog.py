@@ -11,14 +11,14 @@ from tools.release.check_catalog import ReleaseCheckError, check_release
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE_RELEASE = ROOT / "data/release/1"
+SOURCE_RELEASE = ROOT / "data/release/2"
 
 
 class CatalogReleaseCheckTests(unittest.TestCase):
     def setUp(self) -> None:
         self.temporary = tempfile.TemporaryDirectory(prefix="roco-release-check-")
         self.root = Path(self.temporary.name)
-        self.release = self.root / "1"
+        self.release = self.root / "2"
         shutil.copytree(SOURCE_RELEASE, self.release)
 
     def tearDown(self) -> None:
@@ -28,10 +28,10 @@ class CatalogReleaseCheckTests(unittest.TestCase):
         report = check_release(SOURCE_RELEASE)
 
         self.assertEqual("passed", report["status"])
-        self.assertEqual(1, report["catalog_data_version"])
-        self.assertEqual(10, report["database"]["source_revision_count"])
-        self.assertEqual(596, report["database"]["table_counts"]["pets"])
-        self.assertEqual(788, report["database"]["table_counts"]["skills"])
+        self.assertEqual(2, report["catalog_data_version"])
+        self.assertEqual(8, report["database"]["source_revision_count"])
+        self.assertEqual(621, report["database"]["table_counts"]["pets"])
+        self.assertEqual(824, report["database"]["table_counts"]["skills"])
 
     def test_rejects_sqlite_sidecars(self) -> None:
         (self.release / "assets/catalog/catalog.db-wal").write_bytes(b"unsafe")

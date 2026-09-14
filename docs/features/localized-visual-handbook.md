@@ -22,19 +22,19 @@ The reviewed pre-typography store evidence contains four iOS portrait PNGs at 12
 
 ## Offline image library
 
-The App bundles active immutable Wiki image version 2 under `app/assets/wiki/v2/` and compact Tool media version 1 under `app/assets/wiki/tools/v1/`. Creature lists, skill-user lists, and original creature details resolve `illustration_key`; shiny detail art resolves the same key with the source `_yise` suffix. Skills and features resolve `icon_key` together with their stored relationship category. Selected type, base-stat, and skill-category controls use fixed source file titles. Activity cards use 53 deduplicated source icons, and Outfit inspiration uses 220 gender-specific previews. The Catalog still preserves its upstream `head_key`, but the App no longer projects, packages, or renders head images.
+The App bundles active immutable NRC Wiki image version 3 under `app/assets/wiki/v3/` and compact Tool media version 1 under `app/assets/wiki/tools/v1/`. Creature lists, skill-user lists, and original creature details resolve stable local illustration paths from each source filename. Shiny detail art resolves the explicit NRC shiny filename instead of assuming a suffix. Skills and features resolve `icon_key` together with their stored relationship category. Selected type, base-stat, and skill-category controls use 35 exact domain UI icons preserved from immutable image version 2 because the NRC file namespace does not expose them. Activity cards use 53 deduplicated source icons, and Outfit inspiration uses 220 gender-specific previews. The Catalog still preserves its upstream `head_key`, but the App no longer projects, packages, or renders head images.
 
-The manifest contains 1,484 unique files and 1,565 Catalog references:
+The manifest contains 1,594 unique files and 1,673 Catalog references:
 
 | Kind | Files | Local bytes |
 | --- | ---: | ---: |
-| Creature illustrations | 569 | 79,525,000 |
-| Shiny creature illustrations | 144 | 19,631,958 |
-| Skill and feature icons | 736 | 18,015,640 |
+| Creature illustrations | 595 | 81,723,106 |
+| Shiny creature illustrations | 191 | 24,606,991 |
+| Skill and feature icons | 773 | 18,322,479 |
 | Domain UI icons | 35 | 114,409 |
-| **Total** | **1,484** | **117,287,007** |
+| **Total** | **1,594** | **124,766,985** |
 
-The 144 deduplicated shiny files cover 146 active form references. The import tool validates exact MediaWiki page identity, image host and path, MIME type, source dimensions, source SHA-1, downloaded length, PNG dimensions, and local SHA-256 before an immutable version is accepted. A missing runtime asset displays a semantic placeholder and never starts a network request.
+The 595 deduplicated original files cover 621 active forms, the 191 deduplicated shiny files cover 193 active form references, and the 773 skill files cover 824 active skill and feature records. The import tool validates exact MediaWiki page identity, allowed image hosts and paths, MIME type, source dimensions, source SHA-1, downloaded length, PNG dimensions, and local SHA-256 before an immutable version is accepted. A missing runtime asset displays a semantic placeholder and never starts a network request.
 
 An App-side packaging regression reads the active records from the real bundled Catalog and resolves every creature illustration, skill or feature icon, and type icon through the production path helpers. It then requires each resolved path to exist in Flutter's generated asset manifest, closing the gap between source-manifest completeness and runtime packaging.
 
@@ -50,7 +50,7 @@ Sort, Filters, and Search retain the one-to-one-to-two toolbar ratio. Filters op
 
 The detail page presents the exact total in a full-width summary bar, the six stored values as labeled progress rows, and height, weight, review gold, and starlight as supporting fact pills. The progress bars use a bounded 300-point visual scale and never replace the exact numeric copy. `PetDetail.totalBaseStats` calculates the total only when HP, attack, defense, magic attack, magic defense, and speed are all present. Partial source data displays no fabricated total. The Chinese label is `种族资质总和`.
 
-The current Catalog contains 595 active forms with all six values and one source-incomplete form, `pet_000535`, with all six values absent. The complete forms produce their exact totals; the incomplete form reports an unknown total rather than treating nulls as zero.
+The current NRC Catalog contains 621 active forms with all six values. Every form produces its exact total; the null-safe calculation remains in place so a future incomplete source record cannot fabricate a value from zeros.
 
 ## Type relationships
 
@@ -86,7 +86,7 @@ The third bottom destination is Tools rather than a single-purpose library tab. 
 
 Game descriptions presents 54 source-defined terms, six category filters, normal text search, and distinct related feature and skill links. Event timeline presents month navigation, five category filters, current-state badges, compact source icons, local UTC+8 windows, and activity details for 547 source occurrences. Outfit inspiration presents normal text search, grade filters, female and male previews, source descriptions, and acquisition details for 110 outfits. All three are bundled offline; the App does not fabricate entries or open an online fallback.
 
-A complete-Catalog regression resolves the actual one- or two-type combination of every active creature form. All 596 current combinations are recognized by the frozen relationship contract, and every emitted multiplier stays within the supported `¼`, `½`, `×2`, or capped `×3` set.
+A complete-Catalog regression resolves the actual one- or two-type combination of every active creature form. All 621 current combinations are recognized by the frozen relationship contract, and every emitted multiplier stays within the supported `¼`, `½`, `×2`, or capped `×3` set.
 
 ## Accessibility and offline boundary
 

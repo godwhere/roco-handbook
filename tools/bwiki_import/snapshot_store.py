@@ -17,7 +17,7 @@ from .response_validator import validate_response
 _IMPORT_LEVELS = {"required", "adapter_review"}
 
 
-def _read_config(path: Path) -> tuple[str, list[SourceSpec]]:
+def _read_config(path: Path) -> tuple[dict[str, Any], list[SourceSpec]]:
     try:
         document = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
@@ -54,7 +54,7 @@ def _read_config(path: Path) -> tuple[str, list[SourceSpec]]:
         if not filenames:
             filenames = [title.replace(":", "_").replace("/", "_") + ".json"]
         specs.append(SourceSpec(source_key, title, level, tuple(filenames)))
-    return dataset_id, specs
+    return document, specs
 
 
 def _find_input(input_dir: Path, spec: SourceSpec) -> Path | None:
@@ -133,7 +133,8 @@ def import_local_snapshot(
     if not input_dir.is_dir():
         raise InputError(f"Input directory does not exist: {input_dir}")
 
-    dataset_id, specs = _read_config(config_path)
+    config, specs = _read_config(config_path)
+    dataset_id = config["dataset_id"]
     responses: list[ValidatedResponse] = []
     missing_required: list[str] = []
     missing_review: list[str] = []
@@ -166,6 +167,8 @@ def import_local_snapshot(
         "imported_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "import_mode": "local_responses",
         "transport_evidence": "not_available_for_local_files",
+        "source_system": config.get("source_system", "bwiki.rocom"),
+        "api_endpoint": config.get("endpoint"),
         "missing_adapter_review_sources": sorted(missing_review),
         "sources": [
             response.lock_record()

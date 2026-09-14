@@ -11,6 +11,9 @@ import 'package:roco_handbook/data/catalog/remote_catalog_archive.dart';
 import 'package:roco_handbook/data/catalog/remote_catalog_manifest.dart';
 import 'package:sqlite3/sqlite3.dart';
 
+const _bundledDataVersion = 2;
+const _remoteDataVersion = 3;
+
 void main() {
   late Directory temporary;
   late Uint8List databaseBytes;
@@ -20,16 +23,16 @@ void main() {
 
   setUp(() {
     temporary = Directory.systemTemp.createTempSync('roco-remote-archive-');
-    final databaseFile = File('${temporary.path}/catalog-v2.db')
+    final databaseFile = File('${temporary.path}/catalog-v3.db')
       ..writeAsBytesSync(
         File('assets/catalog/catalog.db').readAsBytesSync(),
         flush: true,
       );
     final database = sqlite3.open(databaseFile.path, mode: OpenMode.readWrite);
     database.execute(
-      'UPDATE catalog_meta SET data_version = 2, snapshot_id = ? '
+      'UPDATE catalog_meta SET data_version = 3, snapshot_id = ? '
       'WHERE singleton = 1',
-      <Object?>['snapshot-phase7-archive-v2'],
+      <Object?>['snapshot-phase7-archive-v3'],
     );
     database.execute(
       "UPDATE pets SET name = 'Remote archive creature' "
@@ -41,8 +44,8 @@ void main() {
     final manifest = jsonDecode(
       File('assets/catalog/bundled_catalog.json').readAsStringSync(),
     ) as Map<String, dynamic>;
-    manifest['data_version'] = 2;
-    manifest['snapshot_id'] = 'snapshot-phase7-archive-v2';
+    manifest['data_version'] = _remoteDataVersion;
+    manifest['snapshot_id'] = 'snapshot-phase7-archive-v3';
     manifest['database_bytes'] = databaseBytes.length;
     manifest['database_sha256'] = sha256.convert(databaseBytes).toString();
     catalogManifestText = jsonEncode(manifest);
@@ -85,9 +88,12 @@ void main() {
         ),
       );
       final installed = await decoded.installWith(installer);
-      expect(installed.manifest.dataVersion, 2);
+      expect(installed.manifest.dataVersion, _remoteDataVersion);
       expect(installed.outcome, CatalogOpenOutcome.installedRemote);
-      expect(await installer.readHighestAcceptedRemoteReleaseSequence(), 2);
+      expect(
+        await installer.readHighestAcceptedRemoteReleaseSequence(),
+        _remoteDataVersion,
+      );
       final database = sqlite3.open(
         installed.databasePath,
         mode: OpenMode.readOnly,
@@ -125,7 +131,7 @@ void main() {
             archiveBytes: validArchiveBytes,
             context: RemoteCatalogValidationContext(
               currentAppVersion: '1.0.0',
-              currentDataVersion: 1,
+              currentDataVersion: _bundledDataVersion,
               highestAcceptedReleaseSequence: 99,
               allowedHosts: const {'updates.example.test'},
             ),
@@ -134,8 +140,11 @@ void main() {
           );
 
       expect(installed.outcome, CatalogOpenOutcome.installedRemote);
-      expect(installed.manifest.dataVersion, 2);
-      expect(await installer.readHighestAcceptedRemoteReleaseSequence(), 2);
+      expect(installed.manifest.dataVersion, _remoteDataVersion);
+      expect(
+        await installer.readHighestAcceptedRemoteReleaseSequence(),
+        _remoteDataVersion,
+      );
     },
   );
 
@@ -167,7 +176,10 @@ void main() {
       await decoded.installWith(installer);
       await installer.restoreBundledCatalog(bundled);
 
-      expect(await installer.readHighestAcceptedRemoteReleaseSequence(), 2);
+      expect(
+        await installer.readHighestAcceptedRemoteReleaseSequence(),
+        _remoteDataVersion,
+      );
       await expectLater(
         decoded.installWith(installer),
         _installFailure('remote_release_sequence'),
@@ -203,13 +215,13 @@ void main() {
       );
 
       expect(failed.outcome, CatalogOpenOutcome.recoveredPrevious);
-      expect(failed.manifest.dataVersion, 1);
+      expect(failed.manifest.dataVersion, _bundledDataVersion);
       expect(
         await LocalCatalogInstaller(
           supportPath,
           backgroundWork: false,
         ).readHighestAcceptedRemoteReleaseSequence(),
-        2,
+        _remoteDataVersion,
       );
     },
   );
@@ -250,7 +262,7 @@ void main() {
 
       final result = await decoded.installWith(installer);
       expect(result.outcome, CatalogOpenOutcome.recoveredPrevious);
-      expect(result.manifest.dataVersion, 1);
+      expect(result.manifest.dataVersion, _bundledDataVersion);
       expect(await installer.readHighestAcceptedRemoteReleaseSequence(), 0);
     },
   );
@@ -397,7 +409,7 @@ void main() {
         uncompressed: true,
       ),
     );
-    final marker = utf8.encode('snapshot-phase7-archive-v2');
+    final marker = utf8.encode('snapshot-phase7-archive-v3');
     final offset = _indexOf(bytes, marker);
     expect(offset, isNonNegative);
     final changed = Uint8List.fromList(bytes)
@@ -430,7 +442,7 @@ void main() {
     );
     expect(
       () => const RemoteCatalogArchiveDecoder().decode(
-        manifest: _remoteManifest(validArchiveBytes, dataVersion: 3),
+        manifest: _remoteManifest(validArchiveBytes, dataVersion: 4),
         archiveBytes: validArchiveBytes,
       ),
       _archiveFailure('archive_manifest_mismatch'),
@@ -474,7 +486,7 @@ Uint8List _encode(
 
 VerifiedRemoteCatalogManifest _remoteManifest(
   Uint8List archiveBytes, {
-  int dataVersion = 2,
+  int dataVersion = _remoteDataVersion,
 }) {
   return VerifiedRemoteCatalogManifest(
     keyId: 'test-key',
@@ -582,7 +594,7 @@ _signArchiveManifest(Uint8List archiveBytes) async {
       'skills': true,
       'topic_rewards': false,
     },
-    'data_version': 2,
+    'data_version': _remoteDataVersion,
     'dataset_id': 'roco-world-zh-cn',
     'minimum_app_version': '1.0.0',
     'minimum_protocol_version': 1,
@@ -591,12 +603,12 @@ _signArchiveManifest(Uint8List archiveBytes) async {
       'archive_format': 'zip',
       'archive_sha256': sha256.convert(archiveBytes).toString(),
       'kind': 'complete_catalog',
-      'url': 'https://updates.example.test/full/catalog-v2.zip',
+      'url': 'https://updates.example.test/full/catalog-v3.zip',
     },
     'protocol_version': 1,
     'published_at_utc': '2026-09-09T14:00:00Z',
-    'release_sequence': 2,
-    'snapshot_id': 'snapshot-phase7-archive-v2',
+    'release_sequence': _remoteDataVersion,
+    'snapshot_id': 'snapshot-phase7-archive-v3',
   });
   final algorithm = Ed25519();
   final keyPair = await algorithm.newKeyPair();

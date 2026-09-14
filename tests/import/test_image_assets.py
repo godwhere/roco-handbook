@@ -284,14 +284,14 @@ class ImageAssetTests(unittest.TestCase):
                 self.assertGreater(path.stat().st_size, 1000)
 
         brand_source = (
-            ROOT / "app/assets/wiki/v2/pets/illustrations/JL_dimo.png"
+            ROOT / "app/assets/wiki/v3/pets/illustrations/JL_dimo.png"
         ).read_bytes()
         self.assertEqual(
-            "485d76e697b8f75d63a4036cf534c146b7d22addde663b831f80900e7018eb77",
+            "1b413e8ebe3bbcaadbd09e664afedc288c16ea7456b60386e708be42fa24278e",
             hashlib.sha256(brand_source).hexdigest(),
         )
         self.assertIn(
-            "app/assets/wiki/v2/pets/illustrations/JL_dimo.png",
+            "app/assets/wiki/v3/pets/illustrations/JL_dimo.png",
             (ROOT / "tools/brand/generate_brand_assets.swift").read_text(
                 encoding="utf-8"
             ),
@@ -310,14 +310,14 @@ class ImageAssetTests(unittest.TestCase):
         )
 
     def test_frozen_asset_manifest_matches_every_bundled_png(self) -> None:
-        root = ROOT / "app/assets/wiki/v2"
+        root = ROOT / "app/assets/wiki/v3"
         manifest = json.loads(
             (root / "asset-manifest.json").read_text(encoding="utf-8")
         )
         records = manifest["assets"]
 
-        self.assertEqual(1484, manifest["asset_count"])
-        self.assertEqual(1565, manifest["reference_count"])
+        self.assertEqual(1594, manifest["asset_count"])
+        self.assertEqual(1673, manifest["reference_count"])
         self.assertEqual(
             manifest["total_bytes"],
             sum(record["local_bytes"] for record in records),
@@ -337,8 +337,8 @@ class ImageAssetTests(unittest.TestCase):
 
     def test_derives_complete_current_catalog_scope(self) -> None:
         specs = derive_asset_specs(
-            ROOT / "data/normalized/snapshot-19235f9b9b34dc4e/catalog-v1.json",
-            ROOT / "config/wiki_assets_v2.json",
+            ROOT / "data/normalized/snapshot-dad7cd7d5ce73236/catalog-v2.json",
+            ROOT / "config/wiki_assets_v3.json",
         )
 
         counts = {
@@ -347,20 +347,20 @@ class ImageAssetTests(unittest.TestCase):
         }
         self.assertEqual(
             {
-                "pet_illustration": 569,
-                "pet_shiny_illustration": 144,
-                "skill_icon": 736,
+                "pet_illustration": 595,
+                "pet_shiny_illustration": 191,
+                "skill_icon": 773,
                 "ui_icon": 35,
             },
             counts,
         )
-        self.assertEqual(1565, sum(len(item.catalog_ids) for item in specs))
+        self.assertEqual(1673, sum(len(item.catalog_ids) for item in specs))
         self.assertIn(
-            "File:JL dimo.png",
+            "File:PetPortrait dimo.png",
             {item.source_title for item in specs},
         )
         self.assertIn(
-            "File:JL emolang yise.png",
+            "File:PetPortrait emolang yise.png",
             {item.source_title for item in specs},
         )
         self.assertIn(
@@ -478,6 +478,48 @@ class ImageAssetTests(unittest.TestCase):
                     transport=transport,
                     sleep=lambda _: None,
                 )
+
+    def test_nrc_source_image_names_can_keep_stable_local_asset_paths(self) -> None:
+        catalog = {
+            "dataset_id": "roco-world-zh-cn",
+            "pets": [
+                {
+                    "status": "active",
+                    "pet_id": "pet_1",
+                    "illustration_key": "local_pet",
+                    "has_shiny": 1,
+                    "extra_json": {
+                        "source_illustration_key": "PetPortrait_pet_001",
+                        "source_shiny_illustration_key": "PetPortrait_pet_101",
+                    },
+                }
+            ],
+            "skills": [],
+        }
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            catalog_path = root / "catalog.json"
+            config_path = root / "config.json"
+            catalog_path.write_text(json.dumps(catalog), encoding="utf-8")
+            config_path.write_text(json.dumps(_config()), encoding="utf-8")
+            specs = derive_asset_specs(catalog_path, config_path)
+        by_kind = {spec.kind: spec for spec in specs if spec.kind != "ui_icon"}
+        self.assertEqual(
+            "File:PetPortrait pet 001.png",
+            by_kind["pet_illustration"].source_title,
+        )
+        self.assertEqual(
+            "pets/illustrations/local_pet.png",
+            by_kind["pet_illustration"].local_path,
+        )
+        self.assertEqual(
+            "File:PetPortrait pet 101.png",
+            by_kind["pet_shiny_illustration"].source_title,
+        )
+        self.assertEqual(
+            "pets/shiny/local_pet_yise.png",
+            by_kind["pet_shiny_illustration"].local_path,
+        )
 
 
 if __name__ == "__main__":

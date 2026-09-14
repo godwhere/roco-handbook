@@ -11,7 +11,7 @@ void main() {
   ) async {
     final semantics = tester.ensureSemantics();
     try {
-      for (final path in <String?>[null, 'assets/wiki/v2/does-not-exist.png']) {
+      for (final path in <String?>[null, 'assets/wiki/v3/does-not-exist.png']) {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -48,7 +48,7 @@ void main() {
       final pets = database.select(
         "SELECT pet_id, illustration_key FROM pets WHERE status = 'active'",
       );
-      expect(pets, hasLength(596));
+      expect(pets, hasLength(621));
       for (final row in pets) {
         _requireBundled(
           missing,
@@ -61,7 +61,7 @@ void main() {
       final skills = database.select(
         "SELECT skill_id, name, category, icon_key FROM skills WHERE status = 'active'",
       );
-      expect(skills, hasLength(788));
+      expect(skills, hasLength(824));
       for (final row in skills) {
         final skill = SkillSummary(
           skillId: row['skill_id'] as String,

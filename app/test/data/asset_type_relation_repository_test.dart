@@ -64,7 +64,7 @@ void main() {
       database.close();
     }
 
-    expect(typesByPet, hasLength(596));
+    expect(typesByPet, hasLength(621));
     for (final entry in typesByPet.entries) {
       final result = await repository.forCreatureTypes(entry.value);
       expect(result.outgoing, hasLength(entry.value.length), reason: entry.key);

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../domain/catalog_models.dart';
 
-const _assetRoot = 'assets/wiki/v2';
+const _assetRoot = 'assets/wiki/v3';
 
 String? petIllustrationAsset(String? key) =>
     key == null ? null : '$_assetRoot/pets/illustrations/$key.png';

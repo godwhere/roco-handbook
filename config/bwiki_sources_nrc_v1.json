@@ -1,0 +1,23 @@
+{
+  "config_version": 1,
+  "dataset_id": "roco-world-zh-cn",
+  "source_system": "bwiki.nrc",
+  "endpoint": "https://wiki.biligame.com/nrc/api.php",
+  "request_policy": {
+    "max_concurrency": 1,
+    "minimum_interval_seconds": 1,
+    "connect_timeout_seconds": 10,
+    "read_timeout_seconds": 60,
+    "max_retries": 3
+  },
+  "sources": [
+    {"source_key": "core", "title": "Module:Pets/data/Catalog", "level": "required", "local_filenames": ["Module_Pets_data_Catalog.json"]},
+    {"source_key": "handbook", "title": "Module:Pets/data/Handbooks", "level": "required", "local_filenames": ["Module_Pets_data_Handbooks.json"]},
+    {"source_key": "evolution", "title": "Module:Pets/data/Evolutions", "level": "required", "local_filenames": ["Module_Pets_data_Evolutions.json"]},
+    {"source_key": "learnset_catalog", "title": "Module:Pets/data/Learnsets", "level": "required", "local_filenames": ["Module_Pets_data_Learnsets.json"]},
+    {"source_key": "skill_catalog", "title": "Module:Pets/data/Skills", "level": "required", "local_filenames": ["Module_Pets_data_Skills.json"]},
+    {"source_key": "index", "title": "Module:Pets/data/Index", "level": "required", "local_filenames": ["Module_Pets_data_Index.json"]},
+    {"source_key": "overview", "title": "Module:Pets/data/Overview", "level": "required", "local_filenames": ["Module_Pets_data_Overview.json"]},
+    {"source_key": "history", "title": "Module:Pets/data/History", "level": "required", "local_filenames": ["Module_Pets_data_History.json"]}
+  ]
+}

@@ -69,15 +69,20 @@ def _validate_manifest(manifest: dict[str, Any], schema_path: Path) -> None:
 
 
 def _attribution(normalized: dict[str, Any]) -> str:
-    rendered_revision = normalized["inspection_summary"]["rendered_index_evidence"][
-        "page_revision_id"
-    ]
+    source_name = (
+        "Roco Kingdom World BWIKI contributors"
+        if any(
+            str(source.get("source_ref", "")).startswith("bwiki.nrc:")
+            for source in normalized["source_revisions"]
+        )
+        else "Roco World BWIKI contributors"
+    )
     lines = [
         "Roco World Offline Handbook - Catalog Attribution",
         "",
         "This is an independent, non-commercial, unofficial project.",
         "",
-        "Source: Roco World BWIKI contributors",
+        f"Source: {source_name}",
         "License: CC BY-NC-SA 4.0",
         "License URL: https://creativecommons.org/licenses/by-nc-sa/4.0/",
         "",
@@ -91,15 +96,17 @@ def _attribution(normalized: dict[str, Any]) -> str:
             f"- {source['source_key']}: revision {source['revision_id']} - "
             f"{source['source_url']}"
         )
-    lines.extend(
-        [
-            "",
-            "Rendered handbook evidence:",
-            f"- Page revision {rendered_revision} - "
-            "https://wiki.biligame.com/rocom/%E7%B2%BE%E7%81%B5%E5%9B%BE%E9%89%B4",
-            "",
-        ]
-    )
+    rendered = normalized["inspection_summary"].get("rendered_index_evidence")
+    if isinstance(rendered, dict):
+        lines.extend(
+            [
+                "",
+                "Rendered handbook evidence:",
+                f"- Page revision {rendered['page_revision_id']} - "
+                "https://wiki.biligame.com/rocom/%E7%B2%BE%E7%81%B5%E5%9B%BE%E9%89%B4",
+            ]
+        )
+    lines.append("")
     return "\n".join(lines)
 
 

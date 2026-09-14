@@ -17,8 +17,8 @@ void main() {
 
     expect(info.datasetId, 'roco-world-zh-cn');
     expect(info.schemaVersion, 1);
-    expect(info.dataVersion, 1);
-    expect(info.snapshotId, 'snapshot-19235f9b9b34dc4e');
+    expect(info.dataVersion, 2);
+    expect(info.snapshotId, 'snapshot-dad7cd7d5ce73236');
     expect(info.coverage['pets'], isTrue);
     expect(info.coverage['description_note_definitions'], isFalse);
   });
@@ -29,7 +29,7 @@ void main() {
     );
 
     expect(results, hasLength(1));
-    expect(results.single.petId, 'pet_000595');
+    expect(results.single.petId, 'pet_000593');
     expect(results.single.handbookId, 'handbook_000004');
     expect(results.single.dexNo, '004');
     expect(results.single.isDefaultForm, isFalse);
@@ -182,11 +182,11 @@ void main() {
     );
 
     expect(firstPage, hasLength(200));
-    expect(secondPage, hasLength(31));
+    expect(secondPage, hasLength(45));
     expect(<String>{
       ...firstPage.map((skill) => skill.skillId),
       ...secondPage.map((skill) => skill.skillId),
-    }, hasLength(231));
+    }, hasLength(245));
   });
 
   test('loads deduplicated skills related to a game description', () async {
@@ -227,17 +227,16 @@ void main() {
     expect(featureOnly, isEmpty);
   });
 
-  test(
-    'calculates complete base stats without filling missing source data',
-    () async {
-      final complete = await repository.getPetDetail('pet_000004');
-      final incomplete = await repository.getPetDetail('pet_000535');
+  test('calculates complete base stats from the current source', () async {
+    final complete = await repository.getPetDetail('pet_000004');
+    final unfinished = await repository.getPetDetail('pet_000598');
 
-      expect(complete.totalBaseStats, 582);
-      expect(incomplete.stats.values, everyElement(isNull));
-      expect(incomplete.totalBaseStats, isNull);
-    },
-  );
+    expect(complete.totalBaseStats, 582);
+    expect(unfinished.summary.name, '\u672a\u5b8c\u866b');
+    expect(unfinished.summary.belongSeason, '4');
+    expect(unfinished.hasShiny, isTrue);
+    expect(unfinished.totalBaseStats, 567);
+  });
 
   test('escapes SQL wildcard characters in user search', () async {
     final percent = await repository.searchPets(const PetQuery(keyword: '%'));
@@ -254,11 +253,11 @@ void main() {
     () async {
       final forms = await repository.getFormsForHandbook('handbook_000004');
       final base = await repository.getPetDetail('pet_000007');
-      final special = await repository.getPetDetail('pet_000595');
+      final special = await repository.getPetDetail('pet_000593');
 
       expect(
         forms.map((form) => form.petId),
-        containsAll(<String>['pet_000007', 'pet_000538', 'pet_000595']),
+        containsAll(<String>['pet_000007', 'pet_000536', 'pet_000593']),
       );
       expect(base.summary.name, '魔力猫');
       expect(special.summary.name, '武斗酷猫');
@@ -273,7 +272,7 @@ void main() {
         special.summary.petId,
       );
       expect(baseSkills.featureSkill?.skillId, 'skill_000003');
-      expect(specialSkills.featureSkill?.skillId, 'skill_000226');
+      expect(specialSkills.featureSkill?.skillId, 'skill_000238');
       expect(baseSkills.featureSkill?.iconKey, isNotNull);
     },
   );
@@ -304,13 +303,13 @@ void main() {
   test('returns only evidence-backed evolution edges', () async {
     final graph = await repository.getEvolutionGraph('pet_000007');
 
-    expect(graph.groupIds, contains('evo_000004'));
-    expect(graph.nodes.map((node) => node.petId), contains('pet_000595'));
+    expect(graph.groupIds, contains('evolution_30b562936521'));
+    expect(graph.nodes.map((node) => node.petId), contains('pet_000593'));
     expect(
       graph.edges.where(
         (edge) =>
             edge.fromPetId == 'pet_000007' &&
-            edge.toPetId == 'pet_000595' &&
+            edge.toPetId == 'pet_000593' &&
             edge.methodCode == 'lord_branch',
       ),
       hasLength(1),
