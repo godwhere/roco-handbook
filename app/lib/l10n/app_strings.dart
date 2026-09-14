@@ -81,6 +81,7 @@ final class AppStrings {
   static const _zhCn = <String, String>{
     'Roco World Handbook': '洛克手册',
     'Roco Handbook': '洛克手册',
+    'Explore the creature world · collect every encounter': '探索精灵世界 · 收录每一份奇遇',
     'About this Catalog': '关于图鉴数据',
     'Data version': '数据版本',
     'Catalog schema': '图鉴数据库结构',

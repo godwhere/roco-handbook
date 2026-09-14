@@ -33,6 +33,15 @@ void main() {
 
     await selectDestination(3);
     await tester.tap(
+      find.byKey(const ValueKey('pet-catalog-layout-list')),
+      warnIfMissed: false,
+    );
+    await tester.pumpAndSettle();
+    await selectDestination(0);
+    await binding.takeScreenshot('phase8-creature-list');
+
+    await selectDestination(3);
+    await tester.tap(
       find.byKey(const ValueKey('pet-catalog-layout-grid')),
       warnIfMissed: false,
     );

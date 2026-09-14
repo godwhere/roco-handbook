@@ -141,14 +141,18 @@ class _CatalogHomePageState extends State<CatalogHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CatalogPlatformAppBar(
-        title: context.tr('Roco World Handbook'),
-        dataVersionLabel: context.strings.dataVersion(
-          widget.session.info.dataVersion,
-        ),
-        onShowInformation: _showAbout,
-        informationAccessibilityLabel: context.tr('Catalog information'),
-      ),
+      key: const ValueKey('catalog-home-scaffold'),
+      extendBody: true,
+      appBar: _index == 0
+          ? null
+          : CatalogPlatformAppBar(
+              title: context.tr('Roco World Handbook'),
+              dataVersionLabel: context.strings.dataVersion(
+                widget.session.info.dataVersion,
+              ),
+              onShowInformation: _showAbout,
+              informationAccessibilityLabel: context.tr('Catalog information'),
+            ),
       body: IndexedStack(
         index: _index,
         children: <Widget>[
@@ -158,6 +162,10 @@ class _CatalogHomePageState extends State<CatalogHomePage> {
             userRepository: widget.session.userRepository,
             datasetId: widget.session.info.datasetId,
             layout: _petCatalogLayout,
+            dataVersionLabel: context.strings.dataVersion(
+              widget.session.info.dataVersion,
+            ),
+            onShowInformation: _showAbout,
           ),
           SkillCatalogPage(
             key: ValueKey('skill-catalog-${widget.session.info.dataVersion}'),

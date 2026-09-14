@@ -10,6 +10,7 @@ import 'pet_detail_page.dart';
 import '../../l10n/app_strings.dart';
 import '../../theme/catalog_theme.dart';
 import '../../widgets/catalog_asset_image.dart';
+import '../../widgets/pet_type_card_background.dart';
 
 class PetCatalogPage extends StatefulWidget {
   const PetCatalogPage({
@@ -17,6 +18,8 @@ class PetCatalogPage extends StatefulWidget {
     required this.userRepository,
     required this.datasetId,
     this.layout = PetCatalogLayout.list,
+    this.dataVersionLabel,
+    this.onShowInformation,
     super.key,
   });
 
@@ -24,6 +27,8 @@ class PetCatalogPage extends StatefulWidget {
   final UserRepository userRepository;
   final String datasetId;
   final PetCatalogLayout layout;
+  final String? dataVersionLabel;
+  final VoidCallback? onShowInformation;
 
   @override
   State<PetCatalogPage> createState() => _PetCatalogPageState();
@@ -433,87 +438,119 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
 
   @override
   Widget build(BuildContext context) {
+    final showsHero = widget.dataVersionLabel != null;
     return SafeArea(
-      top: false,
+      key: const ValueKey('pet-catalog-safe-area'),
+      top: showsHero,
+      bottom: false,
       child: Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Expanded(
-                      child: _CompactFilterButton(
-                        key: const ValueKey('pet-sort'),
-                        icon: Icons.sort_rounded,
-                        label: context.tr('Sort'),
-                        semanticValue: _sortLabel(context, _sort),
-                        onPressed: _showSortOptions,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: _CompactFilterButton(
-                        key: const ValueKey('pet-filters'),
-                        icon: Icons.filter_alt_outlined,
-                        label: _selectedFilterCount == 0
-                            ? context.tr('Filters')
-                            : '${context.tr('Filters')} ($_selectedFilterCount)',
-                        onPressed: _showFilters,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      flex: 2,
-                      child: TextField(
-                        key: const ValueKey('pet-search'),
-                        controller: _searchController,
-                        onChanged: _scheduleSearch,
-                        textInputAction: TextInputAction.search,
-                        decoration: InputDecoration(
-                          hintText: context.tr('Search creatures'),
-                          prefixIcon: const Icon(Icons.search_rounded),
-                          suffixIcon: _searchController.text.isEmpty
-                              ? null
-                              : IconButton(
-                                  tooltip: context.tr('Clear search'),
-                                  onPressed: () {
-                                    _searchController.clear();
-                                    _load();
-                                  },
-                                  icon: const Icon(Icons.clear_rounded),
-                                ),
-                          filled: false,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(28),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                if (_searchController.text.isNotEmpty) ...<Widget>[
-                  const SizedBox(height: 8),
-                  Text(
-                    context.tr(
-                      'Search results show concrete forms so a matching form opens directly.',
-                    ),
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
-              ],
+          if (showsHero)
+            _CatalogHeroHeader(
+              dataVersionLabel: widget.dataVersionLabel!,
+              onShowInformation: widget.onShowInformation,
+              child: _buildToolbar(context, inHero: true),
+            )
+          else
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
+              child: _buildToolbar(context),
             ),
-          ),
           Expanded(child: _buildResults()),
         ],
       ),
+    );
+  }
+
+  Widget _buildToolbar(BuildContext context, {bool inHero = false}) {
+    final scheme = Theme.of(context).colorScheme;
+    final fieldBorderColor = inHero ? const Color(0xFF8BBEF4) : scheme.outline;
+    final fillColor = inHero
+        ? scheme.surface.withValues(alpha: 0.58)
+        : Colors.transparent;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: _CompactFilterButton(
+                key: const ValueKey('pet-sort'),
+                icon: Icons.sort_rounded,
+                label: context.tr('Sort'),
+                semanticValue: _sortLabel(context, _sort),
+                borderColor: inHero ? fieldBorderColor : null,
+                fillColor: fillColor,
+                onPressed: _showSortOptions,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _CompactFilterButton(
+                key: const ValueKey('pet-filters'),
+                icon: Icons.filter_alt_outlined,
+                label: _selectedFilterCount == 0
+                    ? context.tr(inHero ? 'Types' : 'Filters')
+                    : '${context.tr('Filters')} ($_selectedFilterCount)',
+                borderColor: inHero ? fieldBorderColor : null,
+                fillColor: fillColor,
+                onPressed: _showFilters,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              flex: 2,
+              child: SizedBox(
+                height: 56,
+                child: TextField(
+                  key: const ValueKey('pet-search'),
+                  controller: _searchController,
+                  onChanged: _scheduleSearch,
+                  textInputAction: TextInputAction.search,
+                  decoration: InputDecoration(
+                    hintText: context.tr('Search creatures'),
+                    prefixIcon: const Icon(Icons.search_rounded),
+                    suffixIcon: _searchController.text.isEmpty
+                        ? null
+                        : IconButton(
+                            tooltip: context.tr('Clear search'),
+                            onPressed: () {
+                              _searchController.clear();
+                              _load();
+                            },
+                            icon: const Icon(Icons.clear_rounded),
+                          ),
+                    filled: inHero,
+                    fillColor: fillColor,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(28),
+                      borderSide: BorderSide(color: fieldBorderColor),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(28),
+                      borderSide: BorderSide(color: fieldBorderColor),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        if (_searchController.text.isNotEmpty) ...<Widget>[
+          const SizedBox(height: 8),
+          Text(
+            context.tr(
+              'Search results show concrete forms so a matching form opens directly.',
+            ),
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ],
+      ],
     );
   }
 
@@ -571,12 +608,13 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
   }
 
   Widget _buildListResults() {
+    final bottomClearance = MediaQuery.paddingOf(context).bottom + 24;
     return RefreshIndicator(
       onRefresh: _load,
       child: ListView.separated(
         key: const ValueKey('pet-list-results'),
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        padding: const EdgeInsets.fromLTRB(16, 2, 16, 24),
+        padding: EdgeInsets.fromLTRB(16, 2, 16, bottomClearance),
         itemCount: _results.length + (_hasMore ? 1 : 0),
         separatorBuilder: (_, _) => const SizedBox(height: 10),
         itemBuilder: (context, index) {
@@ -596,6 +634,7 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
 
   Widget _buildGridResults() {
     final scale = MediaQuery.textScalerOf(context).scale(1).clamp(1.0, 2.0);
+    final bottomClearance = MediaQuery.paddingOf(context).bottom + 12;
     return RefreshIndicator(
       onRefresh: _load,
       child: CustomScrollView(
@@ -603,7 +642,7 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         slivers: <Widget>[
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(12, 2, 12, 12),
+            padding: EdgeInsets.fromLTRB(12, 2, 12, bottomClearance),
             sliver: SliverLayoutBuilder(
               builder: (context, constraints) {
                 final columns = constraints.crossAxisExtent >= 720 ? 3 : 2;
@@ -665,6 +704,142 @@ String _sortLabel(BuildContext context, PetSort sort) {
   };
 }
 
+class _CatalogHeroHeader extends StatelessWidget {
+  const _CatalogHeroHeader({
+    required this.dataVersionLabel,
+    required this.child,
+    this.onShowInformation,
+  });
+
+  final String dataVersionLabel;
+  final VoidCallback? onShowInformation;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+    final titleColor = isDark ? scheme.onSurface : const Color(0xFF19345E);
+    final subtitleColor = isDark
+        ? scheme.onSurfaceVariant
+        : const Color(0xFF68778F);
+    return Container(
+      key: const ValueKey('pet-catalog-hero'),
+      margin: const EdgeInsets.fromLTRB(8, 8, 8, 10),
+      padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(28),
+        image: DecorationImage(
+          image: const AssetImage(
+            'assets/brand/v1/catalog-header-background.png',
+          ),
+          fit: BoxFit.cover,
+          colorFilter: isDark
+              ? const ColorFilter.mode(Color(0x99000000), BlendMode.darken)
+              : null,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          SizedBox(
+            height: 88,
+            child: Stack(
+              children: <Widget>[
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 112,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.tr('Roco World Handbook'),
+                      maxLines: 1,
+                      style: theme.textTheme.displaySmall?.copyWith(
+                        color: titleColor,
+                        fontSize: 40,
+                        height: 1,
+                        shadows: <Shadow>[
+                          Shadow(
+                            color: scheme.surface.withValues(alpha: 0.9),
+                            blurRadius: 4,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 0,
+                  bottom: 4,
+                  child: Text(
+                    context.tr(
+                      'Explore the creature world · collect every encounter',
+                    ),
+                    maxLines: 1,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: subtitleColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 42,
+                        child: OutlinedButton.icon(
+                          key: const ValueKey('pet-catalog-data-version'),
+                          onPressed: onShowInformation,
+                          icon: const Icon(Icons.menu_book_rounded, size: 19),
+                          label: Text(dataVersionLabel),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: const Color(0xFF1E5A9B),
+                            backgroundColor: scheme.surface.withValues(
+                              alpha: 0.58,
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            side: const BorderSide(color: Color(0xFF78B7F5)),
+                            shape: const StadiumBorder(),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      SizedBox.square(
+                        dimension: 42,
+                        child: IconButton.outlined(
+                          key: const ValueKey('pet-catalog-information'),
+                          tooltip: context.tr('Catalog information'),
+                          onPressed: onShowInformation,
+                          color: const Color(0xFF1E5A9B),
+                          style: IconButton.styleFrom(
+                            backgroundColor: scheme.surface.withValues(
+                              alpha: 0.58,
+                            ),
+                            side: const BorderSide(color: Color(0xFF78B7F5)),
+                          ),
+                          icon: const Icon(Icons.info_outline_rounded),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          child,
+        ],
+      ),
+    );
+  }
+}
+
 class _PetResultCard extends StatelessWidget {
   const _PetResultCard({required this.pet, required this.onTap, super.key});
 
@@ -677,117 +852,129 @@ class _PetResultCard extends StatelessWidget {
         ? '\uff08${pet.form!.trim()}\uff09'
         : null;
     return Card(
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            children: <Widget>[
-              CatalogAssetImage(
-                assetPath: petIllustrationAsset(pet.illustrationKey),
-                semanticLabel: pet.name,
-                width: 100,
-                height: 100,
-                fit: BoxFit.contain,
-                fallbackIcon: Icons.pets_outlined,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: FittedBox(
-                            key: ValueKey('pet-title-fit-${pet.petId}'),
-                            fit: BoxFit.scaleDown,
-                            alignment: Alignment.centerLeft,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
-                              textBaseline: TextBaseline.alphabetic,
-                              children: <Widget>[
-                                Text(
-                                  pet.name,
-                                  style: Theme.of(context).textTheme.titleMedium
-                                      ?.copyWith(
-                                        color: pet.hasShiny
-                                            ? _seasonColor(
-                                                context,
-                                                pet.belongSeason,
-                                              )
-                                            : null,
-                                      ),
-                                  maxLines: 1,
-                                  softWrap: false,
-                                ),
-                                if (form != null) ...<Widget>[
-                                  const SizedBox(width: 6),
+      child: PetTypeCardBackground(
+        key: ValueKey('pet-type-background-${pet.petId}'),
+        types: pet.types,
+        warmLight:
+            !pet.isDefaultForm &&
+            pet.types.length == 1 &&
+            pet.types.first == '\u5149\u7cfb',
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              children: <Widget>[
+                CatalogAssetImage(
+                  assetPath: petIllustrationAsset(pet.illustrationKey),
+                  semanticLabel: pet.name,
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.contain,
+                  fallbackIcon: Icons.pets_outlined,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: FittedBox(
+                              key: ValueKey('pet-title-fit-${pet.petId}'),
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerLeft,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.alphabetic,
+                                children: <Widget>[
                                   Text(
-                                    form,
-                                    key: ValueKey('pet-form-${pet.petId}'),
-                                    style: Theme.of(context).textTheme.bodySmall
+                                    pet.name,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
                                         ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant,
+                                          color: pet.hasShiny
+                                              ? _seasonColor(
+                                                  context,
+                                                  pet.belongSeason,
+                                                )
+                                              : null,
                                         ),
                                     maxLines: 1,
                                     softWrap: false,
                                   ),
+                                  if (form != null) ...<Widget>[
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      form,
+                                      key: ValueKey('pet-form-${pet.petId}'),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
+                                      maxLines: 1,
+                                      softWrap: false,
+                                    ),
+                                  ],
                                 ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'NO.${pet.dexNo}',
+                            key: ValueKey('pet-dex-${pet.petId}'),
+                            style: CatalogTypography.numbers(
+                              Theme.of(context).textTheme.labelMedium?.copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 7),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Wrap(
+                              spacing: 6,
+                              runSpacing: 6,
+                              children: <Widget>[
+                                for (final type in pet.types)
+                                  Tooltip(
+                                    message: type,
+                                    child: CatalogAssetImage(
+                                      key: ValueKey(
+                                        'pet-type-${pet.petId}-$type',
+                                      ),
+                                      assetPath: typeIconAsset(type),
+                                      semanticLabel: type,
+                                      width: 28,
+                                      height: 28,
+                                      fallbackIcon: Icons.circle_outlined,
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                  ),
                               ],
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'NO.${pet.dexNo}',
-                          key: ValueKey('pet-dex-${pet.petId}'),
-                          style: CatalogTypography.numbers(
-                            Theme.of(context).textTheme.labelMedium?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 7),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Wrap(
-                            spacing: 6,
-                            runSpacing: 6,
-                            children: <Widget>[
-                              for (final type in pet.types)
-                                Tooltip(
-                                  message: type,
-                                  child: CatalogAssetImage(
-                                    key: ValueKey(
-                                      'pet-type-${pet.petId}-$type',
-                                    ),
-                                    assetPath: typeIconAsset(type),
-                                    semanticLabel: type,
-                                    width: 28,
-                                    height: 28,
-                                    fallbackIcon: Icons.circle_outlined,
-                                    borderRadius: BorderRadius.circular(14),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                        const Icon(Icons.chevron_right_rounded),
-                      ],
-                    ),
-                  ],
+                          const Icon(Icons.chevron_right_rounded),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -809,152 +996,147 @@ class _PetGridResultCard extends StatelessWidget {
     final theme = Theme.of(context);
     return Card(
       margin: EdgeInsets.zero,
-      color: _gridCardColor(context, pet),
+      color: Colors.transparent,
       clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 10, 10, 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) => CatalogAssetImage(
-                    assetPath: petIllustrationAsset(pet.illustrationKey),
-                    semanticLabel: pet.name,
-                    width: constraints.maxWidth,
-                    height: constraints.maxHeight,
-                    fit: BoxFit.contain,
-                    fallbackIcon: Icons.pets_outlined,
+      child: PetTypeCardBackground(
+        key: ValueKey('pet-grid-type-background-${pet.petId}'),
+        types: pet.types,
+        grid: true,
+        warmLight:
+            !pet.isDefaultForm &&
+            pet.types.length == 1 &&
+            pet.types.first == '\u5149\u7cfb',
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Expanded(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) => CatalogAssetImage(
+                      assetPath: petIllustrationAsset(pet.illustrationKey),
+                      semanticLabel: pet.name,
+                      width: constraints.maxWidth,
+                      height: constraints.maxHeight,
+                      fit: BoxFit.contain,
+                      fallbackIcon: Icons.pets_outlined,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        FittedBox(
-                          key: ValueKey('pet-grid-title-fit-${pet.petId}'),
-                          fit: BoxFit.scaleDown,
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            pet.name,
-                            maxLines: 1,
-                            softWrap: false,
-                            style: theme.textTheme.titleLarge?.copyWith(
-                              color: pet.hasShiny
-                                  ? _seasonColor(context, pet.belongSeason)
-                                  : null,
+                const SizedBox(height: 8),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          FittedBox(
+                            key: ValueKey('pet-grid-title-fit-${pet.petId}'),
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              pet.name,
+                              maxLines: 1,
+                              softWrap: false,
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                color: pet.hasShiny
+                                    ? _seasonColor(context, pet.belongSeason)
+                                    : null,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                          child: form == null
-                              ? null
-                              : FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    form,
-                                    key: ValueKey('pet-grid-form-${pet.petId}'),
-                                    maxLines: 1,
-                                    softWrap: false,
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: theme.colorScheme.onSurfaceVariant,
+                          SizedBox(
+                            height: 20,
+                            child: form == null
+                                ? null
+                                : FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      form,
+                                      key: ValueKey(
+                                        'pet-grid-form-${pet.petId}',
+                                      ),
+                                      maxLines: 1,
+                                      softWrap: false,
+                                      style: theme.textTheme.bodySmall
+                                          ?.copyWith(
+                                            color: theme
+                                                .colorScheme
+                                                .onSurfaceVariant,
+                                          ),
                                     ),
                                   ),
-                                ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: theme.colorScheme.surface.withValues(alpha: 0.72),
-                      border: Border.all(
-                        color: theme.colorScheme.outlineVariant,
-                      ),
-                    ),
-                    child: const SizedBox.square(
-                      dimension: 34,
-                      child: Icon(Icons.chevron_right_rounded, size: 22),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 6),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Wrap(
-                      spacing: 5,
-                      runSpacing: 5,
-                      children: <Widget>[
-                        for (final type in pet.types)
-                          Tooltip(
-                            message: type,
-                            child: CatalogAssetImage(
-                              key: ValueKey('pet-grid-type-${pet.petId}-$type'),
-                              assetPath: typeIconAsset(type),
-                              semanticLabel: type,
-                              width: 27,
-                              height: 27,
-                              fallbackIcon: Icons.circle_outlined,
-                              borderRadius: BorderRadius.circular(14),
-                            ),
                           ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    'NO.${pet.dexNo}',
-                    key: ValueKey('pet-grid-dex-${pet.petId}'),
-                    style: CatalogTypography.numbers(
-                      theme.textTheme.labelMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
+                        ],
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    const SizedBox(width: 4),
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: theme.colorScheme.surface.withValues(
+                          alpha: 0.72,
+                        ),
+                        border: Border.all(
+                          color: theme.colorScheme.outlineVariant,
+                        ),
+                      ),
+                      child: const SizedBox.square(
+                        dimension: 34,
+                        child: Icon(Icons.chevron_right_rounded, size: 22),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Wrap(
+                        spacing: 5,
+                        runSpacing: 5,
+                        children: <Widget>[
+                          for (final type in pet.types)
+                            Tooltip(
+                              message: type,
+                              child: CatalogAssetImage(
+                                key: ValueKey(
+                                  'pet-grid-type-${pet.petId}-$type',
+                                ),
+                                assetPath: typeIconAsset(type),
+                                semanticLabel: type,
+                                width: 27,
+                                height: 27,
+                                fallbackIcon: Icons.circle_outlined,
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      'NO.${pet.dexNo}',
+                      key: ValueKey('pet-grid-dex-${pet.petId}'),
+                      style: CatalogTypography.numbers(
+                        theme.textTheme.labelMedium?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-}
-
-Color _gridCardColor(BuildContext context, PetSummary pet) {
-  final theme = Theme.of(context);
-  final type = pet.types.length > 1 ? pet.types.last : pet.types.firstOrNull;
-  final accent =
-      !pet.isDefaultForm && pet.types.length == 1 && type == '\u5149\u7cfb'
-      ? const Color(0xFFE3BD4A)
-      : switch (type) {
-          '\u8349\u7cfb' => const Color(0xFF3DBA77),
-          '\u706b\u7cfb' => const Color(0xFFF2784B),
-          '\u6c34\u7cfb' => const Color(0xFF5A9DF4),
-          '\u5149\u7cfb' => const Color(0xFF54BFF4),
-          '\u7535\u7cfb' => const Color(0xFFF2C94C),
-          '\u51b0\u7cfb' => const Color(0xFF74CFE4),
-          '\u6076\u7cfb' => const Color(0xFF8D729D),
-          _ => theme.colorScheme.primary,
-        };
-  final opacity = theme.brightness == Brightness.dark ? 0.18 : 0.10;
-  return Color.alphaBlend(
-    accent.withValues(alpha: opacity),
-    theme.colorScheme.surface,
-  );
 }
 
 class _PetCatalogFilterSelection {
@@ -1017,12 +1199,16 @@ class _CompactFilterButton extends StatelessWidget {
     required this.label,
     required this.onPressed,
     this.semanticValue,
+    this.borderColor,
+    this.fillColor,
     super.key,
   });
 
   final IconData icon;
   final String label;
   final String? semanticValue;
+  final Color? borderColor;
+  final Color? fillColor;
   final VoidCallback onPressed;
 
   @override
@@ -1035,7 +1221,13 @@ class _CompactFilterButton extends StatelessWidget {
         child: OutlinedButton(
           onPressed: onPressed,
           style: OutlinedButton.styleFrom(
+            foregroundColor: borderColor == null
+                ? null
+                : const Color(0xFF1E5A9B),
+            backgroundColor: fillColor,
             padding: const EdgeInsets.symmetric(horizontal: 6),
+            side: borderColor == null ? null : BorderSide(color: borderColor!),
+            shape: const StadiumBorder(),
           ),
           child: FittedBox(
             fit: BoxFit.scaleDown,
@@ -1045,6 +1237,8 @@ class _CompactFilterButton extends StatelessWidget {
                 Icon(icon, size: 20),
                 const SizedBox(width: 4),
                 Text(label, maxLines: 1),
+                const SizedBox(width: 1),
+                const Icon(Icons.arrow_drop_down_rounded, size: 18),
               ],
             ),
           ),

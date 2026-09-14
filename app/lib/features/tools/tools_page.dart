@@ -147,11 +147,14 @@ class ToolsPage extends StatelessWidget {
         ),
       ),
     ];
+    final bottomClearance = MediaQuery.paddingOf(context).bottom + 28;
     return SafeArea(
+      key: const ValueKey('tools-safe-area'),
       top: false,
+      bottom: false,
       child: ListView.separated(
         key: const ValueKey('tools-page'),
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
+        padding: EdgeInsets.fromLTRB(16, 12, 16, bottomClearance),
         itemCount: cards.length + 1,
         separatorBuilder: (_, _) => const SizedBox(height: 12),
         itemBuilder: (context, index) {

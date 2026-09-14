@@ -304,7 +304,9 @@ class _SkillCatalogPageState extends State<SkillCatalogPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      key: const ValueKey('skill-catalog-safe-area'),
       top: false,
+      bottom: false,
       child: Column(
         children: <Widget>[
           Padding(
@@ -413,11 +415,12 @@ class _SkillCatalogPageState extends State<SkillCatalogPage> {
         ),
       );
     }
+    final bottomClearance = MediaQuery.paddingOf(context).bottom + 24;
     return RefreshIndicator(
       onRefresh: _load,
       child: ListView.separated(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        padding: const EdgeInsets.fromLTRB(16, 2, 16, 24),
+        padding: EdgeInsets.fromLTRB(16, 2, 16, bottomClearance),
         itemCount: _results.length + (_hasMore ? 1 : 0),
         separatorBuilder: (_, _) => const SizedBox(height: 10),
         itemBuilder: (context, index) {

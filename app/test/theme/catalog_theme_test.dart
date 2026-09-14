@@ -31,7 +31,7 @@ void main() {
     expect(numbers.fontFamily, CatalogTypography.numberFamily);
     expect(numbers.fontSize, 18);
     expect(numbers.fontWeight, FontWeight.w700);
-    expect(theme.navigationBarTheme.height, 76);
+    expect(theme.navigationBarTheme.height, 72);
     expect(theme.navigationBarTheme.indicatorShape, isA<StadiumBorder>());
     expect(theme.appBarTheme.shape, isA<RoundedRectangleBorder>());
   });

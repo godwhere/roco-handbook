@@ -28,6 +28,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/brand/v1/
     - assets/catalog/
     - assets/database/
     - assets/wiki/type-relations-v1.json

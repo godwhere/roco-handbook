@@ -69,7 +69,7 @@ ThemeData buildCatalogTheme(ColorScheme colorScheme) {
       ),
     ),
     navigationBarTheme: NavigationBarThemeData(
-      height: 76,
+      height: 72,
       elevation: 0,
       backgroundColor: colorScheme.surfaceContainer,
       indicatorColor: colorScheme.secondaryContainer,

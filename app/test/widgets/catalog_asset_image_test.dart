@@ -3,9 +3,44 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:roco_handbook/domain/catalog_models.dart';
 import 'package:roco_handbook/widgets/catalog_asset_image.dart';
+import 'package:roco_handbook/widgets/pet_type_card_background.dart';
 import 'package:sqlite3/sqlite3.dart';
 
 void main() {
+  test('defines a distinct accent for every active creature type', () {
+    const typeNames = <String>[
+      '\u666e\u901a\u7cfb',
+      '\u8349\u7cfb',
+      '\u706b\u7cfb',
+      '\u6c34\u7cfb',
+      '\u5149\u7cfb',
+      '\u5730\u7cfb',
+      '\u51b0\u7cfb',
+      '\u9f99\u7cfb',
+      '\u7535\u7cfb',
+      '\u6bd2\u7cfb',
+      '\u866b\u7cfb',
+      '\u6b66\u7cfb',
+      '\u7ffc\u7cfb',
+      '\u840c\u7cfb',
+      '\u5e7d\u7cfb',
+      '\u6076\u7cfb',
+      '\u673a\u68b0\u7cfb',
+      '\u5e7b\u7cfb',
+    ];
+    const fallback = Color(0xFF010203);
+    final accents = typeNames
+        .map((type) => petTypeAccentColor(type, fallback: fallback))
+        .toSet();
+
+    expect(accents, hasLength(typeNames.length));
+    expect(accents, isNot(contains(fallback)));
+    expect(
+      petTypeAccentColor('\u5149\u7cfb', fallback: fallback, warmLight: true),
+      isNot(petTypeAccentColor('\u5149\u7cfb', fallback: fallback)),
+    );
+  });
+
   testWidgets('keeps missing and failed asset fallbacks accessible', (
     tester,
   ) async {

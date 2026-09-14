@@ -78,14 +78,42 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    final iosScaffold = tester.widget<Scaffold>(
+      find.byKey(const ValueKey('catalog-home-scaffold')),
+    );
+    expect(iosScaffold.extendBody, isTrue);
+
+    expect(find.byKey(const ValueKey('pet-catalog-hero')), findsOneWidget);
+    expect(
+      find.text('Explore the creature world · collect every encounter'),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('pet-catalog-data-version')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('pet-catalog-information')),
+      findsOneWidget,
+    );
     expect(
       find.byKey(const ValueKey('ios-liquid-glass-top-navigation')),
-      findsOneWidget,
+      findsNothing,
     );
     expect(
       find.byKey(const ValueKey('ios-liquid-glass-bottom-navigation')),
       findsOneWidget,
     );
+    expect(
+      find.byKey(const ValueKey('navigation-safe-area-backdrop')),
+      findsOneWidget,
+    );
+    for (var index = 0; index < 7; index++) {
+      expect(
+        find.byKey(ValueKey('navigation-progressive-blur-band-$index')),
+        findsOneWidget,
+      );
+    }
     expect(find.byType(CupertinoTabBar), findsOneWidget);
     expect(
       find.byKey(const ValueKey('android-expressive-bottom-navigation')),
@@ -93,6 +121,10 @@ void main() {
     );
     await tester.tap(find.text('Settings'));
     await tester.pumpAndSettle();
+    expect(
+      find.byKey(const ValueKey('ios-liquid-glass-top-navigation')),
+      findsOneWidget,
+    );
     expect(
       find.byKey(const ValueKey('pet-catalog-layout-control')),
       findsOneWidget,
@@ -106,7 +138,20 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-
+    final androidScaffold = tester.widget<Scaffold>(
+      find.byKey(const ValueKey('catalog-home-scaffold')),
+    );
+    expect(androidScaffold.extendBody, isTrue);
+    for (final key in <String>[
+      'pet-catalog-safe-area',
+      'skill-catalog-safe-area',
+      'tools-safe-area',
+    ]) {
+      final contentSafeArea = tester.widget<SafeArea>(
+        find.byKey(ValueKey(key), skipOffstage: false),
+      );
+      expect(contentSafeArea.bottom, isFalse);
+    }
     expect(
       find.byKey(const ValueKey('android-expressive-top-navigation')),
       findsOneWidget,
@@ -115,7 +160,48 @@ void main() {
       find.byKey(const ValueKey('android-expressive-bottom-navigation')),
       findsOneWidget,
     );
-    expect(find.byType(NavigationBar), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('navigation-safe-area-backdrop')),
+      findsOneWidget,
+    );
+    final floatingNavigation = tester.widget<SafeArea>(
+      find.byKey(const ValueKey('android-floating-bottom-navigation')),
+    );
+    expect(floatingNavigation.top, isFalse);
+    expect(
+      floatingNavigation.minimum,
+      const EdgeInsets.fromLTRB(16, 0, 16, 12),
+    );
+    final floatingSurface = tester.widget<Material>(
+      find.byKey(const ValueKey('android-floating-navigation-surface')),
+    );
+    expect(floatingSurface.shape, isA<StadiumBorder>());
+    expect(floatingSurface.elevation, 8);
+    expect(floatingSurface.clipBehavior, Clip.antiAlias);
+    final androidNavigation = tester.widget<NavigationBar>(
+      find.byKey(const ValueKey('android-expressive-bottom-navigation')),
+    );
+    expect(androidNavigation.height, 72);
+    expect(androidNavigation.backgroundColor, Colors.transparent);
+    expect(
+      androidNavigation.labelBehavior,
+      NavigationDestinationLabelBehavior.alwaysShow,
+    );
+    final androidDestinations = tester
+        .widgetList<NavigationDestination>(find.byType(NavigationDestination))
+        .toList();
+    expect(
+      androidDestinations.map((destination) => destination.label),
+      <String>['Creatures', 'Skills', 'Tools', 'Settings'],
+    );
+    expect(
+      (androidDestinations.first.selectedIcon as Icon).icon,
+      Icons.pets_rounded,
+    );
+    expect(find.text('Creatures'), findsWidgets);
+    expect(find.text('Skills'), findsWidgets);
+    expect(find.text('Tools'), findsWidgets);
+    expect(find.text('Settings'), findsWidgets);
     expect(
       find.byKey(const ValueKey('ios-liquid-glass-bottom-navigation')),
       findsNothing,
@@ -536,6 +622,10 @@ void main() {
 
     expect(find.text('Roco World Handbook'), findsOneWidget);
     expect(find.text('Creatures'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('android-navigation-destination-0')),
+      findsOneWidget,
+    );
     final first = (await repository.searchPets(const PetQuery(limit: 1)))
         .single;
     await tester.tap(find.byKey(ValueKey('pet-result-${first.petId}')));
@@ -546,10 +636,21 @@ void main() {
       tester.element(find.byKey(ValueKey('pet-detail-${first.petId}'))),
     ).pop();
     await tester.pumpAndSettle();
-    expect(find.text('Skills'), findsOneWidget);
-    expect(find.text('Tools'), findsOneWidget);
-    expect(find.text('Settings'), findsOneWidget);
-    await tester.tap(find.text('Settings'));
+    expect(
+      find.byKey(const ValueKey('android-navigation-destination-1')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('android-navigation-destination-2')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('android-navigation-destination-3')),
+      findsOneWidget,
+    );
+    await tester.tap(
+      find.byKey(const ValueKey('android-navigation-destination-3')),
+    );
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(
       find.byKey(const ValueKey('check-catalog-update')),
@@ -657,6 +758,10 @@ void main() {
     expect(find.text('\uff08\u9996\u9886\u5f62\u6001\uff09'), findsNWidgets(4));
     expect(find.byKey(const ValueKey('pet-dex-pet_000004')), findsOneWidget);
     expect(find.byKey(const ValueKey('pet-dex-pet_000558')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('pet-type-background-pet_000004')),
+      findsOneWidget,
+    );
     expect(find.text('NO.001'), findsNWidgets(5));
     expect(find.text('\u5149\u7cfb'), findsNothing);
     final dimoType = tester.widget<CatalogAssetImage>(
@@ -775,6 +880,10 @@ void main() {
           .first,
     );
     expect(gridImage.width, greaterThan(140));
+    expect(
+      find.byKey(const ValueKey('pet-grid-type-background-pet_000004')),
+      findsOneWidget,
+    );
 
     await tester.tap(find.text('\u8bbe\u7f6e'));
     await tester.pumpAndSettle();
@@ -1231,7 +1340,9 @@ void main() {
         tester.element(find.byKey(const ValueKey('pet-detail-pet_000004'))),
       ).pop();
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Tools'));
+      await tester.tap(
+        find.byKey(const ValueKey('android-navigation-destination-2')),
+      );
       await tester.pumpAndSettle();
       await tester.scrollUntilVisible(
         find.byKey(const ValueKey('tool-card-personal-library')),
@@ -1384,7 +1495,9 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Settings'));
+    await tester.tap(
+      find.byKey(const ValueKey('android-navigation-destination-3')),
+    );
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(
       find.byKey(const ValueKey('restore-bundled-catalog')),
@@ -1435,7 +1548,9 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(checkCalls, 0);
-    await tester.tap(find.text('Settings'));
+    await tester.tap(
+      find.byKey(const ValueKey('android-navigation-destination-3')),
+    );
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(
       find.byKey(const ValueKey('check-catalog-update')),
@@ -1489,7 +1604,9 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Settings'));
+      await tester.tap(
+        find.byKey(const ValueKey('android-navigation-destination-3')),
+      );
       await tester.pumpAndSettle();
       await tester.scrollUntilVisible(
         find.byKey(const ValueKey('check-catalog-update')),
@@ -1558,7 +1675,9 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Settings'));
+      await tester.tap(
+        find.byKey(const ValueKey('android-navigation-destination-3')),
+      );
       await tester.pumpAndSettle();
       await tester.scrollUntilVisible(
         find.byKey(const ValueKey('check-catalog-update')),
@@ -1605,7 +1724,9 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Settings'));
+    await tester.tap(
+      find.byKey(const ValueKey('android-navigation-destination-3')),
+    );
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(
       find.byKey(const ValueKey('check-catalog-update')),
@@ -1647,7 +1768,9 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Settings'));
+    await tester.tap(
+      find.byKey(const ValueKey('android-navigation-destination-3')),
+    );
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(
       find.byKey(const ValueKey('open-source-licenses')),

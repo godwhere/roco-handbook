@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -95,50 +97,142 @@ class CatalogPlatformBottomNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     if (isIOS) {
-      return _NativeCatalogNavigation(
-        key: const ValueKey('ios-liquid-glass-bottom-navigation'),
-        kind: _NativeNavigationKind.bottom,
-        selectedIndex: selectedIndex,
-        labels: labels,
-        onDestinationSelected: onDestinationSelected,
+      return _NavigationSafeAreaBackdrop(
+        child: _NativeCatalogNavigation(
+          key: const ValueKey('ios-liquid-glass-bottom-navigation'),
+          kind: _NativeNavigationKind.bottom,
+          selectedIndex: selectedIndex,
+          labels: labels,
+          onDestinationSelected: onDestinationSelected,
+        ),
       );
     }
 
-    return NavigationBar(
-      key: const ValueKey('android-expressive-bottom-navigation'),
-      selectedIndex: selectedIndex,
-      onDestinationSelected: onDestinationSelected,
-      destinations: <NavigationDestination>[
-        NavigationDestination(
-          icon: Image.asset(
-            'assets/wiki/v3/ui/navigation/creatures.png',
-            width: 26,
-            height: 26,
-            semanticLabel: labels[0],
+    final scheme = Theme.of(context).colorScheme;
+    return _NavigationSafeAreaBackdrop(
+      child: SafeArea(
+        key: const ValueKey('android-floating-bottom-navigation'),
+        top: false,
+        minimum: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+        child: Material(
+          key: const ValueKey('android-floating-navigation-surface'),
+          color: scheme.surfaceContainerHigh,
+          elevation: 8,
+          shadowColor: scheme.shadow.withValues(alpha: 0.18),
+          shape: StadiumBorder(
+            side: BorderSide(
+              color: scheme.outlineVariant.withValues(alpha: 0.55),
+            ),
           ),
-          selectedIcon: Image.asset(
-            'assets/wiki/v3/ui/navigation/creatures.png',
-            width: 30,
-            height: 30,
-            semanticLabel: labels[0],
+          clipBehavior: Clip.antiAlias,
+          child: NavigationBar(
+            key: const ValueKey('android-expressive-bottom-navigation'),
+            height: 72,
+            backgroundColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+            labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+            selectedIndex: selectedIndex,
+            onDestinationSelected: onDestinationSelected,
+            destinations: <NavigationDestination>[
+              NavigationDestination(
+                key: const ValueKey('android-navigation-destination-0'),
+                icon: const Icon(Icons.pets_outlined),
+                selectedIcon: const Icon(Icons.pets_rounded),
+                label: labels[0],
+              ),
+              NavigationDestination(
+                key: const ValueKey('android-navigation-destination-1'),
+                icon: const Icon(Icons.auto_awesome_outlined),
+                selectedIcon: const Icon(Icons.auto_awesome_rounded),
+                label: labels[1],
+              ),
+              NavigationDestination(
+                key: const ValueKey('android-navigation-destination-2'),
+                icon: const Icon(Icons.dashboard_customize_outlined),
+                selectedIcon: const Icon(Icons.dashboard_customize_rounded),
+                label: labels[2],
+              ),
+              NavigationDestination(
+                key: const ValueKey('android-navigation-destination-3'),
+                icon: const Icon(Icons.settings_outlined),
+                selectedIcon: const Icon(Icons.settings_rounded),
+                label: labels[3],
+              ),
+            ],
           ),
-          label: labels[0],
         ),
-        NavigationDestination(
-          icon: const Icon(Icons.auto_awesome_outlined),
-          selectedIcon: const Icon(Icons.auto_awesome_rounded),
-          label: labels[1],
+      ),
+    );
+  }
+}
+
+class _NavigationSafeAreaBackdrop extends StatelessWidget {
+  const _NavigationSafeAreaBackdrop({required this.child});
+
+  final Widget child;
+
+  static const _blurLayers = <({double heightFactor, double sigma})>[
+    (heightFactor: 1.00, sigma: 0.9),
+    (heightFactor: 0.86, sigma: 1.3),
+    (heightFactor: 0.72, sigma: 1.8),
+    (heightFactor: 0.58, sigma: 2.4),
+    (heightFactor: 0.44, sigma: 3.1),
+    (heightFactor: 0.30, sigma: 4.0),
+    (heightFactor: 0.16, sigma: 5.2),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final surface = Theme.of(context).colorScheme.surface;
+    return Stack(
+      fit: StackFit.passthrough,
+      children: <Widget>[
+        Positioned.fill(
+          child: ClipRect(
+            key: const ValueKey('navigation-safe-area-backdrop'),
+            child: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                for (var index = 0; index < _blurLayers.length; index++)
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: FractionallySizedBox(
+                      widthFactor: 1,
+                      heightFactor: _blurLayers[index].heightFactor,
+                      child: ClipRect(
+                        child: BackdropFilter(
+                          key: ValueKey(
+                            'navigation-progressive-blur-band-$index',
+                          ),
+                          filter: ui.ImageFilter.blur(
+                            sigmaX: _blurLayers[index].sigma,
+                            sigmaY: _blurLayers[index].sigma,
+                          ),
+                          child: const ColoredBox(color: Colors.transparent),
+                        ),
+                      ),
+                    ),
+                  ),
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: <Color>[
+                        Colors.transparent,
+                        surface.withValues(alpha: 0.02),
+                        surface.withValues(alpha: 0.08),
+                        surface.withValues(alpha: 0.18),
+                      ],
+                      stops: const <double>[0, 0.28, 0.68, 1],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-        NavigationDestination(
-          icon: const Icon(Icons.dashboard_customize_outlined),
-          selectedIcon: const Icon(Icons.dashboard_customize_rounded),
-          label: labels[2],
-        ),
-        NavigationDestination(
-          icon: const Icon(Icons.settings_outlined),
-          selectedIcon: const Icon(Icons.settings_rounded),
-          label: labels[3],
-        ),
+        child,
       ],
     );
   }
