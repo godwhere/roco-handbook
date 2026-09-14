@@ -1,6 +1,10 @@
 import 'user_models.dart';
 
 abstract interface class UserRepository {
+  Future<PetCatalogLayout> getPetCatalogLayout();
+
+  Future<void> setPetCatalogLayout(PetCatalogLayout layout);
+
   Future<void> setFavorite(ObjectRef object, bool enabled);
 
   Future<bool> isFavorite(ObjectRef object);

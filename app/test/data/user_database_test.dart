@@ -139,6 +139,40 @@ void main() {
     );
   });
 
+  test('creature catalog layout defaults to grid and persists', () async {
+    final open = await UserDatabaseMigrator(
+      temporary.path,
+      backgroundWork: false,
+    ).prepare(schema);
+    final first = SqliteUserRepository(
+      open.databasePath,
+      backgroundQueries: false,
+      utcNow: () => '2026-09-14T12:00:00Z',
+    );
+
+    expect(await first.getPetCatalogLayout(), PetCatalogLayout.grid);
+    await first.setPetCatalogLayout(PetCatalogLayout.list);
+    await first.close();
+
+    final second = SqliteUserRepository(
+      open.databasePath,
+      backgroundQueries: false,
+    );
+    addTearDown(second.close);
+    expect(await second.getPetCatalogLayout(), PetCatalogLayout.list);
+
+    final database = sqlite3.open(open.databasePath, mode: OpenMode.readOnly);
+    addTearDown(database.close);
+    final row = database
+        .select(
+          "SELECT value_json, updated_at_utc FROM settings "
+          "WHERE setting_key = 'pet_catalog_layout'",
+        )
+        .single;
+    expect(row['value_json'], '"list"');
+    expect(row['updated_at_utc'], '2026-09-14T12:00:00Z');
+  });
+
   test('notes preserve content and cannot be reassigned', () async {
     final repository = await _repository(temporary, schema);
     addTearDown(repository.close);

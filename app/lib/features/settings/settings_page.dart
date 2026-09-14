@@ -4,11 +4,14 @@ import '../../app_version.dart';
 import '../../catalog_app.dart';
 import '../../data/catalog/catalog_installer.dart';
 import '../../data/catalog/catalog_update_source.dart';
+import '../../domain/user_models.dart';
 import '../../l10n/app_strings.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({
     required this.session,
+    required this.petCatalogLayout,
+    required this.onPetCatalogLayoutChanged,
     this.onRestoreBundledCatalog,
     this.onCheckCatalogUpdate,
     this.onInstallCatalogUpdate,
@@ -16,6 +19,9 @@ class SettingsPage extends StatefulWidget {
   });
 
   final CatalogSession session;
+  final PetCatalogLayout petCatalogLayout;
+  final Future<void> Function(PetCatalogLayout layout)
+  onPetCatalogLayoutChanged;
   final Future<void> Function()? onRestoreBundledCatalog;
   final Future<CatalogUpdateCheckResult> Function(
     CatalogUpdateCancellationToken cancellation,
@@ -38,6 +44,7 @@ class _SettingsPageState extends State<SettingsPage> {
   var _updatePhase = _CatalogUpdateUiPhase.idle;
   CatalogUpdateProgress? _updateProgress;
   CatalogUpdateCancellationToken? _updateCancellation;
+  var _layoutSaving = false;
 
   bool get _updateBusy => _updatePhase != _CatalogUpdateUiPhase.idle;
 
@@ -214,6 +221,53 @@ class _SettingsPageState extends State<SettingsPage> {
                 leading: const Icon(Icons.brightness_auto_rounded),
                 title: Text(context.tr('Theme')),
                 subtitle: Text(context.tr('Follow device setting')),
+              ),
+              const Divider(height: 1),
+              ListTile(
+                leading: const Icon(Icons.view_module_outlined),
+                title: Text(context.tr('Creature catalog layout')),
+                subtitle: Text(
+                  context.tr('Choose how creature cards are arranged.'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: SegmentedButton<PetCatalogLayout>(
+                    key: const ValueKey('pet-catalog-layout-control'),
+                    segments: <ButtonSegment<PetCatalogLayout>>[
+                      ButtonSegment<PetCatalogLayout>(
+                        value: PetCatalogLayout.list,
+                        icon: const Icon(Icons.view_agenda_outlined),
+                        label: Text(
+                          context.tr('List'),
+                          key: const ValueKey('pet-catalog-layout-list'),
+                        ),
+                      ),
+                      ButtonSegment<PetCatalogLayout>(
+                        value: PetCatalogLayout.grid,
+                        icon: const Icon(Icons.grid_view_rounded),
+                        label: Text(
+                          context.tr('Grid'),
+                          key: const ValueKey('pet-catalog-layout-grid'),
+                        ),
+                      ),
+                    ],
+                    selected: <PetCatalogLayout>{widget.petCatalogLayout},
+                    showSelectedIcon: false,
+                    onSelectionChanged: _layoutSaving
+                        ? null
+                        : (selection) async {
+                            final layout = selection.single;
+                            setState(() => _layoutSaving = true);
+                            await widget.onPetCatalogLayoutChanged(layout);
+                            if (mounted) {
+                              setState(() => _layoutSaving = false);
+                            }
+                          },
+                  ),
+                ),
               ),
               const Divider(height: 1),
               ListTile(

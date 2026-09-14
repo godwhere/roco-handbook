@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:isolate';
 import 'dart:math';
 
@@ -21,6 +22,48 @@ final class SqliteUserRepository implements UserRepository {
   final String Function() _noteIdGenerator;
   final String Function() _utcNow;
   final _changes = StreamController<void>.broadcast();
+
+  static const _petCatalogLayoutSettingKey = 'pet_catalog_layout';
+
+  @override
+  Future<PetCatalogLayout> getPetCatalogLayout() {
+    return _read('read creature catalog layout', (database) {
+      final rows = database.select(
+        'SELECT value_json FROM settings WHERE setting_key = ? LIMIT 1',
+        <Object?>[_petCatalogLayoutSettingKey],
+      );
+      if (rows.isEmpty) {
+        return PetCatalogLayout.grid;
+      }
+      try {
+        final value = jsonDecode(rows.single['value_json'] as String);
+        return value is String
+            ? PetCatalogLayout.tryParse(value) ?? PetCatalogLayout.grid
+            : PetCatalogLayout.grid;
+      } on FormatException {
+        return PetCatalogLayout.grid;
+      }
+    });
+  }
+
+  @override
+  Future<void> setPetCatalogLayout(PetCatalogLayout layout) {
+    final now = _utcNow();
+    return _write('save creature catalog layout', (database) {
+      database.execute(
+        'INSERT INTO settings(setting_key, value_json, updated_at_utc) '
+        'VALUES(?, ?, ?) '
+        'ON CONFLICT(setting_key) DO UPDATE SET '
+        'value_json = excluded.value_json, '
+        'updated_at_utc = excluded.updated_at_utc',
+        <Object?>[
+          _petCatalogLayoutSettingKey,
+          jsonEncode(layout.storageValue),
+          now,
+        ],
+      );
+    });
+  }
 
   @override
   Future<void> setFavorite(ObjectRef object, bool enabled) async {

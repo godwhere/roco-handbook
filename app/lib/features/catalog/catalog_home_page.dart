@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../catalog_app.dart';
 import '../../data/catalog/catalog_update_source.dart';
+import '../../domain/user_models.dart';
 import '../pets/pet_catalog_page.dart';
 import '../settings/settings_page.dart';
 import '../skills/skill_catalog_page.dart';
@@ -36,6 +37,47 @@ class CatalogHomePage extends StatefulWidget {
 
 class _CatalogHomePageState extends State<CatalogHomePage> {
   var _index = 0;
+  var _petCatalogLayout = PetCatalogLayout.grid;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPetCatalogLayout();
+  }
+
+  Future<void> _loadPetCatalogLayout() async {
+    try {
+      final layout = await widget.session.userRepository.getPetCatalogLayout();
+      if (mounted && layout != _petCatalogLayout) {
+        setState(() => _petCatalogLayout = layout);
+      }
+    } on Object {
+      // A damaged optional preference must not block the offline Catalog.
+    }
+  }
+
+  Future<void> _setPetCatalogLayout(PetCatalogLayout layout) async {
+    if (layout == _petCatalogLayout) {
+      return;
+    }
+    final previous = _petCatalogLayout;
+    setState(() => _petCatalogLayout = layout);
+    try {
+      await widget.session.userRepository.setPetCatalogLayout(layout);
+    } on Object {
+      if (!mounted) {
+        return;
+      }
+      setState(() => _petCatalogLayout = previous);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.tr('Creature catalog layout could not be saved.'),
+          ),
+        ),
+      );
+    }
+  }
 
   void _showAbout() {
     final info = widget.session.info;
@@ -126,6 +168,7 @@ class _CatalogHomePageState extends State<CatalogHomePage> {
             repository: widget.session.repository,
             userRepository: widget.session.userRepository,
             datasetId: widget.session.info.datasetId,
+            layout: _petCatalogLayout,
           ),
           SkillCatalogPage(
             key: ValueKey('skill-catalog-${widget.session.info.dataVersion}'),
@@ -141,6 +184,8 @@ class _CatalogHomePageState extends State<CatalogHomePage> {
           ),
           SettingsPage(
             session: widget.session,
+            petCatalogLayout: _petCatalogLayout,
+            onPetCatalogLayoutChanged: _setPetCatalogLayout,
             onRestoreBundledCatalog: widget.onRestoreBundledCatalog,
             onCheckCatalogUpdate: widget.onCheckCatalogUpdate,
             onInstallCatalogUpdate: widget.onInstallCatalogUpdate,

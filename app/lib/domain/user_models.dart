@@ -1,5 +1,23 @@
 enum UserObjectType { pet, skill, handbook }
 
+enum PetCatalogLayout {
+  list('list'),
+  grid('grid');
+
+  const PetCatalogLayout(this.storageValue);
+
+  final String storageValue;
+
+  static PetCatalogLayout? tryParse(String value) {
+    for (final layout in values) {
+      if (layout.storageValue == value) {
+        return layout;
+      }
+    }
+    return null;
+  }
+}
+
 extension UserObjectTypeStorage on UserObjectType {
   String get storageValue => switch (this) {
     UserObjectType.pet => 'pet',

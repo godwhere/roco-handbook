@@ -1,48 +1,45 @@
-# Phase 8 design QA
+# Phase 8 creature Catalog layout design QA
 
-- Status: passed for the implemented iOS simulator scope
-- Review date: 2026-09-10
-- Device: iPhone 17 simulator, iOS 26.5, 1206 x 2622 capture
-- Scope: creature catalog density, grouped creature filters, shiny detail switching, creature detail hierarchy, skill cards and filters, detail-owned favorites, the vertical Tools destination, Game descriptions, Event timeline, and Outfit inspiration
+- Review date: 2026-09-14
+- Source visual truth: `/var/folders/d4/vlsfy7fd51vgb9ymqtc_zs8m0000gn/T/codex-clipboard-178ba5d3-9f1f-431c-b8fa-e5a61a80b622.png`
+- Supporting full-screen concept: `/Users/ethan/.codex/generated_images/01a084ad-ac2c-7d23-9db4-d6fa0b1cfbbb/exec-6ed72adb-da77-435d-906c-a20036587ddc.png`
+- Implementation screenshot: `docs/evidence/phase-8-layout/ios-creature-grid.png`
+- Comparison images: `/tmp/roco-phase8-grid-comparison.png` and `/tmp/roco-phase8-grid-full-comparison.png`
+- Device and state: iPhone 17 simulator, iOS 26.5, `zh-CN`, light theme, grid selected, first four Dimo forms visible
+- Viewport: 402 x 874 logical pixels at 3x density; implementation capture 1206 x 2622 pixels
 
-## Comparison inputs
+## Normalization
 
-The review placed each user-provided visual reference beside the matching rebuilt simulator state before judging the result. The latest pass compared the supplied horizontal filter panel with the App's mobile filter sheet, the supplied single Tool card with the complete vertical Tools destination, the supplied wide activity calendar with a narrow-screen vertical timeline, and the source outfit presentation with a two-column mobile preview grid. The source references use desktop-width layouts, while the App evidence uses the actual 402 x 874 logical iPhone viewport at 3x density, so the review judged preserved hierarchy, grouping, card language, content identity, and control clarity rather than reproducing desktop geometry. It also reviewed the shiny full-body asset, Game descriptions, activity detail, and outfit gender switch in the same simulator run. The earlier subtitle comparison used `/var/folders/d4/vlsfy7fd51vgb9ymqtc_zs8m0000gn/T/codex-clipboard-638bd0a2-d0d7-4ef9-9275-2d02538b6f7d.png` and `docs/evidence/phase-8-detail-redesign/ios-creature-form-subtitle.png` in one focused side-by-side image. Earlier combined comparisons covered the supplied compact-card, base-stat, feature, type-relationship, detail-header, skill-card, and filter references against their corresponding simulator captures.
+The binding card-region source is 772 x 1048 pixels. The matching implementation region was cropped from the 1206 x 2622 simulator capture and resampled to 772 x 1048 before the focused side-by-side comparison. The supporting full-screen concept is 853 x 1844; the complete implementation screenshot was resampled to the same 853 x 1844 dimensions before the full-view comparison. Device chrome is absent from both implementation comparisons.
 
-## Final review
+## Full-view comparison evidence
 
-| Area | Result | Evidence |
-| --- | --- | --- |
-| Creature catalog | Pass. The 100-pixel contained full illustration and 10-pixel padding reduce card height while preserving the full creature. Name, complete muted parenthesized form, and fixed `NO.<dex_no>` remain on one line. The name-and-form group keeps its normal size when space permits and scales down when required, with no wrap or ellipsis. Type icons remain clear, and no favorite control competes with navigation. | `ios-creature-catalog.png`, `ios-creature-form-subtitle.png` |
-| Creature filters | Pass. Shiny availability, stages 1 through 3, main/regional/lord forms, owning seasons S1 through S4, and creature types are separated into vertically readable mobile groups with consistent outlined controls. The sheet scrolls instead of compressing or clipping the groups. | `/tmp/roco-phase8-filter-sheet.png`, widget and repository regressions |
-| Shiny detail | Pass. A shiny-capable creature exposes one outlined Original/Shiny segmented control inside the header. The selected shiny state uses the frozen full-body image and preserves the surrounding identity, favorite, section-dot, and basic-information layout. | `/tmp/roco-phase8-shiny-detail.png`, widget regression |
-| Creature header | Pass. The frozen type icon follows the source name without a chip background. The header shows the derived stage label and exposes the creature favorite at the far right. | `ios-creature-header.png` |
-| Basic information | Pass. The layout remains two equal columns. A normal creature displays No for Lord evolution, while a lord record displays Yes. | `ios-creature-header.png`, focused widget regression |
-| Detail skill cards | Pass. The skill image is vertically centered; name, element icon, and unlock copy form the heading; Energy, Category, and Power form the metric row; source description remains below. | focused widget regression |
-| Skill catalog | Pass. Skill handbook, Skill filters, and Skill query share one row. Cards show image, name with element icon, category, energy, power, description, and navigation without a favorite control. | `ios-skill-catalog.png` |
-| Skill detail | Pass. The favorite control is visible in the detail header and the relationship list remains navigable. | `ios-skill-detail.png` |
-| Tools destination | Pass. The former third destination uses large vertically stacked cards with overlines, strong titles, circular domain icons, descriptions, and diagonal arrows. The hierarchy follows the supplied Tool-card reference while remaining readable in the narrow App viewport. | `/tmp/roco-phase8-tools.png`, widget regression |
-| Game descriptions | Pass. The 54-entry handbook uses a normal search field, horizontally scrollable source categories, compact readable descriptions, and image-backed related feature and skill sections. The delayed capture confirms the pushed page fully covers the prior route without a transition remnant. | `/tmp/roco-phase8-game-descriptions.png`, `/tmp/roco-phase8-game-description-detail.png`, widget and asset regressions |
-| Event timeline | Pass. Month controls, the Today action, horizontally scrollable source categories, 74 September-intersecting entries, date rails, state badges, source icons, and preserved detail text remain readable without overflow. A vertical timeline is more legible than the supplied desktop calendar at the 402-point viewport. | `/tmp/roco-phase8-activity-timeline.png`, `/tmp/roco-phase8-activity-detail.png`, widget and asset regressions |
-| Outfit inspiration | Pass. Search, female and male preview controls, grade chips, the 110-outfit count, two-column source previews, and the detail acquisition hierarchy remain legible. The selected 256-pixel preview stays contained and does not crop the outfit. | `/tmp/roco-phase8-outfit-catalog.png`, `/tmp/roco-phase8-outfit-detail.png`, widget and asset regressions |
-| Section navigation | Pass. Eight right-side dots overlay full-width content without a reserved panel; tap, active state, and rounded outlined long-press labels are covered by the widget regression. | focused widget regression |
-| Accessibility and large text | Pass. Domain icons keep semantic labels and the focused 2.0 text-scale dark-theme regression completes without overflow. | focused widget regression |
+The implementation preserves the concept's app title and data version hierarchy, single compact control row, two-column illustrated Catalog, stable card information, and four-destination bottom navigation. The user-attached crop makes the two-column card region the binding target. The existing Sort, Filters, Search order, Material 3 page shell, and frozen Wiki display font remain intentional product constraints rather than adopting the concept's generated tagline, castle background, or glass treatment. No unapproved decorative bitmap or fabricated domain asset was introduced.
 
-## Intentional differences
+## Focused comparison evidence
 
-The supplied game screenshots define information hierarchy, labels, icon placement, and density rather than a replacement visual theme. The App retains its existing Material 3 light and dark themes, platform typography, and offline frozen Wiki assets. Exact source values remain authoritative, so Flash displays its stored power of 60 rather than the illustrative value of 80 in the reference.
+The same four source-backed creatures appear in the same two-column order. Card aspect ratio, large contained full-body art, rounded surface, name hierarchy, muted Lord-form subtitle, circular detail affordance, type icons, and bottom-right `NO.001` placement match the attached target at readable scale. Blue, warm-gold, green, and warm-red surfaces separate the four example cards while preserving contrast. No label wraps, truncates, overlaps, or leaves the card bounds.
 
-## Unrun visual layers
+## Required fidelity surfaces
 
-The current redesign was not visually re-reviewed on Android or a physical device. Activity posters were intentionally excluded from the App because the 242 referenced originals total about 436 MiB; the timeline uses compact source icons. Store screenshots already tracked for the earlier Phase 8 state were not replaced by these working UI evidence captures.
+- Fonts and typography: the implementation keeps the approved `RocoDisplay` and `RocoNumbers` roles. Names, subtitles, and identifiers remain single-line and legible; using the approved product font instead of the generated concept font is intentional.
+- Spacing and layout rhythm: two equal phone columns, 10-pixel grid gaps, consistent 12-pixel outer inset, stable card radii, and aligned card footers match the target hierarchy. The responsive contract changes to three columns at 720 logical pixels.
+- Colors and visual tokens: type-aligned low-opacity surfaces preserve Material contrast in light and dark themes. The non-default single-Light example uses the target's warm-gold separation.
+- Image quality and asset fidelity: every card uses the exact frozen full-body Wiki illustration and bundled type icon through the production asset resolver. Images remain contained and sharp with no crop or transparency halo.
+- Copy and content: source names, form text, type identity, and `NO.<dex_no>` remain data-backed. No concept-only tagline or online feature was added.
+
+## Interaction and accessibility evidence
+
+The iOS integration run opened Settings, selected Grid, returned to Creatures, captured the result, opened the grouped filter sheet, and completed the existing Tools and shiny-detail flow. The focused widget test switches to List, verifies the horizontal layout, recreates the page, and confirms that the saved choice persists. The complete Flutter test suite covers dark theme and a 2.0 text scale. The integration log contains no Flutter exception or failed assertion.
 
 ## Comparison history
 
-- Earlier finding, P2: equal flexible-width allocation truncated the alternate form label `（蜕皮时的样子）` even though the title row still had usable space.
-- Fix: the name-and-form group now uses single-line, scale-down fitting inside the width left by the fixed `NO.<dex_no>` label.
-- Post-fix evidence: the focused side-by-side comparison shows the complete `板板壳（蜕皮时的样子）` label without wrapping, ellipsis, number movement, asset degradation, color drift, or spacing regression. Typography, layout rhythm, colors, frozen image quality, and source copy all pass for the changed component.
-- Latest Phase 8 continuation: the iPhone 17 integration run captured the grouped filter sheet, vertical Tools destination, Game descriptions and detail, Event timeline and detail, Outfit inspiration and detail, and shiny detail state at 1206 x 2622. No clipping, overlap, unreadable text, missing frozen image, transition remnant, or broken navigation was observed.
+- First pass, P2: the non-default single-Light card used the same blue surface as the default Dimo card, weakening the target's visual grouping.
+- Fix: apply a restrained warm-gold surface to non-default single-Light cards while leaving the exact illustration and type icon unchanged.
+- Second pass: the normalized focused comparison confirms the blue, gold, green, and red grouping with unchanged geometry, copy, image scale, and contrast. No actionable P0, P1, or P2 finding remains.
 
-No actionable P0, P1, or P2 findings remain. No additional focused region was needed because the changed surface is the complete title row shown at readable scale in the focused comparison.
+## Follow-up polish
+
+- P3: the generated concept contains decorative star and castle imagery that is not part of the attached binding card crop or the approved offline asset library. A later visual-theme task may add a reviewed source asset without coupling it to the layout preference.
 
 final result: passed

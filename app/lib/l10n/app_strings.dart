@@ -323,6 +323,11 @@ final class AppStrings {
     'Mechanical Group': '机械组',
     'Theme': '主题',
     'Follow device setting': '跟随设备设置',
+    'Creature catalog layout': '精灵图鉴布局',
+    'Choose how creature cards are arranged.': '选择精灵卡片的排列方式。',
+    'List': '列表',
+    'Grid': '双列',
+    'Creature catalog layout could not be saved.': '无法保存精灵图鉴布局。',
     'Personal data': '个人数据',
     'Favorites, collection marks, and notes stay on this device. Uninstalling the App may remove them.':
         '收藏、收集标记和笔记仅保存在此设备上；卸载 App 可能会移除这些数据。',

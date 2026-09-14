@@ -9,13 +9,15 @@ The bottom navigation has four destinations:
 - **Creatures** opens the handbook browser.
 - **Skills** opens the skill browser.
 - **Tools** opens season, feature, egg-group, game-description, activity-timeline, outfit, and device-local Personal library routes.
-- **Settings** shows local data versions and attribution, starts the optional foreground complete-Catalog update flow, and provides the confirmed bundled-Catalog recovery action.
+- **Settings** switches the persisted creature card layout, shows local data versions and attribution, starts the optional foreground complete-Catalog update flow, and provides the confirmed bundled-Catalog recovery action.
 
 The information action shows data version, Catalog schema, snapshot ID, build time, complete source revision time range, coverage flags, and the attribution text validated and retained with that exact Catalog version.
 
 ## Creature browser
 
 The creature browser always shows concrete pet records, so an exact special-form result opens that exact `petId` without a handbook/form mode switch.
+
+The default visual browser uses two large full-illustration cards per phone row and three cards on wider surfaces. Settings can switch to the preserved compact horizontal list. Both layouts consume the same result set, pagination state, type icons, stable identity, and detail route. The choice is stored in the existing device-local `user.db.settings` table, defaults safely to the grid, and remains independent of Catalog install, update, recovery, and rollback.
 
 Search supports canonical name, title, alias, and exact handbook number. Pure numeric input is left-padded for matching, so `4` and `004` both match stored display number `004`; the stored number is not rewritten. `%`, `_`, and backslash are treated as literal search characters.
 

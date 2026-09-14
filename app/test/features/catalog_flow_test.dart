@@ -679,6 +679,67 @@ void main() {
     );
   });
 
+  testWidgets('settings switches and persists the creature catalog layout', (
+    tester,
+  ) async {
+    await _setPhoneSurface(tester);
+
+    Widget app({Key? homeKey}) => MaterialApp(
+      locale: const Locale('zh', 'CN'),
+      supportedLocales: AppStrings.supportedLocales,
+      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      home: CatalogHomePage(key: homeKey, session: session),
+    );
+
+    await tester.pumpWidget(app());
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey('pet-grid-results')), findsOneWidget);
+    expect(find.byKey(const ValueKey('pet-list-results')), findsNothing);
+    final firstCard = tester.getRect(
+      find.byKey(const ValueKey('pet-result-pet_000004')),
+    );
+    final secondCard = tester.getRect(
+      find.byKey(const ValueKey('pet-result-pet_000558')),
+    );
+    expect(firstCard.center.dy, closeTo(secondCard.center.dy, 0.1));
+    expect(firstCard.right, lessThan(secondCard.left));
+    final gridImage = tester.widget<CatalogAssetImage>(
+      find
+          .descendant(
+            of: find.byKey(const ValueKey('pet-result-pet_000004')),
+            matching: find.byType(CatalogAssetImage),
+          )
+          .first,
+    );
+    expect(gridImage.width, greaterThan(140));
+
+    await tester.tap(find.text('\u8bbe\u7f6e'));
+    await tester.pumpAndSettle();
+    expect(
+      find.byKey(const ValueKey('pet-catalog-layout-control')),
+      findsOneWidget,
+    );
+    expect(find.text('\u7cbe\u7075\u56fe\u9274\u5e03\u5c40'), findsOneWidget);
+    await tester.tap(find.text('\u5217\u8868'));
+    await tester.pumpAndSettle();
+    expect(await userRepository.getPetCatalogLayout(), PetCatalogLayout.list);
+
+    await tester.tap(find.text('\u7cbe\u7075'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('pet-list-results')), findsOneWidget);
+    expect(find.byKey(const ValueKey('pet-grid-results')), findsNothing);
+
+    await tester.pumpWidget(app(homeKey: UniqueKey()));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('pet-list-results')), findsOneWidget);
+    expect(find.byKey(const ValueKey('pet-grid-results')), findsNothing);
+  });
+
   testWidgets('creature form subtitles stay complete on one adaptive line', (
     tester,
   ) async {
@@ -1272,6 +1333,10 @@ void main() {
       300,
       scrollable: find.byType(Scrollable).last,
     );
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('restore-bundled-catalog')),
+    );
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('restore-bundled-catalog')));
     await tester.pumpAndSettle();
 

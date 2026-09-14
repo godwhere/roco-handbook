@@ -12,6 +12,18 @@ void main() {
     app.main();
     await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
+    final size = tester.view.physicalSize / tester.view.devicePixelRatio;
+    await tester.tapAt(Offset(size.width * 0.875, size.height - 65));
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.byKey(const ValueKey('pet-catalog-layout-grid')),
+      warnIfMissed: false,
+    );
+    await tester.pumpAndSettle();
+    await tester.tapAt(Offset(size.width * 0.125, size.height - 65));
+    await tester.pumpAndSettle();
+    await binding.takeScreenshot('phase8-creature-grid');
+
     await tester.tap(find.byKey(const ValueKey('pet-filters')));
     await tester.pumpAndSettle();
     await binding.takeScreenshot('phase8-filter-sheet');
@@ -20,7 +32,6 @@ void main() {
         .pop();
     await tester.pumpAndSettle();
 
-    final size = tester.view.physicalSize / tester.view.devicePixelRatio;
     await tester.tapAt(Offset(size.width * 0.625, size.height - 65));
     await tester.pumpAndSettle();
     await binding.takeScreenshot('phase8-tools');

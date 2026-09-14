@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/catalog_models.dart';
 import '../../domain/catalog_repository.dart';
+import '../../domain/user_models.dart';
 import '../../domain/user_repository.dart';
 import 'pet_detail_page.dart';
 import '../../l10n/app_strings.dart';
@@ -15,12 +16,14 @@ class PetCatalogPage extends StatefulWidget {
     required this.repository,
     required this.userRepository,
     required this.datasetId,
+    this.layout = PetCatalogLayout.list,
     super.key,
   });
 
   final CatalogRepository repository;
   final UserRepository userRepository;
   final String datasetId;
+  final PetCatalogLayout layout;
 
   @override
   State<PetCatalogPage> createState() => _PetCatalogPageState();
@@ -561,29 +564,24 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
         ),
       );
     }
+    return switch (widget.layout) {
+      PetCatalogLayout.list => _buildListResults(),
+      PetCatalogLayout.grid => _buildGridResults(),
+    };
+  }
+
+  Widget _buildListResults() {
     return RefreshIndicator(
       onRefresh: _load,
       child: ListView.separated(
+        key: const ValueKey('pet-list-results'),
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: const EdgeInsets.fromLTRB(16, 2, 16, 24),
         itemCount: _results.length + (_hasMore ? 1 : 0),
         separatorBuilder: (_, _) => const SizedBox(height: 10),
         itemBuilder: (context, index) {
           if (index == _results.length) {
-            return Center(
-              child: OutlinedButton.icon(
-                onPressed: _loadingMore ? null : () => _load(append: true),
-                icon: _loadingMore
-                    ? const SizedBox.square(
-                        dimension: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.expand_more_rounded),
-                label: Text(
-                  context.tr(_loadingMore ? 'Loading...' : 'Load more'),
-                ),
-              ),
-            );
+            return _buildLoadMoreButton();
           }
           final pet = _results[index];
           return _PetResultCard(
@@ -592,6 +590,66 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
             onTap: () => _open(pet),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildGridResults() {
+    final scale = MediaQuery.textScalerOf(context).scale(1).clamp(1.0, 2.0);
+    return RefreshIndicator(
+      onRefresh: _load,
+      child: CustomScrollView(
+        key: const ValueKey('pet-grid-results'),
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        slivers: <Widget>[
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(12, 2, 12, 12),
+            sliver: SliverLayoutBuilder(
+              builder: (context, constraints) {
+                final columns = constraints.crossAxisExtent >= 720 ? 3 : 2;
+                return SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: columns,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: 0.66 / (1 + ((scale - 1) * 0.24)),
+                  ),
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final pet = _results[index];
+                    return _PetGridResultCard(
+                      key: ValueKey('pet-result-${pet.petId}'),
+                      pet: pet,
+                      onTap: () => _open(pet),
+                    );
+                  }, childCount: _results.length),
+                );
+              },
+            ),
+          ),
+          if (_hasMore)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+                child: _buildLoadMoreButton(),
+              ),
+            ),
+          if (!_hasMore) const SliverToBoxAdapter(child: SizedBox(height: 12)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoadMoreButton() {
+    return Center(
+      child: OutlinedButton.icon(
+        onPressed: _loadingMore ? null : () => _load(append: true),
+        icon: _loadingMore
+            ? const SizedBox.square(
+                dimension: 18,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            : const Icon(Icons.expand_more_rounded),
+        label: Text(context.tr(_loadingMore ? 'Loading...' : 'Load more')),
       ),
     );
   }
@@ -735,6 +793,168 @@ class _PetResultCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class _PetGridResultCard extends StatelessWidget {
+  const _PetGridResultCard({required this.pet, required this.onTap, super.key});
+
+  final PetSummary pet;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final form = !pet.isDefaultForm && pet.form?.trim().isNotEmpty == true
+        ? pet.form!.trim()
+        : null;
+    final theme = Theme.of(context);
+    return Card(
+      margin: EdgeInsets.zero,
+      color: _gridCardColor(context, pet),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 10, 10, 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) => CatalogAssetImage(
+                    assetPath: petIllustrationAsset(pet.illustrationKey),
+                    semanticLabel: pet.name,
+                    width: constraints.maxWidth,
+                    height: constraints.maxHeight,
+                    fit: BoxFit.contain,
+                    fallbackIcon: Icons.pets_outlined,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        FittedBox(
+                          key: ValueKey('pet-grid-title-fit-${pet.petId}'),
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            pet.name,
+                            maxLines: 1,
+                            softWrap: false,
+                            style: theme.textTheme.titleLarge?.copyWith(
+                              color: pet.hasShiny
+                                  ? _seasonColor(context, pet.belongSeason)
+                                  : null,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                          child: form == null
+                              ? null
+                              : FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    form,
+                                    key: ValueKey('pet-grid-form-${pet.petId}'),
+                                    maxLines: 1,
+                                    softWrap: false,
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: theme.colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: theme.colorScheme.surface.withValues(alpha: 0.72),
+                      border: Border.all(
+                        color: theme.colorScheme.outlineVariant,
+                      ),
+                    ),
+                    child: const SizedBox.square(
+                      dimension: 34,
+                      child: Icon(Icons.chevron_right_rounded, size: 22),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Wrap(
+                      spacing: 5,
+                      runSpacing: 5,
+                      children: <Widget>[
+                        for (final type in pet.types)
+                          Tooltip(
+                            message: type,
+                            child: CatalogAssetImage(
+                              key: ValueKey('pet-grid-type-${pet.petId}-$type'),
+                              assetPath: typeIconAsset(type),
+                              semanticLabel: type,
+                              width: 27,
+                              height: 27,
+                              fallbackIcon: Icons.circle_outlined,
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    'NO.${pet.dexNo}',
+                    key: ValueKey('pet-grid-dex-${pet.petId}'),
+                    style: CatalogTypography.numbers(
+                      theme.textTheme.labelMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Color _gridCardColor(BuildContext context, PetSummary pet) {
+  final theme = Theme.of(context);
+  final type = pet.types.length > 1 ? pet.types.last : pet.types.firstOrNull;
+  final accent =
+      !pet.isDefaultForm && pet.types.length == 1 && type == '\u5149\u7cfb'
+      ? const Color(0xFFE3BD4A)
+      : switch (type) {
+          '\u8349\u7cfb' => const Color(0xFF3DBA77),
+          '\u706b\u7cfb' => const Color(0xFFF2784B),
+          '\u6c34\u7cfb' => const Color(0xFF5A9DF4),
+          '\u5149\u7cfb' => const Color(0xFF54BFF4),
+          '\u7535\u7cfb' => const Color(0xFFF2C94C),
+          '\u51b0\u7cfb' => const Color(0xFF74CFE4),
+          '\u6076\u7cfb' => const Color(0xFF8D729D),
+          _ => theme.colorScheme.primary,
+        };
+  final opacity = theme.brightness == Brightness.dark ? 0.18 : 0.10;
+  return Color.alphaBlend(
+    accent.withValues(alpha: opacity),
+    theme.colorScheme.surface,
+  );
 }
 
 class _PetCatalogFilterSelection {
