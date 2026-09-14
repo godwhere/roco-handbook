@@ -4,6 +4,7 @@ import '../../domain/tool_catalogs.dart';
 import '../../l10n/app_strings.dart';
 import '../../theme/catalog_theme.dart';
 import '../../widgets/catalog_asset_image.dart';
+import '../../widgets/catalog_platform_navigation.dart';
 
 class ActivityTimelinePage extends StatefulWidget {
   const ActivityTimelinePage({required this.repository, super.key});
@@ -23,7 +24,7 @@ class _ActivityTimelinePageState extends State<ActivityTimelinePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.tr('Event timeline'))),
+      appBar: CatalogPlatformAppBar(title: context.tr('Event timeline')),
       body: FutureBuilder<ActivityTimelineCatalog>(
         future: _catalog,
         builder: (context, snapshot) {
@@ -290,7 +291,7 @@ class ActivityDetailPage extends StatelessWidget {
     final status = _activityStatus(entry, now);
     final color = _statusColor(status);
     return Scaffold(
-      appBar: AppBar(title: Text(entry.name)),
+      appBar: CatalogPlatformAppBar(title: entry.name),
       body: ListView(
         key: ValueKey('activity-detail-${entry.activityId}'),
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),

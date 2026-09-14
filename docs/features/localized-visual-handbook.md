@@ -12,6 +12,14 @@ Focused localization tests compare every source-grounded domain term used by the
 
 A Chinese-locale navigation smoke test renders the creature and skill search fields, personal library tabs, Settings sections, and Catalog information sheet. It verifies the actual top-level interface instead of treating dictionary coverage as rendering evidence.
 
+## Platform navigation materials
+
+iOS navigation uses native UIKit views rather than a Flutter blur approximation. The App registers bounded `UINavigationBar` and `UITabBar` platform views, keeps their iOS 26 system appearance untouched, and receives Liquid Glass from the operating system. Earlier supported iOS versions retain the same native navigation and use a system-material blur fallback. Back, Catalog information, and destination-selection events return to the existing Flutter navigation state through per-view channels.
+
+Android retains Material 3 navigation. Its app bar, bottom navigation, and sheets use expressive rounded shapes, tonal elevation, a pill selection indicator, and stronger selected-state typography and icon scale. Android does not receive an iOS-style glass imitation.
+
+This material split applies only to navigation and transient control hierarchy. Creature and skill cards, filter sheets, reference panels, settings, and descriptions remain opaque or tonal so dense offline information stays readable. The platform branch introduces no runtime asset or network request.
+
 ## Typography
 
 The App bundles immutable font asset version 1. `RocoDisplay` follows the Wiki's primary game-facing typeface for Material display, headline, title, and label roles. `RocoNumbers` supplies tabular handbook identifiers and selected creature, skill, and timeline values. Body roles retain the platform face so descriptions, search input, Settings explanations, and accessibility-scaled paragraphs remain clear.

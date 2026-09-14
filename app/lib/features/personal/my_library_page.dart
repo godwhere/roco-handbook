@@ -8,6 +8,7 @@ import '../pets/pet_detail_page.dart';
 import '../skills/skill_detail_page.dart';
 import 'personal_controls.dart';
 import '../../l10n/app_strings.dart';
+import '../../widgets/catalog_platform_navigation.dart';
 
 class MyLibraryPage extends StatelessWidget {
   const MyLibraryPage({
@@ -346,7 +347,7 @@ class _UnavailableSavedItemPageState extends State<UnavailableSavedItemPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.tr('Saved item'))),
+      appBar: CatalogPlatformAppBar(title: context.tr('Saved item')),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
         children: <Widget>[

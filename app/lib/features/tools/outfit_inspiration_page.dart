@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../domain/tool_catalogs.dart';
 import '../../l10n/app_strings.dart';
 import '../../widgets/catalog_asset_image.dart';
+import '../../widgets/catalog_platform_navigation.dart';
 
 class OutfitInspirationPage extends StatefulWidget {
   const OutfitInspirationPage({required this.repository, super.key});
@@ -28,7 +29,7 @@ class _OutfitInspirationPageState extends State<OutfitInspirationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.tr('Outfit inspiration'))),
+      appBar: CatalogPlatformAppBar(title: context.tr('Outfit inspiration')),
       body: FutureBuilder<FashionCatalog>(
         future: _catalog,
         builder: (context, snapshot) {
@@ -272,7 +273,7 @@ class _OutfitDetailPageState extends State<OutfitDetailPage> {
     final variant = entry.variantFor(_gender);
     final description = variant.description ?? entry.description;
     return Scaffold(
-      appBar: AppBar(title: Text(variant.name)),
+      appBar: CatalogPlatformAppBar(title: variant.name),
       body: ListView(
         key: ValueKey('outfit-detail-${entry.outfitId}'),
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:roco_handbook/main.dart' as app;
@@ -11,17 +12,32 @@ void main() {
   ) async {
     app.main();
     await tester.pumpAndSettle(const Duration(milliseconds: 200));
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      await binding.convertFlutterSurfaceToImage();
+      await tester.pumpAndSettle();
+    }
 
     final size = tester.view.physicalSize / tester.view.devicePixelRatio;
-    await tester.tapAt(Offset(size.width * 0.875, size.height - 65));
-    await tester.pumpAndSettle();
+    Future<void> selectDestination(int index) async {
+      if (defaultTargetPlatform == TargetPlatform.iOS) {
+        await tester.tap(
+          find.byKey(ValueKey('ios-navigation-destination-$index')),
+        );
+      } else {
+        await tester.tapAt(
+          Offset(size.width * ((index + 0.5) / 4), size.height - 65),
+        );
+      }
+      await tester.pumpAndSettle();
+    }
+
+    await selectDestination(3);
     await tester.tap(
       find.byKey(const ValueKey('pet-catalog-layout-grid')),
       warnIfMissed: false,
     );
     await tester.pumpAndSettle();
-    await tester.tapAt(Offset(size.width * 0.125, size.height - 65));
-    await tester.pumpAndSettle();
+    await selectDestination(0);
     await binding.takeScreenshot('phase8-creature-grid');
 
     await tester.tap(find.byKey(const ValueKey('pet-filters')));
@@ -32,8 +48,7 @@ void main() {
         .pop();
     await tester.pumpAndSettle();
 
-    await tester.tapAt(Offset(size.width * 0.625, size.height - 65));
-    await tester.pumpAndSettle();
+    await selectDestination(2);
     await binding.takeScreenshot('phase8-tools');
 
     await tester.tap(find.byKey(const ValueKey('tool-card-egg-groups')));
@@ -114,8 +129,7 @@ void main() {
     ).pop();
     await tester.pumpAndSettle();
 
-    await tester.tapAt(Offset(size.width * 0.125, size.height - 65));
-    await tester.pumpAndSettle();
+    await selectDestination(0);
     await tester.enterText(find.byKey(const ValueKey('pet-search')), '030');
     await tester.pump(const Duration(milliseconds: 400));
     await tester.pumpAndSettle();

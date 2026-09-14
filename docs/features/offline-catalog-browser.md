@@ -11,6 +11,8 @@ The bottom navigation has four destinations:
 - **Tools** opens season, feature, egg-group, game-description, activity-timeline, outfit, and device-local Personal library routes.
 - **Settings** switches the persisted creature card layout, shows local data versions and attribution, starts the optional foreground complete-Catalog update flow, and provides the confirmed bundled-Catalog recovery action.
 
+The destinations and state are shared, but their navigation material is platform-specific. iOS uses native UIKit bars and receives system Liquid Glass on iOS 26, with a native system-material fallback on older supported releases. Android uses the Material 3 navigation bar, expressive pill selection, tonal surfaces, and platform motion. Neither branch adds glass to Catalog content or changes the offline data path.
+
 The information action shows data version, Catalog schema, snapshot ID, build time, complete source revision time range, coverage flags, and the attribution text validated and retained with that exact Catalog version.
 
 ## Creature browser

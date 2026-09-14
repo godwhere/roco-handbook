@@ -9,6 +9,7 @@ import '../../data/catalog/asset_type_relation_repository.dart';
 import '../../l10n/app_strings.dart';
 import '../../theme/catalog_theme.dart';
 import '../../widgets/catalog_asset_image.dart';
+import '../../widgets/catalog_platform_navigation.dart';
 import '../personal/personal_controls.dart';
 import '../skills/skill_detail_page.dart';
 
@@ -318,7 +319,7 @@ class _PetDetailPageState extends State<PetDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.tr('Creature details'))),
+      appBar: CatalogPlatformAppBar(title: context.tr('Creature details')),
       body: FutureBuilder<_PetPageData>(
         future: _data,
         builder: (context, snapshot) {

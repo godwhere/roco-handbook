@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -63,6 +64,63 @@ void main() {
     PaintingBinding.instance.imageCache
       ..clear()
       ..clearLiveImages();
+  });
+
+  testWidgets('uses distinct iOS and Android navigation shells', (
+    tester,
+  ) async {
+    await _setPhoneSurface(tester);
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(platform: TargetPlatform.iOS, useMaterial3: true),
+        home: CatalogHomePage(session: session),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byKey(const ValueKey('ios-liquid-glass-top-navigation')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('ios-liquid-glass-bottom-navigation')),
+      findsOneWidget,
+    );
+    expect(find.byType(CupertinoTabBar), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('android-expressive-bottom-navigation')),
+      findsNothing,
+    );
+    await tester.tap(find.text('Settings'));
+    await tester.pumpAndSettle();
+    expect(
+      find.byKey(const ValueKey('pet-catalog-layout-control')),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(platform: TargetPlatform.android, useMaterial3: true),
+        home: CatalogHomePage(session: session),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byKey(const ValueKey('android-expressive-top-navigation')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('android-expressive-bottom-navigation')),
+      findsOneWidget,
+    );
+    expect(find.byType(NavigationBar), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('ios-liquid-glass-bottom-navigation')),
+      findsNothing,
+    );
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets(

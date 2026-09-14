@@ -1,45 +1,54 @@
-# Phase 8 creature Catalog layout design QA
+# Phase 8 platform navigation design QA
 
 - Review date: 2026-09-14
-- Source visual truth: `/var/folders/d4/vlsfy7fd51vgb9ymqtc_zs8m0000gn/T/codex-clipboard-178ba5d3-9f1f-431c-b8fa-e5a61a80b622.png`
-- Supporting full-screen concept: `/Users/ethan/.codex/generated_images/01a084ad-ac2c-7d23-9db4-d6fa0b1cfbbb/exec-6ed72adb-da77-435d-906c-a20036587ddc.png`
-- Implementation screenshot: `docs/evidence/phase-8-layout/ios-creature-grid.png`
-- Comparison images: `/tmp/roco-phase8-grid-comparison.png` and `/tmp/roco-phase8-grid-full-comparison.png`
-- Device and state: iPhone 17 simulator, iOS 26.5, `zh-CN`, light theme, grid selected, first four Dimo forms visible
-- Viewport: 402 x 874 logical pixels at 3x density; implementation capture 1206 x 2622 pixels
+- Source visual truth: `/Users/ethan/.codex/generated_images/01a084ad-ac2c-7d23-9db4-d6fa0b1cfbbb/exec-6ed72adb-da77-435d-906c-a20036587ddc.png`
+- iOS implementation: `docs/evidence/phase-8-platform-navigation/ios-liquid-glass-home.png`
+- Android implementation: `docs/evidence/phase-8-platform-navigation/android-m3-expressive-home.png`
+- Full-view comparisons: `docs/evidence/phase-8-platform-navigation/ios-source-comparison.png` and `docs/evidence/phase-8-platform-navigation/android-source-comparison.png`
+- Focused comparison: `docs/evidence/phase-8-platform-navigation/platform-navigation-focused-comparison.png`
+- States: `zh-CN`, light theme, creature grid, first four Dimo forms, first destination selected
 
 ## Normalization
 
-The binding card-region source is 772 x 1048 pixels. The matching implementation region was cropped from the 1206 x 2622 simulator capture and resampled to 772 x 1048 before the focused side-by-side comparison. The supporting full-screen concept is 853 x 1844; the complete implementation screenshot was resampled to the same 853 x 1844 dimensions before the full-view comparison. Device chrome is absent from both implementation comparisons.
+The source is 853 x 1844 pixels. The iOS capture is 1206 x 2622 pixels at a 402 x 874 logical viewport and 3x density. Both were center-fitted to 603 x 1311 before horizontal composition. The Android capture is 1080 x 2057 pixels and was center-fitted with the source to a common comparison frame. The focused comparison independently places the source beside each implementation's top and bottom navigation regions.
 
 ## Full-view comparison evidence
 
-The implementation preserves the concept's app title and data version hierarchy, single compact control row, two-column illustrated Catalog, stable card information, and four-destination bottom navigation. The user-attached crop makes the two-column card region the binding target. The existing Sort, Filters, Search order, Material 3 page shell, and frozen Wiki display font remain intentional product constraints rather than adopting the concept's generated tagline, castle background, or glass treatment. No unapproved decorative bitmap or fabricated domain asset was introduced.
+Both implementations preserve the selected direction's title/version hierarchy, compact Sort/Filters/Search control group, two-column illustrated Catalog, type-aligned card colors, and four equal primary destinations. The source's castle, cloud, star, and glass-card decoration is intentionally absent from production: the user limited glass to preserve reading clarity, the decorative bitmap is not an approved offline source asset, and Catalog content remains an opaque information layer.
+
+The iOS capture preserves the source's floating translucent navigation hierarchy through native UIKit. System Liquid Glass appears on the version, information, and tab-bar navigation layer without adding a custom Flutter blur to cards or text. The Android capture intentionally translates the same hierarchy into M3 Expressive with a tonal app bar, circular tonal information action, rounded sheet contract, pill selection indicator, and stronger selected label instead of copying iOS translucency.
 
 ## Focused comparison evidence
 
-The same four source-backed creatures appear in the same two-column order. Card aspect ratio, large contained full-body art, rounded surface, name hierarchy, muted Lord-form subtitle, circular detail affordance, type icons, and bottom-right `NO.001` placement match the attached target at readable scale. Blue, warm-gold, green, and warm-red surfaces separate the four example cards while preserving contrast. No label wraps, truncates, overlaps, or leaves the card bounds.
+The focused top and bottom regions confirm that title, version, information, and four destination labels remain fully visible on both platforms. iOS uses the system's optical material, native SF symbols, and floating bar proportions. Android uses opaque tonal surfaces, Material icons, a larger selected indicator, and platform system-bar spacing. No persistent navigation control overlaps the safe areas or loses its selected state.
 
 ## Required fidelity surfaces
 
-- Fonts and typography: the implementation keeps the approved `RocoDisplay` and `RocoNumbers` roles. Names, subtitles, and identifiers remain single-line and legible; using the approved product font instead of the generated concept font is intentional.
-- Spacing and layout rhythm: two equal phone columns, 10-pixel grid gaps, consistent 12-pixel outer inset, stable card radii, and aligned card footers match the target hierarchy. The responsive contract changes to three columns at 720 logical pixels.
-- Colors and visual tokens: type-aligned low-opacity surfaces preserve Material contrast in light and dark themes. The non-default single-Light example uses the target's warm-gold separation.
-- Image quality and asset fidelity: every card uses the exact frozen full-body Wiki illustration and bundled type icon through the production asset resolver. Images remain contained and sharp with no crop or transparency halo.
-- Copy and content: source names, form text, type identity, and `NO.<dex_no>` remain data-backed. No concept-only tagline or online feature was added.
+- Fonts and typography: Catalog display text retains the approved `RocoDisplay` role and identifiers retain `RocoNumbers`. Native iOS navigation uses the system face and SF Symbols, while Android navigation uses the display label role; this is an intentional platform distinction. Titles and labels remain single-line and legible.
+- Spacing and layout rhythm: the two-column grid and control-row geometry remain unchanged. Both navigation bars respect platform safe areas. The iOS bar floats above content; Android reserves an opaque Material navigation surface.
+- Colors and visual tokens: iOS lets the system adapt Liquid Glass contrast. Android derives tonal surfaces and selection colors from the App `ColorScheme`. Content-card colors match the accepted blue, gold, green, and red grouping.
+- Image quality and asset fidelity: every Catalog card uses the exact frozen Wiki illustration and type icon. No screenshot raster, custom SVG, emoji, placeholder, or generated navigation icon replaces a source asset or platform symbol.
+- Copy and content: source names, form labels, `NO.<dex_no>`, data version, and destination labels remain data-backed or localized. No concept-only tagline was added.
 
 ## Interaction and accessibility evidence
 
-The iOS integration run opened Settings, selected Grid, returned to Creatures, captured the result, opened the grouped filter sheet, and completed the existing Tools and shiny-detail flow. The focused widget test switches to List, verifies the horizontal layout, recreates the page, and confirms that the saved choice persists. The complete Flutter test suite covers dark theme and a 2.0 text scale. The integration log contains no Flutter exception or failed assertion.
+Focused widget coverage selects the iOS and Android shells, changes destination through the Cupertino test fallback, and checks the M3 theme geometry. The iOS integration flow changes all four destinations through the labeled Flutter hit regions over the native platform view and opens Flutter-owned child routes. Both platform builds launched successfully. Native iOS top-bar buttons carry accessibility labels, the bottom bar uses Flutter-owned destination semantics without duplicating the hidden native item semantics, and Material destinations retain Flutter semantics. The complete Flutter suite covers dark theme and a 2.0 text scale.
+
+## Findings
+
+No actionable P0, P1, or P2 mismatch remains. The platform differences are intentional translations of one shared hierarchy, not drift.
 
 ## Comparison history
 
-- First pass, P2: the non-default single-Light card used the same blue surface as the default Dimo card, weakening the target's visual grouping.
-- Fix: apply a restrained warm-gold surface to non-default single-Light cards while leaving the exact illustration and type icon unchanged.
-- Second pass: the normalized focused comparison confirms the blue, gold, green, and red grouping with unchanged geometry, copy, image scale, and contrast. No actionable P0, P1, or P2 finding remains.
+- First pass, P1: Flutter 3.47.2 does not provide complete Liquid Glass support, so a Cupertino blur would have presented a visual approximation as native behavior.
+- Fix: add a bounded UIKit platform-view bridge and keep iOS 26 `UINavigationBar` and `UITabBar` system appearances unmodified.
+- First pass, P2: applying the same translucent treatment to Android would weaken platform identity and repeat glass in a dense information surface.
+- Fix: keep Android on Material 3 and express hierarchy through tonal elevation, shape, selection scale, and label weight.
+- Post-fix evidence: the normalized full and focused comparisons show distinct native platform treatments, complete labels, stable safe areas, and unchanged opaque Catalog content.
 
 ## Follow-up polish
 
-- P3: the generated concept contains decorative star and castle imagery that is not part of the attached binding card crop or the approved offline asset library. A later visual-theme task may add a reviewed source asset without coupling it to the layout preference.
+- P3: validate Reduce Transparency and Increase Contrast on a physical iPhone before the store candidate.
+- P3: evaluate Android dynamic color as a separately approved enhancement; it is not required for the current M3 Expressive treatment.
 
 final result: passed

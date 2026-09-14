@@ -12,5 +12,14 @@ import UIKit
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+    guard let registrar = engineBridge.pluginRegistry.registrar(
+      forPlugin: "NativeCatalogNavigation"
+    ) else {
+      return
+    }
+    registrar.register(
+      NativeCatalogNavigationFactory(messenger: registrar.messenger()),
+      withId: "world.roco.handbook/catalog_navigation"
+    )
   }
 }

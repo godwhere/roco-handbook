@@ -8,6 +8,7 @@ import '../settings/settings_page.dart';
 import '../skills/skill_catalog_page.dart';
 import '../tools/tools_page.dart';
 import '../../l10n/app_strings.dart';
+import '../../widgets/catalog_platform_navigation.dart';
 
 class CatalogHomePage extends StatefulWidget {
   const CatalogHomePage({
@@ -140,25 +141,13 @@ class _CatalogHomePageState extends State<CatalogHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.tr('Roco World Handbook')),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Chip(
-              visualDensity: VisualDensity.compact,
-              label: Text(
-                context.strings.dataVersion(widget.session.info.dataVersion),
-              ),
-            ),
-          ),
-          IconButton(
-            tooltip: context.tr('Catalog information'),
-            onPressed: _showAbout,
-            icon: const Icon(Icons.info_outline_rounded),
-          ),
-          const SizedBox(width: 4),
-        ],
+      appBar: CatalogPlatformAppBar(
+        title: context.tr('Roco World Handbook'),
+        dataVersionLabel: context.strings.dataVersion(
+          widget.session.info.dataVersion,
+        ),
+        onShowInformation: _showAbout,
+        informationAccessibilityLabel: context.tr('Catalog information'),
       ),
       body: IndexedStack(
         index: _index,
@@ -192,40 +181,14 @@ class _CatalogHomePageState extends State<CatalogHomePage> {
           ),
         ],
       ),
-      bottomNavigationBar: NavigationBar(
+      bottomNavigationBar: CatalogPlatformBottomNavigation(
         selectedIndex: _index,
         onDestinationSelected: (index) => setState(() => _index = index),
-        destinations: <NavigationDestination>[
-          NavigationDestination(
-            icon: Image.asset(
-              'assets/wiki/v3/ui/navigation/creatures.png',
-              width: 28,
-              height: 28,
-              semanticLabel: context.tr('Creatures'),
-            ),
-            selectedIcon: Image.asset(
-              'assets/wiki/v3/ui/navigation/creatures.png',
-              width: 32,
-              height: 32,
-              semanticLabel: context.tr('Creatures'),
-            ),
-            label: context.tr('Creatures'),
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.auto_awesome_outlined),
-            selectedIcon: const Icon(Icons.auto_awesome_rounded),
-            label: context.tr('Skills'),
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.dashboard_customize_outlined),
-            selectedIcon: const Icon(Icons.dashboard_customize_rounded),
-            label: context.tr('Tools'),
-          ),
-          NavigationDestination(
-            icon: const Icon(Icons.settings_outlined),
-            selectedIcon: const Icon(Icons.settings_rounded),
-            label: context.tr('Settings'),
-          ),
+        labels: <String>[
+          context.tr('Creatures'),
+          context.tr('Skills'),
+          context.tr('Tools'),
+          context.tr('Settings'),
         ],
       ),
     );

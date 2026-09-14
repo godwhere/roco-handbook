@@ -50,8 +50,56 @@ ThemeData buildCatalogTheme(ColorScheme colorScheme) {
       margin: EdgeInsets.zero,
     ),
   );
+  final displayTextTheme = CatalogTypography.applyDisplayFont(base.textTheme);
   return base.copyWith(
-    textTheme: CatalogTypography.applyDisplayFont(base.textTheme),
+    textTheme: displayTextTheme,
     primaryTextTheme: CatalogTypography.applyDisplayFont(base.primaryTextTheme),
+    appBarTheme: AppBarTheme(
+      centerTitle: false,
+      elevation: 0,
+      scrolledUnderElevation: 2,
+      surfaceTintColor: colorScheme.surfaceTint,
+      backgroundColor: colorScheme.surfaceContainerLow,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
+      ),
+      titleTextStyle: displayTextTheme.titleLarge?.copyWith(
+        color: colorScheme.onSurface,
+        fontWeight: FontWeight.w700,
+      ),
+    ),
+    navigationBarTheme: NavigationBarThemeData(
+      height: 76,
+      elevation: 0,
+      backgroundColor: colorScheme.surfaceContainer,
+      indicatorColor: colorScheme.secondaryContainer,
+      indicatorShape: const StadiumBorder(),
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+      labelTextStyle: WidgetStateProperty.resolveWith((states) {
+        final selected = states.contains(WidgetState.selected);
+        return displayTextTheme.labelMedium?.copyWith(
+          color: selected
+              ? colorScheme.onSecondaryContainer
+              : colorScheme.onSurfaceVariant,
+          fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+        );
+      }),
+      iconTheme: WidgetStateProperty.resolveWith((states) {
+        final selected = states.contains(WidgetState.selected);
+        return IconThemeData(
+          color: selected
+              ? colorScheme.onSecondaryContainer
+              : colorScheme.onSurfaceVariant,
+          size: selected ? 27 : 24,
+        );
+      }),
+    ),
+    bottomSheetTheme: BottomSheetThemeData(
+      showDragHandle: true,
+      backgroundColor: colorScheme.surfaceContainerLow,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+    ),
   );
 }

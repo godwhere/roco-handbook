@@ -9,6 +9,7 @@ import '../personal/personal_controls.dart';
 import '../../l10n/app_strings.dart';
 import '../../theme/catalog_theme.dart';
 import '../../widgets/catalog_asset_image.dart';
+import '../../widgets/catalog_platform_navigation.dart';
 
 class SkillDetailPage extends StatefulWidget {
   const SkillDetailPage({
@@ -73,7 +74,7 @@ class _SkillDetailPageState extends State<SkillDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.tr('Skill details'))),
+      appBar: CatalogPlatformAppBar(title: context.tr('Skill details')),
       body: FutureBuilder<_SkillPageData>(
         future: _data,
         builder: (context, snapshot) {

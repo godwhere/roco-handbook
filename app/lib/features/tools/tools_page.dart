@@ -11,6 +11,7 @@ import '../../domain/tool_catalogs.dart';
 import '../../domain/user_repository.dart';
 import '../../l10n/app_strings.dart';
 import '../../widgets/catalog_asset_image.dart';
+import '../../widgets/catalog_platform_navigation.dart';
 import '../personal/my_library_page.dart';
 import '../pets/pet_detail_page.dart';
 import '../skills/skill_detail_page.dart';
@@ -136,7 +137,7 @@ class ToolsPage extends StatelessWidget {
         onTap: () => _open(
           context,
           Scaffold(
-            appBar: AppBar(title: Text(context.tr('My Library'))),
+            appBar: CatalogPlatformAppBar(title: context.tr('My Library')),
             body: MyLibraryPage(
               catalogRepository: catalogRepository,
               userRepository: userRepository,
@@ -288,7 +289,7 @@ class SeasonArchivePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.tr('Season archive'))),
+      appBar: CatalogPlatformAppBar(title: context.tr('Season archive')),
       body: FutureBuilder<List<List<PetSummary>>>(
         future: Future.wait<List<PetSummary>>(<Future<List<PetSummary>>>[
           for (final season in const <String>['1', '2', '3', '4'])
@@ -394,7 +395,7 @@ class FeatureHandbookPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.tr('Feature handbook'))),
+      appBar: CatalogPlatformAppBar(title: context.tr('Feature handbook')),
       body: FutureBuilder<List<SkillSummary>>(
         future: _loadFeatures(),
         builder: (context, snapshot) {
@@ -659,7 +660,7 @@ class _EggGroupsPageState extends State<EggGroupsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.tr('Egg groups'))),
+      appBar: CatalogPlatformAppBar(title: context.tr('Egg groups')),
       body: Column(
         children: <Widget>[
           Padding(
@@ -809,7 +810,7 @@ class _PetListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: CatalogPlatformAppBar(title: title),
       body: FutureBuilder<List<PetSummary>>(
         future: repository.searchPets(query),
         builder: (context, snapshot) {

@@ -6,6 +6,7 @@ import '../../domain/game_descriptions.dart';
 import '../../domain/user_repository.dart';
 import '../../l10n/app_strings.dart';
 import '../../widgets/catalog_asset_image.dart';
+import '../../widgets/catalog_platform_navigation.dart';
 import '../skills/skill_detail_page.dart';
 
 class GameDescriptionCatalogPage extends StatefulWidget {
@@ -42,7 +43,9 @@ class _GameDescriptionCatalogPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.tr('Game description handbook'))),
+      appBar: CatalogPlatformAppBar(
+        title: context.tr('Game description handbook'),
+      ),
       body: FutureBuilder<GameDescriptionCatalog>(
         future: _catalog,
         builder: (context, snapshot) {
@@ -246,7 +249,7 @@ class GameDescriptionDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = _categoryColor(entry.category);
     return Scaffold(
-      appBar: AppBar(title: Text(entry.name)),
+      appBar: CatalogPlatformAppBar(title: entry.name),
       body: FutureBuilder<List<SkillSummary>>(
         future: catalogRepository.getSkillsForDescriptionNote(entry.noteId),
         builder: (context, snapshot) {

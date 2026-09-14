@@ -18,6 +18,7 @@ import 'domain/user_repository.dart';
 import 'features/catalog/catalog_home_page.dart';
 import 'l10n/app_strings.dart';
 import 'theme/catalog_theme.dart';
+import 'widgets/catalog_platform_navigation.dart';
 
 final class CatalogSession {
   const CatalogSession({
@@ -352,7 +353,7 @@ class _CatalogFailureScreen extends StatelessWidget {
     };
     final personalFailure = error is UserDataException;
     return Scaffold(
-      appBar: AppBar(title: Text(context.tr('Roco World Handbook'))),
+      appBar: CatalogPlatformAppBar(title: context.tr('Roco World Handbook')),
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
