@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:roco_handbook/catalog_app.dart';
@@ -206,6 +207,62 @@ void main() {
       find.byKey(const ValueKey('ios-liquid-glass-bottom-navigation')),
       findsNothing,
     );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('creature hero extends behind the status bar safely', (
+    tester,
+  ) async {
+    await _setPhoneSurface(tester);
+    tester.view.padding = const FakeViewPadding(top: 47, bottom: 34);
+    tester.view.viewPadding = const FakeViewPadding(top: 47, bottom: 34);
+    addTearDown(tester.view.resetPadding);
+    addTearDown(tester.view.resetViewPadding);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ThemeData(platform: TargetPlatform.iOS, useMaterial3: true),
+        home: CatalogHomePage(session: session),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final pageSafeArea = tester.widget<SafeArea>(
+      find.byKey(const ValueKey('pet-catalog-safe-area')),
+    );
+    expect(pageSafeArea.top, isFalse);
+
+    final heroFinder = find.byKey(const ValueKey('pet-catalog-hero'));
+    expect(tester.getTopLeft(heroFinder).dy, 0);
+    final hero = tester.widget<Container>(heroFinder);
+    expect(hero.margin, const EdgeInsets.only(bottom: 10));
+    expect(hero.padding, const EdgeInsets.fromLTRB(18, 63, 18, 16));
+    final decoration = hero.decoration! as BoxDecoration;
+    expect(
+      decoration.borderRadius,
+      const BorderRadius.only(
+        bottomLeft: Radius.circular(28),
+        bottomRight: Radius.circular(28),
+      ),
+    );
+
+    expect(
+      tester.getTopLeft(find.text('Roco World Handbook')).dy,
+      greaterThanOrEqualTo(47),
+    );
+
+    final overlay = tester.widget<AnnotatedRegion<SystemUiOverlayStyle>>(
+      find.ancestor(
+        of: heroFinder,
+        matching: find.byWidgetPredicate(
+          (widget) => widget is AnnotatedRegion<SystemUiOverlayStyle>,
+        ),
+      ),
+    );
+    expect(overlay.value.statusBarColor, Colors.transparent);
+    expect(overlay.value.statusBarIconBrightness, Brightness.dark);
+    expect(overlay.value.statusBarBrightness, Brightness.light);
+    expect(overlay.value.systemStatusBarContrastEnforced, isFalse);
     expect(tester.takeException(), isNull);
   });
 

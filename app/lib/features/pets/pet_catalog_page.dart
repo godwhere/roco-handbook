@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 
 import '../../domain/catalog_models.dart';
 import '../../domain/catalog_repository.dart';
@@ -441,7 +442,7 @@ class _PetCatalogPageState extends State<PetCatalogPage> {
     final showsHero = widget.dataVersionLabel != null;
     return SafeArea(
       key: const ValueKey('pet-catalog-safe-area'),
-      top: showsHero,
+      top: !showsHero,
       bottom: false,
       child: Column(
         children: <Widget>[
@@ -724,12 +725,26 @@ class _CatalogHeroHeader extends StatelessWidget {
     final subtitleColor = isDark
         ? scheme.onSurfaceVariant
         : const Color(0xFF68778F);
-    return Container(
+    final overlayStyle = SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+      statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+      systemStatusBarContrastEnforced: false,
+    );
+    final hero = Container(
       key: const ValueKey('pet-catalog-hero'),
-      margin: const EdgeInsets.fromLTRB(8, 8, 8, 10),
-      padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.fromLTRB(
+        18,
+        MediaQuery.paddingOf(context).top + 16,
+        18,
+        16,
+      ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(28),
+          bottomRight: Radius.circular(28),
+        ),
         image: DecorationImage(
           image: const AssetImage(
             'assets/brand/v1/catalog-header-background.png',
@@ -836,6 +851,10 @@ class _CatalogHeroHeader extends StatelessWidget {
           child,
         ],
       ),
+    );
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: overlayStyle,
+      child: hero,
     );
   }
 }
