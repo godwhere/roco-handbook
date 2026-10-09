@@ -1,5 +1,13 @@
 # V1 release readiness
 
+## Active native release boundary
+
+ADR-0023 replaces the active Flutter/Android release target with `ios/RocoHandbook.xcodeproj`, App version 1.2.0, build 3, bundle identifier `world.roco.rocoHandbook`, and minimum iOS 15. The earlier candidates and Android evidence below are historical artifacts, not acceptance for this client.
+
+CI retains the offline Python data suite on Ubuntu and replaces the Flutter job with Swift XCTest and a native unsigned simulator build on macOS. The local XCUITest matrix is recorded separately in Phase 9 evidence. The native App declares no protected-resource usage description, background mode, ATS exception, account capability, or third-party runtime package. Settings exposes the version-specific Catalog attribution and frozen visual-source information.
+
+A future iOS release must independently verify a signed upgrade from the preceding Flutter build, physical offline use, personal-data retention, VoiceOver/Dynamic Type, older supported iOS versions, archive/export, signing, current store policy, upload, review, and publication. The Phase 6 waiver is not inherited as native device proof.
+
 ## Version identity
 
 The first candidate uses App version `1.0.0`, build number `1`, Catalog schema version `1`, Catalog data version `1`, and User schema version `1`. Settings displays the App version and the installed data versions independently.

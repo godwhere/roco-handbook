@@ -1,5 +1,13 @@
 # Catalog update and recovery
 
+## Native iOS installer
+
+ADR-0023 moves this contract to `ios/Sources/HandbookCore/CatalogInstaller.swift`. The actor and existing OS file-lock basename serialize work. Current pointer version 2, compatible earlier pointers, canonical and legacy basenames, and attribution paths remain readable. Candidate bytes, metadata, exact tables/views, SQLite integrity, foreign keys, and the established probe are verified before activation. A newer compatible active Catalog remains selected across App updates.
+
+The native migration deletes only staging files owned by its current invocation. It retains earlier Catalog files and legacy failure records rather than sweeping them; the older cleanup and machine-readable failure-report descriptions below remain historical. This conservative retention may consume additional storage. File rename, power-loss durability, low-storage behavior, and signed physical upgrades still require device acceptance.
+
+Settings shows a newer candidate and its package size with a current-connection prompt before Download. Transfer reports received and expected bytes and allows cancellation. Verification and installation hide cancellation. A validated release advances the existing replay floor before pointer activation; bundled recovery never lowers it. Native restore creates a new Catalog session while keeping the same personal repository.
+
 ## Normal startup
 
 The App reads Catalog data only from private application-support storage. Startup completes Catalog selection before creating the read-only repository or showing normal navigation. One file lock serializes installer work.

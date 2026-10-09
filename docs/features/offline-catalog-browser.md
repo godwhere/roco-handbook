@@ -1,5 +1,13 @@
 # Offline Catalog browser
 
+## Native iOS ownership
+
+ADR-0023 makes `ios/` the active iOS-only Swift/SwiftUI client. Native `TabView` and navigation containers replace the previous Flutter/UIKit bridge; iOS 15 retains a `NavigationView` fallback. Repository actors keep database work outside view construction. Native pages request 80 records per page, provide explicit Load more, and discard obsolete search generations. Large accessibility text switches the creature grid to one column.
+
+The four destinations and seven Tools routes remain available. The native hero uses a tonal system surface with live Sort, Filters, Search, data version, and information controls. Type colors are derived from the first explicit type; shiny-capable names use a distinct accent. Season-specific name palettes, decorative code-native motifs, and exact Flutter pixel geometry are historical presentation details rather than native acceptance requirements. The known glossary definitions come from the separate frozen description asset; undefined note IDs do not create broken links.
+
+The remaining sections retain the source/domain feature contract. Where they mention platform branches, 60-row pages, or Flutter presentation, this native section and ADR-0023 take precedence.
+
 ## Entry and navigation
 
 The App prepares the bundled Catalog before showing normal navigation. Preparation is a local copy and validation step; the screen explicitly states that no download is required. A startup failure shows a retry action and confirms that personal data was not changed.

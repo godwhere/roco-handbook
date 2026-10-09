@@ -1,5 +1,11 @@
 # Independent Catalog updates
 
+## Native Swift implementation
+
+The active client implements the existing Phase 7 protocol in `ios/Sources/HandbookCore/CatalogUpdateService.swift` and `CatalogArchive.swift`, using CryptoKit Ed25519 and platform zlib. The initial package URL must exactly match its signed data version under the existing repository. Transport accepts a direct 200 or one validated 302 and enforces stream limits, declared length when available, identity content encoding, cancellation, and SHA-256.
+
+The offline suite reuses the existing owned Ed25519 fixtures and tests stored/deflated three-entry ZIPs, CRC failure, extra bytes/entries, traversal, host rejection, replay, and minimum-version rejection. No live check, download, signing operation, or publication was performed for the Swift migration. Catalog data version 2 is bundled locally; its remote package is still unpublished. Historical real-package deferrals remain open and are not replaced by simulator evidence.
+
 ## Current state
 
 Phase 7 now has a complete-ZIP publisher, signed-manifest generator, production public trust key, strict validator and installer, and an enabled user-triggered GitHub Releases transport. The App still starts entirely from its bundled Catalog and performs no automatic or background network request. ADR-0014 temporarily closes the phase under `PHASE7-LIVE-CATALOG-001` while a genuine newer Catalog is unavailable; the real-package matrix remains deferred rather than passed.

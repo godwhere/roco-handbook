@@ -214,8 +214,12 @@ class ProjectStructureTests(unittest.TestCase):
         uses = re.findall(r"^\s*uses:\s*([^\s#]+)", workflow, re.M)
 
         self.assertIn("permissions:\n  contents: read", workflow)
-        self.assertEqual(4, len(uses))
-        self.assertEqual(3, len(set(uses)))
+        self.assertEqual(3, len(uses))
+        self.assertEqual(2, len(set(uses)))
+        self.assertEqual(
+            {"actions/checkout", "actions/setup-python"},
+            {action.split("@", 1)[0] for action in uses},
+        )
         self.assertEqual(2, workflow.count("persist-credentials: false"))
         for action in uses:
             with self.subTest(action=action):

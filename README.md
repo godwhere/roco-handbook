@@ -2,24 +2,24 @@
 
 [![离线验证](https://github.com/godwhere/roco-handbook/actions/workflows/offline-validation.yml/badge.svg)](https://github.com/godwhere/roco-handbook/actions/workflows/offline-validation.yml)
 
-一款面向 iOS 和 Android 的独立、非商业、离线优先游戏资料 App。项目使用 Python 将经过校验的 BWIKI 固定版本数据转换为结构化 SQLite 图鉴，并通过 Flutter 提供精灵、技能、特性、进化、属性克制、活动和个性化收藏等查询能力。
+一款仅面向 iOS 的独立、非商业、离线优先游戏资料 App。客户端使用 Swift 与 SwiftUI，支持 iOS 15 及以上版本；Python 数据工具将经过校验的 BWIKI 固定版本数据转换为结构化 SQLite 图鉴，提供精灵、技能、特性、进化、属性克制、活动和个性化收藏等查询能力。
 
 App 首次启动不需要下载数据，也不会在浏览过程中访问 Wiki。完整图鉴、图片和字体随安装包提供；后续数据更新必须由用户在设置页主动触发，并经过签名、哈希、压缩包、数据库和版本兼容性校验后才能启用。
 
-> 当前开发版本为 `1.1.0+2`。项目尚未发布到应用商店，真机、正式签名、商店上传和审核仍属于独立的发布验收环节。
+> 当前原生开发版本为 `1.2.0`，构建号 `3`。项目尚未发布到应用商店，真机、正式签名、商店上传和审核仍属于独立的发布验收环节。
 
 ## 项目概览
 
 | 项目 | 当前实现 |
 | --- | --- |
-| 客户端 | Flutter 跨平台 App，支持 iOS 与 Android |
+| 客户端 | Swift / SwiftUI 原生 iOS App，支持 iOS 15 及以上 |
 | 数据规模 | 621 个具体精灵形态、466 个图鉴条目、824 个技能、311 份技能学习表、273 组进化关系 |
 | 数据存储 | 只读 `catalog.db` 与独立可迁移 `user.db` |
 | 离线资源 | 精灵立绘、异色立绘、技能与特性图标、属性与分类图标、活动图标、时装预览和 Wiki 风格字体 |
 | 本地化 | `zh-CN` 与 `en-US`，其他语言回退到英文；游戏术语以冻结的 Wiki 词汇为准 |
-| 平台视觉 | 品牌化图鉴头图与系别主题卡片；iOS 26 使用原生 Liquid Glass 导航，旧版 iOS 使用系统材质降级；Android 使用带文案的悬浮胶囊 M3 Expressive 导航与色调层级 |
+| 平台视觉 | 原生 SwiftUI 导航与系统材质、品牌化图鉴标题、系别主题卡片、动态字号 |
 | 数据更新 | 设置页主动检查，使用 GitHub Releases 分发由 Ed25519 签名清单认证的完整图鉴包 |
-| 自动化验证 | 105 项 Python 测试、119 项 Flutter 测试、静态检查、格式检查和 GitHub Actions 离线持续集成 |
+| 自动化验证 | Python 数据契约测试、Swift XCTest、iOS UI 测试与 GitHub Actions 离线持续集成 |
 
 ## 核心功能
 
@@ -28,7 +28,7 @@ App 首次启动不需要下载数据，也不会在浏览过程中访问 Wiki�
 - 按名称、称号、别名或图鉴编号搜索具体精灵形态。
 - 支持图鉴编号、名称、物攻、魔攻和速度排序。
 - 支持系别、阶数、主形态／地区形态／首领形态、归属赛季和有无异色的组合筛选。
-- 默认双列卡片放大展示完整立绘，也可在设置中切换回紧凑横向列表；两种布局共享 18 种系别主题背景，双系精灵组合两种色彩，并保留形态副标题、`NO.<编号>`、系别图标和详情跳转。
+- 默认双列卡片放大展示完整立绘，也可在设置中切换回紧凑横向列表；两种布局共享基于精灵系别的主题背景，并保留形态副标题、`NO.<编号>`、系别图标和详情跳转。
 - 有异色资源的精灵可在详情页切换原始立绘与异色立绘。
 
 ### 精灵详情
@@ -68,12 +68,12 @@ App 首次启动不需要下载数据，也不会在浏览过程中访问 Wiki�
 - 图鉴对象在新版本中缺失时，个人收藏仍保留保存时的名称快照和笔记。
 - 当前版本不提供账号、云同步或跨设备个人数据迁移。
 
-### 平台化界面
+### 原生 iOS 界面
 
-- 精灵首页使用品牌化头图整合名称、数据版本、说明、排序、系别和搜索；其他页面的 iOS 顶部导航及底部导航由 UIKit 原生组件承载，在 iOS 26 上使用系统 Liquid Glass，在旧系统上自动降级为系统材质。
-- Android 保留 Material 3 组件体系，底部导航使用避开手势区、带图标与文案的悬浮胶囊外壳，并通过色调层级、选中指示器和反馈呈现 M3 Expressive。
-- 两端的图鉴内容都会延伸到悬浮导航栏下方，原安全区使用轻微模糊和表面渐变衔接内容；列表末尾同时保留动态安全余量，最后一项仍可完整滚动到导航栏之外。
-- 两端共享同一套离线数据和页面结构，但不强行复制对方的视觉语言；玻璃只用于 iOS 导航层，图鉴卡片、技能说明和长文区域保持清晰的实体背景。
+- 使用 SwiftUI 的系统标签栏、导航、菜单、表单和筛选页；iOS 16 及以上使用 `NavigationStack`，iOS 15 使用 `NavigationView`。
+- 系统组件随 iOS 版本呈现对应导航材质；密集图鉴、说明和资料面板保持清晰的实体背景。
+- 精灵、技能、工具和设置四个主入口保留，列表末尾可滚动到导航栏之外；动态字号增大时精灵网格可切换为单列。
+- 图鉴支持中英文界面，游戏条目的名称和说明保留上游原文。Android 不再属于开发和发布目标。
 
 ## 技术架构
 
@@ -98,7 +98,7 @@ Catalog Builder
 
 运行期数据链路
 
-Flutter 页面
+SwiftUI 页面
     ↓
 Controller / Domain DTO
     ↓
@@ -107,7 +107,7 @@ Repository
     └── 独立 user.db：收藏、收集状态、笔记和设置
 ```
 
-Flutter 页面只通过 Repository 和领域 DTO 读取数据。SQLite 连接、文件复制、哈希计算和完整性检查不会进入 Widget 构建过程；所有搜索输入使用参数绑定，排序字段由受控枚举选择。
+SwiftUI 页面只通过 Repository 和领域 DTO 读取数据。SQLite 连接、文件复制、哈希计算和完整性检查不会进入视图构建过程；所有搜索输入使用参数绑定，排序字段由受控枚举选择。
 
 ## 关键工程设计
 
@@ -129,7 +129,7 @@ Flutter 页面只通过 Repository 和领域 DTO 读取数据。SQLite 连接、
 
 - `catalog.db` 是不可变、版本化、只读的内容数据库，可以整体替换和回滚。
 - `user.db` 使用独立结构和迁移流程，只保存个人数据，图鉴安装器无权重建或删除它。
-- Catalog 打开时启用 SQLite 只读和 `query_only`，同步查询在后台 Isolate 中执行。
+- Catalog 打开时启用 SQLite 只读和 `query_only`，同步查询由后台 actor 仓库串行执行。
 
 ### 4. 可恢复的完整图鉴更新
 
@@ -146,30 +146,31 @@ Flutter 页面只通过 Repository 和领域 DTO 读取数据。SQLite 连接、
 - 773 个技能或特性图标、35 个属性与分类图标随 App 打包。
 - 图鉴视觉资源清单包含 1,594 个文件、1,673 个引用和 124,766,985 字节，并记录来源与本地哈希。
 - 工具资源包含 53 个活动图标和 220 个时装预览，共 273 个文件、12,379,751 字节。
-- 标题、标签和数值使用离线字体角色，长说明和输入框保留平台字体及缺字回退。
+- 标题使用冻结的 Wiki 字体，数值使用系统等宽数字；长说明和输入框保留平台字体及缺字回退。
 
 ### 6. 自动化质量门禁
 
 - Python 测试覆盖来源契约、安全解析、规范化、身份稳定、引用闭包、数据库构建、资源清单和发布检查。
-- Flutter 测试覆盖 Repository、双数据库生命周期、更新与回滚、搜索筛选、详情导航、本地化、视觉资源和主要交互。
-- GitHub Actions 在无 Wiki、无签名私钥、无商店凭据的 Ubuntu 环境中重建离线验证边界。
+- Swift 测试覆盖 Repository、双数据库生命周期、更新与恢复、搜索筛选、具体形态、来源关系、离线图片及签名验证；iOS UI 测试覆盖实际导航和个人数据流程。
+- GitHub Actions 分别在 Ubuntu 和 macOS 上验证 Python 数据管线及原生 Swift 客户端，不使用 Wiki、签名私钥或商店凭据。
 - 发布检查会拒绝 SQLite 事务边车、占位元数据、错误覆盖声明、哈希漂移、来源锁不一致、未审核删除和结构探针失败。
 
 ## 技术栈
 
 | 层级 | 技术 |
 | --- | --- |
-| 跨平台客户端 | Flutter 3.47.2、Dart、Material 3 |
-| 本地数据 | SQLite、`sqlite3`、JSON |
+| iOS 客户端 | Swift、SwiftUI、Xcode |
+| 本地数据 | 系统 SQLite、参数绑定、JSON |
 | 数据工具 | Python 3.11、标准库单元测试、确定性构建脚本 |
 | 安全更新 | Ed25519、SHA-256、规范化 Base64url、ZIP 完整包 |
-| 平台能力 | iOS、Android、应用私有存储、后台 Isolate |
-| 工程质量 | Flutter Test、Integration Test、静态分析、GitHub Actions |
+| 平台能力 | iOS、应用私有存储、Swift Concurrency、Foundation、CryptoKit |
+| 工程质量 | XCTest、XCUITest、原生构建、GitHub Actions |
 
 ## 仓库结构
 
 ```text
-app/                    Flutter 客户端、iOS/Android 工程和离线资源
+ios/                    当前 Swift/SwiftUI 客户端、Xcode 工程和原生测试
+app/                    保留的 Flutter 迁移参考及共用的不可变离线资源
 config/                 来源、身份、术语、关系和资源清单配置
 data/raw/               本地冻结响应；正文忽略提交，来源锁可追溯
 data/normalized/        确定性的 Catalog 构建输入
@@ -185,17 +186,9 @@ tools/                  BWIKI 导入、规范化、构建、签名和发布检�
 
 ## 本地运行
 
-安装 Flutter 环境后进入客户端目录：
+使用 Xcode 打开 `ios/RocoHandbook.xcodeproj`，选择 `RocoHandbook` Scheme 和一个 iOS 模拟器后运行。当前客户端不需要 Flutter、Dart、CocoaPods 或 Android 环境。
 
-```bash
-cd app
-flutter pub get
-flutter analyze
-flutter test
-flutter run
-```
-
-App 会从 `app/assets/catalog/` 安装内置图鉴。普通浏览不需要网络；只有设置页中由用户主动确认的图鉴更新会连接固定的 GitHub Releases 地址。
+App 构建时复用 `app/assets/` 中的冻结资源，首次启动安装内置图鉴。普通浏览不需要网络；设置页中的主动更新操作才会连接固定的 GitHub Releases 地址。
 
 ## 本地验证
 
@@ -212,23 +205,24 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 tools/release/check_catalog.p
   --release data/release/2
 ```
 
-验证 Flutter 客户端：
+验证原生客户端：
 
 ```bash
-cd app
-dart format --output=none --set-exit-if-changed lib test integration_test test_driver tool
-flutter analyze --no-pub
-flutter test --no-pub
+swift test --package-path ios --scratch-path /tmp/roco-handbook-spm
+xcodebuild -project ios/RocoHandbook.xcodeproj -scheme RocoHandbook \
+  -destination 'generic/platform=iOS Simulator' \
+  -derivedDataPath /tmp/roco-handbook-xcode CODE_SIGNING_ALLOWED=NO build
 ```
+
+iOS UI 测试命令见 [原生客户端说明](ios/README.md)。
 
 ## 当前状态与验收边界
 
-- 阶段 0—6 已完成；阶段 6 根据明确决策跳过真机测试，因此真机结果仍记录为未运行。
-- 阶段 7 已实现完整图鉴包构建、签名、GitHub Releases 传输、前台下载和安全安装；当前已生成真实的 NRC Catalog 数据版本 2，但尚未制作、签名或发布对应的远端更新包。
-- 阶段 8 已完成正式 App 身份、中英文界面、离线图片与字体、图鉴与详情页重构、筛选、异色切换、七个工具入口，以及 iOS 原生 Liquid Glass／Android 带文案悬浮胶囊 M3 Expressive 平台导航，并已将新版 NRC Wiki 数据与图片作为发布前基线；应用商店截图需要在最终视觉确定后重新生成。
-- Android 模拟器已验证飞行模式首次启动、个人数据持久化、旧指针迁移、恢复流程和当前带文案悬浮胶囊 M3 Expressive 首页呈现。
-- iOS 模拟器已验证构建、首次启动、数据库创建与复用、旧指针迁移、当前主要界面流程和 iOS 26 原生 Liquid Glass 导航呈现。
-- 真机离线测试、正式签名、商店账户配置、上传、审核和发布均未完成，README 不将这些环节描述为已通过。
+- Swift / SwiftUI 客户端位于 `ios/`，保留精灵、技能、七个图鉴工具、收藏、收集标记、笔记和设置功能。Python 导入与构建管线、Catalog 数据版本 2、两份规范 SQL 和离线资源继续复用。
+- 保留原 iOS 应用标识和个人数据库路径；图鉴恢复与更新不会覆盖 `user.db`。旧 Flutter 工程暂作迁移参考，Android 构建和发布已退出当前范围。
+- 完整包的签名验证及固定 GitHub Releases 传输已移植到 Swift；尚未签名和发布数据版本 2 的远端更新包，本次验证未访问上游或在线更新源。
+- 当前原生界面、构建与本地测试证据见 Phase 9 报告；旧 Flutter / Android 证据不能作为原生 iOS 验收结果。
+- 真机安装、旧版 Flutter 到原生版的签名升级、iOS 15 运行、VoiceOver、低存储与崩溃耐久性、正式归档、商店上传、审核和发布尚未完成。
 
 ## 相关文档
 
@@ -238,4 +232,5 @@ flutter test --no-pub
 - [图鉴更新与恢复](docs/features/catalog-update-and-recovery.md)：安装、指针切换、回滚与清理边界。
 - [独立图鉴更新](docs/features/independent-catalog-updates.md)：签名清单、GitHub Releases 和前台更新流程。
 - [视觉与本地化](docs/features/localized-visual-handbook.md)：中文术语、图片、字体和页面呈现。
-- [Phase 8 实施报告](docs/implementation-reports/phase-8.md)：当前 UI、资源、验证结果和剩余风险。
+- [原生 iOS 决策](docs/decisions/ADR-0023-native-swift-ios-client.md)：Swift、平台范围及兼容边界。
+- [Phase 9 实施报告](docs/implementation-reports/phase-9.md)：当前原生客户端、验证结果和剩余风险。

@@ -8,7 +8,7 @@ Choose solutions in this order and stop expanding once one is sufficient:
 
 1. Confirm whether the requirement is already satisfied or needs no new implementation.
 2. Reuse an existing schema, domain contract, adapter pattern, test fixture, or adjacent module.
-3. Prefer Python, Dart, Flutter, SQLite, and platform capabilities already accepted by the baseline architecture.
+3. Prefer Python, Swift, SwiftUI, SQLite, and Apple platform capabilities accepted by ADR-0023.
 4. Make a localized change inside the current phase and ownership boundary.
 5. Add a new abstraction or dependency only when the preceding options cannot deliver the required behavior.
 
@@ -19,7 +19,7 @@ Minimal scope must not remove source validation, identity stability, reference c
 - All project-authored code, identifiers, comments, documentation, reports, configuration descriptions, test names, CLI messages, and commit messages must be written in English.
 - New explanatory prose in the repository must not be written in Chinese.
 - The root `README.md` is an approved presentation exception: it is written in Chinese for the public project overview. Technical names and commands may remain in English.
-- Phase 8 localization and terminology resources may contain `zh-CN` UI copy, and focused tests may assert that copy. Chinese domain terms must follow the frozen BWIKI terminology contract instead of being inferred from English labels.
+- Phase 8 and later localization and terminology resources may contain `zh-CN` UI copy, including native `zh-Hans.lproj` resources, and focused tests may assert that copy. Chinese domain terms must follow the frozen BWIKI terminology contract instead of being inferred from English labels.
 - Canonical upstream game data, such as creature names and descriptions, may retain its source language. Fixtures may contain that data only when the language itself is part of the parsing or mapping case.
 - `docs/technical-spec-v1.md` is the sole governance exception: it preserves the user-supplied Chinese baseline specification byte-for-byte for provenance and must not be translated in place.
 - User communication may use the user's language; this repository-language rule applies to project artifacts.
@@ -35,7 +35,7 @@ Minimal scope must not remove source validation, identity stability, reference c
 
 ## Project facts and boundaries
 
-- This is an independent, non-commercial Flutter application for iOS and Android.
+- This is an independent, non-commercial native Swift/SwiftUI application for iOS 15 and later. Android is outside the active delivery scope. `ios/` is the active client; `app/` retains the earlier Flutter implementation as migration evidence and the shared immutable assets.
 - The development pipeline reads explicitly allowed BWIKI MediaWiki modules, freezes immutable source revisions, safely parses data-only Lua tables, normalizes records, validates identities and references, and builds SQLite artifacts.
 - The installed App is offline-first. It must not request BWIKI, execute Lua, require an account, or depend on a first-launch download.
 - `schemas/catalog_v1.sql` is the sole V1 Catalog schema source. The App opens the installed Catalog read-only and must not auto-create or migrate it.
@@ -43,14 +43,14 @@ Minimal scope must not remove source validation, identity stability, reference c
 - `handbook_id`, `pet_id`, and upstream numeric IDs have different meanings. Do not infer official numbering, default forms, evolution direction, or identity from suffixes, names, or list order.
 - Core and Learnset feature references must remain independently traceable. Conflicts require a specific review result and must not be silently overwritten.
 - Shared Learnsets and every native, bloodline, and skill-stone acquisition condition must be preserved.
-- V1 distributes complete Catalog databases with App releases. Runtime full downloads, incremental patches, servers, accounts, cloud synchronization, and bulk image acquisition are outside scope.
+- V1 distributes complete Catalog databases with App releases. ADR-0010 through ADR-0013 additionally allow explicitly requested, signed complete-Catalog updates from the fixed GitHub Releases source. Incremental patches, servers, accounts, cloud synchronization, and bulk image acquisition are outside scope.
 - Do not change system proxy, DNS, TUN, routes, certificates, shell networking configuration, or Shadowrocket.
 
 ## Implementation constraints
 
 - Work in one declared phase at a time and modify only that phase's allowlisted paths.
 - Reuse existing models and contracts. Avoid single-use abstractions, speculative configuration, unused extension points, parallel sources of truth, and unrelated repository-wide refactors.
-- Network access belongs only in the import client and only in an explicitly authorized import task. Parser, normalizer, validator, writer, repository, and ordinary tests must run offline.
+- Development-time upstream network access belongs only in the import client and only in an explicitly authorized import task. Native runtime network access belongs only in `ios/Sources/HandbookCore/CatalogUpdateService.swift`, triggered explicitly in Settings under the accepted Phase 7 contract. Parser, normalizer, validator, writer, repository, startup, and ordinary tests must run offline.
 - Never execute downloaded Lua, call its `require`, or use whole-file regular-expression replacement as a parser. Unsupported executable syntax must fail with a source location.
 - Preserve source revisions, hashes, upstream IDs, null values, unknown fields, raw conditional values, and review-required conflicts.
 - A failed API response, empty module, parse failure, or incomplete snapshot must never be converted into an empty successful release or bulk deletion.
@@ -70,8 +70,8 @@ Minimal scope must not remove source validation, identity stability, reference c
 
 - Schema changes must execute both normative SQL files in a fresh database and verify exact objects, `integrity_check`, `foreign_key_check`, constraints, and schema versions.
 - Parser and adapter tests use owned offline fixtures. Tests must cover unsupported syntax, unknown fields, empty input, identity conflicts, shared Learnsets, and the documented three-form creature case when those modules exist.
-- Flutter behavior changes require focused Dart or Widget tests. Database, file lifecycle, accessibility, platform, and update behavior require their corresponding integration or device checks.
-- Automated local tests do not prove live BWIKI access, complete source coverage, iOS or Android device behavior, store signing, upload, or release acceptance. Report every unrun layer explicitly.
+- Native client behavior changes require focused Swift XCTest coverage and appropriate iOS UI tests. Database, file lifecycle, accessibility, platform, and update behavior require their corresponding integration or device checks. The retained Flutter implementation is historical evidence rather than an active release target.
+- Automated local tests do not prove live BWIKI access, complete source coverage, physical iOS device behavior, store signing, upload, or release acceptance. Report every unrun layer explicitly.
 - Before phase completion, run `git diff --check`, review the complete phase diff, and confirm that no credentials, cookies, proxy data, personal databases, fake release data, or unrelated files are included.
 
 ## Documentation and delivery

@@ -1,0 +1,76 @@
+# Phase 9 implementation report
+
+- Status: native implementation and local acceptance complete; physical upgrade and release acceptance remain open
+- Date: 2026-10-09
+- Workspace: `/Users/ethan/Documents/ChatGPT/roco-handbook`
+- Decision: [ADR-0023](../decisions/ADR-0023-native-swift-ios-client.md)
+
+## Declared boundary
+
+The user requested Swift and iOS-only delivery. This phase replaces the active Flutter client with Swift/SwiftUI for iOS 15 and later, preserving the offline Catalog and personal-data contracts. Allowed paths are `ios/`, `AGENTS.md`, the root and historical App READMEs, the offline CI workflow, focused native packaging and CI assertions under `tests/`, ADR-0023, the six affected feature documents, this report, and Phase 9 evidence.
+
+Imports, source revisions, normalized data, identities, both normative SQL files, immutable Catalog and visual assets, signing keys, network configuration, store accounts, and repository visibility are outside this phase. Android is excluded from active implementation and release acceptance. The prior client remains a migration reference; its assets remain the single immutable packaging source.
+
+Stopping conditions were an incompatible personal schema, immutable-asset drift, a required unapproved dependency, or an installer unable to preserve personal data. None occurred. No source import or live Catalog update was initiated.
+
+## Changed files and resulting behavior
+
+- `ios/Package.swift`, `Sources/CSystem/`, and `Sources/HandbookCore/`: platform SQLite/zlib, typed domain records, actor-owned Catalog and personal repositories, frozen asset/Tool repositories, Catalog install/recovery, Ed25519 validation, bounded explicit transport, and strict complete-package ZIP decoding. No third-party Swift dependency was added.
+- `ios/App/`: native SwiftUI presentation, four destinations, creature and skill search/filter/sort/paging, explicit concrete-form details and source references, original/shiny illustrations, seven Tool routes, favorites, collection marks, notes, layout persistence, source attribution, recovery, and manually initiated Catalog updates. Existing source terms are reused in English and Simplified Chinese resources. Current Apple system navigation is used; iOS 15 has a navigation fallback.
+- `ios/RocoHandbook.xcodeproj/`, `generate_project.py`, and `prepare_resources.py`: deterministic local-package Xcode project, shared scheme, version `1.2.0` build `3`, unchanged bundle ID `world.roco.rocoHandbook`, and exact active asset staging. The personal SQL is compared with its normative source before packaging. Historical image versions are excluded.
+- `ios/Tests/HandbookCoreTests/`, `ios/UITests/`, and `tests/test_native_ios.py`: focused compatibility, identity, source, asset closure, lifecycle, signature/archive, native configuration, bilingual literal/error-copy completeness, frozen terminology, and actual UI regression coverage. `tests/test_project_structure.py` now expects only the two pinned action kinds used by the active Python and native CI jobs.
+- `.github/workflows/offline-validation.yml`: retain offline Python validation, check active Catalog release 2, and replace Flutter CI with Mac-host Swift tests and a native iOS simulator build. Actions remain pinned, checkout credentials are not persisted, and repository permissions remain read-only.
+- `AGENTS.md`, both READMEs, ADR-0023, six feature documents, this report, and [Phase 9 evidence](../evidence/phase-9-swift-ios-2026-10-09.md): declare the active language/platform, local commands, compatibility, conservative cleanup, current presentation, and honest acceptance limits. The Chinese provenance specification remains unchanged.
+
+## Compatibility and preservation
+
+The native client retains `Library/Application Support/user/user.db`, user schema version 1, saved stable identities, note IDs, name snapshots, and the JSON `pet_catalog_layout` value. Unknown or damaged personal databases are preserved and block startup. Catalog restoration keeps the same personal repository.
+
+Existing active/previous pointer paths, pointer version 2, compatible legacy pointers, versioned Catalog basenames, attribution basenames, installer lock, and replay-state path are supported. A newer validated Catalog remains selected during App startup. Restore does not lower the accepted release-sequence floor. Cleanup removes invocation-owned staging files and may repair the exact damaged candidate basename; it does not sweep older files or touch the personal directory.
+
+Catalog data version 2 remains 621 concrete forms, 466 handbook entries, 824 skills, 311 Learnsets, and 273 evolution groups. All 621 original-image references, 193 shiny references, and 824 skill/feature-image references close over existing packaged files. The source response/parser/normalizer/database chain was reused without a schema or identity change.
+
+## Verification
+
+Host: Xcode 27.0 (`27A266a`), Swift 6.4, iOS SDK 27.0. UI tests used a newly created, invocation-owned iPhone 18 Pro simulator, iOS 27.0. Existing simulators and personal application data were not reset.
+
+| Check | Result |
+| --- | --- |
+| `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m unittest discover -s tests -p 'test_*.py'` | Passed: 109 tests |
+| `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 tools/release/check_catalog.py --release data/release/2` | Passed: exact release identity, metadata, source lock, schema, integrity, and references |
+| `swift test --package-path ios --scratch-path /tmp/roco-handbook-spm` | Passed: 22 offline XCTest cases |
+| `xcodebuild -project ios/RocoHandbook.xcodeproj -scheme RocoHandbook -destination 'generic/platform=iOS Simulator' -derivedDataPath /tmp/roco-handbook-xcode CODE_SIGNING_ALLOWED=NO build` | Passed: native simulator application |
+| `xcodebuild -project ios/RocoHandbook.xcodeproj -scheme RocoHandbook -destination 'platform=iOS Simulator,id=59C3C5B8-DC7B-418A-84D7-8C0B165A5B8A' -derivedDataPath /tmp/roco-handbook-ui -resultBundlePath /tmp/roco-native-ui-tests-final.xcresult -parallel-testing-enabled NO test` | Passed: 4 UI tests, zero failures |
+| Chinese Catalog capture | Native installed simulator UI reviewed at 1206 × 2622; stored in Phase 9 evidence |
+| Frozen specification and phase diff | Baseline specification unchanged; only declared paths changed; `git diff --check` passed |
+
+Swift coverage includes concrete-form/default identity, the documented three-form case, independent feature source references, shared Learnsets and acquisition conditions, search escaping and filters, missing saved-object snapshots, literal prior-client pointers and personal paths, recovery, unknown personal schema preservation, cross-object note edit rejection, replay protection, signed fixture rejection, and stored/deflated ZIP validation. Owned remote fixtures are test-only; none were placed in production resources.
+
+UI coverage includes all four destinations and all seven Tools routes, detail navigation, a source-backed shiny switch, favorites and notes surviving Catalog restoration, and the selected list layout surviving process restart. These flows do not issue an update request. A separate Chinese capture confirms the localized Catalog presentation; exhaustive localization and accessibility acceptance are not implied.
+
+Initial host test signing failed when a test bundle inherited Documents resource-fork metadata. Moving derived/test products to `/tmp` resolved it without changing host security or networking. A simulator test build initially selected a mismatched package architecture; Debug now uses the active architecture. The first UI run exposed inherited parent accessibility identifiers hiding child controls; the parent identifiers were removed, and final UI tests passed. The stale CI action-count assertion was updated for the intentional removal of the Flutter setup action, and all Python tests then passed. Non-failing App Intents metadata extraction notes remain.
+
+## Artifacts
+
+- Active source project: `ios/RocoHandbook.xcodeproj`
+- Native debug App: `/tmp/roco-handbook-xcode/Build/Products/Debug-iphonesimulator/RocoHandbook.app`
+- UI results: `/tmp/roco-native-ui-tests-final.xcresult`
+- Full local logs: `/tmp/roco-python-tests.log`, `/tmp/roco-swift-tests.log`, `/tmp/roco-catalog-check.log`, `/tmp/roco-ios-build.log`, `/tmp/roco-ios-ui-tests.log`
+- Reviewed capture: `docs/evidence/phase-9-swift-ios/catalog-zh-cn.png`
+
+Temporary products are local validation artifacts, not signed release deliverables. No credentials, cookies, personal databases, generated releases, or build products are included in the phase delivery. GitHub Desktop is the required commit/push route; remote synchronization is checked after delivery.
+
+## Not run and remaining risks
+
+- Signed Flutter-to-Swift upgrade on a physical iPhone, physical offline first launch, or personal-data migration on hardware
+- iOS 15 runtime acceptance, VoiceOver, largest accessibility text sizes, exhaustive localization, power-loss durability, or low-storage behavior
+- A live signed discovery/download/install, the unpublished data version 2 remote package, or an actual server response matrix
+- Distribution signing, Release archive/export, store screenshots for submission, App Store upload, review, or publication
+- Hosted CI for this revision at the time of local acceptance; the changed workflow is checked locally but its future hosted result must be observed separately
+- Archived Flutter and Android builds or tests; they are not active delivery targets
+
+Conservative Catalog retention can use additional storage. Physical upgrade and recovery acceptance should precede any broader cleanup policy or removal of the historical client.
+
+## Next allowed boundary
+
+Configure the user's iOS signing team and validate an ordinary signed upgrade from the prior client, including existing favorites, notes, collection marks, layout settings, and Catalog pointers. Then validate supported-device/runtime accessibility and recovery before distribution. Any live update publication or App Store upload requires its own explicit scope and evidence.

@@ -1,5 +1,11 @@
 # Personal library
 
+## Native iOS compatibility
+
+The active Swift repository keeps the preceding bundle identifier and `Library/Application Support/user/user.db` location. It executes the existing normative SQL only when creating a new independent personal database. An existing database is validated and opened without replacement; damaged or unknown schemas remain intact and block startup.
+
+Native detail pages retain favorite controls, handbook-level collection marks, and note creation, editing, deletion confirmation, failed-save draft retention, and unavailable-object snapshots. Layout remains stored as the existing JSON string under `pet_catalog_layout`. UI state refreshes after successful repository writes; it does not report a write as saved before SQLite succeeds. Catalog startup, recovery, and remote update operate in separate directories and cannot write the personal database.
+
 ## Storage and identity
 
 The App stores favorites, collection marks, and notes in a private `user.db` that is independent from the replaceable Catalog. Every saved reference includes the dataset, stable object type and ID, and a name snapshot. No personal table has a foreign key into `catalog.db`.
