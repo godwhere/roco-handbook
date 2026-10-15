@@ -4,7 +4,7 @@ public enum PetSort: String, CaseIterable, Sendable { case handbook, name, attac
 public enum ShinyFilter: String, CaseIterable, Sendable { case any, hasShiny, noShiny }
 public enum PetFormFilter: String, CaseIterable, Sendable { case main, regional, lord }
 public enum SkillFilter: String, Sendable { case all, features, learnable }
-public enum PetCatalogLayout: String, CaseIterable, Sendable { case grid, list }
+public enum PetCatalogLayout: String, CaseIterable, Sendable { case threeColumn, grid, list }
 
 public struct PetQuery: Equatable, Sendable {
     public var keyword = ""
@@ -56,6 +56,16 @@ public struct BaseStat: Identifiable, Sendable {
     public let id: String
     public let value: Int?
 }
+public struct EggSize: Decodable, Sendable {
+    public let minimum: Double?
+    public let maximum: Double?
+    public let miniMaximum: Double?
+    public let hugeMinimum: Double?
+    public let unit: String?
+    enum CodingKeys: String, CodingKey {
+        case minimum = "min", maximum = "max", miniMaximum = "mini_max", hugeMinimum = "huge_min", unit
+    }
+}
 public struct PetDetail: Sendable {
     public let summary: PetSummary
     public let className: String?
@@ -65,6 +75,8 @@ public struct PetDetail: Sendable {
     public let starlight: Int?
     public let reviewGold: Int?
     public let canDoubleRide: Bool?
+    public let eggGroups: [Int]
+    public let eggSize: EggSize?
     public let stats: [BaseStat]
     public let sources: [SourceReference]
     public var totalBaseStats: Int? {

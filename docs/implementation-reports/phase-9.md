@@ -74,3 +74,17 @@ Conservative Catalog retention can use additional storage. Physical upgrade and 
 ## Next allowed boundary
 
 Configure the user's iOS signing team and validate an ordinary signed upgrade from the prior client, including existing favorites, notes, collection marks, layout settings, and Catalog pointers. Then validate supported-device/runtime accessibility and recovery before distribution. Any live update publication or App Store upload requires its own explicit scope and evidence.
+
+## Native layout follow-up, 2026-10-15
+
+The user requested a status-bar-covering Catalog hero, a single row for sort/filter/search, a default three-column creature layout, and creature details following four supplied reference screens. [ADR-0024](../decisions/ADR-0024-native-catalog-and-detail-layout.md) declares the Phase 9 allowlist, acceptance commands, non-goals, and stopping conditions. No stopping condition has occurred.
+
+Changed files are `ios/App/{AppModel,CatalogViews,Components,DetailViews,SettingsViews}.swift`, both native `Localizable.strings` resources, `ios/Sources/HandbookCore/{Models,CatalogRepository,UserRepository}.swift`, focused core/UI tests, the root README, the localized-visual feature document, ADR-0024, this report, and the new evidence document/captures. No project generator, dependency, schema, source snapshot, Catalog release, or immutable asset changed.
+
+The root hero extends behind system status information while preserving a safe content inset. Sort/filter icon controls and search share one row. Three-column cards size illustrations to their available width; two-column and list preferences remain available and compatible. The new default uses the existing personal setting without replacing user data.
+
+Creature details have a warm illustration header, rounded surface, and Overview, Skills, Type relationships, and Egg groups tabs. The overview has colored stat bars, the independent feature card, existing egg measurements, and basic facts. Skills keep source selectors, text search, filters, and every acquisition condition. Relationship direction is explicit and existing multiplier rules remain intact. Egg-group links use the existing Catalog filter. The toolbar preserves favorites, personal records, evolution, and source access; source-backed shiny switching remains available. The repository maps existing egg metadata into typed DTOs without changing the database or inventing missing fields.
+
+Verification and artifacts are recorded in [native layout evidence](../evidence/phase-9-native-layout-2026-10-15.md). Local acceptance passed: 109 Python tests, 24 Swift tests, seven UI cases, a focused Catalog regression, the final Chinese capture regression, the final generic simulator build, scoped diff review, and `git diff --check`. Five original 1206 × 2622 captures are retained under `docs/evidence/phase-9-native-layout/`. The initial hero accessibility identifier issue was corrected before the full passing UI run; final visual refinements were checked with a new capture run and build. No personal database, input reference screenshot, build product, credential, or fabricated release data is included.
+
+The next allowed boundary remains physical iOS/accessibility and signed-upgrade validation; no live import, update publication, or store operation is part of this follow-up. GitHub Desktop commit/push completes the scoped repository delivery, with the observed synchronization result reported in the final handoff.

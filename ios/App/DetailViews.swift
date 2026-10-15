@@ -1,11 +1,15 @@
 import SwiftUI
 import HandbookCore
 
-private struct SectionPositions: PreferenceKey {
-    static var defaultValue: [String: CGFloat] = [:]
-    static func reduce(value: inout [String: CGFloat], nextValue: () -> [String: CGFloat]) {
-        value.merge(nextValue(), uniquingKeysWith: { _, next in next })
-    }
+private enum PetDetailTab: String, CaseIterable {
+    case overview = "Overview", skills = "Skills", types = "Type relationships", eggs = "Egg groups tab"
+}
+private enum PetSkillTab: String, CaseIterable {
+    case native = "Pet skills", blood = "Bloodline effects", other = "Learnable skills"
+}
+private enum PetDetailSheet: String, Identifiable {
+    case personal = "My library", evolution = "Evolution", source = "Source"
+    var id: String { rawValue }
 }
 
 struct PetDetailView: View {
@@ -18,63 +22,66 @@ struct PetDetailView: View {
     @State private var relationships: TypeRelationships?
     @State private var error: String?
     @State private var shiny = false
+    @State private var tab: PetDetailTab = .overview
+    @State private var skillTab: PetSkillTab = .native
+    @State private var skillQuery = ""
     @State private var skillTypes: [String] = []
     @State private var skillElement = ""
-    @State private var currentSection = "Basic information"
-    @State private var hint: String?
-    private let sections = ["Basic information", "Feature", "Base stats", "Skills", "Evolution", "Type relationships", "My library", "Source"]
+    @State private var defending = false
+    @State private var sheet: PetDetailSheet?
 
     var body: some View {
         Group {
             if let detail {
-                ScrollViewReader { proxy in
-                    ScrollView {
-                        VStack(spacing: 16) {
-                            anchor("Basic information") { basic(detail) }
-                            anchor("Feature") { feature }
-                            anchor("Base stats") { stats(detail) }
-                            anchor("Skills") { skillPanel }
-                            anchor("Evolution") { evolutionPanel }
-                            anchor("Type relationships") { typePanel }
-                            anchor("My library") {
-                                PersonalPanel(session: session, object: object(detail.summary), handbookID: detail.summary.handbookID)
+                ScrollView {
+                    VStack(spacing: -22) {
+                        hero(detail)
+                        LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
+                            Section {
+                                tabContent(detail).padding(16).padding(.bottom, 28)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            } header: {
+                                tabBar.padding(.horizontal, 16).padding(.vertical, 10).background(HandbookTheme.surface)
                             }
-                            anchor("Source") { SourcePanel(references: detail.sources) }
-                        }.padding(16).padding(.bottom, 24)
-                    }.coordinateSpace(name: "petDetail")
-                        .onPreferenceChange(SectionPositions.self) { positions in
-                            let passed = positions.filter { $0.value <= 90 }.max { $0.value < $1.value }
-                            currentSection = passed?.key ?? sections[0]
-                        }
-                        .overlay(alignment: .trailing) {
-                            VStack(spacing: 15) {
-                                ForEach(sections, id: \.self) { section in
-                                    Button {
-                                        withAnimation { proxy.scrollTo(section, anchor: .top) }
-                                    } label: {
-                                        Circle().fill(currentSection == section ? Color.accentColor : Color.secondary.opacity(0.35))
-                                            .frame(width: 7, height: 7).frame(width: 30, height: 30)
-                                    }.accessibilityLabel(tr(section)).accessibilityIdentifier("detail.section.\(section)")
-                                        .onLongPressGesture { hint = section }
-                                }
-                            }.padding(.trailing, 2)
-                                .overlay(alignment: .trailing) {
-                                    if let hint {
-                                        Text(tr(hint)).font(.caption).padding(10).background(HandbookTheme.surface)
-                                            .clipShape(Capsule()).offset(x: -34).fixedSize()
-                                            .onTapGesture { self.hint = nil }
-                                    }
-                                }
-                        }
-                }
+                        }.background(HandbookTheme.surface)
+                            .clipShape(EdgeRoundedRectangle(radius: 24, corners: [.topLeft, .topRight]))
+                    }
+                }.background(HandbookTheme.surface)
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) { FavoriteButton(session: session, object: object(detail.summary)) }
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                        FavoriteButton(session: session, object: object(detail.summary))
+                        Menu {
+                            Button(tr("My library")) { sheet = .personal }
+                                .accessibilityIdentifier("detail.section.My library")
+                            Button(tr("Evolution")) { sheet = .evolution }
+                                .accessibilityIdentifier("detail.section.Evolution")
+                            Button(tr("Source")) { sheet = .source }
+                                .accessibilityIdentifier("detail.section.Source")
+                        } label: { Image(systemName: "ellipsis.circle") }
+                            .accessibilityLabel(tr("More creature information")).accessibilityIdentifier("detail.more")
+                    }
+                }
+                .sheet(item: $sheet) { destination in
+                    AppNavigation {
+                        ScrollView {
+                            VStack(spacing: 16) {
+                                switch destination {
+                                case .personal:
+                                    PersonalPanel(session: session, object: object(detail.summary), handbookID: detail.summary.handbookID)
+                                case .evolution: evolutionPanel
+                                case .source: SourcePanel(references: detail.sources)
+                                }
+                            }.padding(16)
+                        }.background(HandbookTheme.background)
+                            .navigationTitle(tr(destination.rawValue)).navigationBarTitleDisplayMode(.inline)
+                            .toolbar { ToolbarItem(placement: .confirmationAction) { Button(tr("Done")) { sheet = nil } } }
+                    }
                 }
             } else if let error {
                 VStack { EmptyState(text: error); Button(tr("Retry")) { Task { await load() } } }
             } else { ProgressView() }
-        }.background(HandbookTheme.background)
-            .navigationTitle(detail?.summary.name ?? tr("Creature"))
+        }.background(HandbookTheme.background).tint(HandbookTheme.detailAccent)
+            .navigationTitle(tr("Creature details"))
             .navigationBarTitleDisplayMode(.inline).navigationBarHidden(false)
             .task(id: petID) { await load() }
     }
@@ -93,26 +100,160 @@ struct PetDetailView: View {
             detail = loaded; skills = loadedKit; evolution = loadedGraph; relationships = loadedTypes
         } catch { if !Task.isCancelled { self.error = "This creature is unavailable in the current Catalog." } }
     }
-    private func anchor<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
-        content().id(title).background(GeometryReader { geometry in
-            Color.clear.preference(key: SectionPositions.self, value: [title: geometry.frame(in: .named("petDetail")).minY])
-        })
-    }
-    private func basic(_ detail: PetDetail) -> some View {
-        ReadingPanel(title: "Basic information") {
-            HStack {
-                Text(detail.summary.name).font(HandbookTheme.display(26, relativeTo: .title))
-                TypeIcons(types: detail.summary.types)
+    private func hero(_ detail: PetDetail) -> some View {
+        VStack(spacing: 12) {
+            HStack(spacing: 18) {
+                AssetImage(path: CatalogAssets.pet(detail.summary.illustrationKey, shiny: shiny),
+                           label: detail.summary.name, size: 112)
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("NO.\(detail.summary.dexNo)").font(.subheadline.bold().monospacedDigit())
+                        .padding(.horizontal, 12).padding(.vertical, 6)
+                        .background(Color.black.opacity(0.25)).clipShape(Capsule())
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    Text(detail.summary.name).font(HandbookTheme.display(26, relativeTo: .title))
+                        .accessibilityAddTraits(.isHeader)
+                    if let form = detail.summary.form, !detail.summary.isDefaultForm {
+                        Text(form).font(.subheadline)
+                    }
+                    typeBadges(detail.summary.types)
+                }
             }
-            Text("NO.\(detail.summary.dexNo)").font(.subheadline.monospacedDigit()).foregroundColor(.secondary)
             if detail.summary.hasShiny {
                 Picker(tr("Illustration"), selection: $shiny) {
                     Text(tr("Original")).tag(false); Text(tr("Shiny")).tag(true)
                 }.pickerStyle(.segmented).accessibilityIdentifier("detail.shiny")
             }
-            AssetImage(path: CatalogAssets.pet(detail.summary.illustrationKey, shiny: shiny), label: detail.summary.name, size: 250)
-                .frame(maxWidth: .infinity)
-            if let description = detail.description { Text(description).textSelection(.enabled) }
+        }.padding(.horizontal, 20).padding(.top, 14).padding(.bottom, 34).foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .background {
+                LinearGradient(colors: [Color(red: 0.80, green: 0.38, blue: 0.26), Color(red: 0.83, green: 0.47, blue: 0.27)],
+                               startPoint: .topLeading, endPoint: .bottomTrailing)
+                    .overlay(alignment: .topTrailing) {
+                        Circle().fill(Color.white.opacity(0.04)).frame(width: 210, height: 210).offset(x: 70, y: -70)
+                    }.clipped()
+            }
+    }
+    private var tabBar: some View {
+        HStack(spacing: 3) {
+            ForEach(PetDetailTab.allCases, id: \.self) { item in
+                Button { tab = item } label: {
+                    Text(tr(item.rawValue)).font(.subheadline.weight(.semibold)).multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity, minHeight: 44).padding(.horizontal, 2)
+                        .foregroundColor(tab == item ? HandbookTheme.detailAccent : .secondary)
+                        .background(tab == item ? HandbookTheme.surface : Color.clear)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                }.buttonStyle(.plain).accessibilityAddTraits(tab == item ? .isSelected : [])
+                    .accessibilityIdentifier("detail.tab.\(item.rawValue)")
+            }
+        }.padding(4).background(HandbookTheme.detailWash).clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+    @ViewBuilder private func tabContent(_ detail: PetDetail) -> some View {
+        switch tab {
+        case .overview:
+            VStack(alignment: .leading, spacing: 26) {
+                stats(detail)
+                feature
+                if let size = detail.eggSize { eggMeasurements(size) }
+                basic(detail)
+            }
+        case .skills: skillPanel
+        case .types: typePanel
+        case .eggs: eggGroups(detail)
+        }
+    }
+    private func detailSection<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 8) {
+                Circle().fill(HandbookTheme.detailAccent).frame(width: 6, height: 6).accessibilityHidden(true)
+                Text(tr(title)).font(HandbookTheme.display()).accessibilityAddTraits(.isHeader)
+            }
+            content()
+        }.frame(maxWidth: .infinity, alignment: .leading)
+    }
+    private func stats(_ detail: PetDetail) -> some View {
+        let colors: [Color] = [.red, .orange, .blue, .yellow, .green, .pink]
+        let order = ["HP", "Attack", "Magic attack", "Defense", "Magic defense", "Speed"]
+        return VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 8) {
+                Circle().fill(HandbookTheme.detailAccent).frame(width: 6, height: 6).accessibilityHidden(true)
+                Text(tr("Base stats")).font(HandbookTheme.display()).accessibilityAddTraits(.isHeader)
+                Spacer(minLength: 4)
+                VStack(spacing: 2) {
+                    Text(detail.totalBaseStats.map(String.init) ?? "—").font(.headline.monospacedDigit())
+                        .foregroundColor(HandbookTheme.detailAccent)
+                    Text(tr("Total base stats")).font(.caption2).foregroundColor(.secondary)
+                }.padding(.horizontal, 10).padding(.vertical, 6)
+                    .background(HandbookTheme.detailWash).clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+            VStack(spacing: 8) {
+                ForEach(Array(order.enumerated()), id: \.element) { index, key in
+                    let value = detail.stats.first { $0.id == key }?.value
+                    HStack(spacing: 10) {
+                        Text(tr(key)).font(.subheadline).foregroundColor(.secondary).frame(width: 80, alignment: .leading)
+                        GeometryReader { geometry in
+                            Capsule().fill(HandbookTheme.detailWash)
+                            Capsule().fill(LinearGradient(colors: [colors[index].opacity(0.65), colors[index]], startPoint: .leading, endPoint: .trailing))
+                                .frame(width: geometry.size.width * CGFloat(max(0, value ?? 0)) /
+                                       CGFloat(max(200, detail.stats.compactMap(\.value).max() ?? 200)))
+                        }.frame(height: 8).accessibilityHidden(true)
+                        Text(value.map(String.init) ?? "—").font(.subheadline.bold().monospacedDigit())
+                            .foregroundColor(HandbookTheme.detailAccent).frame(minWidth: 34, alignment: .trailing)
+                    }.frame(minHeight: 26).accessibilityElement(children: .combine)
+                }
+            }
+        }
+    }
+    private var feature: some View {
+        detailSection("Feature") {
+            if let feature = skills?.feature {
+                NavigationLink(destination: SkillDetailView(session: session, skillID: feature.id)) {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack(spacing: 12) {
+                            AssetImage(path: CatalogAssets.skill(feature), label: feature.name, size: 40)
+                            Text(feature.name).font(HandbookTheme.display()).foregroundColor(.primary)
+                            Spacer()
+                            Image(systemName: "chevron.right").font(.caption).foregroundColor(.secondary)
+                        }
+                        if let description = feature.description {
+                            Text(description).font(.subheadline).foregroundColor(.secondary).lineSpacing(5)
+                                .padding(12).frame(maxWidth: .infinity, alignment: .leading)
+                                .background(HandbookTheme.detailWash).clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                    }.padding(14).background(HandbookTheme.surface)
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                        .overlay(RoundedRectangle(cornerRadius: 16).stroke(HandbookTheme.detailAccent.opacity(0.12)))
+                }.buttonStyle(.plain)
+            } else { Text(tr("None")).foregroundColor(.secondary) }
+        }
+    }
+    private func eggMeasurements(_ size: EggSize) -> some View {
+        detailSection("Egg information") {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                measurement("Egg weight", "\(eggWeight(size.minimum, unit: size.unit)) – \(eggWeight(size.maximum, unit: size.unit))")
+                measurement("Mini maximum", eggWeight(size.miniMaximum, unit: size.unit))
+                measurement("Huge minimum", eggWeight(size.hugeMinimum, unit: size.unit))
+            }
+        }
+    }
+    private func eggWeight(_ value: Double?, unit: String?) -> String {
+        guard let value else { return "—" }
+        return value.formatted(.number.precision(.fractionLength(0...3)).grouping(.never)) + (unit.map { " \($0)" } ?? "")
+    }
+    private func measurement(_ title: String, _ value: String) -> some View {
+        VStack(spacing: 8) {
+            Text(tr(title)).font(.caption).foregroundColor(.secondary)
+            Text(value).font(.subheadline.bold().monospacedDigit()).multilineTextAlignment(.center)
+        }.padding(14).frame(maxWidth: .infinity, minHeight: 84)
+            .background(HandbookTheme.detailWash).clipShape(RoundedRectangle(cornerRadius: 14))
+            .accessibilityElement(children: .combine)
+    }
+    private func basic(_ detail: PetDetail) -> some View {
+        detailSection("Basic information") {
+            if let description = detail.description { Text(description).font(.subheadline).lineSpacing(5).textSelection(.enabled) }
+            HStack(alignment: .top, spacing: 10) {
+                measurement("Weight", detail.weight ?? "—")
+                measurement("Height", detail.height ?? "—")
+            }
             if let className = detail.className { fact("Class", className) }
             if detail.summary.isLordEvolution { fact("Form", tr("Lord form")) }
             else if let stage = detail.summary.stage {
@@ -120,70 +261,153 @@ struct PetDetailView: View {
             }
             if let form = detail.summary.form, !detail.summary.isDefaultForm { fact("Regional form", form) }
             if let season = detail.summary.season { fact("Season", season) }
-            fact("Height", detail.height ?? "—")
-            fact("Weight", detail.weight ?? "—")
             fact("Starlight", detail.starlight.map(String.init) ?? "—")
             fact("Review gold", detail.reviewGold.map(String.init) ?? "—")
             if let ride = detail.canDoubleRide { fact("Double ride", tr(ride ? "Yes" : "No")) }
         }
     }
-    private var feature: some View {
-        ReadingPanel(title: "Feature") {
-            if let feature = skills?.feature {
-                NavigationLink(destination: SkillDetailView(session: session, skillID: feature.id)) { SkillCard(skill: feature) }
-                    .buttonStyle(.plain)
-            } else { Text(tr("None")).foregroundColor(.secondary) }
-        }
-    }
-    private func stats(_ detail: PetDetail) -> some View {
-        ReadingPanel(title: "Base stats") {
-            ForEach(detail.stats) { stat in
-                HStack {
-                    Text(tr(stat.id)).frame(minWidth: 100, alignment: .leading)
-                    ProgressView(value: Double(stat.value ?? 0), total: Double(max(1, detail.stats.compactMap(\.value).max() ?? 1)))
-                        .accessibilityHidden(true)
-                    Text(stat.value.map(String.init) ?? "—").monospacedDigit().frame(minWidth: 35, alignment: .trailing)
-                }.accessibilityElement(children: .combine)
-            }
-            fact("Total base stats", detail.totalBaseStats.map(String.init) ?? "—")
-        }
-    }
     private var skillPanel: some View {
-        ReadingPanel(title: "Skills") {
-            Menu {
-                ForEach(SkillTerms.types, id: \.self) { type in
-                    Button {
-                        if skillTypes.contains(type) { skillTypes.removeAll { $0 == type } } else { skillTypes.append(type) }
-                    } label: { Label(type, systemImage: skillTypes.contains(type) ? "checkmark" : "circle") }
+        VStack(alignment: .leading, spacing: 14) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(PetSkillTab.allCases, id: \.self) { item in
+                        Button { skillTab = item } label: {
+                            Text(tr(item.rawValue)).font(.subheadline.weight(.semibold)).padding(.horizontal, 14).frame(minHeight: 44)
+                                .background(skillTab == item ? HandbookTheme.detailAccent : HandbookTheme.detailWash)
+                                .foregroundColor(skillTab == item ? .white : .secondary)
+                                .clipShape(RoundedRectangle(cornerRadius: 13))
+                        }.buttonStyle(.plain).accessibilityAddTraits(skillTab == item ? .isSelected : [])
+                            .accessibilityIdentifier("detail.skills.\(item.rawValue)")
+                    }
                 }
-                Button(tr("Reset filters")) { skillTypes = []; skillElement = "" }
-            } label: { Label(tr("Skill type"), systemImage: "line.3.horizontal.decrease") }
-            if let skills {
-                Picker(tr("Types"), selection: $skillElement) {
-                    Text(tr("Any")).tag("")
-                    ForEach(Array(Set(skills.learned.compactMap(\.skill.element))).sorted(), id: \.self) { Text($0).tag($0) }
+            }
+            HStack(spacing: 8) {
+                Image(systemName: "magnifyingglass").foregroundColor(.secondary)
+                TextField(tr("Search skills by name, type, or description"), text: $skillQuery)
+                    .textInputAutocapitalization(.never).disableAutocorrection(true).accessibilityIdentifier("detail.skills.search")
+                if !skillQuery.isEmpty {
+                    Button { skillQuery = "" } label: { Image(systemName: "xmark.circle.fill") }
+                        .accessibilityLabel(tr("Clear search"))
                 }
-                learnedSection("Pet skills", skills.learned.filter { $0.sourceKind == "native" })
-                learnedSection("Bloodline effects", skills.learned.filter { $0.sourceKind == "blood" })
-                learnedSection("Learnable skills", skills.learned.filter { $0.sourceKind != "native" && $0.sourceKind != "blood" })
+                Menu {
+                    ForEach(SkillTerms.types, id: \.self) { type in
+                        Button {
+                            if skillTypes.contains(type) { skillTypes.removeAll { $0 == type } } else { skillTypes.append(type) }
+                        } label: { Label(type, systemImage: skillTypes.contains(type) ? "checkmark" : "circle") }
+                    }
+                    Picker(tr("Types"), selection: $skillElement) {
+                        Text(tr("Any")).tag("")
+                        ForEach(Array(Set(skills?.learned.compactMap(\.skill.element) ?? [])).sorted(), id: \.self) { Text($0).tag($0) }
+                    }
+                    Button(tr("Reset filters")) { skillTypes = []; skillElement = "" }
+                } label: { Image(systemName: "line.3.horizontal.decrease").frame(minWidth: 36, minHeight: 44) }
+                    .accessibilityLabel(tr("Skill filters"))
+            }.padding(.horizontal, 12).background(HandbookTheme.detailWash).clipShape(RoundedRectangle(cornerRadius: 14))
+            if filteredSkills.isEmpty { EmptyState(text: "No skills match these filters.") }
+            ForEach(filteredSkills) { source in
+                VStack(alignment: .leading, spacing: 6) {
+                    NavigationLink(destination: SkillDetailView(session: session, skillID: source.skill.id)) {
+                        SkillCard(skill: source.skill, prominent: true)
+                    }.buttonStyle(.plain).accessibilityIdentifier("detail.skill.\(source.id)")
+                    acquisition(source.sourceKind, level: source.learnLevel, stage: source.sourceStage,
+                                blood: source.bloodRaw, requirement: source.requirement).padding(.horizontal, 12)
+                }.padding(.bottom, 12).background(HandbookTheme.surface)
+                    .clipShape(RoundedRectangle(cornerRadius: 18))
+                    .overlay(RoundedRectangle(cornerRadius: 18).stroke(HandbookTheme.detailAccent.opacity(0.10)))
+                    .shadow(color: .black.opacity(0.05), radius: 8, y: 4)
             }
         }
     }
-    @ViewBuilder private func learnedSection(_ title: String, _ learned: [LearnableSkill]) -> some View {
-        Text(tr(title)).font(.headline)
-        let filtered = learned.filter {
-            (skillTypes.isEmpty || skillTypes.contains($0.skill.damageClass ?? "") || skillTypes.contains($0.skill.category ?? "")) &&
-                (skillElement.isEmpty || $0.skill.element == skillElement)
+    private var filteredSkills: [LearnableSkill] {
+        let keyword = skillQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+        return (skills?.learned ?? []).filter { source in
+            let matchesSource = skillTab == .native ? source.sourceKind == "native" :
+                skillTab == .blood ? source.sourceKind == "blood" : !["native", "blood"].contains(source.sourceKind)
+            let skill = source.skill
+            return matchesSource && (skillTypes.isEmpty || skillTypes.contains(skill.damageClass ?? "") || skillTypes.contains(skill.category ?? "")) &&
+                (skillElement.isEmpty || skill.element == skillElement) &&
+                (keyword.isEmpty || [skill.name, skill.element, skill.description, skill.damageClass, skill.category]
+                    .compactMap { $0 }.contains { $0.localizedCaseInsensitiveContains(keyword) })
         }
-        if filtered.isEmpty { Text(tr("None")).foregroundColor(.secondary) }
-        ForEach(filtered) { source in
-            VStack(alignment: .leading, spacing: 5) {
-                NavigationLink(destination: SkillDetailView(session: session, skillID: source.skill.id)) { SkillCard(skill: source.skill) }
-                    .buttonStyle(.plain)
-                acquisition(source.sourceKind, level: source.learnLevel, stage: source.sourceStage,
-                            blood: source.bloodRaw, requirement: source.requirement)
+    }
+    private var typePanel: some View {
+        VStack(alignment: .leading, spacing: 22) {
+            Picker(tr("Relationship direction"), selection: $defending) {
+                Label(tr("Attacking"), systemImage: "arrow.up.right").tag(false)
+                Label(tr("Defending"), systemImage: "shield.lefthalf.filled").tag(true)
+            }.pickerStyle(.segmented).accessibilityIdentifier("detail.types.direction")
+            if let relationships {
+                if defending {
+                    ForEach(Array(Set(relationships.incoming.map(\.multiplier))).sorted(by: >), id: \.self) { multiplier in
+                        damageCard(multiplier, types: relationships.incoming.filter { $0.multiplier == multiplier }.map(\.type))
+                    }
+                    if relationships.incoming.isEmpty { Text(tr("None")).foregroundColor(.secondary) }
+                } else {
+                    ForEach(relationships.outgoing) { relation in
+                        if relationships.outgoing.count > 1 { Text(relation.name).font(.headline) }
+                        damageCard(2, types: relation.strongAgainst)
+                        damageCard(0.5, types: relation.resistedBy)
+                    }
+                }
+            }
+            Text(tr("Damage multipliers follow the recorded type chart. Dual-type incoming damage is capped at 3×."))
+                .font(.caption).foregroundColor(.secondary).padding(14).frame(maxWidth: .infinity, alignment: .leading)
+                .background(HandbookTheme.detailWash).clipShape(RoundedRectangle(cornerRadius: 14))
+        }
+    }
+    private func damageCard(_ multiplier: Double, types: [String]) -> some View {
+        let favorable = defending ? multiplier < 1 : multiplier > 1
+        let color: Color = favorable ? .green : .red
+        return VStack(spacing: 0) {
+            HStack(spacing: 8) {
+                Text("\(multiplier.formatted())×").font(.title3.bold().monospacedDigit()).foregroundColor(color)
+                Text(tr("Damage")).font(.headline)
+            }.frame(maxWidth: .infinity).padding(12).background(color.opacity(0.08))
+            if types.isEmpty { Text(tr("None")).foregroundColor(.secondary).padding(14) }
+            else { typeBadges(types).padding(14) }
+        }.background(HandbookTheme.surface).clipShape(RoundedRectangle(cornerRadius: 16))
+            .overlay(RoundedRectangle(cornerRadius: 16).stroke(HandbookTheme.detailWash, lineWidth: 1))
+            .shadow(color: .black.opacity(0.04), radius: 10, y: 5)
+    }
+    private func typeBadges(_ types: [String]) -> some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 90), alignment: .leading)], alignment: .leading, spacing: 8) {
+            ForEach(types, id: \.self) { type in
+                HStack(spacing: 6) {
+                    AssetImage(path: CatalogAssets.type(type), label: type, size: 23).accessibilityHidden(true)
+                    Text(type).font(.subheadline.bold())
+                }.padding(.horizontal, 10).padding(.vertical, 7).foregroundColor(.white)
+                    .background(Color.black.opacity(0.86)).clipShape(Capsule())
             }
         }
+    }
+    private func eggGroups(_ detail: PetDetail) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            if detail.eggGroups.isEmpty {
+                Text(tr("No egg-group data is recorded.")).foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, minHeight: 100).background(HandbookTheme.detailWash)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+            }
+            ForEach(detail.eggGroups, id: \.self) { id in
+                NavigationLink(destination: PetCatalogView(session: session, title: "Egg groups", initialQuery: eggQuery(id))) {
+                    HStack(spacing: 12) {
+                        Image(systemName: "oval.portrait.fill").font(.title2).foregroundColor(HandbookTheme.detailAccent)
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text(eggGroupName(id)).font(.headline).foregroundColor(.primary)
+                            Text("\(tr("Egg group")) \(id)").font(.caption).foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right").font(.caption)
+                    }.padding(18).background(HandbookTheme.detailWash).clipShape(RoundedRectangle(cornerRadius: 16))
+                }.buttonStyle(.plain).accessibilityIdentifier("detail.eggGroup.\(id)")
+            }
+        }
+    }
+    private func eggQuery(_ id: Int) -> PetQuery { var query = PetQuery(); query.eggGroupIDs = [id]; return query }
+    private func eggGroupName(_ id: Int) -> String {
+        let keys = [1: "Undiscovered", 2: "Giant Spirit Group", 3: "Amphibious Group", 4: "Insect Group", 5: "Sky Group",
+                    6: "Animal Group", 7: "Fairy Group", 8: "Plant Group", 9: "Humanoid Group", 10: "Soft-bodied Group",
+                    11: "Earth Group", 12: "Magic Group", 13: "Ocean Group", 14: "Flying Dragon Group", 15: "Mechanical Group"]
+        return tr(keys[id] ?? "Unknown")
     }
     private var evolutionPanel: some View {
         ReadingPanel(title: "Evolution") {
@@ -206,21 +430,6 @@ struct PetDetailView: View {
     private func evolutionLink(_ id: String, graph: EvolutionGraph) -> some View {
         NavigationLink(destination: PetDetailView(session: session, petID: id)) {
             Text(graph.nodes.first { $0.id == id }?.name ?? id).font(.headline)
-        }
-    }
-    private var typePanel: some View {
-        ReadingPanel(title: "Type relationships") {
-            if let relationships {
-                ForEach(relationships.outgoing) { relation in
-                    Text(relation.name).font(.headline)
-                    fact("Strong against", relation.strongAgainst.joined(separator: " · "))
-                    fact("Resisted by", relation.resistedBy.joined(separator: " · "))
-                }
-                Text(tr("Incoming damage")).font(.headline)
-                ForEach(relationships.incoming) { entry in
-                    HStack { TypeIcons(types: [entry.type]); Text(entry.type); Spacer(); Text("\(entry.multiplier.formatted())×").monospacedDigit() }
-                }
-            }
         }
     }
 }

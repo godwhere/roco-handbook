@@ -19,7 +19,7 @@ final class AppModel: ObservableObject {
     @Published private(set) var session: HandbookSession?
     @Published private(set) var startupError: String?
     @Published var operationError: String?
-    @Published private(set) var layout: PetCatalogLayout = .grid
+    @Published private(set) var layout: PetCatalogLayout = .threeColumn
     @Published private(set) var userRevision = 0
     @Published private(set) var busy = false
     private var supportURL: URL {

@@ -76,6 +76,46 @@ final class HandbookCoreTests: XCTestCase {
         XCTAssertFalse(detail.sources.isEmpty)
         XCTAssertEqual(detail.summary.dexNo, "004")
     }
+    func testThreeColumnDefaultAndSavedLayoutCompatibility() async throws {
+        let support = try temporary()
+        let saved = try user(support)
+        let initial = try await saved.layout()
+        XCTAssertEqual(initial, .threeColumn)
+        for layout in PetCatalogLayout.allCases {
+            try await saved.setLayout(layout)
+            let reopened = try user(support)
+            let actual = try await reopened.layout()
+            XCTAssertEqual(actual, layout)
+        }
+        let db = try SQLite(saved.databaseURL, readOnly: false)
+        for json in ["[]", "123", "\"unsupported\""] {
+            try db.execute("UPDATE settings SET value_json = ? WHERE setting_key = 'pet_catalog_layout'", [.text(json)])
+            let actual = try await saved.layout()
+            XCTAssertEqual(actual, .threeColumn)
+        }
+    }
+    func testDetailEggGroupsAndMeasurementsMatchStoredSource() async throws {
+        let db = try SQLite(assets.appendingPathComponent("catalog/catalog.db"), readOnly: true)
+        let rows = try db.rows("SELECT pet_id, extra_json FROM pets WHERE status = 'active'")
+        var missingSizeCount = 0
+        for row in rows {
+            let extra = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(row.text("extra_json").utf8)) as? [String: Any])
+            let detail = try await catalog.petDetail(row.text("pet_id"))
+            XCTAssertEqual(detail.eggGroups, extra["egg_group"] as? [Int] ?? [])
+            if let size = extra["egg_size"] as? [String: Any] {
+                XCTAssertEqual(detail.eggSize?.minimum, size["min"] as? Double)
+                XCTAssertEqual(detail.eggSize?.maximum, size["max"] as? Double)
+                XCTAssertEqual(detail.eggSize?.miniMaximum, size["mini_max"] as? Double)
+                XCTAssertEqual(detail.eggSize?.hugeMinimum, size["huge_min"] as? Double)
+                XCTAssertEqual(detail.eggSize?.unit, size["unit"] as? String)
+            } else {
+                XCTAssertNil(detail.eggSize)
+                missingSizeCount += 1
+            }
+        }
+        XCTAssertEqual(rows.count, 621)
+        XCTAssertEqual(missingSizeCount, 47)
+    }
     func testSharedLearnsetAndAllAcquisitionConditionsRemainTraceable() async throws {
         let db = try SQLite(assets.appendingPathComponent("catalog/catalog.db"), readOnly: true)
         let shared = try db.rows("""

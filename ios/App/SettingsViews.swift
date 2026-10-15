@@ -18,6 +18,7 @@ struct SettingsView: View {
                 Picker(tr("Creature catalog layout"), selection: Binding(
                     get: { app.layout }, set: { value in Task { await app.setLayout(value) } }
                 )) {
+                    Text(tr("Three columns")).tag(PetCatalogLayout.threeColumn)
                     Text(tr("Grid")).tag(PetCatalogLayout.grid)
                     Text(tr("List")).tag(PetCatalogLayout.list)
                 }.pickerStyle(.segmented).accessibilityIdentifier("settings.layout")

@@ -7,6 +7,11 @@ func tr(_ key: String) -> String { NSLocalizedString(key, comment: "") }
 enum HandbookTheme {
     static let background = Color(uiColor: .systemGroupedBackground)
     static let surface = Color(uiColor: .secondarySystemGroupedBackground)
+    static let detailAccent = Color(uiColor: UIColor { $0.userInterfaceStyle == .dark
+        ? UIColor(red: 1, green: 0.60, blue: 0.44, alpha: 1)
+        : UIColor(red: 0.72, green: 0.29, blue: 0.17, alpha: 1) })
+    static let detailWash = Color(uiColor: UIColor { $0.userInterfaceStyle == .dark
+        ? .tertiarySystemGroupedBackground : UIColor(red: 0.99, green: 0.96, blue: 0.94, alpha: 1) })
     static func display(_ size: CGFloat = 20, relativeTo style: Font.TextStyle = .headline) -> Font {
         guard let path = Bundle.main.resourceURL?.appendingPathComponent("assets/fonts/v1/roco-display.ttf"),
               let descriptors = CTFontManagerCreateFontDescriptorsFromURL(path as CFURL) as? [CTFontDescriptor],
@@ -23,6 +28,15 @@ enum HandbookTheme {
                                .purple, .mint, .orange, .teal, .pink, .purple, .indigo, .gray, .pink]
         let short = name.hasSuffix("\u{7cfb}") ? String(name.dropLast()) : name
         return names.firstIndex(of: short).map { colors[$0] } ?? .blue
+    }
+}
+
+struct EdgeRoundedRectangle: Shape {
+    var radius: CGFloat
+    var corners: UIRectCorner
+    func path(in rect: CGRect) -> Path {
+        Path(UIBezierPath(roundedRect: rect, byRoundingCorners: corners,
+                          cornerRadii: CGSize(width: radius, height: radius)).cgPath)
     }
 }
 
@@ -61,7 +75,10 @@ struct TypeIcons: View {
 
 struct PetCard: View {
     let pet: PetSummary
+    @ScaledMetric(relativeTo: .headline) private var denseNameHeight: CGFloat = 44
     var compact = false
+    var dense = false
+    var illustrationSize: CGFloat = 136
     var body: some View {
         Group {
             if compact {
@@ -72,26 +89,28 @@ struct PetCard: View {
                     TypeIcons(types: pet.types)
                 }.padding(12)
             } else {
-                VStack(alignment: .leading, spacing: 10) {
+                VStack(alignment: .leading, spacing: dense ? 6 : 10) {
                     HStack {
-                        Text("NO.\(pet.dexNo)").font(.caption.monospacedDigit()).foregroundColor(.secondary)
+                        Text("NO.\(pet.dexNo)").font((dense ? Font.caption2 : .caption).monospacedDigit()).foregroundColor(.secondary)
                         Spacer(minLength: 0)
-                        TypeIcons(types: pet.types)
+                        if !dense { TypeIcons(types: pet.types) }
                     }
-                    AssetImage(path: CatalogAssets.pet(pet.illustrationKey), label: pet.name, size: 136)
+                    AssetImage(path: CatalogAssets.pet(pet.illustrationKey), label: pet.name, size: illustrationSize)
                         .frame(maxWidth: .infinity)
-                    nameBlock
-                }.padding(14).frame(maxWidth: .infinity, alignment: .leading)
+                    nameBlock.frame(minHeight: dense ? denseNameHeight : nil, alignment: .topLeading)
+                    if dense { TypeIcons(types: pet.types) }
+                }.padding(dense ? 8 : 14).frame(maxWidth: .infinity, alignment: .leading)
             }
         }
         .background(LinearGradient(colors: [HandbookTheme.typeColor(pet.types.first ?? "").opacity(0.16), HandbookTheme.surface],
                                    startPoint: .topLeading, endPoint: .bottomTrailing))
-        .clipShape(RoundedRectangle(cornerRadius: 22))
+        .clipShape(RoundedRectangle(cornerRadius: dense ? 16 : 22))
         .accessibilityElement(children: .combine)
     }
     private var nameBlock: some View {
         VStack(alignment: .leading, spacing: 5) {
-            Text(pet.name).font(HandbookTheme.display(19)).foregroundColor(pet.hasShiny ? .purple : .primary)
+            Text(pet.name).font(HandbookTheme.display(dense ? 16 : 19)).foregroundColor(pet.hasShiny ? .purple : .primary)
+                .lineLimit(dense ? 2 : nil)
             if let form = pet.form, !pet.isDefaultForm { Text(form).font(.caption).foregroundColor(.secondary) }
             if compact { Text("NO.\(pet.dexNo)").font(.caption.monospacedDigit()).foregroundColor(.secondary) }
         }
@@ -100,9 +119,10 @@ struct PetCard: View {
 
 struct SkillCard: View {
     let skill: SkillSummary
+    var prominent = false
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            AssetImage(path: CatalogAssets.skill(skill), label: skill.name, size: 48)
+            AssetImage(path: CatalogAssets.skill(skill), label: skill.name, size: prominent ? 72 : 48)
             VStack(alignment: .leading, spacing: 7) {
                 HStack {
                     Text(skill.name).font(HandbookTheme.display(19))

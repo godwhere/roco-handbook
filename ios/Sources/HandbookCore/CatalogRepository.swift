@@ -97,17 +97,25 @@ public actor CatalogRepository {
             guard let row = try db.rows("\(Self.petSelect) WHERE p.pet_id = ? AND p.status = 'active'", [.text(id)]).first else {
                 throw HandbookError("not_found", "This creature is unavailable in the current Catalog.")
             }
+            let extra = try JSONDecoder().decode(PetEggData.self, from: Data(row.text("extra_json").utf8))
             return try PetDetail(
                 summary: pet(row, db), className: row.optionalText("class_name"),
                 description: row.optionalText("description"), height: row.optionalText("height_text"),
                 weight: row.optionalText("weight_text"), starlight: row.integer("starlight"),
                 reviewGold: row.integer("review_gold"), canDoubleRide: row.bool("can_double_ride"),
+                eggGroups: extra.groups ?? [], eggSize: extra.size,
                 stats: [("HP", "hp"), ("Attack", "atk"), ("Defense", "def"),
                         ("Magic attack", "spa"), ("Magic defense", "spd"), ("Speed", "spe")].map {
                     BaseStat(id: $0.0, value: row.integer($0.1))
                 }, sources: sources(db, kind: "pet", id: id)
             )
         }
+    }
+
+    private struct PetEggData: Decodable {
+        let groups: [Int]?
+        let size: EggSize?
+        enum CodingKeys: String, CodingKey { case groups = "egg_group", size = "egg_size" }
     }
     public func forms(_ handbookID: String) throws -> [PetSummary] {
         try read { db in

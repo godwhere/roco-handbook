@@ -60,7 +60,7 @@ public actor UserRepository {
     public func layout() throws -> PetCatalogLayout {
         guard let row = try database.rows("SELECT value_json FROM settings WHERE setting_key = ?", [.text("pet_catalog_layout")]).first,
               let string = try? JSONDecoder().decode(String.self, from: Data(row.text("value_json").utf8)),
-              let layout = PetCatalogLayout(rawValue: string) else { return .grid }
+              let layout = PetCatalogLayout(rawValue: string) else { return .threeColumn }
         return layout
     }
     public func setLayout(_ layout: PetCatalogLayout) throws {

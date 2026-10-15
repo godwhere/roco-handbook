@@ -19,7 +19,7 @@ struct PetCatalogView: View {
         GeometryReader { geometry in
             ScrollView {
                 VStack(spacing: 16) {
-                    if title == nil { hero }
+                    if title == nil { hero(topInset: geometry.safeAreaInsets.top) }
                     else { controls.padding(.horizontal, 16) }
                     if let error = model.error {
                         EmptyState(text: error)
@@ -28,9 +28,11 @@ struct PetCatalogView: View {
                     if app.layout == .list {
                         LazyVStack(spacing: 12) { cards(compact: true) }.padding(.horizontal, 16)
                     } else {
-                        let count = textSize.isAccessibilitySize ? 1 : (geometry.size.width >= 700 ? 3 : 2)
-                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: count), spacing: 12) {
-                            cards(compact: false)
+                        let count = textSize.isAccessibilitySize ? 1 : (app.layout == .threeColumn || geometry.size.width >= 700 ? 3 : 2)
+                        let spacing: CGFloat = count == 3 ? 8 : 12
+                        let cardWidth = (geometry.size.width - 32 - spacing * CGFloat(count - 1)) / CGFloat(count)
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: spacing, alignment: .top), count: count), spacing: spacing) {
+                            cards(compact: false, dense: count == 3, illustrationSize: min(136, max(44, cardWidth - (count == 3 ? 16 : 28))))
                         }.padding(.horizontal, 16)
                     }
                     if model.loading { ProgressView().padding() }
@@ -41,6 +43,7 @@ struct PetCatalogView: View {
                     }
                 }.padding(.bottom, 28)
             }.background(HandbookTheme.background)
+                .ignoresSafeArea(.container, edges: title == nil ? .top : [])
         }
         .navigationTitle(title.map(tr) ?? "")
         .navigationBarHidden(title == nil)
@@ -54,14 +57,14 @@ struct PetCatalogView: View {
         }
         .accessibilityIdentifier("pets.catalog")
     }
-    @ViewBuilder private func cards(compact: Bool) -> some View {
+    @ViewBuilder private func cards(compact: Bool, dense: Bool = false, illustrationSize: CGFloat = 136) -> some View {
         ForEach(model.rows) { pet in
             NavigationLink(destination: PetDetailView(session: session, petID: pet.id)) {
-                PetCard(pet: pet, compact: compact)
+                PetCard(pet: pet, compact: compact, dense: dense, illustrationSize: illustrationSize)
             }.buttonStyle(.plain).accessibilityIdentifier("pet.\(pet.id)")
         }
     }
-    private var hero: some View {
+    private func hero(topInset: CGFloat) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 7) {
@@ -76,35 +79,37 @@ struct PetCatalogView: View {
             }
             Text("\(tr("Data version")) \(session.info.dataVersion)").font(.caption.monospacedDigit()).foregroundColor(.secondary)
             controls
-        }.padding(20).padding(.top, 12)
+        }.padding(20).padding(.top, topInset + 12)
             .background(LinearGradient(colors: [Color.blue.opacity(0.16), HandbookTheme.surface], startPoint: .topLeading, endPoint: .bottomTrailing))
-            .clipShape(RoundedRectangle(cornerRadius: 28))
-            .padding(.horizontal, 12).padding(.top, 8)
+            .clipShape(EdgeRoundedRectangle(radius: 28, corners: [.bottomLeft, .bottomRight]))
     }
     private var controls: some View {
-        VStack(spacing: 12) {
-            HStack {
-                Menu {
-                    Picker(tr("Sort"), selection: $query.sort) {
-                        ForEach(PetSort.allCases, id: \.self) { Text(sortLabel($0)).tag($0) }
-                    }
-                } label: { Label(tr("Sort"), systemImage: "arrow.up.arrow.down") }
-                    .accessibilityIdentifier("pets.sort")
-                Spacer()
-                Button { showFilters = true } label: { Label(tr("Filters"), systemImage: "line.3.horizontal.decrease") }
-                    .accessibilityIdentifier("pets.filters")
-            }.buttonStyle(.bordered)
-            HStack {
+        HStack(spacing: 8) {
+            Menu {
+                Picker(tr("Sort"), selection: $query.sort) {
+                    ForEach(PetSort.allCases, id: \.self) { Text(sortLabel($0)).tag($0) }
+                }
+            } label: {
+                Image(systemName: "arrow.up.arrow.down").frame(width: 44, height: 44)
+                    .background(Color.accentColor.opacity(0.12)).clipShape(RoundedRectangle(cornerRadius: 13))
+            }.accessibilityLabel(tr("Sort")).accessibilityIdentifier("pets.sort")
+            Button { showFilters = true } label: {
+                Image(systemName: "line.3.horizontal.decrease").frame(width: 44, height: 44)
+                    .background(Color.accentColor.opacity(0.12)).clipShape(RoundedRectangle(cornerRadius: 13))
+            }.accessibilityLabel(tr("Filters")).accessibilityIdentifier("pets.filters")
+            HStack(spacing: 6) {
                 Image(systemName: "magnifyingglass").foregroundColor(.secondary)
-                TextField(tr("Search creatures or handbook number"), text: $query.keyword)
+                TextField(tr("Name or number"), text: $query.keyword)
                     .textInputAutocapitalization(.never).disableAutocorrection(true)
+                    .accessibilityLabel(tr("Search creatures or handbook number"))
                     .accessibilityIdentifier("pets.search")
                 if !query.keyword.isEmpty {
                     Button { query.keyword = "" } label: { Image(systemName: "xmark.circle.fill") }
                         .accessibilityLabel(tr("Clear search"))
                 }
-            }.padding(12).background(HandbookTheme.surface).clipShape(RoundedRectangle(cornerRadius: 14))
-        }
+            }.padding(.horizontal, 10).frame(minHeight: 44)
+                .background(HandbookTheme.surface).clipShape(RoundedRectangle(cornerRadius: 13))
+        }.buttonStyle(.plain)
     }
 }
 
