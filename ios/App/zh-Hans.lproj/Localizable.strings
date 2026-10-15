@@ -124,6 +124,8 @@
 "Favorites, collection marks, and notes are kept." = "收藏、收集标记和笔记会保留。";
 "Favorites, collection marks, and notes stay on this device. Uninstalling the App may remove them." = "收藏、收集标记和笔记仅保存在此设备上；卸载 App 可能会移除这些数据。";
 "Feature" = "特性";
+"Feature users" = "拥有该特性的精灵";
+"Learning sources" = "可学习该技能的精灵";
 "Feature handbook" = "特性图鉴";
 "Feature handbook could not be loaded." = "无法加载特性图鉴。";
 "Feature relationship" = "特性关系";

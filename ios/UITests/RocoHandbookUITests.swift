@@ -69,9 +69,11 @@ final class RocoHandbookUITests: XCTestCase {
         XCTAssertTrue(physical.waitForExistence(timeout: 10)); physical.tap()
         app.buttons["filter.Types.\u{666e}\u{901a}\u{7cfb}"].tap()
         app.buttons["Done"].tap()
+        XCTAssertEqual(app.keyboards.count, 0)
         let scratches = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@ AND identifier ENDSWITH %@", "detail.skill.native:", ":skill_000246")).firstMatch
         let rest = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@ AND identifier ENDSWITH %@", "detail.skill.native:", ":skill_000273")).firstMatch
         XCTAssertTrue(scratches.waitForExistence(timeout: 10))
+        XCTAssertTrue(scratches.isHittable)
         XCTAssertTrue(waitForAbsence(rest))
         app.buttons["detail.skills.filters"].tap()
         XCTAssertTrue(physical.isSelected)
@@ -236,6 +238,81 @@ final class RocoHandbookUITests: XCTestCase {
             if index > 0 { XCTAssertGreaterThan(frame.minX, first.minX) }
         }
         XCTAssertGreaterThan(cards.element(boundBy: count).frame.minY, first.minY)
+    }
+    func testCenteredCreatureIdentityAndIllustratedSkillUserNavigation() {
+        let app = launch()
+        app.buttons["pet.pet_000559"].tap()
+        assertCenteredIdentity(in: app)
+        XCTAssertEqual(app.staticTexts["detail.identity.name"].frame.midX, app.frame.midX, accuracy: 2)
+        let art = app.descendants(matching: .any).matching(identifier: "detail.illustration").firstMatch
+        app.buttons["detail.tab.Skills"].tap()
+        app.swipeUp()
+        XCTAssertTrue(waitForValue("Compact illustration", on: art))
+        assertCenteredIdentity(in: app)
+        XCTAssertGreaterThanOrEqual(art.frame.minY, app.navigationBars["Creature details"].frame.maxY)
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.buttons["pet.pet_000001"].tap()
+        app.buttons["detail.tab.Skills"].tap()
+        app.buttons["detail.skill.native:0:skill_000246"].tap()
+        let card = app.buttons["skill.user.pet_000007:native:0"]
+        for _ in 0..<6 where !card.isHittable { app.swipeUp() }
+        XCTAssertTrue(card.isHittable)
+        XCTAssertTrue(card.label.contains("NO.004"))
+        XCTAssertTrue(card.label.contains("Level 1"))
+        XCTAssertTrue(card.label.contains("Source stage 1"))
+        card.tap()
+        let name = app.staticTexts["detail.identity.name"]
+        XCTAssertTrue(name.waitForExistence(timeout: 10))
+        XCTAssertEqual(name.label, "\u{9b54}\u{529b}\u{732b}")
+        assertCenteredIdentity(in: app)
+    }
+    private func assertCenteredIdentity(in app: XCUIApplication) {
+        let name = app.staticTexts["detail.identity.name"]
+        let types = app.descendants(matching: .any).matching(identifier: "detail.identity.types").firstMatch
+        XCTAssertTrue(name.waitForExistence(timeout: 10))
+        XCTAssertTrue(types.waitForExistence(timeout: 10))
+        XCTAssertEqual(name.frame.midX, types.frame.midX, accuracy: 2)
+    }
+    func testChineseCenteredDetailAndVisualSkillUserCaptures() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-AppleLanguages", "(zh-Hans)", "-AppleLocale", "zh_CN"]
+        app.launch()
+        XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
+        app.tabBars.buttons.element(boundBy: 3).tap()
+        app.segmentedControls["settings.skillLayout"].buttons.element(boundBy: 0).tap()
+        app.tabBars.buttons.element(boundBy: 0).tap()
+        app.buttons["pet.pet_000559"].tap()
+        assertCenteredIdentity(in: app)
+        capture(app, name: "detail-centered-expanded-zh")
+        app.buttons["detail.tab.Skills"].tap()
+        app.swipeUp()
+        let art = app.descendants(matching: .any).matching(identifier: "detail.illustration").firstMatch
+        XCTAssertTrue(waitForValue("\u{5c0f}\u{56fe}", on: art))
+        assertCenteredIdentity(in: app)
+        capture(app, name: "detail-pinned-navigation-zh")
+        app.swipeUp()
+        capture(app, name: "detail-pinned-deep-scroll-zh")
+        app.terminate(); app.launch()
+        XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
+        app.buttons["pet.pet_000001"].tap()
+        app.buttons["detail.tab.Skills"].tap()
+        app.buttons["detail.skill.native:0:skill_000246"].tap()
+        let learner = app.buttons["skill.user.pet_000007:native:0"]
+        for _ in 0..<6 where !learner.isHittable { app.swipeUp() }
+        XCTAssertTrue(learner.isHittable)
+        capture(app, name: "skill-learning-cards-zh")
+        app.terminate(); app.launch()
+        XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
+        app.tabBars.buttons.element(boundBy: 2).tap()
+        app.buttons["tools.features"].tap()
+        let feature = app.buttons["skill.skill_000211"]
+        XCTAssertTrue(feature.waitForExistence(timeout: 10)); feature.tap()
+        XCTAssertTrue(app.staticTexts["拥有该特性的精灵"].waitForExistence(timeout: 10))
+        let owner = app.buttons["skill.user.pet_000539:feature:0"]
+        XCTAssertTrue(owner.waitForExistence(timeout: 10))
+        for _ in 0..<4 where !owner.isHittable { app.swipeUp() }
+        XCTAssertTrue(owner.isHittable)
+        capture(app, name: "skill-feature-cards-zh")
     }
     func testChineseNeutralHeroAndCompactSkillCaptures() {
         let app = XCUIApplication()

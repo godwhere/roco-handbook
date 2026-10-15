@@ -40,6 +40,7 @@ struct PetDetailView: View {
     @State private var tab: PetDetailTab = .overview
     @State private var skillTab: PetSkillTab = .native
     @State private var skillQuery = ""
+    @FocusState private var skillSearchFocused: Bool
     @State private var skillTypes: [String] = []
     @State private var skillElements: [String] = []
     @State private var defending = false
@@ -152,8 +153,12 @@ struct PetDetailView: View {
                     .onChange(of: tab) { _ in
                         if scrollOffset > distance { reader.scrollTo("detail-browsing-top", anchor: .top) }
                     }
+                    .onChange(of: filteredSkills.map(\.id)) { _ in
+                        if scrollOffset > distance { reader.scrollTo("detail-browsing-top", anchor: .top) }
+                    }
             }
-        }
+        }.clipped()
+            .background(HandbookTheme.surface.ignoresSafeArea(edges: .top))
     }
     private func hero(_ detail: PetDetail, width: CGFloat, largeArt: CGFloat, progress: CGFloat,
                       height: CGFloat, variantHeight: CGFloat) -> some View {
@@ -165,11 +170,12 @@ struct PetDetailView: View {
                 .accessibilityValue(tr(progress < 0.98 ? "Expanded illustration" : "Compact illustration"))
                 .position(x: width / 2 + (70 - width / 2) * progress,
                           y: largeArt / 2 + 10 + (compactCenter - largeArt / 2 - 10) * progress)
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .center, spacing: 8) {
                 Text("NO.\(detail.summary.dexNo)").font(.caption2.bold().monospacedDigit())
                     .frame(height: 12 * progress).opacity(progress).accessibilityHidden(progress < 0.5)
                 Text(detail.summary.name).font(HandbookTheme.display(30 - 6 * progress, relativeTo: .title))
                     .fixedSize(horizontal: false, vertical: true).accessibilityAddTraits(.isHeader)
+                    .accessibilityIdentifier("detail.identity.name")
                 if let form = detail.summary.form, !detail.summary.isDefaultForm { Text(form).font(.caption) }
                 HStack(spacing: 10) {
                     ForEach(detail.summary.types, id: \.self) { type in
@@ -178,8 +184,9 @@ struct PetDetailView: View {
                             Text(type).font(.caption.bold())
                         }.accessibilityElement(children: .combine)
                     }
-                }
-            }.frame(width: width - 168, alignment: .leading)
+                }.accessibilityElement(children: .contain).accessibilityIdentifier("detail.identity.types")
+            }.multilineTextAlignment(.center).frame(width: width - 168, alignment: .center)
+                .accessibilityElement(children: .contain).accessibilityIdentifier("detail.identity")
                 .position(x: width / 2 + 64 * progress,
                           y: largeArt + identityHeight / 2 + 8 + (compactCenter - largeArt - identityHeight / 2 - 8) * progress)
             Text("NO.\(detail.summary.dexNo)").font(.caption.bold().monospacedDigit())
@@ -361,12 +368,13 @@ struct PetDetailView: View {
             HStack(spacing: 8) {
                 Image(systemName: "magnifyingglass").foregroundColor(.secondary)
                 TextField(tr("Search skills by name, type, or description"), text: $skillQuery)
-                    .textInputAutocapitalization(.never).disableAutocorrection(true).accessibilityIdentifier("detail.skills.search")
+                    .textInputAutocapitalization(.never).disableAutocorrection(true).focused($skillSearchFocused)
+                    .accessibilityIdentifier("detail.skills.search")
                 if !skillQuery.isEmpty {
                     Button { skillQuery = "" } label: { Image(systemName: "xmark.circle.fill") }
                         .accessibilityLabel(tr("Clear search"))
                 }
-                Button { sheet = .filters } label: {
+                Button { skillSearchFocused = false; sheet = .filters } label: {
                     Image(systemName: skillTypes.isEmpty && skillElements.isEmpty ? "line.3.horizontal.decrease" : "line.3.horizontal.decrease.circle.fill")
                         .frame(minWidth: 44, minHeight: 44)
                 }.accessibilityLabel(tr("Skill filters")).accessibilityIdentifier("detail.skills.filters")
@@ -598,13 +606,18 @@ struct SkillDetailView: View {
     @ViewBuilder private func users(_ title: String, _ users: [SkillUser]) -> some View {
         if !users.isEmpty {
             ReadingPanel(title: title) {
-                ForEach(users) { user in
-                    NavigationLink(destination: PetDetailView(session: session, petID: user.pet.id)) {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text(user.pet.name).font(.headline)
-                            acquisition(user.relationship, level: user.learnLevel, stage: user.sourceStage,
-                                        blood: user.bloodRaw, requirement: user.requirement)
+                LazyVStack(spacing: 12) {
+                    ForEach(users) { user in
+                        NavigationLink(destination: PetDetailView(session: session, petID: user.pet.id)) {
+                            VStack(alignment: .leading, spacing: 8) {
+                                PetCard(pet: user.pet, compact: true)
+                                acquisition(user.relationship, level: user.learnLevel, stage: user.sourceStage,
+                                            blood: user.bloodRaw, requirement: user.requirement)
+                                    .padding(.horizontal, 12).padding(.bottom, 12)
+                            }.frame(maxWidth: .infinity, alignment: .leading)
+                                .background(HandbookTheme.background).clipShape(RoundedRectangle(cornerRadius: 22))
                         }
+                        .buttonStyle(.plain).accessibilityIdentifier("skill.user.\(user.id)")
                     }
                 }
             }
