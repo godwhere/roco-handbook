@@ -299,6 +299,9 @@
 "Shiny form" = "异色形态";
 "Show creatures" = "查看精灵";
 "Skill" = "技能";
+"Skill card layout" = "技能展示";
+"Detailed descriptions" = "详细描述";
+"Creature learning conditions" = "当前精灵的学习条件";
 "Skill Stone Topics" = "技能石课题";
 "Skill details" = "技能详情";
 "Skill details could not be loaded." = "无法加载技能详情。";

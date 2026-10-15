@@ -184,7 +184,7 @@ struct PetDetailView: View {
                           y: largeArt + identityHeight / 2 + 8 + (compactCenter - largeArt - identityHeight / 2 - 8) * progress)
             Text("NO.\(detail.summary.dexNo)").font(.caption.bold().monospacedDigit())
                 .padding(.horizontal, 12).padding(.vertical, 6)
-                .background(Color.black.opacity(0.25)).clipShape(Capsule())
+                .foregroundColor(.secondary).background(HandbookTheme.background).clipShape(Capsule())
                 .frame(maxWidth: .infinity, alignment: .trailing).padding(.horizontal, 20).padding(.top, 10)
                 .opacity(1 - progress).accessibilityHidden(progress > 0.5)
             if detail.summary.hasShiny {
@@ -194,14 +194,7 @@ struct PetDetailView: View {
                 }.pickerStyle(.segmented).accessibilityIdentifier("detail.shiny")
                     .padding(.horizontal, 20).frame(maxHeight: .infinity, alignment: .bottom).padding(.bottom, 24)
             }
-        }.frame(height: height).foregroundColor(.white)
-            .background {
-                LinearGradient(colors: [Color(red: 0.70, green: 0.29, blue: 0.18), Color(red: 0.72, green: 0.32, blue: 0.20)],
-                               startPoint: .topLeading, endPoint: .bottomTrailing)
-                    .overlay(alignment: .topTrailing) {
-                        Circle().fill(Color.white.opacity(0.04)).frame(width: 210, height: 210).offset(x: 70, y: -70)
-                    }.clipped()
-            }
+        }.frame(height: height).foregroundColor(.primary).background(HandbookTheme.surface)
     }
     private var tabBar: some View {
         HStack(spacing: 3) {
@@ -377,19 +370,28 @@ struct PetDetailView: View {
                     Image(systemName: skillTypes.isEmpty && skillElements.isEmpty ? "line.3.horizontal.decrease" : "line.3.horizontal.decrease.circle.fill")
                         .frame(minWidth: 44, minHeight: 44)
                 }.accessibilityLabel(tr("Skill filters")).accessibilityIdentifier("detail.skills.filters")
+                SkillLayoutMenu(identifier: "detail.skills.layout")
             }.padding(.horizontal, 12).background(HandbookTheme.detailWash).clipShape(RoundedRectangle(cornerRadius: 14))
             if filteredSkills.isEmpty { EmptyState(text: "No skills match these filters.") }
-            ForEach(filteredSkills) { source in
-                VStack(alignment: .leading, spacing: 6) {
-                    NavigationLink(destination: SkillDetailView(session: session, skillID: source.skill.id)) {
-                        SkillCard(skill: source.skill, prominent: true)
-                    }.buttonStyle(.plain).accessibilityIdentifier("detail.skill.\(source.id)")
-                    acquisition(source.sourceKind, level: source.learnLevel, stage: source.sourceStage,
-                                blood: source.bloodRaw, requirement: source.requirement).padding(.horizontal, 12)
-                }.padding(.bottom, 12).background(HandbookTheme.surface)
-                    .clipShape(RoundedRectangle(cornerRadius: 18))
-                    .overlay(RoundedRectangle(cornerRadius: 18).stroke(HandbookTheme.detailAccent.opacity(0.10)))
-                    .shadow(color: .black.opacity(0.05), radius: 8, y: 4)
+            SkillGrid(layout: app.skillLayout) { compact, dense in
+                ForEach(filteredSkills) { source in
+                    if compact {
+                        NavigationLink(destination: SkillDetailView(session: session, skillID: source.skill.id, learningSource: source)) {
+                            CompactSkillCard(skill: source.skill, level: source.learnLevel, dense: dense)
+                        }.buttonStyle(.plain).accessibilityIdentifier("detail.skill.\(source.id)")
+                    } else {
+                        VStack(alignment: .leading, spacing: 6) {
+                            NavigationLink(destination: SkillDetailView(session: session, skillID: source.skill.id, learningSource: source)) {
+                                SkillCard(skill: source.skill, prominent: true)
+                            }.buttonStyle(.plain).accessibilityIdentifier("detail.skill.\(source.id)")
+                            acquisition(source.sourceKind, level: source.learnLevel, stage: source.sourceStage,
+                                        blood: source.bloodRaw, requirement: source.requirement).padding(.horizontal, 12)
+                        }.padding(.bottom, 12).background(HandbookTheme.surface)
+                            .clipShape(RoundedRectangle(cornerRadius: 18))
+                            .overlay(RoundedRectangle(cornerRadius: 18).stroke(HandbookTheme.detailAccent.opacity(0.10)))
+                            .shadow(color: .black.opacity(0.05), radius: 8, y: 4)
+                    }
+                }
             }
         }
     }
@@ -537,6 +539,7 @@ struct PetDetailView: View {
 struct SkillDetailView: View {
     let session: HandbookSession
     let skillID: String
+    var learningSource: LearnableSkill?
     @State private var detail: SkillDetail?
     @State private var featureUsers: [SkillUser] = []
     @State private var learnedUsers: [SkillUser] = []
@@ -550,6 +553,12 @@ struct SkillDetailView: View {
                         ReadingPanel(title: detail.summary.name) {
                             SkillCard(skill: detail.summary)
                             if let target = detail.target { fact("Target", target) }
+                        }
+                        if let source = learningSource {
+                            ReadingPanel(title: "Creature learning conditions") {
+                                acquisition(source.sourceKind, level: source.learnLevel, stage: source.sourceStage,
+                                            blood: source.bloodRaw, requirement: source.requirement)
+                            }
                         }
                         if !definitions.isEmpty {
                             ReadingPanel(title: "Game descriptions") {

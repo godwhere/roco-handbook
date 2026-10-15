@@ -191,10 +191,13 @@ struct SkillCatalogView: View {
                     EmptyState(text: error)
                     Button(tr("Retry")) { Task { await model.load(query) } }
                 }
-                ForEach(model.rows) { skill in
-                    NavigationLink(destination: SkillDetailView(session: session, skillID: skill.id)) {
-                        SkillCard(skill: skill)
-                    }.buttonStyle(.plain).accessibilityIdentifier("skill.\(skill.id)")
+                SkillGrid(layout: app.skillLayout) { compact, dense in
+                    ForEach(model.rows) { skill in
+                        NavigationLink(destination: SkillDetailView(session: session, skillID: skill.id)) {
+                            if compact { CompactSkillCard(skill: skill, dense: dense) }
+                            else { SkillCard(skill: skill) }
+                        }.buttonStyle(.plain).accessibilityIdentifier("skill.\(skill.id)")
+                    }
                 }
                 if model.loading { ProgressView().padding() }
                 else if model.rows.isEmpty, model.error == nil { EmptyState(text: "No skills match these filters.") }
@@ -207,6 +210,9 @@ struct SkillCatalogView: View {
             .navigationTitle(tr(title)).navigationBarTitleDisplayMode(.inline)
             .searchable(text: $query.keyword, prompt: tr("Skill query"))
             .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    SkillLayoutMenu()
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button { showFilters = true } label: {
                         Image(systemName: query.typeIDs.isEmpty && query.skillTypes.isEmpty && query.tags.isEmpty

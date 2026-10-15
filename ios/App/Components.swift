@@ -117,6 +117,118 @@ struct PetCard: View {
     }
 }
 
+extension SkillCatalogLayout {
+    var title: String {
+        switch self {
+        case .twoColumn: return tr("Grid")
+        case .threeColumn: return tr("Three columns")
+        case .detailed: return tr("Detailed descriptions")
+        }
+    }
+    var symbol: String {
+        switch self {
+        case .twoColumn: return "square.grid.2x2"
+        case .threeColumn: return "square.grid.3x2"
+        case .detailed: return "list.bullet.rectangle"
+        }
+    }
+}
+
+struct SkillLayoutMenu: View {
+    @EnvironmentObject private var app: AppModel
+    var identifier = "skills.layout"
+    var body: some View {
+        Menu {
+            Picker(tr("Skill card layout"), selection: Binding(
+                get: { app.skillLayout }, set: { value in Task { await app.setSkillLayout(value) } }
+            )) {
+                ForEach(SkillCatalogLayout.allCases, id: \.self) { layout in
+                    Label(layout.title, systemImage: layout.symbol).tag(layout)
+                }
+            }
+        } label: {
+            Image(systemName: app.skillLayout.symbol).frame(minWidth: 44, minHeight: 44)
+        }.accessibilityLabel(tr("Skill card layout")).accessibilityIdentifier(identifier)
+    }
+}
+
+struct SkillGrid<Content: View>: View {
+    let layout: SkillCatalogLayout
+    @ViewBuilder let content: (_ compact: Bool, _ dense: Bool) -> Content
+    @Environment(\.dynamicTypeSize) private var textSize
+    var body: some View {
+        let count = textSize.isAccessibilitySize || layout == .detailed ? 1 : layout == .threeColumn ? 3 : 2
+        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10, alignment: .top), count: count), spacing: 10) {
+            content(count > 1, count == 3)
+        }
+    }
+}
+
+struct CompactSkillCard: View {
+    let skill: SkillSummary
+    var level: Int?
+    var dense = false
+    @ScaledMetric(relativeTo: .headline) private var nameHeight: CGFloat = 22
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .top, spacing: 4) {
+                Text(skill.name).font(HandbookTheme.display(dense ? 14 : 16)).lineLimit(1).minimumScaleFactor(0.75)
+                    .frame(maxWidth: .infinity, alignment: .topLeading)
+                if let icon = SkillTerms.icon(skill.damageClass ?? skill.category ?? "") {
+                    AssetImage(path: icon, label: skill.damageClass ?? skill.category ?? "", size: dense ? 14 : 16)
+                        .opacity(0.7).accessibilityHidden(true)
+                }
+            }.frame(height: nameHeight * (dense ? 0.9 : 1), alignment: .topLeading)
+            HStack(spacing: 6) {
+                AssetImage(path: CatalogAssets.skill(skill), label: skill.name, size: dense ? 32 : 48)
+                    .accessibilityHidden(true)
+                    .overlay(alignment: .bottomLeading) {
+                        if !skill.isFeature {
+                            HStack(spacing: 2) {
+                                Image(systemName: "star.fill").font(.system(size: 8))
+                                Text(metric(skill.energyText, skill.energyValue)).font(.system(size: dense ? 10 : 12, weight: .bold, design: .rounded))
+                            }.padding(3).background(Color.black.opacity(0.75)).clipShape(RoundedRectangle(cornerRadius: 5))
+                                .offset(x: -2, y: 4).accessibilityHidden(true)
+                        }
+                    }
+                VStack(alignment: .trailing, spacing: 4) {
+                    if skill.isFeature {
+                        Label(tr("Feature"), systemImage: "star.circle.fill").font(.caption2.bold()).foregroundColor(.white.opacity(0.8))
+                    } else {
+                        HStack(spacing: 4) {
+                            if let type = skill.element {
+                                AssetImage(path: CatalogAssets.type(type), label: type, size: 16).accessibilityHidden(true)
+                            }
+                            Text(metric(skill.powerText, skill.powerValue)).font(.system(size: 14, weight: .heavy, design: .rounded))
+                                .monospacedDigit().lineLimit(1).minimumScaleFactor(0.65)
+                        }.padding(.horizontal, 6).frame(maxWidth: .infinity, minHeight: 23)
+                            .background(HandbookTheme.typeColor(skill.element ?? "").opacity(0.32)).clipShape(Capsule())
+                    }
+                    if let level {
+                        Text("LV\(level)").font(.caption2.bold().monospacedDigit()).padding(.horizontal, 6).padding(.vertical, 2)
+                            .foregroundColor(.white.opacity(0.8))
+                            .background(Color.white.opacity(0.10)).clipShape(RoundedRectangle(cornerRadius: 5))
+                            .accessibilityHidden(true)
+                    }
+                }.frame(maxWidth: .infinity, minHeight: dense ? 32 : 48)
+            }
+        }.padding(8)
+            .frame(maxWidth: .infinity, minHeight: dense ? 80 : 92, alignment: .topLeading)
+            .foregroundColor(.white)
+            .background(Color(red: 0.14, green: 0.16, blue: 0.16))
+            .clipShape(RoundedRectangle(cornerRadius: 15))
+            .accessibilityElement(children: .combine).accessibilityLabel(accessibleSummary)
+    }
+    private var accessibleSummary: String {
+        var parts = [skill.name, skill.element, skill.damageClass ?? skill.category].compactMap { $0 }
+        if !skill.isFeature {
+            parts += ["\(tr("Energy")) \(metric(skill.energyText, skill.energyValue))", "\(tr("Power")) \(metric(skill.powerText, skill.powerValue))"]
+        }
+        if let level { parts.append("\(tr("Level")) \(level)") }
+        return parts.joined(separator: ", ")
+    }
+}
+
 struct SkillCard: View {
     let skill: SkillSummary
     var prominent = false

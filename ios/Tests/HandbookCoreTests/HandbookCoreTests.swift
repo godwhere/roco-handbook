@@ -94,6 +94,31 @@ final class HandbookCoreTests: XCTestCase {
             XCTAssertEqual(actual, .threeColumn)
         }
     }
+    func testSkillLayoutDefaultsPersistenceAndCreaturePreferenceIsolation() async throws {
+        let support = try temporary()
+        let saved = try user(support)
+        let initial = try await saved.skillLayout()
+        XCTAssertEqual(initial, .twoColumn)
+        try await saved.setLayout(.list)
+        let ref = ObjectRef(type: .pet, objectID: "pet_000001", name: "Saved creature")
+        try await saved.setFavorite(ref, enabled: true)
+        for layout in SkillCatalogLayout.allCases {
+            try await saved.setSkillLayout(layout)
+            let reopened = try user(support)
+            let actual = try await reopened.skillLayout()
+            let petLayout = try await reopened.layout()
+            let favorite = try await reopened.isFavorite(ref)
+            XCTAssertEqual(actual, layout)
+            XCTAssertEqual(petLayout, .list)
+            XCTAssertTrue(favorite)
+        }
+        let db = try SQLite(saved.databaseURL, readOnly: false)
+        for json in ["[]", "123", "null", "\"unsupported\""] {
+            try db.execute("UPDATE settings SET value_json = ? WHERE setting_key = 'skill_catalog_layout'", [.text(json)])
+            let actual = try await saved.skillLayout()
+            XCTAssertEqual(actual, .twoColumn)
+        }
+    }
     func testDetailEggGroupsAndMeasurementsMatchStoredSource() async throws {
         let db = try SQLite(assets.appendingPathComponent("catalog/catalog.db"), readOnly: true)
         let rows = try db.rows("SELECT pet_id, extra_json FROM pets WHERE status = 'active'")

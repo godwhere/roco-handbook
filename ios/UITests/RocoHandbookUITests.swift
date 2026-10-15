@@ -177,6 +177,99 @@ final class RocoHandbookUITests: XCTestCase {
     private func waitForAbsence(_ element: XCUIElement) -> Bool {
         XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "exists == false"), object: element)], timeout: 10) == .completed
     }
+    func testSkillLayoutsPersistAndPreserveDescriptionsAndLearningConditions() {
+        let app = launch()
+        app.tabBars.buttons["Settings"].tap()
+        let preference = app.segmentedControls["settings.skillLayout"]
+        XCTAssertTrue(preference.waitForExistence(timeout: 10))
+        preference.buttons["Two columns"].tap()
+        app.tabBars.buttons["Skills"].tap()
+        let cards = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "skill.skill_"))
+        XCTAssertTrue(cards.element(boundBy: 2).waitForExistence(timeout: 10))
+        assertColumns(cards, count: 2, in: app)
+        let description = "\u{5bf9}\u{654c}\u{65b9}\u{7cbe}\u{7075}\u{9020}\u{6210}\u{7269}\u{7406}\u{4f24}\u{5bb3}\u{3002}"
+        XCTAssertFalse(app.buttons["skill.skill_000678"].label.contains(description))
+        chooseSkillLayout("Three columns", menu: "skills.layout", in: app)
+        assertColumns(cards, count: 3, in: app)
+        chooseSkillLayout("Detailed descriptions", menu: "skills.layout", in: app)
+        XCTAssertGreaterThan(cards.element(boundBy: 0).frame.width, app.frame.width * 0.8)
+        XCTAssertTrue(app.buttons["skill.skill_000678"].label.contains(description))
+        app.terminate(); app.launch()
+        XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
+        app.tabBars.buttons["Settings"].tap()
+        XCTAssertTrue(preference.buttons["Detailed descriptions"].isSelected)
+        preference.buttons["Two columns"].tap()
+        app.tabBars.buttons["Creatures"].tap()
+        app.buttons["pet.pet_000001"].tap()
+        XCTAssertTrue(app.buttons["detail.tab.Skills"].waitForExistence(timeout: 10))
+        app.buttons["detail.tab.Skills"].tap()
+        let learned = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "detail.skill.native:"))
+        XCTAssertTrue(learned.element(boundBy: 2).waitForExistence(timeout: 10))
+        assertColumns(learned, count: 2, in: app)
+        XCTAssertTrue(learned.element(boundBy: 0).label.contains("Level 1"))
+        chooseSkillLayout("Three columns", menu: "detail.skills.layout", in: app)
+        assertColumns(learned, count: 3, in: app)
+        learned.element(boundBy: 0).tap()
+        XCTAssertTrue(app.staticTexts["Creature learning conditions"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Level 1"].exists)
+        XCTAssertTrue(app.staticTexts["Source stage 1"].exists)
+        app.tabBars.buttons["Settings"].tap()
+        XCTAssertTrue(preference.buttons["Three columns"].isSelected)
+        preference.buttons["Two columns"].tap()
+        app.tabBars.buttons["Tools"].tap()
+        app.buttons["tools.features"].tap()
+        XCTAssertTrue(cards.element(boundBy: 0).waitForExistence(timeout: 10))
+        XCTAssertFalse(cards.element(boundBy: 0).label.contains("Energy"))
+        XCTAssertFalse(cards.element(boundBy: 0).label.contains("Power"))
+    }
+    private func chooseSkillLayout(_ label: String, menu: String, in app: XCUIApplication) {
+        app.buttons[menu].tap()
+        app.buttons[label].tap()
+    }
+    private func assertColumns(_ cards: XCUIElementQuery, count: Int, in app: XCUIApplication) {
+        let first = cards.element(boundBy: 0).frame
+        for index in 0..<count {
+            let frame = cards.element(boundBy: index).frame
+            XCTAssertEqual(frame.minY, first.minY, accuracy: 2)
+            XCTAssertLessThanOrEqual(frame.maxX, app.frame.maxX)
+            XCTAssertGreaterThanOrEqual(frame.height, 44)
+            if index > 0 { XCTAssertGreaterThan(frame.minX, first.minX) }
+        }
+        XCTAssertGreaterThan(cards.element(boundBy: count).frame.minY, first.minY)
+    }
+    func testChineseNeutralHeroAndCompactSkillCaptures() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-AppleLanguages", "(zh-Hans)", "-AppleLocale", "zh_CN"]
+        app.launch()
+        XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
+        app.tabBars.buttons.element(boundBy: 3).tap()
+        app.segmentedControls["settings.layout"].buttons.element(boundBy: 0).tap()
+        app.segmentedControls["settings.skillLayout"].buttons.element(boundBy: 0).tap()
+        app.tabBars.buttons.element(boundBy: 1).tap()
+        let cards = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "skill.skill_"))
+        XCTAssertTrue(cards.element(boundBy: 2).waitForExistence(timeout: 10))
+        capture(app, name: "skills-two-columns-zh")
+        chooseSkillLayout("\u{4e09}\u{5217}", menu: "skills.layout", in: app)
+        capture(app, name: "skills-three-columns-zh")
+        chooseSkillLayout("\u{8be6}\u{7ec6}\u{63cf}\u{8ff0}", menu: "skills.layout", in: app)
+        capture(app, name: "skills-detailed-zh")
+        chooseSkillLayout("\u{53cc}\u{5217}", menu: "skills.layout", in: app)
+        app.tabBars.buttons.element(boundBy: 0).tap()
+        app.buttons["pet.pet_000004"].tap()
+        XCTAssertTrue(app.buttons["detail.tab.Overview"].waitForExistence(timeout: 10))
+        capture(app, name: "neutral-hero-expanded-zh")
+        app.swipeUp()
+        let art = app.descendants(matching: .any).matching(identifier: "detail.illustration").firstMatch
+        XCTAssertTrue(waitForValue("\u{5c0f}\u{56fe}", on: art))
+        capture(app, name: "neutral-hero-compact-zh")
+        app.buttons["detail.tab.Skills"].tap()
+        capture(app, name: "creature-skills-two-columns-zh")
+        chooseSkillLayout("\u{4e09}\u{5217}", menu: "detail.skills.layout", in: app)
+        capture(app, name: "creature-skills-three-columns-zh")
+        chooseSkillLayout("\u{8be6}\u{7ec6}\u{63cf}\u{8ff0}", menu: "detail.skills.layout", in: app)
+        capture(app, name: "creature-skills-detailed-zh")
+        chooseSkillLayout("\u{53cc}\u{5217}", menu: "detail.skills.layout", in: app)
+    }
     func testChineseCatalogAndReferenceDetailCaptures() {
         let app = XCUIApplication()
         app.launchArguments = ["-AppleLanguages", "(zh-Hans)", "-AppleLocale", "zh_CN"]

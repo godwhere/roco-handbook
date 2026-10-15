@@ -20,6 +20,7 @@ final class AppModel: ObservableObject {
     @Published private(set) var startupError: String?
     @Published var operationError: String?
     @Published private(set) var layout: PetCatalogLayout = .threeColumn
+    @Published private(set) var skillLayout: SkillCatalogLayout = .twoColumn
     @Published private(set) var userRevision = 0
     @Published private(set) var busy = false
     private var supportURL: URL {
@@ -50,6 +51,7 @@ final class AppModel: ObservableObject {
             let updates = CatalogUpdateService(trustData: trustData, installer: installer,
                                                appVersion: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.2.0")
             layout = try await user.layout()
+            skillLayout = try await user.skillLayout()
             session = HandbookSession(catalog: catalog, user: user, assets: AssetRepository(assetRoot: root),
                                       info: info, attribution: open.attribution, outcome: open.outcome,
                                       updateService: updates, assetRoot: root)
@@ -69,6 +71,11 @@ final class AppModel: ObservableObject {
     func setLayout(_ value: PetCatalogLayout) async {
         guard let session else { return }
         do { try await session.user.setLayout(value); layout = value; changed() }
+        catch { operationError = message(error) }
+    }
+    func setSkillLayout(_ value: SkillCatalogLayout) async {
+        guard let session else { return }
+        do { try await session.user.setSkillLayout(value); skillLayout = value; changed() }
         catch { operationError = message(error) }
     }
     func changed() { userRevision += 1 }

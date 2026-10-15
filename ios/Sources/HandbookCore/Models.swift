@@ -5,6 +5,7 @@ public enum ShinyFilter: String, CaseIterable, Sendable { case any, hasShiny, no
 public enum PetFormFilter: String, CaseIterable, Sendable { case main, regional, lord }
 public enum SkillFilter: String, Sendable { case all, features, learnable }
 public enum PetCatalogLayout: String, CaseIterable, Sendable { case threeColumn, grid, list }
+public enum SkillCatalogLayout: String, CaseIterable, Sendable { case twoColumn, threeColumn, detailed }
 
 public struct PetQuery: Equatable, Sendable {
     public var keyword = ""

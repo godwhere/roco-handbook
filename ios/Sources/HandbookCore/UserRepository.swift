@@ -70,6 +70,19 @@ public actor UserRepository {
             ON CONFLICT(setting_key) DO UPDATE SET value_json = excluded.value_json, updated_at_utc = excluded.updated_at_utc
             """, [.text("pet_catalog_layout"), .text(json), .text(utcNow())])
     }
+    public func skillLayout() throws -> SkillCatalogLayout {
+        guard let row = try database.rows("SELECT value_json FROM settings WHERE setting_key = ?", [.text("skill_catalog_layout")]).first,
+              let string = try? JSONDecoder().decode(String.self, from: Data(row.text("value_json").utf8)),
+              let layout = SkillCatalogLayout(rawValue: string) else { return .twoColumn }
+        return layout
+    }
+    public func setSkillLayout(_ layout: SkillCatalogLayout) throws {
+        let json = String(decoding: try JSONEncoder().encode(layout.rawValue), as: UTF8.self)
+        try database.execute("""
+            INSERT INTO settings(setting_key, value_json, updated_at_utc) VALUES(?, ?, ?)
+            ON CONFLICT(setting_key) DO UPDATE SET value_json = excluded.value_json, updated_at_utc = excluded.updated_at_utc
+            """, [.text("skill_catalog_layout"), .text(json), .text(utcNow())])
+    }
     public func isFavorite(_ object: ObjectRef) throws -> Bool {
         try !database.rows("SELECT 1 FROM favorites WHERE dataset_id = ? AND object_type = ? AND object_id = ?", arguments(object)).isEmpty
     }

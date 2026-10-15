@@ -22,6 +22,11 @@ struct SettingsView: View {
                     Text(tr("Grid")).tag(PetCatalogLayout.grid)
                     Text(tr("List")).tag(PetCatalogLayout.list)
                 }.pickerStyle(.segmented).accessibilityIdentifier("settings.layout")
+                Picker(tr("Skill card layout"), selection: Binding(
+                    get: { app.skillLayout }, set: { value in Task { await app.setSkillLayout(value) } }
+                )) {
+                    ForEach(SkillCatalogLayout.allCases, id: \.self) { layout in Text(layout.title).tag(layout) }
+                }.pickerStyle(.segmented).accessibilityIdentifier("settings.skillLayout")
             }
             Section(header: Text(tr("My library"))) {
                 NavigationLink(destination: PersonalLibraryView(session: session)) {
