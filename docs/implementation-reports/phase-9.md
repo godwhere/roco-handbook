@@ -5,6 +5,29 @@
 - Workspace: `/Users/ethan/Documents/ChatGPT/roco-handbook`
 - Decision: [ADR-0023](../decisions/ADR-0023-native-swift-ios-client.md)
 
+## Offline CI repair, 2026-10-15
+
+[Offline validation run 29](https://github.com/godwhere/roco-handbook/actions/runs/38751322820)
+failed its Python job because the NRC normalization test depended on ignored raw
+Lua content. Swift tests and the simulator build passed. [ADR-0028](../decisions/ADR-0028-checkout-independent-nrc-tests.md)
+limits this Phase 9 repair to `tests/builder/test_nrc_pipeline.py`, owned test
+fixtures under `tests/builder/fixtures/nrc/`, that decision, this report, and
+[CI repair evidence](../evidence/phase-9-offline-ci-2026-10-15.md).
+
+The test now normalizes a tracked synthetic snapshot, checks deterministic
+output and acquisition conditions, and rejects missing required metadata or
+content. Validation of the complete committed Catalog is retained. Production
+code, UI, imports, schemas, identities, immutable data, workflow, commands, and
+dependencies are unchanged; the README therefore needs no update. The focused
+four-case NRC suite and immutable release 2 check pass. A tracked-files-plus-patch
+copy without raw content passes all 111 Python tests and the release check; the
+working-copy full run was interrupted during slow frozen-image reads and is not
+claimed as a pass. All 13 changed paths match the allowlist, and `git diff --check`
+passes. Logs and the corrected initial English-text failure are recorded in the
+linked evidence. GitHub Desktop commit/push and hosted follow-up complete the
+repository boundary; physical iOS, signed upgrades, accessibility, live updates,
+and store acceptance remain separate.
+
 ## Declared boundary
 
 The user requested Swift and iOS-only delivery. This phase replaces the active Flutter client with Swift/SwiftUI for iOS 15 and later, preserving the offline Catalog and personal-data contracts. Allowed paths are `ios/`, `AGENTS.md`, the root and historical App READMEs, the offline CI workflow, focused native packaging and CI assertions under `tests/`, ADR-0023, the six affected feature documents, this report, and Phase 9 evidence.
