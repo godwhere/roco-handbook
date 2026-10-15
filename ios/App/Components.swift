@@ -172,22 +172,63 @@ struct MultiSelectSection<Value: Hashable>: View {
     let title: String
     let values: [Value]
     @Binding var selection: [Value]
+    var icon: (Value) -> String? = { _ in nil }
+    var symbol: (Value) -> String? = { _ in nil }
+    var minimumWidth: CGFloat = 90
+    var loading = false
     let label: (Value) -> String
+    @Environment(\.dynamicTypeSize) private var textSize
     var body: some View {
-        Section(header: Text(tr(title))) {
-            ForEach(values, id: \.self) { value in
-                Button {
-                    if selection.contains(value) { selection.removeAll { $0 == value } }
-                    else { selection.append(value) }
-                } label: {
-                    HStack {
-                        Text(label(value)).foregroundColor(.primary)
-                        Spacer()
-                        if selection.contains(value) { Image(systemName: "checkmark").foregroundColor(.accentColor) }
+        ReadingPanel(title: title) {
+            if loading { ProgressView().frame(maxWidth: .infinity).padding(8).accessibilityLabel(tr(title)) }
+            LazyVGrid(columns: textSize.isAccessibilitySize ? [GridItem(.flexible())] : [GridItem(.adaptive(minimum: minimumWidth), spacing: 8)], spacing: 8) {
+                ForEach(values, id: \.self) { value in
+                    FilterChoice(title: label(value), icon: icon(value), symbol: symbol(value), selected: selection.contains(value),
+                                 identifier: "filter.\(title).\(String(describing: value))") {
+                        if selection.contains(value) { selection.removeAll { $0 == value } }
+                        else { selection.append(value) }
                     }
-                }.accessibilityAddTraits(selection.contains(value) ? .isSelected : [])
+                }
             }
         }
+    }
+}
+
+struct FilterChoice: View {
+    let title: String
+    var icon: String?
+    var symbol: String?
+    let selected: Bool
+    var identifier: String?
+    let action: () -> Void
+    var body: some View {
+        Button(action: action) {
+            Group {
+                if let icon {
+                    VStack(spacing: 5) {
+                        AssetImage(path: icon, label: title, size: 30).accessibilityHidden(true)
+                        Text(title).font(.caption.weight(.medium)).multilineTextAlignment(.center)
+                    }.padding(.vertical, 10)
+                } else {
+                    HStack(spacing: 6) {
+                        if let symbol { Image(systemName: symbol).accessibilityHidden(true) }
+                        Text(title).font(.subheadline.weight(.medium)).multilineTextAlignment(.center)
+                    }.padding(.vertical, 10)
+                }
+            }.padding(.horizontal, 8).frame(maxWidth: .infinity, minHeight: 44)
+                .foregroundColor(selected ? HandbookTheme.detailAccent : .primary)
+                .background(selected ? HandbookTheme.detailAccent.opacity(0.10) : HandbookTheme.detailWash)
+                .clipShape(RoundedRectangle(cornerRadius: 13))
+                .overlay(RoundedRectangle(cornerRadius: 13).stroke(selected ? HandbookTheme.detailAccent : .clear, lineWidth: 1.5))
+                .overlay(alignment: .topTrailing) {
+                    if selected {
+                        Image(systemName: "checkmark.circle.fill").font(.caption2.bold())
+                            .foregroundColor(HandbookTheme.detailAccent).padding(3).accessibilityHidden(true)
+                    }
+                }
+        }.buttonStyle(.plain).accessibilityLabel(title)
+            .accessibilityAddTraits(selected ? .isSelected : [])
+            .accessibilityIdentifier(identifier ?? title)
     }
 }
 

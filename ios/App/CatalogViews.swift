@@ -53,7 +53,7 @@ struct PetCatalogView: View {
             catch { app.report(error) }
         }
         .sheet(isPresented: $showFilters) {
-            AppNavigation { PetFiltersView(query: $query, types: types) }
+            AppNavigation { PetFiltersView(query: $query, types: $types) }
         }
         .accessibilityIdentifier("pets.catalog")
     }
@@ -94,9 +94,10 @@ struct PetCatalogView: View {
                     .background(Color.accentColor.opacity(0.12)).clipShape(RoundedRectangle(cornerRadius: 13))
             }.accessibilityLabel(tr("Sort")).accessibilityIdentifier("pets.sort")
             Button { showFilters = true } label: {
-                Image(systemName: "line.3.horizontal.decrease").frame(width: 44, height: 44)
+                Image(systemName: filtersActive ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease").frame(width: 44, height: 44)
                     .background(Color.accentColor.opacity(0.12)).clipShape(RoundedRectangle(cornerRadius: 13))
             }.accessibilityLabel(tr("Filters")).accessibilityIdentifier("pets.filters")
+                .accessibilityAddTraits(filtersActive ? .isSelected : [])
             HStack(spacing: 6) {
                 Image(systemName: "magnifyingglass").foregroundColor(.secondary)
                 TextField(tr("Name or number"), text: $query.keyword)
@@ -110,6 +111,9 @@ struct PetCatalogView: View {
             }.padding(.horizontal, 10).frame(minHeight: 44)
                 .background(HandbookTheme.surface).clipShape(RoundedRectangle(cornerRadius: 13))
         }.buttonStyle(.plain)
+    }
+    private var filtersActive: Bool {
+        !query.typeIDs.isEmpty || !query.stages.isEmpty || !query.forms.isEmpty || !query.seasons.isEmpty || query.shiny != .any
     }
 }
 
@@ -125,30 +129,44 @@ func sortLabel(_ sort: PetSort) -> String {
 
 struct PetFiltersView: View {
     @Binding var query: PetQuery
-    let types: [CatalogType]
+    @Binding var types: [CatalogType]
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var textSize
     var body: some View {
-        Form {
-            Section(header: Text(tr("Shiny"))) {
-                Picker(tr("Shiny"), selection: $query.shiny) {
-                    Text(tr("Any")).tag(ShinyFilter.any)
-                    Text(tr("Has shiny")).tag(ShinyFilter.hasShiny)
-                    Text(tr("No shiny")).tag(ShinyFilter.noShiny)
-                }.pickerStyle(.segmented)
+        ScrollView {
+            VStack(spacing: 14) {
+                MultiSelectSection(title: "Types", values: types.map(\.id), selection: $query.typeIDs,
+                                   icon: { id in CatalogAssets.type(types.first { $0.id == id }?.name ?? id) }, minimumWidth: 60, loading: types.isEmpty) { id in
+                    types.first { $0.id == id }?.name ?? id
+                }
+                MultiSelectSection(title: "Stage", values: [1, 2, 3], selection: $query.stages) { "\(tr("Stage")) \($0)" }
+                MultiSelectSection(title: "Form", values: PetFormFilter.allCases, selection: $query.forms,
+                                   symbol: { $0 == .main ? "pawprint.fill" : $0 == .regional ? "mappin.and.ellipse" : "crown.fill" }) {
+                    tr($0 == .main ? "Main form" : $0 == .regional ? "Regional form" : "Lord form")
+                }
+                ReadingPanel(title: "Shiny") {
+                    LazyVGrid(columns: textSize.isAccessibilitySize ? [GridItem(.flexible())] : [GridItem(.adaptive(minimum: 80), spacing: 8)], spacing: 8) {
+                        ForEach(ShinyFilter.allCases, id: \.self) { value in
+                            FilterChoice(title: tr(value == .any ? "Any" : value == .hasShiny ? "Has shiny" : "No shiny"),
+                                         symbol: value == .hasShiny ? "sparkles" : nil, selected: query.shiny == value) { query.shiny = value }
+                        }
+                    }
+                }
+                MultiSelectSection(title: "Season", values: ["S1", "S2", "S3", "S4"], selection: $query.seasons, minimumWidth: 65) { $0 }
+            }.padding(16)
+        }.background(HandbookTheme.background).navigationTitle(tr("Filters")).navigationBarTitleDisplayMode(.inline)
+            .tint(HandbookTheme.detailAccent)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button {
+                        query.shiny = .any; query.stages = []; query.forms = []; query.seasons = []; query.typeIDs = []
+                    } label: { Image(systemName: "arrow.counterclockwise") }
+                        .accessibilityLabel(tr("Reset filters")).accessibilityIdentifier("filters.reset")
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button { dismiss() } label: { Image(systemName: "checkmark") }.accessibilityLabel(tr("Done"))
+                }
             }
-            MultiSelectSection(title: "Stage", values: [1, 2, 3], selection: $query.stages) { "\(tr("Stage")) \($0)" }
-            MultiSelectSection(title: "Form", values: PetFormFilter.allCases, selection: $query.forms) {
-                tr($0 == .main ? "Main form" : $0 == .regional ? "Regional form" : "Lord form")
-            }
-            MultiSelectSection(title: "Season", values: ["S1", "S2", "S3", "S4"], selection: $query.seasons) { $0 }
-            MultiSelectSection(title: "Types", values: types.map(\.id), selection: $query.typeIDs) { id in
-                types.first { $0.id == id }?.name ?? id
-            }
-            Button(tr("Reset filters")) {
-                query.shiny = .any; query.stages = []; query.forms = []; query.seasons = []; query.typeIDs = []
-            }
-        }.navigationTitle(tr("Filters"))
-            .toolbar { ToolbarItem(placement: .confirmationAction) { Button(tr("Done")) { dismiss() } } }
     }
 }
 
@@ -190,7 +208,10 @@ struct SkillCatalogView: View {
             .searchable(text: $query.keyword, prompt: tr("Skill query"))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button { showFilters = true } label: { Image(systemName: "line.3.horizontal.decrease") }
+                    Button { showFilters = true } label: {
+                        Image(systemName: query.typeIDs.isEmpty && query.skillTypes.isEmpty && query.tags.isEmpty
+                              ? "line.3.horizontal.decrease" : "line.3.horizontal.decrease.circle.fill")
+                    }
                         .accessibilityLabel(tr("Skill filters")).accessibilityIdentifier("skills.filters")
                 }
             }
@@ -198,7 +219,7 @@ struct SkillCatalogView: View {
             .task {
                 do { types = try await session.catalog.types() } catch { app.report(error) }
             }
-            .sheet(isPresented: $showFilters) { AppNavigation { SkillFiltersView(query: $query, types: types) } }
+            .sheet(isPresented: $showFilters) { AppNavigation { SkillFiltersView(query: $query, types: $types) } }
             .accessibilityIdentifier("skills.catalog")
     }
 }
@@ -209,20 +230,36 @@ enum SkillTerms {
                        "\u{9a71}\u{6563}", "\u{5148}\u{624b}", "\u{79bb}\u{573a}", "\u{5929}\u{6c14}", "\u{9009}\u{62e9}",
                        "\u{5de7}\u{53d8}", "\u{5f3a}\u{5316}", "\u{8fde}\u{51fb}", "\u{840c}\u{5316}", "\u{5f15}\u{7535}",
                        "\u{8fc5}\u{6377}", "\u{4f20}\u{52a8}", "\u{8ff8}\u{53d1}", "\u{5949}\u{732e}", "\u{6253}\u{65ad}"]
+    static func icon(_ type: String) -> String? {
+        guard let index = types.firstIndex(of: type) else { return nil }
+        return "wiki/v3/ui/skill-categories/\(["physical-attack", "magic-attack", "defense", "status"][index]).png"
+    }
 }
 struct SkillFiltersView: View {
     @Binding var query: SkillQuery
-    let types: [CatalogType]
+    @Binding var types: [CatalogType]
     @Environment(\.dismiss) private var dismiss
     var body: some View {
-        Form {
-            MultiSelectSection(title: "Skill type", values: SkillTerms.types, selection: $query.skillTypes) { $0 }
-            MultiSelectSection(title: "Skill tags", values: SkillTerms.tags, selection: $query.tags) { $0 }
-            MultiSelectSection(title: "Types", values: types.map(\.id), selection: $query.typeIDs) { id in
-                types.first { $0.id == id }?.name ?? id
+        ScrollView {
+            VStack(spacing: 14) {
+                MultiSelectSection(title: "Skill type", values: SkillTerms.types, selection: $query.skillTypes,
+                                   icon: SkillTerms.icon, minimumWidth: 64) { $0 }
+                MultiSelectSection(title: "Types", values: types.map(\.id), selection: $query.typeIDs,
+                                   icon: { id in CatalogAssets.type(types.first { $0.id == id }?.name ?? id) }, minimumWidth: 60, loading: types.isEmpty) { id in
+                    types.first { $0.id == id }?.name ?? id
+                }
+                MultiSelectSection(title: "Skill tags", values: SkillTerms.tags, selection: $query.tags) { $0 }
+            }.padding(16)
+        }.background(HandbookTheme.background).navigationTitle(tr("Skill filters")).navigationBarTitleDisplayMode(.inline)
+            .tint(HandbookTheme.detailAccent)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button { query.skillTypes = []; query.tags = []; query.typeIDs = [] } label: { Image(systemName: "arrow.counterclockwise") }
+                        .accessibilityLabel(tr("Reset filters")).accessibilityIdentifier("filters.reset")
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button { dismiss() } label: { Image(systemName: "checkmark") }.accessibilityLabel(tr("Done"))
+                }
             }
-            Button(tr("Reset filters")) { query.skillTypes = []; query.tags = []; query.typeIDs = [] }
-        }.navigationTitle(tr("Skill filters"))
-            .toolbar { ToolbarItem(placement: .confirmationAction) { Button(tr("Done")) { dismiss() } } }
     }
 }

@@ -3,19 +3,34 @@ import HandbookCore
 
 private enum PetDetailTab: String, CaseIterable {
     case overview = "Overview", skills = "Skills", types = "Type relationships", eggs = "Egg groups tab"
+    var symbol: String {
+        switch self {
+        case .overview: return "chart.bar.fill"
+        case .skills: return "sparkles"
+        case .types: return "arrow.left.arrow.right"
+        case .eggs: return "oval.portrait.fill"
+        }
+    }
 }
 private enum PetSkillTab: String, CaseIterable {
     case native = "Pet skills", blood = "Bloodline effects", other = "Learnable skills"
 }
 private enum PetDetailSheet: String, Identifiable {
-    case personal = "My library", evolution = "Evolution", source = "Source"
+    case personal = "My library", evolution = "Evolution", source = "Source", filters = "Skill filters"
     var id: String { rawValue }
+}
+private struct DetailScrollOffset: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = max(value, nextValue()) }
 }
 
 struct PetDetailView: View {
     let session: HandbookSession
     let petID: String
     @EnvironmentObject private var app: AppModel
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var textSize
+    @ScaledMetric(relativeTo: .title) private var identityHeight: CGFloat = 80
     @State private var detail: PetDetail?
     @State private var skills: PetSkillBundle?
     @State private var evolution: EvolutionGraph?
@@ -26,27 +41,15 @@ struct PetDetailView: View {
     @State private var skillTab: PetSkillTab = .native
     @State private var skillQuery = ""
     @State private var skillTypes: [String] = []
-    @State private var skillElement = ""
+    @State private var skillElements: [String] = []
     @State private var defending = false
     @State private var sheet: PetDetailSheet?
+    @State private var scrollOffset: CGFloat = 0
 
     var body: some View {
         Group {
             if let detail {
-                ScrollView {
-                    VStack(spacing: -22) {
-                        hero(detail)
-                        LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
-                            Section {
-                                tabContent(detail).padding(16).padding(.bottom, 28)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            } header: {
-                                tabBar.padding(.horizontal, 16).padding(.vertical, 10).background(HandbookTheme.surface)
-                            }
-                        }.background(HandbookTheme.surface)
-                            .clipShape(EdgeRoundedRectangle(radius: 24, corners: [.topLeft, .topRight]))
-                    }
-                }.background(HandbookTheme.surface)
+                detailContent(detail)
                 .toolbar {
                     ToolbarItemGroup(placement: .navigationBarTrailing) {
                         FavoriteButton(session: session, object: object(detail.summary))
@@ -70,11 +73,22 @@ struct PetDetailView: View {
                                     PersonalPanel(session: session, object: object(detail.summary), handbookID: detail.summary.handbookID)
                                 case .evolution: evolutionPanel
                                 case .source: SourcePanel(references: detail.sources)
+                                case .filters: skillFilters
                                 }
                             }.padding(16)
                         }.background(HandbookTheme.background)
                             .navigationTitle(tr(destination.rawValue)).navigationBarTitleDisplayMode(.inline)
-                            .toolbar { ToolbarItem(placement: .confirmationAction) { Button(tr("Done")) { sheet = nil } } }
+                            .toolbar {
+                                ToolbarItem(placement: .cancellationAction) {
+                                    if destination == .filters {
+                                        Button { skillTypes = []; skillElements = [] } label: { Image(systemName: "arrow.counterclockwise") }
+                                            .accessibilityLabel(tr("Reset filters")).accessibilityIdentifier("filters.reset")
+                                    }
+                                }
+                                ToolbarItem(placement: .confirmationAction) {
+                                    Button { sheet = nil } label: { Image(systemName: "checkmark") }.accessibilityLabel(tr("Done"))
+                                }
+                            }
                     }
                 }
             } else if let error {
@@ -100,33 +114,89 @@ struct PetDetailView: View {
             detail = loaded; skills = loadedKit; evolution = loadedGraph; relationships = loadedTypes
         } catch { if !Task.isCancelled { self.error = "This creature is unavailable in the current Catalog." } }
     }
-    private func hero(_ detail: PetDetail) -> some View {
-        VStack(spacing: 12) {
-            HStack(spacing: 18) {
-                AssetImage(path: CatalogAssets.pet(detail.summary.illustrationKey, shiny: shiny),
-                           label: detail.summary.name, size: 112)
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("NO.\(detail.summary.dexNo)").font(.subheadline.bold().monospacedDigit())
-                        .padding(.horizontal, 12).padding(.vertical, 6)
-                        .background(Color.black.opacity(0.25)).clipShape(Capsule())
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                    Text(detail.summary.name).font(HandbookTheme.display(26, relativeTo: .title))
-                        .accessibilityAddTraits(.isHeader)
-                    if let form = detail.summary.form, !detail.summary.isDefaultForm {
-                        Text(form).font(.subheadline)
+    private func detailContent(_ detail: PetDetail) -> some View {
+        GeometryReader { geometry in
+            let largeArt = min(250, max(180, geometry.size.width - 120))
+            let variantHeight: CGFloat = detail.summary.hasShiny ? 44 : 0
+            let expandedHeight = largeArt + identityHeight + 34 + variantHeight
+            let compactHeight = max(136, identityHeight + 44) + variantHeight
+            let distance = max(1, expandedHeight - compactHeight)
+            let fraction = min(1, max(0, scrollOffset / distance))
+            let progress = reduceMotion ? (fraction > 0.5 ? 1.0 : 0.0) : fraction
+            let tabsHeight: CGFloat = textSize.isAccessibilitySize ? 96 : 76
+            ScrollViewReader { reader in
+                ScrollView {
+                    VStack(spacing: 0) {
+                        Color.clear.frame(height: distance).accessibilityHidden(true)
+                        Color.clear.frame(height: compactHeight + tabsHeight - 18)
+                            .id("detail-browsing-top").accessibilityHidden(true)
+                        tabContent(detail).padding(16).padding(.bottom, 28)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }.frame(minHeight: geometry.size.height + distance, alignment: .top)
+                        .background {
+                            GeometryReader { marker in
+                                Color.clear.preference(key: DetailScrollOffset.self,
+                                                       value: -marker.frame(in: .named("pet-detail-scroll")).minY)
+                            }
+                        }
+                        .overlay(alignment: .top) {
+                            VStack(spacing: -18) {
+                                hero(detail, width: geometry.size.width, largeArt: largeArt, progress: progress,
+                                     height: expandedHeight - distance * progress, variantHeight: variantHeight)
+                                tabBar.padding(.horizontal, 16).frame(height: tabsHeight).background(HandbookTheme.surface)
+                                    .clipShape(EdgeRoundedRectangle(radius: 24, corners: [.topLeft, .topRight]))
+                            }.offset(y: scrollOffset).accessibilitySortPriority(1)
+                        }
+                }.coordinateSpace(name: "pet-detail-scroll").background(HandbookTheme.surface)
+                    .onPreferenceChange(DetailScrollOffset.self) { scrollOffset = max(0, $0) }
+                    .onChange(of: tab) { _ in
+                        if scrollOffset > distance { reader.scrollTo("detail-browsing-top", anchor: .top) }
                     }
-                    typeBadges(detail.summary.types)
-                }
             }
+        }
+    }
+    private func hero(_ detail: PetDetail, width: CGFloat, largeArt: CGFloat, progress: CGFloat,
+                      height: CGFloat, variantHeight: CGFloat) -> some View {
+        let artSize = largeArt - (largeArt - 100) * progress
+        let compactCenter = (height - variantHeight - 18) / 2
+        return ZStack(alignment: .topLeading) {
+            AssetImage(path: CatalogAssets.pet(detail.summary.illustrationKey, shiny: shiny), label: detail.summary.name, size: artSize)
+                .accessibilityIdentifier("detail.illustration")
+                .accessibilityValue(tr(progress < 0.98 ? "Expanded illustration" : "Compact illustration"))
+                .position(x: width / 2 + (70 - width / 2) * progress,
+                          y: largeArt / 2 + 10 + (compactCenter - largeArt / 2 - 10) * progress)
+            VStack(alignment: .leading, spacing: 8) {
+                Text("NO.\(detail.summary.dexNo)").font(.caption2.bold().monospacedDigit())
+                    .frame(height: 12 * progress).opacity(progress).accessibilityHidden(progress < 0.5)
+                Text(detail.summary.name).font(HandbookTheme.display(30 - 6 * progress, relativeTo: .title))
+                    .fixedSize(horizontal: false, vertical: true).accessibilityAddTraits(.isHeader)
+                if let form = detail.summary.form, !detail.summary.isDefaultForm { Text(form).font(.caption) }
+                HStack(spacing: 10) {
+                    ForEach(detail.summary.types, id: \.self) { type in
+                        HStack(spacing: 4) {
+                            AssetImage(path: CatalogAssets.type(type), label: type, size: 23).accessibilityHidden(true)
+                            Text(type).font(.caption.bold())
+                        }.accessibilityElement(children: .combine)
+                    }
+                }
+            }.frame(width: width - 168, alignment: .leading)
+                .position(x: width / 2 + 64 * progress,
+                          y: largeArt + identityHeight / 2 + 8 + (compactCenter - largeArt - identityHeight / 2 - 8) * progress)
+            Text("NO.\(detail.summary.dexNo)").font(.caption.bold().monospacedDigit())
+                .padding(.horizontal, 12).padding(.vertical, 6)
+                .background(Color.black.opacity(0.25)).clipShape(Capsule())
+                .frame(maxWidth: .infinity, alignment: .trailing).padding(.horizontal, 20).padding(.top, 10)
+                .opacity(1 - progress).accessibilityHidden(progress > 0.5)
             if detail.summary.hasShiny {
                 Picker(tr("Illustration"), selection: $shiny) {
-                    Text(tr("Original")).tag(false); Text(tr("Shiny")).tag(true)
+                    Label(tr("Original"), systemImage: "pawprint.fill").tag(false)
+                    Label(tr("Shiny"), systemImage: "sparkles").tag(true)
                 }.pickerStyle(.segmented).accessibilityIdentifier("detail.shiny")
+                    .padding(.horizontal, 20).frame(maxHeight: .infinity, alignment: .bottom).padding(.bottom, 24)
             }
-        }.padding(.horizontal, 20).padding(.top, 14).padding(.bottom, 34).foregroundColor(.white)
-            .frame(maxWidth: .infinity)
+        }.frame(height: height).foregroundColor(.white)
             .background {
-                LinearGradient(colors: [Color(red: 0.80, green: 0.38, blue: 0.26), Color(red: 0.83, green: 0.47, blue: 0.27)],
+                LinearGradient(colors: [Color(red: 0.70, green: 0.29, blue: 0.18), Color(red: 0.72, green: 0.32, blue: 0.20)],
                                startPoint: .topLeading, endPoint: .bottomTrailing)
                     .overlay(alignment: .topTrailing) {
                         Circle().fill(Color.white.opacity(0.04)).frame(width: 210, height: 210).offset(x: 70, y: -70)
@@ -137,12 +207,15 @@ struct PetDetailView: View {
         HStack(spacing: 3) {
             ForEach(PetDetailTab.allCases, id: \.self) { item in
                 Button { tab = item } label: {
-                    Text(tr(item.rawValue)).font(.subheadline.weight(.semibold)).multilineTextAlignment(.center)
+                    VStack(spacing: 4) {
+                        Image(systemName: item.symbol).font(.system(size: 17, weight: .semibold)).accessibilityHidden(true)
+                        Text(tr(item.rawValue)).font(.caption.weight(.semibold)).multilineTextAlignment(.center)
+                    }
                         .frame(maxWidth: .infinity, minHeight: 44).padding(.horizontal, 2)
                         .foregroundColor(tab == item ? HandbookTheme.detailAccent : .secondary)
                         .background(tab == item ? HandbookTheme.surface : Color.clear)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
-                }.buttonStyle(.plain).accessibilityAddTraits(tab == item ? .isSelected : [])
+                }.buttonStyle(.plain).accessibilityLabel(tr(item.rawValue)).accessibilityAddTraits(tab == item ? .isSelected : [])
                     .accessibilityIdentifier("detail.tab.\(item.rawValue)")
             }
         }.padding(4).background(HandbookTheme.detailWash).clipShape(RoundedRectangle(cornerRadius: 16))
@@ -173,6 +246,7 @@ struct PetDetailView: View {
     private func stats(_ detail: PetDetail) -> some View {
         let colors: [Color] = [.red, .orange, .blue, .yellow, .green, .pink]
         let order = ["HP", "Attack", "Magic attack", "Defense", "Magic defense", "Speed"]
+        let icons = ["health", "physical-attack", "magic-attack", "physical-defense", "magic-defense", "speed"]
         return VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 8) {
                 Circle().fill(HandbookTheme.detailAccent).frame(width: 6, height: 6).accessibilityHidden(true)
@@ -189,7 +263,10 @@ struct PetDetailView: View {
                 ForEach(Array(order.enumerated()), id: \.element) { index, key in
                     let value = detail.stats.first { $0.id == key }?.value
                     HStack(spacing: 10) {
-                        Text(tr(key)).font(.subheadline).foregroundColor(.secondary).frame(width: 80, alignment: .leading)
+                        HStack(spacing: 5) {
+                            AssetImage(path: "wiki/v3/ui/stats/\(icons[index]).png", label: tr(key), size: 19).accessibilityHidden(true)
+                            Text(tr(key)).font(.caption).foregroundColor(.secondary)
+                        }.frame(width: 90, alignment: .leading)
                         GeometryReader { geometry in
                             Capsule().fill(HandbookTheme.detailWash)
                             Capsule().fill(LinearGradient(colors: [colors[index].opacity(0.65), colors[index]], startPoint: .leading, endPoint: .trailing))
@@ -272,7 +349,14 @@ struct PetDetailView: View {
                 HStack(spacing: 8) {
                     ForEach(PetSkillTab.allCases, id: \.self) { item in
                         Button { skillTab = item } label: {
-                            Text(tr(item.rawValue)).font(.subheadline.weight(.semibold)).padding(.horizontal, 14).frame(minHeight: 44)
+                            HStack(spacing: 6) {
+                                if item == .native { Image(systemName: "pawprint.fill").accessibilityHidden(true) }
+                                else {
+                                    AssetImage(path: "wiki/v3/ui/sources/\(item == .blood ? "bloodline" : "skill-stone").png",
+                                               label: tr(item.rawValue), size: 23).accessibilityHidden(true)
+                                }
+                                Text(tr(item.rawValue)).font(.subheadline.weight(.semibold))
+                            }.padding(.horizontal, 12).frame(minHeight: 44)
                                 .background(skillTab == item ? HandbookTheme.detailAccent : HandbookTheme.detailWash)
                                 .foregroundColor(skillTab == item ? .white : .secondary)
                                 .clipShape(RoundedRectangle(cornerRadius: 13))
@@ -289,19 +373,10 @@ struct PetDetailView: View {
                     Button { skillQuery = "" } label: { Image(systemName: "xmark.circle.fill") }
                         .accessibilityLabel(tr("Clear search"))
                 }
-                Menu {
-                    ForEach(SkillTerms.types, id: \.self) { type in
-                        Button {
-                            if skillTypes.contains(type) { skillTypes.removeAll { $0 == type } } else { skillTypes.append(type) }
-                        } label: { Label(type, systemImage: skillTypes.contains(type) ? "checkmark" : "circle") }
-                    }
-                    Picker(tr("Types"), selection: $skillElement) {
-                        Text(tr("Any")).tag("")
-                        ForEach(Array(Set(skills?.learned.compactMap(\.skill.element) ?? [])).sorted(), id: \.self) { Text($0).tag($0) }
-                    }
-                    Button(tr("Reset filters")) { skillTypes = []; skillElement = "" }
-                } label: { Image(systemName: "line.3.horizontal.decrease").frame(minWidth: 36, minHeight: 44) }
-                    .accessibilityLabel(tr("Skill filters"))
+                Button { sheet = .filters } label: {
+                    Image(systemName: skillTypes.isEmpty && skillElements.isEmpty ? "line.3.horizontal.decrease" : "line.3.horizontal.decrease.circle.fill")
+                        .frame(minWidth: 44, minHeight: 44)
+                }.accessibilityLabel(tr("Skill filters")).accessibilityIdentifier("detail.skills.filters")
             }.padding(.horizontal, 12).background(HandbookTheme.detailWash).clipShape(RoundedRectangle(cornerRadius: 14))
             if filteredSkills.isEmpty { EmptyState(text: "No skills match these filters.") }
             ForEach(filteredSkills) { source in
@@ -325,9 +400,17 @@ struct PetDetailView: View {
                 skillTab == .blood ? source.sourceKind == "blood" : !["native", "blood"].contains(source.sourceKind)
             let skill = source.skill
             return matchesSource && (skillTypes.isEmpty || skillTypes.contains(skill.damageClass ?? "") || skillTypes.contains(skill.category ?? "")) &&
-                (skillElement.isEmpty || skill.element == skillElement) &&
+                (skillElements.isEmpty || skillElements.contains(skill.element ?? "")) &&
                 (keyword.isEmpty || [skill.name, skill.element, skill.description, skill.damageClass, skill.category]
                     .compactMap { $0 }.contains { $0.localizedCaseInsensitiveContains(keyword) })
+        }
+    }
+    private var skillFilters: some View {
+        VStack(spacing: 14) {
+            MultiSelectSection(title: "Skill type", values: SkillTerms.types, selection: $skillTypes,
+                               icon: SkillTerms.icon, minimumWidth: 64) { $0 }
+            MultiSelectSection(title: "Types", values: Array(Set(skills?.learned.compactMap(\.skill.element) ?? [])).sorted(),
+                               selection: $skillElements, icon: CatalogAssets.type, minimumWidth: 60) { $0 }
         }
     }
     private var typePanel: some View {
