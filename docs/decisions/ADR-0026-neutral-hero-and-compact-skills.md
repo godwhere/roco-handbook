@@ -15,7 +15,7 @@ Source imports, immutable assets, Catalog records, SQL schemas, identities, quer
 - Use the existing adaptive surface for the expanded and compact creature header, with primary text and a tonal number badge. Preserve scroll contraction, top restoration, shiny selection, navigation, and offline artwork paths.
 - Add a shared skill layout preference with `twoColumn` (default), `threeColumn`, and `detailed`. Store it as a JSON string in the existing `settings` table under `skill_catalog_layout`; missing, malformed, and unknown values fall back to two columns. Do not alter the creature layout key or either SQL schema.
 - Expose the skill layout in Settings and accessible symbol menus beside skill catalog/detail controls. Use it in skill and feature catalogs and creature skill tabs. Reading contexts, including individual skill details and glossary references, retain full descriptions. Accessibility text sizes use the full-width detailed presentation while retaining the user's saved preference.
-- Compact cards place the name in a dedicated top row, followed by contained artwork, a type/power pill, and an energy badge. The classification symbol shares the title row. Creature learning cards show a level badge beside the artwork only when `LearnableSkill.learnLevel` exists. Preserve raw textual metrics and unknown values; feature cards must not acquire invented power or energy values.
+- Compact cards use two vertically centered modules: enlarged contained artwork on the left and a name/type-power stack on the right. The energy badge belongs to the artwork; the classification symbol occupies the upper-right corner. Creature learning cards show a lower-right level badge only when `LearnableSkill.learnLevel` exists. Reserve space for that badge without changing the alignment between the two modules. Preserve raw textual metrics and unknown values; feature cards must not acquire invented power or energy values.
 - Tapping a compact card opens the complete skill detail. Creature-origin routes additionally show their exact acquisition record near the top, preserving source kind, level, source stage, bloodline values, and requirements. Detailed mode retains the previous description and acquisition rows.
 
 ## Acceptance
@@ -31,3 +31,9 @@ git diff --check
 ```
 
 Physical hardware, iOS 15 runtime behavior, exhaustive accessibility, signed upgrades, and store delivery remain separate acceptance layers.
+
+## Centered card clarification, 2026-10-15
+
+The latest user reference supersedes the preceding full-width title row: both the name and type/power pill belong to the right of the illustration, with the illustration and text stack vertically centered against each other. Increase artwork from 48 to 60 points in two-column cards and from 32 to 40 points in three-column cards.
+
+This follow-up is limited to `ios/App/Components.swift`, the root README, this decision, `docs/features/localized-visual-handbook.md`, the Phase 9 report, and new centered-card evidence with four captures. Repository/model/settings contracts, queries, detail routes, full descriptions, source conditions, assets, imports, Catalog records, schemas, identities, dependencies, networking, and release operations are excluded. Reuse the two existing focused skill-layout/Chinese-capture UI tests, then perform generic/destination builds, visual review, installation without uninstalling, personal-record comparison, `git diff --check`, scoped diff review, and GitHub Desktop commit/push. Stop if the requested presentation requires changes outside this allowlist or data loss; complete after the rendered two/three-column cards and installed App agree with the clarified reference.

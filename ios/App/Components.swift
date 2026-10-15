@@ -168,54 +168,54 @@ struct CompactSkillCard: View {
     let skill: SkillSummary
     var level: Int?
     var dense = false
-    @ScaledMetric(relativeTo: .headline) private var nameHeight: CGFloat = 22
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack(alignment: .top, spacing: 4) {
-                Text(skill.name).font(HandbookTheme.display(dense ? 14 : 16)).lineLimit(1).minimumScaleFactor(0.75)
-                    .frame(maxWidth: .infinity, alignment: .topLeading)
-                if let icon = SkillTerms.icon(skill.damageClass ?? skill.category ?? "") {
-                    AssetImage(path: icon, label: skill.damageClass ?? skill.category ?? "", size: dense ? 14 : 16)
-                        .opacity(0.7).accessibilityHidden(true)
+        HStack(alignment: .center, spacing: dense ? 5 : 6) {
+            AssetImage(path: CatalogAssets.skill(skill), label: skill.name, size: dense ? 40 : 60)
+                .accessibilityHidden(true)
+                .overlay(alignment: .bottomLeading) {
+                    if !skill.isFeature {
+                        HStack(spacing: 2) {
+                            Image(systemName: "star.fill").font(.system(size: 8))
+                            Text(metric(skill.energyText, skill.energyValue)).font(.system(size: dense ? 10 : 12, weight: .bold, design: .rounded))
+                        }.padding(3).background(Color.black.opacity(0.75)).clipShape(RoundedRectangle(cornerRadius: 5))
+                            .offset(x: -2, y: 4).accessibilityHidden(true)
+                    }
                 }
-            }.frame(height: nameHeight * (dense ? 0.9 : 1), alignment: .topLeading)
-            HStack(spacing: 6) {
-                AssetImage(path: CatalogAssets.skill(skill), label: skill.name, size: dense ? 32 : 48)
-                    .accessibilityHidden(true)
-                    .overlay(alignment: .bottomLeading) {
-                        if !skill.isFeature {
-                            HStack(spacing: 2) {
-                                Image(systemName: "star.fill").font(.system(size: 8))
-                                Text(metric(skill.energyText, skill.energyValue)).font(.system(size: dense ? 10 : 12, weight: .bold, design: .rounded))
-                            }.padding(3).background(Color.black.opacity(0.75)).clipShape(RoundedRectangle(cornerRadius: 5))
-                                .offset(x: -2, y: 4).accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: dense ? 4 : 5) {
+                Text(skill.name).font(HandbookTheme.display(dense ? 13 : 16)).lineLimit(2).minimumScaleFactor(0.75)
+                    .padding(.trailing, dense ? 12 : 14).fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                if skill.isFeature {
+                    Label(tr("Feature"), systemImage: "star.circle.fill").font(.caption2.bold()).foregroundColor(.white.opacity(0.8))
+                } else {
+                    HStack(spacing: dense ? 3 : 4) {
+                        if let type = skill.element {
+                            AssetImage(path: CatalogAssets.type(type), label: type, size: dense ? 12 : 16).accessibilityHidden(true)
                         }
-                    }
-                VStack(alignment: .trailing, spacing: 4) {
-                    if skill.isFeature {
-                        Label(tr("Feature"), systemImage: "star.circle.fill").font(.caption2.bold()).foregroundColor(.white.opacity(0.8))
-                    } else {
-                        HStack(spacing: 4) {
-                            if let type = skill.element {
-                                AssetImage(path: CatalogAssets.type(type), label: type, size: 16).accessibilityHidden(true)
-                            }
-                            Text(metric(skill.powerText, skill.powerValue)).font(.system(size: 14, weight: .heavy, design: .rounded))
-                                .monospacedDigit().lineLimit(1).minimumScaleFactor(0.65)
-                        }.padding(.horizontal, 6).frame(maxWidth: .infinity, minHeight: 23)
-                            .background(HandbookTheme.typeColor(skill.element ?? "").opacity(0.32)).clipShape(Capsule())
-                    }
-                    if let level {
-                        Text("LV\(level)").font(.caption2.bold().monospacedDigit()).padding(.horizontal, 6).padding(.vertical, 2)
-                            .foregroundColor(.white.opacity(0.8))
-                            .background(Color.white.opacity(0.10)).clipShape(RoundedRectangle(cornerRadius: 5))
-                            .accessibilityHidden(true)
-                    }
-                }.frame(maxWidth: .infinity, minHeight: dense ? 32 : 48)
-            }
-        }.padding(8)
-            .frame(maxWidth: .infinity, minHeight: dense ? 80 : 92, alignment: .topLeading)
+                        Text(metric(skill.powerText, skill.powerValue)).font(.system(size: dense ? 12 : 14, weight: .heavy, design: .rounded))
+                            .monospacedDigit().lineLimit(1).minimumScaleFactor(0.65)
+                    }.padding(.horizontal, dense ? 4 : 6).frame(maxWidth: .infinity, minHeight: dense ? 21 : 24)
+                        .background(HandbookTheme.typeColor(skill.element ?? "").opacity(0.32)).clipShape(Capsule())
+                }
+            }.frame(maxWidth: .infinity, alignment: .leading)
+        }.padding(.bottom, level == nil ? 0 : 18).padding(.horizontal, dense ? 6 : 8).padding(.vertical, 8)
+            .frame(maxWidth: .infinity, minHeight: level == nil ? (dense ? 72 : 80) : (dense ? 88 : 94), alignment: .center)
             .foregroundColor(.white)
             .background(Color(red: 0.14, green: 0.16, blue: 0.16))
+            .overlay(alignment: .topTrailing) {
+                if let icon = SkillTerms.icon(skill.damageClass ?? skill.category ?? "") {
+                    AssetImage(path: icon, label: skill.damageClass ?? skill.category ?? "", size: dense ? 12 : 16)
+                        .opacity(0.35).padding(6).accessibilityHidden(true)
+                }
+            }
+            .overlay(alignment: .bottomTrailing) {
+                if let level {
+                    Text("LV\(level)").font(.caption2.bold().monospacedDigit()).padding(.horizontal, 6).padding(.vertical, 2)
+                        .foregroundColor(.white.opacity(0.8))
+                        .background(Color.white.opacity(0.10)).clipShape(RoundedRectangle(cornerRadius: 5)).padding(5)
+                        .accessibilityHidden(true)
+                }
+            }
             .clipShape(RoundedRectangle(cornerRadius: 15))
             .accessibilityElement(children: .combine).accessibilityLabel(accessibleSummary)
     }
