@@ -42,10 +42,11 @@ unchanged. No live BWIKI import or remote Catalog update was requested.
 | --- | --- |
 | `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 -m unittest tests.builder.test_nrc_pipeline` | Passed: 4 tests |
 | Full offline Python suite in the working checkout | Interrupted during slow frozen-PNG reads; not counted as a pass |
+| English-text-only check in the working checkout | Interrupted during slow text-file reads; not counted as a pass |
 | `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 tools/release/check_catalog.py --release data/release/2` | Passed: release identity, hashes, schema, integrity, references |
 | Full offline Python suite and release check in a tracked-files-plus-patch copy without raw content | Passed: 111 tests, zero skips, release check passed |
 | Complete scoped diff review and `git diff --check` | Passed: all 13 changed paths match ADR-0028 |
-| New hosted workflow after GitHub Desktop delivery | Pending |
+| New hosted workflow after GitHub Desktop delivery | Passed: [run 30](https://github.com/godwhere/roco-handbook/actions/runs/38754548059), both jobs successful |
 
 Full local logs use `/tmp/roco-ci29-{nrc,python,catalog}.log`. Clean-copy checks
 use `/tmp/roco-ci29-clean-{python,catalog}.log` with a receipt at
@@ -61,13 +62,31 @@ guard. The final clean run passed every test. Fixture Lua totals 2,352 bytes.
 The immutable specification retains SHA-256
 `343618b414b7b8d6262dd58f82010bfefb2f3fdb29711a9e86428e042dd81876`.
 No production code, immutable data, personal database, credential, or build
-product is included. The hosted Python 3.11 result remains a separate check.
+product is included. The English-text-only attempt has its separate interrupted
+log at `/tmp/roco-ci29-doc-language.log`; the same guard passed in the complete
+clean-copy and hosted suites.
+
+## Hosted verification and delivery
+
+GitHub Desktop committed the scoped repair as
+`d29da2f41b7285f5c3795405d2578512f5309e46` (`Fix offline NRC tests in clean checkouts`)
+and pushed it to `origin/main`. The checkout was clean and the local and tracking
+branches matched after the push.
+
+[Offline validation run 30](https://github.com/godwhere/roco-handbook/actions/runs/38754548059)
+evaluated that exact commit and completed successfully:
+
+- `Catalog and release contracts`: Python 3.11 offline suite and immutable Catalog release validation passed.
+- `Native Swift and iOS contracts`: offline Swift tests and unsigned simulator build passed.
+
+The workflow and production code were unchanged. This evidence-only follow-up
+records the observed hosted result; it does not change the tested implementation.
 
 ## Limits and next boundary
 
 This repair changes tests and documentation only. Native Swift, simulator build,
-and UI tests are not rerun locally for this patch; the new hosted workflow must
-be observed independently. Physical iOS behavior, signed upgrades, VoiceOver,
+and UI tests were not rerun locally for this patch; hosted Swift tests and the
+simulator build passed as recorded above. Physical iOS behavior, signed upgrades, VoiceOver,
 live source access, full raw-snapshot reproduction, remote Catalog publication,
 and store delivery remain unrun. The baseline native job's success does not prove
 any of those layers.

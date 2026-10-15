@@ -24,9 +24,11 @@ copy without raw content passes all 111 Python tests and the release check; the
 working-copy full run was interrupted during slow frozen-image reads and is not
 claimed as a pass. All 13 changed paths match the allowlist, and `git diff --check`
 passes. Logs and the corrected initial English-text failure are recorded in the
-linked evidence. GitHub Desktop commit/push and hosted follow-up complete the
-repository boundary; physical iOS, signed upgrades, accessibility, live updates,
-and store acceptance remain separate.
+linked evidence. GitHub Desktop committed and pushed the repair as `d29da2f`;
+[hosted run 30](https://github.com/godwhere/roco-handbook/actions/runs/38754548059)
+passed both Catalog/release and native Swift/iOS jobs. This evidence-only
+follow-up records that result. Physical iOS, signed upgrades, accessibility,
+live updates, and store acceptance remain the next separate boundary.
 
 ## Declared boundary
 
