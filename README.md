@@ -8,6 +8,12 @@ App 首次启动不需要下载数据，也不会在浏览过程中访问 Wiki�
 
 > 当前原生开发版本为 `1.2.0`，构建号 `3`。项目尚未发布到应用商店，真机、正式签名、商店上传和审核仍属于独立的发布验收环节。
 
+当前[原生发布候选清单](release/1.2.0+3/release-candidate.json)、[发布说明](release/1.2.0+3/RELEASE_NOTES.md)和[已知限制](release/1.2.0+3/KNOWN_LIMITATIONS.md)记录 Catalog 2、资源哈希及原生 CI 证据。这是源码候选，尚无正式签名分发包；`release/1.0.0+1/` 仅保留旧 Flutter/Android 历史。
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3 tools/release/check_native_candidate.py
+```
+
 ## 项目概览
 
 | 项目 | 当前实现 |
