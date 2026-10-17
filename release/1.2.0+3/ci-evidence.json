@@ -1,0 +1,91 @@
+{
+  "retrieved_on": "2026-10-17",
+  "run": {
+    "id": 38754548059,
+    "run_number": 30,
+    "run_attempt": 1,
+    "head_sha": "d29da2f41b7285f5c3795405d2578512f5309e46",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-10-15T14:47:30Z",
+    "updated_at": "2026-10-15T14:50:14Z",
+    "html_url": "https://github.com/godwhere/roco-handbook/actions/runs/38754548059",
+    "path": ".github/workflows/offline-validation.yml"
+  },
+  "jobs": [
+    {
+      "id": 116489405817,
+      "name": "Native Swift and iOS contracts",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check out repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Record Apple toolchain",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run offline Swift tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build native iOS simulator application",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Check out repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 116489406343,
+      "name": "Catalog and release contracts",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check out repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Use Python 3.11",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run offline project tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Validate immutable Catalog release",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Use Python 3.11",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Check out repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ]
+}

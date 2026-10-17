@@ -1,0 +1,152 @@
+{
+  "app": {
+    "build_number": 3,
+    "bundle_id": "world.roco.rocoHandbook",
+    "client": "Swift/SwiftUI",
+    "device_families": [
+      "iPhone",
+      "iPad"
+    ],
+    "display_name": "Roco World Handbook",
+    "minimum_ios": "15.0",
+    "project": "ios/RocoHandbook.xcodeproj",
+    "scheme": "RocoHandbook",
+    "version": "1.2.0"
+  },
+  "artifact": {
+    "path": null,
+    "sha256": null,
+    "signed": false,
+    "status": "not_produced_in_this_review"
+  },
+  "candidate_manifest_version": 3,
+  "catalog": {
+    "attribution_sha256": "3888742a9a20440232c92ca7249294952897f4b4c0b65927f05474b3135fed37",
+    "catalog_check": "release/1.2.0+3/catalog-check.json",
+    "catalog_check_sha256": "8ecd96ee1821c3c37df319fb9ce1a12da5dde0e6c3a34cc7407f832f92aa8159",
+    "catalog_schema_version": 1,
+    "coverage": {
+      "description_note_definitions": false,
+      "evolutions": true,
+      "pets": true,
+      "skill_stone_topics": false,
+      "skills": true,
+      "topic_rewards": false
+    },
+    "data_version": 2,
+    "database_asset": "assets/catalog/catalog.db",
+    "database_bytes": 4657152,
+    "database_sha256": "dce0d3376611adc151f8e2abe1f74185d19c94f61a3d0d2fade98a188dae9d61",
+    "dataset_id": "roco-world-zh-cn",
+    "manifest_sha256": "d81a63a24e0d219940dc05e52ee1cd86b7c02cfd0480d7ab60b4baa5b1a34804",
+    "manifest_version": 1,
+    "normalized_catalog_sha256": "1cadf4b719803d7f8982ec4893eb941d0abac2479fc4790bfce96308aae4a57e",
+    "release": "data/release/2",
+    "snapshot_id": "snapshot-dad7cd7d5ce73236",
+    "source_lock_sha256": "9a46ca24654b25053bb9dd687ab4d12157af89ca38ce8615c947963bedd2ac31"
+  },
+  "evidence": {
+    "candidate_review": "docs/evidence/native-candidate-2026-10-17.md",
+    "ci": {
+      "conclusion": "success",
+      "jobs": [
+        {
+          "conclusion": "success",
+          "id": 116489405817,
+          "name": "Native Swift and iOS contracts"
+        },
+        {
+          "conclusion": "success",
+          "id": 116489406343,
+          "name": "Catalog and release contracts"
+        }
+      ],
+      "receipt": "release/1.2.0+3/ci-evidence.json",
+      "receipt_sha256": "a608921c272dff74255ddafd45bf17ee93bb4ac816ff858aa958d0cbeeb67527",
+      "run_attempt": 1,
+      "run_id": 38754548059,
+      "run_number": 30,
+      "scope": [
+        "offline Python tests",
+        "Catalog release 2 validation",
+        "offline host Swift tests",
+        "unsigned generic iOS simulator build"
+      ],
+      "ui_tests_in_ci": false,
+      "url": "https://github.com/godwhere/roco-handbook/actions/runs/38754548059"
+    },
+    "historical_local_native": "docs/evidence/phase-9-swift-ios-2026-10-09.md",
+    "latest_local_ui": "docs/evidence/phase-9-detail-polish-2026-10-15.md"
+  },
+  "gates": {
+    "low_storage_crash_durability": {
+      "required_before_store_release": true,
+      "status": "not_run"
+    },
+    "minimum_ios_15_runtime": {
+      "required_before_store_release": true,
+      "status": "not_run"
+    },
+    "physical_device_offline": {
+      "required_before_store_release": true,
+      "status": "not_run"
+    },
+    "physical_ipad_runtime": {
+      "required_before_store_release": true,
+      "status": "not_run"
+    },
+    "signed_archive_export": {
+      "required_before_store_release": true,
+      "status": "not_run"
+    },
+    "signed_flutter_to_native_upgrade": {
+      "required_before_store_release": true,
+      "status": "not_run"
+    },
+    "store_metadata_privacy_rights_review": {
+      "required_before_store_release": true,
+      "status": "not_run"
+    },
+    "store_upload_review": {
+      "required_before_store_release": true,
+      "status": "not_run"
+    },
+    "testflight": {
+      "required_before_store_release": true,
+      "status": "not_run"
+    },
+    "voiceover_dynamic_type": {
+      "required_before_store_release": true,
+      "status": "not_run"
+    }
+  },
+  "generated_at_utc": "2026-10-17",
+  "historical_candidate": "release/1.0.0+1/release-candidate.json",
+  "historical_waiver_inherited": false,
+  "publication": {
+    "archives_exported": false,
+    "status": "not_published",
+    "store_ready": false,
+    "uploaded": false
+  },
+  "resources": {
+    "file_count": 1882,
+    "inventory": "release/1.2.0+3/resource-inventory.json",
+    "inventory_sha256": "59eb2718aef9e64c5d77efe5febf7cf3da46ef2479626046f9f53f53a382f811",
+    "scope": "Exact active prepare_resources.py inputs, including shared immutable assets under app/assets; historical wiki/v1 and wiki/v2 excluded. This is not a compiled App digest.",
+    "total_bytes": 152078847
+  },
+  "source": {
+    "ci_commit": "d29da2f41b7285f5c3795405d2578512f5309e46",
+    "commit": "bfe145df60b2cf4963ab9b4a1ca22013525a3966",
+    "difference_from_ci": "Only Phase 9 evidence and implementation-report Markdown changed before this candidate.",
+    "repository": "godwhere/roco-handbook"
+  },
+  "status": "source_candidate_pending_release_acceptance",
+  "user_database": {
+    "path": "Library/Application Support/user/user.db",
+    "preservation": "Independent personal storage; signed Flutter-to-native upgrade not verified.",
+    "schema_sha256": "848f2bd304e925d9651caf2df853233255a1d0f3b0853af7996a2f851d55ff71",
+    "schema_version": 1
+  }
+}

@@ -151,3 +151,21 @@ The user requested centered creature names/types, removal of scrolled content sh
 The expanded and compact identity module centers its name, form subtitle, and type row. A clipped content viewport and adaptive opaque top surface isolate scrolled panels from the native navigation material while retaining system controls, the constant scroll inset, artwork/shiny state, and tabs. Skill-result changes restore the browsing start, and filters dismiss the search keyboard. Skill details reuse compact `PetCard` illustrations, names, numbers, forms, and type icons for both feature ownership and learning sources, with localized section headings, the existing acquisition renderer, and concrete-pet routes. Lazy rendering preserves distinct source records through their existing ordinal-aware identity.
 
 Two new and four retained UI cases passed after the search/filter regression was corrected; coverage includes centered identity, concrete-form card navigation, scroll restoration/shiny selection, reachable search/filter results, tabs/egg groups, skill density/source conditions, and personal records across recovery. Four native packaging/localization tests and generic/destination simulator builds passed using a byte-matching local build mirror after cloud-cache delays. Five final Chinese captures were visually reviewed. Installation without uninstalling onto the original simulator passed with matching executable/debug-library hashes and unchanged personal table digests/counts/schema, valid integrity, and no foreign-key violations. The complete 14-path diff and `git diff --check` passed. Logs, source-equivalence receipts, cache-recovery and early failure details, captures, and unrun layers are recorded in [detail-polish evidence](../evidence/phase-9-detail-polish-2026-10-15.md). Physical iOS/accessibility and signed-upgrade acceptance remain the next boundary, with scoped repository delivery through GitHub Desktop.
+
+## Native source candidate, 2026-10-17
+
+[ADR-0029](../decisions/ADR-0029-native-source-candidate.md) adds the active
+[1.2.0 build 3 candidate](../../release/1.2.0+3/RELEASE_NOTES.md), Catalog 2
+validation, exact active resource inventory, observed CI receipt, release notes
+and known limitations. The historical Flutter candidate is unchanged. The new
+offline checker and three regression cases verify project/generator identity,
+Catalog equality, schema and resource hashes and reject stale identity or asset
+drift. The release-readiness document and root README point to the new candidate.
+
+Validation: 114 offline Python tests, Catalog 2 validation and candidate check
+passed; scoped diff review and `git diff --check` passed. The initial test import
+collision was corrected before acceptance. [Review evidence](../evidence/native-candidate-2026-10-17.md)
+records the source/CI commit distinction, environment and limits. Swift/Xcode/UI
+were not rerun in this Linux environment. Physical iOS/accessibility, signed
+Flutter-to-native upgrade, archive/export, TestFlight and store acceptance remain
+open. No binary, signed Catalog update or App release was published.
