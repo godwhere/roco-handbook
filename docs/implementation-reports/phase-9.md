@@ -151,3 +151,22 @@ The user requested centered creature names/types, removal of scrolled content sh
 The expanded and compact identity module centers its name, form subtitle, and type row. A clipped content viewport and adaptive opaque top surface isolate scrolled panels from the native navigation material while retaining system controls, the constant scroll inset, artwork/shiny state, and tabs. Skill-result changes restore the browsing start, and filters dismiss the search keyboard. Skill details reuse compact `PetCard` illustrations, names, numbers, forms, and type icons for both feature ownership and learning sources, with localized section headings, the existing acquisition renderer, and concrete-pet routes. Lazy rendering preserves distinct source records through their existing ordinal-aware identity.
 
 Two new and four retained UI cases passed after the search/filter regression was corrected; coverage includes centered identity, concrete-form card navigation, scroll restoration/shiny selection, reachable search/filter results, tabs/egg groups, skill density/source conditions, and personal records across recovery. Four native packaging/localization tests and generic/destination simulator builds passed using a byte-matching local build mirror after cloud-cache delays. Five final Chinese captures were visually reviewed. Installation without uninstalling onto the original simulator passed with matching executable/debug-library hashes and unchanged personal table digests/counts/schema, valid integrity, and no foreign-key violations. The complete 14-path diff and `git diff --check` passed. Logs, source-equivalence receipts, cache-recovery and early failure details, captures, and unrun layers are recorded in [detail-polish evidence](../evidence/phase-9-detail-polish-2026-10-15.md). Physical iOS/accessibility and signed-upgrade acceptance remain the next boundary, with scoped repository delivery through GitHub Desktop.
+
+## iOS README clarification, 2026-10-17
+
+The user requested a README describing the current iOS application without migration announcements or platform-exclusion comparisons. This Phase 9 documentation follow-up is limited to `README.md` and this report. The README states the Swift/SwiftUI implementation, supported iOS version, current features, client entry point, application identity, and personal-data location. It explains the macOS/Xcode/Python prerequisites, project-opening command, shared scheme, simulator Run steps, automatic offline-resource staging, and physical-device signing requirement. The historical client and shared assets retain their existing roles.
+
+The existing ADR-0023, client structure, feature contracts, validation commands, and release criteria remain authoritative; no implementation or contract change requires another decision or feature document. No source, asset, schema, personal database, dependency, or release artifact was changed. The preserved Chinese specification remains unchanged.
+
+Validation passed for 12 local README links, syntax of all four Bash blocks, and consistency with the checked-in native project version, minimum iOS target, shared scheme, and resource-staging step. The check log is `/tmp/roco-readme-doc-check-20261017.log`. The following three existing regression cases passed; the log is `/tmp/roco-readme-configuration-tests-20261017.log`:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools:tests python3 -m unittest \
+  test_project_structure.ProjectStructureTests.test_baseline_spec_is_preserved_verbatim \
+  test_native_ios.NativeIOSPackagingTests.test_native_bundle_identity_permissions_and_local_dependencies \
+  test_native_ios.NativeIOSPackagingTests.test_native_project_matches_generator
+```
+
+The initial broader English-text scan was interrupted while reading the unchanged `docs/evidence/phase-9-swift-ios-2026-10-09.md`; it is not claimed as passed. Its log is `/tmp/roco-readme-focused-tests-20261017.log`. The new report section was checked directly for the English-language rule. The complete two-file diff and `git diff --check` passed.
+
+No App build, Swift/XCUITest suite, source import, live update, physical-device installation, signing, or store acceptance was run for this documentation-only change. Stop after the two-file diff, focused documentation/configuration checks, and scoped GitHub Desktop commit/push; the next implementation boundary remains physical iOS/accessibility and signed-upgrade acceptance.
