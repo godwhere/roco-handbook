@@ -10,6 +10,12 @@ The offline suite reuses the existing owned Ed25519 fixtures and tests stored/de
 
 Phase 7 now has a complete-ZIP publisher, signed-manifest generator, production public trust key, strict validator and installer, and an enabled user-triggered GitHub Releases transport. The App still starts entirely from its bundled Catalog and performs no automatic or background network request. ADR-0014 temporarily closes the phase under `PHASE7-LIVE-CATALOG-001` while a genuine newer Catalog is unavailable; the real-package matrix remains deferred rather than passed.
 
+## Tencent mirror preparation
+
+ADR-0029 permits a server-only hosting preparation slice for the owner's existing Tencent server and `time9.site`. The domain resolves to the server, and a static Nginx service with the existing real Catalog v2 ZIP passes internal transport checks on `127.0.0.1:8081`. The domain is not ICP-filed, so public ports and HTTPS remain inactive. There is no signed discovery envelope, new data version, GitHub Release, App allowlist change, or automatic source switching in this slice.
+
+Configuration, immutable publication rules, the inactive HTTPS template, rollback, and the public activation gates are documented in [the mirror runbook](../../deploy/catalog-mirror/README.md). The [deployment evidence](../evidence/phase-7-tencent-mirror-staging-2026-10-19.md) records actual checks. Future native fallback must cover both discovery and the exact versioned package, preserve publisher authentication and every installer invariant, and distinguish transport failure from invalid signed content.
+
 ## Supported first capability
 
 The first Phase 7 delivery targets a complete immutable Catalog database package. ADR-0011 freezes its strict envelope, canonical signed payload, Ed25519 authentication, public-key sequence ranges, dataset and compatibility fields, monotonic release sequence, exact-host HTTPS URL, byte length, and SHA-256. Offline conformance fixtures and negative tests now cover that metadata boundary.

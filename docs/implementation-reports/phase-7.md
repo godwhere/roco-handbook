@@ -2,6 +2,7 @@
 
 - Status: temporarily closed under `PHASE7-LIVE-CATALOG-001`; foreground complete-Catalog runtime implemented, live newer Release evidence deferred
 - Date: 2026-09-10
+- Hosting follow-up: 2026-10-19 private Tencent mirror staging accepted; public hosting remains blocked by ICP/TLS prerequisites
 - Workspace: `/Users/ethan/Documents/ChatGPT/roco-handbook`
 
 ## Declared boundary
@@ -106,3 +107,13 @@ Generated Android and iOS products remain ignored and untracked. Dependency reso
 ## Remaining risks and next boundary
 
 The runtime capability is implemented and locally verified at its available boundaries, and the empty production channel fails safely. Phase 7 is temporarily closed under ADR-0014, with the missing live-package matrix deferred rather than passed. Its next meaningful evidence requires a real validated Catalog data version greater than 1. That release must be built outside the repository, signed with the accepted external key, uploaded under the exact immutable package tag, checked through the foreground client, and then exercised for interruption, low storage, rollback, and platform behavior. Logical patch work remains deferred until complete-package evidence demonstrates a material need and a separate protocol is accepted.
+
+## Tencent hosting preparation, 2026-10-19
+
+The owner separately requested a domestic fallback and then server deployment first. ADR-0029 permits only this hosting preparation slice. Changed paths are `deploy/catalog-mirror/`, `AGENTS.md`, `README.md`, ADR-0029, the independent-update feature document, the corresponding Tencent staging evidence, and this report. The App, historical client, source data, immutable releases, SQL, signing keys, and existing services remain outside the slice.
+
+Both authoritative DNS servers confirm `time9.site` points to the owned Shanghai Tencent instance. The authenticated ICP console reports the domain as not filed. Nginx is installed and enabled with a loopback-only static listener, a real internally staged Catalog v2 archive, restrictive routes, and an inactive production HTTPS template. Existing Timeline and host firewall configuration are preserved. No signed discovery or public update was published.
+
+Verification: the existing complete-update builder validated release 2; the 889409-byte archive and its downloaded bytes match SHA-256 `805210c80c41922a88d87a188a5ee4e0c715570200ffcb624847de0a04b2333a`. All 12 server integration groups pass, including methods, paths, hidden files, symlinks, cache behavior, exact HEAD/range responses, restart, boot enablement, and existing-service preservation. Configuration readback matches the checkout. The focused project-structure module passes all 12 tests; whitespace, the exact 10-file allowlist, local links, and new-artifact language checks pass. The immutable specification retains SHA-256 `343618b414b7b8d6262dd58f82010bfefb2f3fdb29711a9e86428e042dd81876`. Server dependency impact is four newly installed Ubuntu packages and no upgraded/removed packages; App lockfiles are unchanged.
+
+Artifacts, commands, observed console state, the corrected negative-test expectation, and unrun layers are recorded in [the evidence](../evidence/phase-7-tencent-mirror-staging-2026-10-19.md) and [runbook](../../deploy/catalog-mirror/README.md). Public activation, certificate renewal, external transfer, ICP approval, reboot, signed publication, native fallback, and physical-device checks remain unrun. The next boundary is the owner's ICP completion, then trusted TLS and public hosting acceptance; App fallback follows separately. This staging result does not close the outstanding Phase 7 live-update matrix.

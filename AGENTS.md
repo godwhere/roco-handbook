@@ -43,7 +43,7 @@ Minimal scope must not remove source validation, identity stability, reference c
 - `handbook_id`, `pet_id`, and upstream numeric IDs have different meanings. Do not infer official numbering, default forms, evolution direction, or identity from suffixes, names, or list order.
 - Core and Learnset feature references must remain independently traceable. Conflicts require a specific review result and must not be silently overwritten.
 - Shared Learnsets and every native, bloodline, and skill-stone acquisition condition must be preserved.
-- V1 distributes complete Catalog databases with App releases. ADR-0010 through ADR-0013 additionally allow explicitly requested, signed complete-Catalog updates from the fixed GitHub Releases source. Incremental patches, servers, accounts, cloud synchronization, and bulk image acquisition are outside scope.
+- V1 distributes complete Catalog databases with App releases. ADR-0010 through ADR-0013 additionally allow explicitly requested, signed complete-Catalog updates from the fixed GitHub Releases source. ADR-0029 additionally permits preparation of the explicitly requested Tencent static mirror; it remains private until ICP and public HTTPS acceptance, and does not enable native fallback. Other servers, incremental patches, accounts, cloud synchronization, and bulk image acquisition are outside scope.
 - Do not change system proxy, DNS, TUN, routes, certificates, shell networking configuration, or Shadowrocket.
 
 ## Implementation constraints

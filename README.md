@@ -182,6 +182,7 @@ config/                 来源、身份、术语、关系和资源清单配置
 data/raw/               本地冻结响应；正文忽略提交，来源锁可追溯
 data/normalized/        确定性的 Catalog 构建输入
 data/release/           不可变版本数据库、清单、署名和构建报告
+deploy/                 静态资料镜像的服务器配置与运行说明
 docs/                   技术规格、决策记录、功能文档、证据和阶段报告
 licenses/               数据署名边界和运行依赖许可清单
 release/                发布候选检查、说明和已知限制
@@ -240,6 +241,7 @@ iOS UI 测试命令见 [原生客户端说明](ios/README.md)。
 - Swift / SwiftUI 客户端位于 `ios/`，提供精灵、技能、七个图鉴工具、收藏、收集标记、笔记和设置功能。数据工具使用 Python，当前 Catalog 数据版本为 2，数据库结构由两份规范 SQL 定义。
 - 应用标识为 `world.roco.rocoHandbook`，个人数据位于 `Library/Application Support/user/user.db`；图鉴恢复与更新不会覆盖个人数据库。
 - 支持签名完整图鉴包校验和固定 GitHub Releases 传输；正式数据包的签名、托管和在线更新验证属于独立验收环节。
+- 腾讯云备用源已完成服务器内部部署和资料包传输验收；`time9.site` 尚未备案，公网 HTTPS 与 App 自动切换尚未启用。部署边界和后续步骤见 [服务器运行说明](deploy/catalog-mirror/README.md)。
 - 当前原生界面、构建与本地测试证据见 Phase 9 报告。
 - 真机安装、既有安装的签名升级、iOS 15 运行、VoiceOver、低存储与崩溃耐久性、正式归档、商店上传、审核和发布尚未完成。
 

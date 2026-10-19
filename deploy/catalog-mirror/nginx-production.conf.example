@@ -1,0 +1,29 @@
+# Enable only after ICP approval, valid public certificates, and firewall review.
+server {
+    listen 80;
+    server_name time9.site;
+    if ($host != time9.site) {
+        return 404;
+    }
+    return 308 https://time9.site$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name time9.site;
+    ssl_certificate /etc/ssl/roco-catalog/fullchain.pem;
+    ssl_certificate_key /etc/ssl/roco-catalog/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_session_cache shared:RocoCatalogTLS:1m;
+    ssl_session_timeout 1d;
+    root /srv/roco-catalog/public;
+    server_tokens off;
+    autoindex off;
+    disable_symlinks on;
+    gzip off;
+    max_ranges 1;
+    client_max_body_size 1k;
+    access_log off;
+    add_header X-Content-Type-Options "nosniff" always;
+    include /etc/nginx/snippets/roco-catalog-locations.conf;
+}
