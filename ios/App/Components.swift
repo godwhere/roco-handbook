@@ -7,6 +7,24 @@ func tr(_ key: String) -> String { NSLocalizedString(key, comment: "") }
 enum HandbookTheme {
     static let background = Color(uiColor: .systemGroupedBackground)
     static let surface = Color(uiColor: .secondarySystemGroupedBackground)
+    static let paperBackground = Color(uiColor: UIColor { $0.userInterfaceStyle == .dark
+        ? UIColor(red: 0.07, green: 0.10, blue: 0.08, alpha: 1)
+        : UIColor(red: 0.97, green: 0.96, blue: 0.91, alpha: 1) })
+    static let paperSurface = Color(uiColor: UIColor { $0.userInterfaceStyle == .dark
+        ? UIColor(red: 0.11, green: 0.15, blue: 0.12, alpha: 1)
+        : UIColor(red: 1, green: 0.995, blue: 0.97, alpha: 1) })
+    static let forestAccent = Color(uiColor: UIColor { $0.userInterfaceStyle == .dark
+        ? UIColor(red: 0.59, green: 0.82, blue: 0.63, alpha: 1)
+        : UIColor(red: 0.18, green: 0.36, blue: 0.24, alpha: 1) })
+    static let goldAccent = Color(uiColor: UIColor { $0.userInterfaceStyle == .dark
+        ? UIColor(red: 0.94, green: 0.78, blue: 0.43, alpha: 1)
+        : UIColor(red: 0.56, green: 0.38, blue: 0.13, alpha: 1) })
+    static let paperLine = Color(uiColor: UIColor { $0.userInterfaceStyle == .dark
+        ? UIColor(red: 0.29, green: 0.39, blue: 0.31, alpha: 1)
+        : UIColor(red: 0.82, green: 0.79, blue: 0.65, alpha: 1) })
+    static let paperSecondary = Color(uiColor: UIColor { $0.userInterfaceStyle == .dark
+        ? UIColor(red: 0.72, green: 0.77, blue: 0.70, alpha: 1)
+        : UIColor(red: 0.35, green: 0.39, blue: 0.33, alpha: 1) })
     static let detailAccent = Color(uiColor: UIColor { $0.userInterfaceStyle == .dark
         ? UIColor(red: 1, green: 0.60, blue: 0.44, alpha: 1)
         : UIColor(red: 0.72, green: 0.29, blue: 0.17, alpha: 1) })
@@ -28,6 +46,44 @@ enum HandbookTheme {
                                .purple, .mint, .orange, .teal, .pink, .purple, .indigo, .gray, .pink]
         let short = name.hasSuffix("\u{7cfb}") ? String(name.dropLast()) : name
         return names.firstIndex(of: short).map { colors[$0] } ?? .blue
+    }
+}
+
+struct HandbookPageHeader: View {
+    let title: String
+    let subtitle: String
+    let artworkPath: String
+    @Environment(\.sizeCategory) private var sizeCategory
+
+    var body: some View {
+        HStack(spacing: 8) {
+            VStack(alignment: .leading, spacing: 6) {
+                if !sizeCategory.isAccessibilityCategory {
+                    Text(tr("Roco World Handbook")).font(.caption.weight(.semibold))
+                        .foregroundColor(HandbookTheme.forestAccent)
+                }
+                Text(title).font(HandbookTheme.display(sizeCategory.isAccessibilityCategory ? 18 : 21, relativeTo: .title2))
+                    .foregroundColor(.primary).accessibilityAddTraits(.isHeader)
+                if !sizeCategory.isAccessibilityCategory {
+                    Text(subtitle).font(.footnote).foregroundColor(HandbookTheme.paperSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }.frame(maxWidth: .infinity, alignment: .leading)
+            if !sizeCategory.isAccessibilityCategory {
+                AssetImage(path: artworkPath, label: "", size: 72)
+                    .accessibilityHidden(true)
+            }
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(LinearGradient(
+            colors: [HandbookTheme.forestAccent.opacity(0.12), HandbookTheme.goldAccent.opacity(0.06)],
+            startPoint: .topLeading, endPoint: .bottomTrailing
+        ))
+        .background(HandbookTheme.paperSurface)
+        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 24, style: .continuous)
+            .stroke(HandbookTheme.paperLine, lineWidth: 1))
     }
 }
 

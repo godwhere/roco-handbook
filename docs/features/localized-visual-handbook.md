@@ -18,6 +18,10 @@ Creature and skill filters use adaptive multi-column options grouped by their ex
 
 Filter sheets observe the parent type list through a binding. Opening a sheet before the offline metadata read finishes shows progress and then the available icons, rather than retaining an empty captured list.
 
+Tools and Settings share a scoped Roco notebook treatment: warm paper surfaces, forest-green text accents, restrained gold outlines, existing starter-creature illustrations, and the frozen display font for headings. Compact native navigation titles sit above illustrated page headers. Seven full-width Tool cards retain their original routes and accessible names, adding localized explanatory subtitles. Settings uses separate Appearance, My library, Catalog, and About paper panels with explicit layout labels. Both pages remain fully scrollable; the rest of the App theme is unchanged.
+
+Light and dark surfaces have separate color values. Accessibility text sizes hide decorative art/badges, allow natural card growth, and replace the two segmented layout controls with native menus over the same saved values. Navigation and action rows, including download/cancel, provide at least 44-point hit targets. The existing update progress, cancellation, errors, recovery confirmation, personal-data notice, and source/license routes remain available. These presentation changes are owned by ADR-0031 and the Phase 11 report; they do not modify Catalog or personal-data contracts.
+
 ## Offline resources and typography
 
 `ios/prepare_resources.py` stages only active resources from `app/assets/`: Catalog data version 3, Wiki images version 4, Tool images version 2, font assets version 1, and the frozen reference JSON files. Earlier image versions are excluded. No runtime image or font request exists. Native path helpers validate keys and Tool subdirectories and show a local fallback when a resource is unavailable.

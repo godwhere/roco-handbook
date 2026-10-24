@@ -93,6 +93,7 @@ App 首次启动不需要下载数据，也不会在浏览过程中访问 Wiki�
 - 系统组件随 iOS 版本呈现对应导航材质；密集图鉴、说明和资料面板保持清晰的实体背景。
 - 主界面提供精灵、技能、工具和设置四个入口，列表末尾可滚动到导航栏之外；动态字号增大时精灵网格可切换为单列。
 - 图鉴支持中英文界面，游戏条目的名称和说明保留上游原文。
+- 工具页与设置页使用精灵插画、暖纸色卡片及绿金配色，支持深色模式；布局选项带有明确标签，大字号时使用易于阅读的菜单选择。
 
 ## 技术架构
 
@@ -255,7 +256,7 @@ iOS UI 测试命令见 [原生客户端说明](ios/README.md)。
 - 应用标识为 `world.roco.rocoHandbook`，个人数据位于 `Library/Application Support/user/user.db`；图鉴恢复与更新不会覆盖个人数据库。
 - 支持签名完整图鉴包校验和固定 GitHub Releases 传输；正式数据包的签名、托管和在线更新验证属于独立验收环节。
 - 腾讯云备用源已完成服务器内部部署和资料包传输验收；`time9.site` 尚未备案，公网 HTTPS 与 App 自动切换尚未启用。部署边界和后续步骤见 [服务器运行说明](deploy/catalog-mirror/README.md)。
-- 当前原生界面证据见 Phase 9 报告；图鉴、活动与时装更新及兼容性验证见 Phase 10 报告。
+- 当前工具、设置与字号适配证据见 Phase 11 报告；原生基础实现见 Phase 9，图鉴、活动与时装更新及身份兼容见 Phase 10。
 - 真机安装、既有安装的签名升级、iOS 15 运行、VoiceOver、低存储与崩溃耐久性、正式归档、商店上传、审核和发布尚未完成。
 
 ## 相关文档
@@ -270,4 +271,5 @@ iOS UI 测试命令见 [原生客户端说明](ios/README.md)。
 - [原生 iOS 决策](docs/decisions/ADR-0023-native-swift-ios-client.md)：Swift、平台范围及兼容边界。
 - [Phase 9 实施报告](docs/implementation-reports/phase-9.md)：原生客户端与界面证据。
 - [Phase 10 实施报告](docs/implementation-reports/phase-10.md)：最新来源内容、身份兼容、离线资源与验证边界。
+- [Phase 11 实施报告](docs/implementation-reports/phase-11.md)：工具与设置的洛克手册风格、常规字号与辅助字号验收。
 - [内容更新流程](docs/features/catalog-content-refresh.md)：冻结来源、审查映射与完整资料包构建。

@@ -8,6 +8,13 @@ final class RocoHandbookUITests: XCTestCase {
         XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
         return app
     }
+    private func reveal(_ element: XCUIElement, in app: XCUIApplication) {
+        for _ in 0..<10 {
+            if element.isHittable { return }
+            app.swipeUp()
+        }
+        XCTAssertTrue(element.isHittable)
+    }
     func testOfflineCatalogSearchAndDetailNavigation() {
         let app = launch()
         let search = app.textFields["pets.search"]
@@ -31,6 +38,46 @@ final class RocoHandbookUITests: XCTestCase {
         capture.name = "phase10-new-creature"
         capture.lifetime = .keepAlways
         add(capture)
+    }
+    func testChineseToolsAndSettingsCaptures() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-AppleLanguages", "(zh-Hans)", "-AppleLocale", "zh_CN"]
+        app.launch()
+        XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
+        app.tabBars.buttons.element(boundBy: 2).tap()
+        XCTAssertTrue(app.buttons["tools.seasons"].waitForExistence(timeout: 10))
+        capture(app, name: "tools-zh")
+        app.tabBars.buttons.element(boundBy: 3).tap()
+        XCTAssertTrue(app.segmentedControls["settings.layout"].waitForExistence(timeout: 10))
+        capture(app, name: "settings-zh")
+    }
+    func testToolsAndSettingsRemainReachableWithAccessibilityText() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-AppleLanguages", "(zh-Hans)", "-AppleLocale", "zh_CN",
+                               "-UIPreferredContentSizeCategoryName",
+                               "UICTContentSizeCategoryAccessibilityXXXL"]
+        app.launch()
+        XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
+        app.tabBars.buttons.element(boundBy: 2).tap()
+        let first = app.buttons["tools.seasons"]
+        XCTAssertTrue(first.waitForExistence(timeout: 10))
+        XCTAssertGreaterThanOrEqual(first.frame.height, 44)
+        capture(app, name: "tools-large-text-zh")
+        reveal(app.buttons["tools.library"], in: app)
+        app.tabBars.buttons.element(boundBy: 3).tap()
+        let layout = app.buttons["settings.layout"]
+        reveal(layout, in: app)
+        XCTAssertTrue(layout.exists)
+        XCTAssertFalse(app.segmentedControls["settings.layout"].exists)
+        capture(app, name: "settings-large-text-zh")
+        let restore = app.buttons["settings.restore"]
+        reveal(restore, in: app)
+        XCTAssertGreaterThanOrEqual(restore.frame.height, 44)
+        restore.tap()
+        XCTAssertTrue(app.alerts.firstMatch.waitForExistence(timeout: 10))
+        app.alerts.buttons["\u{53d6}\u{6d88}"].tap()
+        reveal(app.buttons["settings.licenses"], in: app)
+        capture(app, name: "settings-large-text-lower-zh")
     }
     func testCatalogToolbarAndThreeColumnGeometryAndPersistence() {
         let app = launch()
@@ -434,7 +481,7 @@ final class RocoHandbookUITests: XCTestCase {
         ]
         for (id, title) in routes {
             let link = app.buttons[id]
-            if !link.isHittable { app.swipeUp() }
+            reveal(link, in: app)
             XCTAssertTrue(link.waitForExistence(timeout: 10))
             link.tap()
             XCTAssertTrue(app.navigationBars[title].waitForExistence(timeout: 15))
@@ -442,6 +489,7 @@ final class RocoHandbookUITests: XCTestCase {
         }
         app.tabBars.buttons["Settings"].tap()
         XCTAssertTrue(app.buttons["settings.restore"].waitForExistence(timeout: 10))
+        reveal(app.buttons["settings.restore"], in: app)
     }
     func testFavoritesNotesLayoutAndRestorePreservePersonalData() {
         let app = launch()
@@ -462,10 +510,12 @@ final class RocoHandbookUITests: XCTestCase {
         let layout = app.segmentedControls["settings.layout"]
         XCTAssertTrue(layout.waitForExistence(timeout: 10))
         layout.buttons["List"].tap()
+        reveal(app.buttons["settings.restore"], in: app)
         app.buttons["settings.restore"].tap()
         app.alerts.buttons["Restore Catalog"].tap()
         XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
         app.tabBars.buttons["Tools"].tap()
+        reveal(app.buttons["tools.library"], in: app)
         app.buttons["tools.library"].tap()
         let saved = app.buttons["favorite.pet.pet_000001"]
         XCTAssertTrue(saved.waitForExistence(timeout: 10))
