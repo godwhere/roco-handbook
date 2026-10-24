@@ -264,7 +264,7 @@ struct PetDetailView: View {
                     let value = detail.stats.first { $0.id == key }?.value
                     HStack(spacing: 10) {
                         HStack(spacing: 5) {
-                            AssetImage(path: "wiki/v3/ui/stats/\(icons[index]).png", label: tr(key), size: 19).accessibilityHidden(true)
+                            AssetImage(path: "wiki/v4/ui/stats/\(icons[index]).png", label: tr(key), size: 19).accessibilityHidden(true)
                             Text(tr(key)).font(.caption).foregroundColor(.secondary)
                         }.frame(width: 90, alignment: .leading)
                         GeometryReader { geometry in
@@ -352,7 +352,7 @@ struct PetDetailView: View {
                             HStack(spacing: 6) {
                                 if item == .native { Image(systemName: "pawprint.fill").accessibilityHidden(true) }
                                 else {
-                                    AssetImage(path: "wiki/v3/ui/sources/\(item == .blood ? "bloodline" : "skill-stone").png",
+                                    AssetImage(path: "wiki/v4/ui/sources/\(item == .blood ? "bloodline" : "skill-stone").png",
                                                label: tr(item.rawValue), size: 23).accessibilityHidden(true)
                                 }
                                 Text(tr(item.rawValue)).font(.subheadline.weight(.semibold))

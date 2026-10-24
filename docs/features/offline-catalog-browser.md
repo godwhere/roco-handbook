@@ -33,7 +33,7 @@ Search supports canonical name, title, alias, and exact handbook number. Pure nu
 
 The grouped filter sheet combines shiny availability, First/Second/Third stage, Main/Regional/Lord form, S1 through S4 owning season, and creature type. Choices use OR within a group and AND between groups. Main forms use the reviewed `handbook_display.default_pet_id`; regional and lord predicates use preserved source fields rather than suffix or list-order inference. The current Catalog has no independent shiny-season field, so the App does not present a misleading nested shiny-season filter. Sorting is limited to the visible enum choices: handbook number, name, attack, magic attack, or speed. Results load 60 at a time through an explicit **Load more** action.
 
-Shiny-capable creature names use the stored season's Wiki-aligned color family. Records without an owning season use the App primary color. The S4 filter resolves the owning-season values now present in NRC Catalog data version 2.
+Shiny-capable creature names use the stored season's Wiki-aligned color family. Records without an owning season use the App primary color. The S4 filter resolves the owning-season values now present in NRC Catalog data version 3.
 
 ## Creature detail
 
@@ -57,7 +57,7 @@ Description-note identifiers remain stored in the Catalog. When their definition
 
 Tools uses compact vertically stacked cards based on the supplied and captured Wiki navigation references. Each card begins with its functional title at the upper left and omits the earlier numbered category overline. Season archive queries `belong_season_raw`, and Feature handbook queries preserved feature relationships. Egg groups combines normal text-input creature search with a multi-select sheet over the numeric identifiers in `pets.extra_json`; an empty group selection means every stored group, selected groups use OR semantics, and results open the matching concrete creature directly. No second identity or raw-field UI path is introduced.
 
-Personal library remains available as a Tools card. Game descriptions reads a separate bundled 54-term contract and joins each term to distinct Catalog skill or feature relationships. Event timeline reads 547 bundled activity occurrences, filters them by source category and selected month, derives Active, Upcoming, Ended, or Undated against the device clock, and opens preserved summaries and descriptions. Outfit inspiration reads 110 bundled outfits and 220 gender variants, supports text and grade filtering, switches the preview gender, and displays acquisition details.
+Personal library remains available as a Tools card. Game descriptions reads a separate bundled 54-term contract and joins each term to distinct Catalog skill or feature relationships. Event timeline reads 552 bundled activity occurrences, filters them by source category and selected month, derives Active, Upcoming, Ended, or Undated against the device clock, and opens preserved summaries and descriptions. Outfit inspiration reads 124 bundled outfits and 248 gender variants, supports text and grade filtering, switches the preview gender, and displays acquisition details.
 
 These three Tool contracts preserve their source revision and complete source records but remain separate from Catalog schema version 1. Their development import commands validate data-only Lua and refuse executable syntax or a changed identity. The App packages compact source activity icons and outfit previews and never opens the Wiki or downloads a missing image at runtime.
 

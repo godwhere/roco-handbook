@@ -10,11 +10,11 @@ Changes: MediaWiki data was validated, safely parsed, normalized,
 cross-referenced, and packaged into an offline SQLite Catalog.
 
 Frozen source revisions:
-- core: revision 13095 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Catalog&oldid=13095
-- evolution: revision 7267 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Evolutions&oldid=7267
-- handbook: revision 7268 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Handbooks&oldid=7268
-- history: revision 13096 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/History&oldid=13096
-- index: revision 12251 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Index&oldid=12251
-- learnset_catalog: revision 13094 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Learnsets&oldid=13094
-- overview: revision 12253 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Overview&oldid=12253
-- skill_catalog: revision 7273 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Skills&oldid=7273
+- core: revision 19223 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Catalog&oldid=19223
+- evolution: revision 19224 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Evolutions&oldid=19224
+- handbook: revision 18791 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Handbooks&oldid=18791
+- history: revision 18792 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/History&oldid=18792
+- index: revision 18793 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Index&oldid=18793
+- learnset_catalog: revision 18761 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Learnsets&oldid=18761
+- overview: revision 18794 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Overview&oldid=18794
+- skill_catalog: revision 18764 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Skills&oldid=18764

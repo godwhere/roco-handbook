@@ -1,0 +1,707 @@
+{
+  "changed_existing_evolution_edges": [
+    {
+      "group_id": "evolution_44a27d3632b6",
+      "new": [
+        {
+          "condition_text": "生涯击败[棋骑士（白子）]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_44a27d3632b6",
+          "from_pet_id": "pet_000437",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000438"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_44a27d3632b6",
+          "from_pet_id": "pet_000438",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000576"
+        }
+      ],
+      "old": [
+        {
+          "condition_text": "生涯击败[棋骑士]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_44a27d3632b6",
+          "from_pet_id": "pet_000437",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000438"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_44a27d3632b6",
+          "from_pet_id": "pet_000438",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000576"
+        }
+      ]
+    },
+    {
+      "group_id": "evolution_5d4cd7122023",
+      "new": [
+        {
+          "condition_text": "生涯击败[棋绮后（黑子）]3只 + 雌性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_5d4cd7122023",
+          "from_pet_id": "pet_000432",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000434"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_5d4cd7122023",
+          "from_pet_id": "pet_000434",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000573"
+        }
+      ],
+      "old": [
+        {
+          "condition_text": "生涯击败[棋绮后]3只 + 雌性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_5d4cd7122023",
+          "from_pet_id": "pet_000432",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000434"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_5d4cd7122023",
+          "from_pet_id": "pet_000434",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000573"
+        }
+      ]
+    },
+    {
+      "group_id": "evolution_719999c46bfc",
+      "new": [
+        {
+          "condition_text": "生涯击败[棋齐垒（白子）]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_719999c46bfc",
+          "from_pet_id": "pet_000437",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000440"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_719999c46bfc",
+          "from_pet_id": "pet_000440",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000578"
+        }
+      ],
+      "old": [
+        {
+          "condition_text": "生涯击败[棋齐垒]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_719999c46bfc",
+          "from_pet_id": "pet_000437",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000440"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_719999c46bfc",
+          "from_pet_id": "pet_000440",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000578"
+        }
+      ]
+    },
+    {
+      "group_id": "evolution_772a15e4c21d",
+      "new": [
+        {
+          "condition_text": "生涯击败[棋祈督（白子）]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_772a15e4c21d",
+          "from_pet_id": "pet_000437",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000441"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_772a15e4c21d",
+          "from_pet_id": "pet_000441",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000579"
+        }
+      ],
+      "old": [
+        {
+          "condition_text": "生涯击败[棋祈督]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_772a15e4c21d",
+          "from_pet_id": "pet_000437",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000441"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_772a15e4c21d",
+          "from_pet_id": "pet_000441",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000579"
+        }
+      ]
+    },
+    {
+      "group_id": "evolution_82baca9096dd",
+      "new": [
+        {
+          "condition_text": "生涯击败[棋齐垒（黑子）]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_82baca9096dd",
+          "from_pet_id": "pet_000432",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000435"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_82baca9096dd",
+          "from_pet_id": "pet_000435",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000574"
+        }
+      ],
+      "old": [
+        {
+          "condition_text": "生涯击败[棋齐垒]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_82baca9096dd",
+          "from_pet_id": "pet_000432",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000435"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_82baca9096dd",
+          "from_pet_id": "pet_000435",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000574"
+        }
+      ]
+    },
+    {
+      "group_id": "evolution_840a77b84850",
+      "new": [
+        {
+          "condition_text": "生涯击败[棋祈督（黑子）]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_840a77b84850",
+          "from_pet_id": "pet_000432",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000436"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_840a77b84850",
+          "from_pet_id": "pet_000436",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000575"
+        }
+      ],
+      "old": [
+        {
+          "condition_text": "生涯击败[棋祈督]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_840a77b84850",
+          "from_pet_id": "pet_000432",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000436"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_840a77b84850",
+          "from_pet_id": "pet_000436",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000575"
+        }
+      ]
+    },
+    {
+      "group_id": "evolution_a57e0145a38a",
+      "new": [
+        {
+          "condition_text": "生涯击败[棋绮后（白子）]3只 + 雌性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_a57e0145a38a",
+          "from_pet_id": "pet_000437",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000439"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_a57e0145a38a",
+          "from_pet_id": "pet_000439",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000577"
+        }
+      ],
+      "old": [
+        {
+          "condition_text": "生涯击败[棋绮后]3只 + 雌性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_a57e0145a38a",
+          "from_pet_id": "pet_000437",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000439"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_a57e0145a38a",
+          "from_pet_id": "pet_000439",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000577"
+        }
+      ]
+    },
+    {
+      "group_id": "evolution_a5b0e6d8cc44",
+      "new": [
+        {
+          "condition_text": "生涯击败[棋骑士（白子）]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_a5b0e6d8cc44",
+          "from_pet_id": "pet_000437",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000438"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_a5b0e6d8cc44",
+          "from_pet_id": "pet_000438",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000576"
+        },
+        {
+          "condition_text": "生涯击败[棋绮后（白子）]3只 + 雌性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_a5b0e6d8cc44",
+          "from_pet_id": "pet_000437",
+          "level_requirement": 26,
+          "ordinal": 2,
+          "to_pet_id": "pet_000439"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_a5b0e6d8cc44",
+          "from_pet_id": "pet_000439",
+          "level_requirement": null,
+          "ordinal": 3,
+          "to_pet_id": "pet_000577"
+        },
+        {
+          "condition_text": "生涯击败[棋齐垒（白子）]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_a5b0e6d8cc44",
+          "from_pet_id": "pet_000437",
+          "level_requirement": 26,
+          "ordinal": 4,
+          "to_pet_id": "pet_000440"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_a5b0e6d8cc44",
+          "from_pet_id": "pet_000440",
+          "level_requirement": null,
+          "ordinal": 5,
+          "to_pet_id": "pet_000578"
+        },
+        {
+          "condition_text": "生涯击败[棋祈督（白子）]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_a5b0e6d8cc44",
+          "from_pet_id": "pet_000437",
+          "level_requirement": 26,
+          "ordinal": 6,
+          "to_pet_id": "pet_000441"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_a5b0e6d8cc44",
+          "from_pet_id": "pet_000441",
+          "level_requirement": null,
+          "ordinal": 7,
+          "to_pet_id": "pet_000579"
+        }
+      ],
+      "old": [
+        {
+          "condition_text": "生涯击败[棋骑士]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_a5b0e6d8cc44",
+          "from_pet_id": "pet_000437",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000438"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_a5b0e6d8cc44",
+          "from_pet_id": "pet_000438",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000576"
+        },
+        {
+          "condition_text": "生涯击败[棋绮后]3只 + 雌性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_a5b0e6d8cc44",
+          "from_pet_id": "pet_000437",
+          "level_requirement": 26,
+          "ordinal": 2,
+          "to_pet_id": "pet_000439"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_a5b0e6d8cc44",
+          "from_pet_id": "pet_000439",
+          "level_requirement": null,
+          "ordinal": 3,
+          "to_pet_id": "pet_000577"
+        },
+        {
+          "condition_text": "生涯击败[棋齐垒]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_a5b0e6d8cc44",
+          "from_pet_id": "pet_000437",
+          "level_requirement": 26,
+          "ordinal": 4,
+          "to_pet_id": "pet_000440"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_a5b0e6d8cc44",
+          "from_pet_id": "pet_000440",
+          "level_requirement": null,
+          "ordinal": 5,
+          "to_pet_id": "pet_000578"
+        },
+        {
+          "condition_text": "生涯击败[棋祈督]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_a5b0e6d8cc44",
+          "from_pet_id": "pet_000437",
+          "level_requirement": 26,
+          "ordinal": 6,
+          "to_pet_id": "pet_000441"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_a5b0e6d8cc44",
+          "from_pet_id": "pet_000441",
+          "level_requirement": null,
+          "ordinal": 7,
+          "to_pet_id": "pet_000579"
+        }
+      ]
+    },
+    {
+      "group_id": "evolution_f28cc1f0218e",
+      "new": [
+        {
+          "condition_text": "生涯击败[棋骑士（黑子）]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_f28cc1f0218e",
+          "from_pet_id": "pet_000432",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000433"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_f28cc1f0218e",
+          "from_pet_id": "pet_000433",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000556"
+        },
+        {
+          "condition_text": "生涯击败[棋绮后（黑子）]3只 + 雌性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_f28cc1f0218e",
+          "from_pet_id": "pet_000432",
+          "level_requirement": 26,
+          "ordinal": 2,
+          "to_pet_id": "pet_000434"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_f28cc1f0218e",
+          "from_pet_id": "pet_000434",
+          "level_requirement": null,
+          "ordinal": 3,
+          "to_pet_id": "pet_000573"
+        },
+        {
+          "condition_text": "生涯击败[棋齐垒（黑子）]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_f28cc1f0218e",
+          "from_pet_id": "pet_000432",
+          "level_requirement": 26,
+          "ordinal": 4,
+          "to_pet_id": "pet_000435"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_f28cc1f0218e",
+          "from_pet_id": "pet_000435",
+          "level_requirement": null,
+          "ordinal": 5,
+          "to_pet_id": "pet_000574"
+        },
+        {
+          "condition_text": "生涯击败[棋祈督（黑子）]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_f28cc1f0218e",
+          "from_pet_id": "pet_000432",
+          "level_requirement": 26,
+          "ordinal": 6,
+          "to_pet_id": "pet_000436"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_f28cc1f0218e",
+          "from_pet_id": "pet_000436",
+          "level_requirement": null,
+          "ordinal": 7,
+          "to_pet_id": "pet_000575"
+        }
+      ],
+      "old": [
+        {
+          "condition_text": "生涯击败[棋骑士]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_f28cc1f0218e",
+          "from_pet_id": "pet_000432",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000433"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_f28cc1f0218e",
+          "from_pet_id": "pet_000433",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000556"
+        },
+        {
+          "condition_text": "生涯击败[棋绮后]3只 + 雌性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_f28cc1f0218e",
+          "from_pet_id": "pet_000432",
+          "level_requirement": 26,
+          "ordinal": 2,
+          "to_pet_id": "pet_000434"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_f28cc1f0218e",
+          "from_pet_id": "pet_000434",
+          "level_requirement": null,
+          "ordinal": 3,
+          "to_pet_id": "pet_000573"
+        },
+        {
+          "condition_text": "生涯击败[棋齐垒]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_f28cc1f0218e",
+          "from_pet_id": "pet_000432",
+          "level_requirement": 26,
+          "ordinal": 4,
+          "to_pet_id": "pet_000435"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_f28cc1f0218e",
+          "from_pet_id": "pet_000435",
+          "level_requirement": null,
+          "ordinal": 5,
+          "to_pet_id": "pet_000574"
+        },
+        {
+          "condition_text": "生涯击败[棋祈督]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_f28cc1f0218e",
+          "from_pet_id": "pet_000432",
+          "level_requirement": 26,
+          "ordinal": 6,
+          "to_pet_id": "pet_000436"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_f28cc1f0218e",
+          "from_pet_id": "pet_000436",
+          "level_requirement": null,
+          "ordinal": 7,
+          "to_pet_id": "pet_000575"
+        }
+      ]
+    },
+    {
+      "group_id": "evolution_f9b10d964cc9",
+      "new": [
+        {
+          "condition_text": "生涯击败[棋骑士（黑子）]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_f9b10d964cc9",
+          "from_pet_id": "pet_000432",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000433"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_f9b10d964cc9",
+          "from_pet_id": "pet_000433",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000556"
+        }
+      ],
+      "old": [
+        {
+          "condition_text": "生涯击败[棋骑士]3只 + 雄性",
+          "edge_kind": "chain",
+          "evolution_group_id": "evolution_f9b10d964cc9",
+          "from_pet_id": "pet_000432",
+          "level_requirement": 26,
+          "ordinal": 0,
+          "to_pet_id": "pet_000433"
+        },
+        {
+          "condition_text": "首领化; 棋契陛下的信物",
+          "edge_kind": "lord_branch",
+          "evolution_group_id": "evolution_f9b10d964cc9",
+          "from_pet_id": "pet_000433",
+          "level_requirement": null,
+          "ordinal": 1,
+          "to_pet_id": "pet_000556"
+        }
+      ]
+    }
+  ],
+  "changed_skill_identities": [],
+  "evolution_groups": {
+    "additions": 6,
+    "missing_prior_ids": []
+  },
+  "handbook_entries": {
+    "additions": 2,
+    "missing_prior_ids": []
+  },
+  "learnset_blood_skills_relations": {
+    "added_rows": 18,
+    "prior_rows": 5598,
+    "removed_rows": 0,
+    "retained_rows": 5598
+  },
+  "learnset_legendary_skills_relations": {
+    "added_rows": 0,
+    "prior_rows": 7,
+    "removed_rows": 0,
+    "retained_rows": 7
+  },
+  "learnset_native_skills_relations": {
+    "added_rows": 13,
+    "prior_rows": 4408,
+    "removed_rows": 0,
+    "retained_rows": 4408
+  },
+  "learnset_skill_stones_relations": {
+    "added_rows": 12,
+    "prior_rows": 5548,
+    "removed_rows": 0,
+    "retained_rows": 5548
+  },
+  "learnsets": {
+    "additions": 1,
+    "missing_prior_ids": []
+  },
+  "learnsets_relations": {
+    "added_rows": 1,
+    "prior_rows": 311,
+    "removed_rows": 0,
+    "retained_rows": 311
+  },
+  "missing_prior_skills": [],
+  "missing_source_provenance": [],
+  "new_skills": [
+    {
+      "category": "特性",
+      "name": "吐水",
+      "skill_id": "skill_000834",
+      "upstream_numeric_id": 200326
+    }
+  ],
+  "pets": {
+    "additions": 12,
+    "missing_prior_ids": []
+  }
+}

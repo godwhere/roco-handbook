@@ -17,6 +17,7 @@ from .adapters.common import (
 from .errors import AdapterError
 from .inspection import _load_lock, _source_by_key
 from .lua_parser import LuaTable, LuaValue, parse_lua_table
+from .nrc_identity import apply_reviewed_nrc_identities
 from .normalizer import (
     _load_type_aliases,
     _numeric_and_text,
@@ -137,7 +138,7 @@ def _png_stem(value: LuaValue, context: str) -> str:
     return filename[:-4]
 
 
-def _legacy_illustrations(previous_catalog: Path | None) -> dict[int, str]:
+def _previous_illustrations(previous_catalog: Path | None) -> dict[int, str]:
     if previous_catalog is None:
         return {}
     if not previous_catalog.is_file():
@@ -148,17 +149,29 @@ def _legacy_illustrations(previous_catalog: Path | None) -> dict[int, str]:
             uri=True,
         )
         rows = connection.execute(
-            "SELECT head_key, illustration_key FROM pets WHERE status = 'active'"
+            "SELECT head_key, illustration_key, extra_json FROM pets WHERE status = 'active'"
         ).fetchall()
         connection.close()
     except sqlite3.Error as error:
         raise AdapterError(f"Cannot read previous Catalog image aliases: {error}") from error
     aliases: dict[int, str] = {}
-    for head_key, illustration_key in rows:
-        match = _LEGACY_HEAD.match(head_key or "")
-        if match is None or not isinstance(illustration_key, str) or not illustration_key:
+    for head_key, illustration_key, raw_extra in rows:
+        try:
+            extra = json.loads(raw_extra)
+        except (TypeError, json.JSONDecodeError) as error:
+            raise AdapterError("Previous Catalog has invalid image alias metadata") from error
+        if not isinstance(extra, dict):
+            raise AdapterError("Previous Catalog image alias metadata must be an object")
+        if "game_id" in extra:
+            game_id = extra["game_id"]
+        else:
+            match = _LEGACY_HEAD.match(head_key or "")
+            game_id = int(match.group(1)) if match else None
+        if (
+            not isinstance(game_id, int) or isinstance(game_id, bool) or game_id <= 0
+            or not isinstance(illustration_key, str) or not illustration_key
+        ):
             raise AdapterError("Previous Catalog has an invalid image alias record")
-        game_id = int(match.group(1))
         if game_id in aliases and aliases[game_id] != illustration_key:
             raise AdapterError(f"Previous Catalog repeats game ID {game_id}")
         aliases[game_id] = illustration_key
@@ -185,6 +198,7 @@ def normalize_nrc_snapshot(
     previous_catalog_path: Path | None,
     data_version: int,
     built_at_utc: str,
+    identity_review_path: Path | None = None,
 ) -> dict[str, Any]:
     if data_version <= 0:
         raise AdapterError("Data version must be positive")
@@ -252,7 +266,7 @@ def normalize_nrc_snapshot(
         return type_ids[canonical]
 
     source_revisions, source_refs = _source_revisions(lock, source_records)
-    legacy_illustrations = _legacy_illustrations(previous_catalog_path)
+    previous_illustrations = _previous_illustrations(previous_catalog_path)
 
     index = parsed["index"]
     handbook_order = [
@@ -393,7 +407,7 @@ def normalize_nrc_snapshot(
             image.get("illustration"),
             f"core.{pet_id}.image.illustration",
         )
-        illustration = legacy_illustrations.get(game_id, source_illustration)
+        illustration = previous_illustrations.get(game_id, source_illustration)
         source_shiny = (
             None
             if image.get("shiny") is None
@@ -784,14 +798,14 @@ def normalize_nrc_snapshot(
     if unfinished is None:
         raise AdapterError("Required S4 source sample is missing")
 
-    return {
+    normalized = {
         "normalized_version": 1,
         "dataset_id": lock["dataset_id"],
         "schema_version": 1,
         "data_version": data_version,
         "snapshot_id": lock["snapshot_id"],
-        "adapter_version": "nrc-v1",
-        "builder_version": "phase8-nrc-v1",
+        "adapter_version": "nrc-v2",
+        "builder_version": "phase10-nrc-v1",
         "built_at_utc": built_at_utc,
         "coverage": {
             "pets": True,
@@ -803,12 +817,7 @@ def normalize_nrc_snapshot(
         },
         "inspection_summary": {
             "status": "passed",
-            "warnings": [
-                {
-                    "code": "pre_release_identity_baseline_replaced",
-                    "reason": "The application has not been released and has no user identity compatibility requirement.",
-                }
-            ],
+            "warnings": [],
             "sample_mappings": {"s4_creature": unfinished},
             "rendered_index_evidence": None,
             "evolution_type_mismatches": [
@@ -857,3 +866,6 @@ def normalize_nrc_snapshot(
             "history_revision_id": source_records["history"]["revision_id"],
         },
     }
+    if identity_review_path is not None:
+        apply_reviewed_nrc_identities(normalized, identity_review_path, previous_catalog_path)
+    return normalized

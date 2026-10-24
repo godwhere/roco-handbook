@@ -34,7 +34,7 @@ jobs:
       - name: Validate immutable Catalog release
         run: >-
           PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=tools python3
-          tools/release/check_catalog.py --release data/release/2
+          tools/release/check_catalog.py --release data/release/3
 
   ios:
     name: Native Swift and iOS contracts

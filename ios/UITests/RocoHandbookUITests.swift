@@ -19,6 +19,19 @@ final class RocoHandbookUITests: XCTestCase {
         XCTAssertTrue(app.buttons["personal.favorite"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.buttons["detail.tab.Overview"].exists)
     }
+    func testRefreshedCreatureIsReachableFromBundledCatalog() {
+        let app = launch()
+        let search = app.textFields["pets.search"]
+        search.tap(); search.typeText("467")
+        let pet = app.buttons["pet.pet_000620"]
+        XCTAssertTrue(pet.waitForExistence(timeout: 10)); pet.tap()
+        XCTAssertTrue(app.buttons["detail.tab.Overview"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["\u{4e91}\u{68a6}\u{8c5a}"].firstMatch.exists)
+        let capture = XCTAttachment(screenshot: app.screenshot())
+        capture.name = "phase10-new-creature"
+        capture.lifetime = .keepAlways
+        add(capture)
+    }
     func testCatalogToolbarAndThreeColumnGeometryAndPersistence() {
         let app = launch()
         let sort = app.buttons["pets.sort"], filters = app.buttons["pets.filters"], search = app.textFields["pets.search"]

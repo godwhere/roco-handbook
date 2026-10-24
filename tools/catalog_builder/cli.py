@@ -53,6 +53,7 @@ def _parser() -> argparse.ArgumentParser:
     normalize_nrc.add_argument("--snapshot", type=Path, required=True)
     normalize_nrc.add_argument("--type-aliases", type=Path, required=True)
     normalize_nrc.add_argument("--previous-catalog", type=Path)
+    normalize_nrc.add_argument("--identity-review", type=Path)
     normalize_nrc.add_argument("--data-version", type=int, required=True)
     normalize_nrc.add_argument("--built-at-utc")
     normalize_nrc.add_argument("--output", type=Path, required=True)
@@ -157,6 +158,7 @@ def main(argv: list[str] | None = None) -> int:
                 args.snapshot,
                 type_aliases_path=args.type_aliases,
                 previous_catalog_path=args.previous_catalog,
+                identity_review_path=args.identity_review,
                 data_version=args.data_version,
                 built_at_utc=built_at_utc,
             )

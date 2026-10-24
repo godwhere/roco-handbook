@@ -21,7 +21,7 @@ final class HandbookCoreTests: XCTestCase {
     func testBundledCatalogMatchesImmutableRelease() throws {
         for filename in ["catalog.db", "bundled_catalog.json", "ATTRIBUTION.txt"] {
             XCTAssertEqual(try Data(contentsOf: assets.appendingPathComponent("catalog/\(filename)")),
-                           try Data(contentsOf: root.appendingPathComponent("data/release/2/assets/catalog/\(filename)")))
+                           try Data(contentsOf: root.appendingPathComponent("data/release/3/assets/catalog/\(filename)")))
         }
         XCTAssertEqual(try Data(contentsOf: assets.appendingPathComponent("database/user_v1.sql")),
                        try Data(contentsOf: root.appendingPathComponent("schemas/user_v1.sql")))
@@ -35,8 +35,8 @@ final class HandbookCoreTests: XCTestCase {
             if page.count < query.limit { break }
             query.offset += page.count
         }
-        XCTAssertEqual(pets.count, 621)
-        XCTAssertEqual(Set(pets.map(\.id)).count, 621)
+        XCTAssertEqual(pets.count, 633)
+        XCTAssertEqual(Set(pets.map(\.id)).count, 633)
         query.offset = 0; query.limit = 200
         var handbooks: [PetSummary] = []
         while true {
@@ -45,7 +45,7 @@ final class HandbookCoreTests: XCTestCase {
             if page.count < query.limit { break }
             query.offset += page.count
         }
-        XCTAssertEqual(handbooks.count, 466)
+        XCTAssertEqual(handbooks.count, 468)
         XCTAssertTrue(handbooks.allSatisfy(\.isDefaultForm))
     }
     func testSearchBindsValuesAndEscapesWildcards() async throws {
@@ -138,7 +138,7 @@ final class HandbookCoreTests: XCTestCase {
                 missingSizeCount += 1
             }
         }
-        XCTAssertEqual(rows.count, 621)
+        XCTAssertEqual(rows.count, 633)
         XCTAssertEqual(missingSizeCount, 47)
     }
     func testSharedLearnsetAndAllAcquisitionConditionsRemainTraceable() async throws {
@@ -170,7 +170,7 @@ final class HandbookCoreTests: XCTestCase {
             let page = try await catalog.searchSkills(query); all += page
             if page.count < query.limit { break }; query.offset += page.count
         }
-        XCTAssertEqual(all.count, 824)
+        XCTAssertEqual(all.count, 825)
         query.offset = 0; query.filter = .features
         let features = try await catalog.searchSkills(query)
         XCTAssertTrue(features.allSatisfy(\.isFeature))
@@ -187,7 +187,7 @@ final class HandbookCoreTests: XCTestCase {
     func testShinySeasonStageTypeAndEggGroupFilters() async throws {
         var query = PetQuery(); query.shiny = .hasShiny; query.limit = 200
         let pets = try await catalog.searchPets(query)
-        XCTAssertEqual(pets.count, 193)
+        XCTAssertEqual(pets.count, 197)
         XCTAssertTrue(pets.allSatisfy(\.hasShiny))
         let types = try await catalog.types()
         XCTAssertEqual(types.count, 18)
@@ -203,40 +203,48 @@ final class HandbookCoreTests: XCTestCase {
     func testNativeInstallerReusesFlutterPointerAndProtectsUserData() async throws {
         let support = try temporary()
         let bundle = try CatalogBundle.load(assetRoot: assets)
+        let legacy = try CatalogBundle.load(assetRoot: root.appendingPathComponent("data/release/2/assets"))
         let directory = support.appendingPathComponent("catalogs")
         let state = support.appendingPathComponent("catalog-state")
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         try FileManager.default.createDirectory(at: state, withIntermediateDirectories: true)
         let filename = "catalog-v2-s1-dce0d3376611.db"
-        try bundle.database.write(to: directory.appendingPathComponent(filename))
-        try bundle.attribution.write(to: directory.appendingPathComponent("catalog-v2-s1-dce0d3376611.attribution.txt"))
+        try legacy.database.write(to: directory.appendingPathComponent(filename))
+        try legacy.attribution.write(to: directory.appendingPathComponent("catalog-v2-s1-dce0d3376611.attribution.txt"))
         let flutterPointer: [String: Any] = [
             "pointer_version": 2, "dataset_id": "roco-world-zh-cn", "schema_version": 1, "data_version": 2,
-            "snapshot_id": "snapshot-dad7cd7d5ce73236", "database_bytes": bundle.database.count,
-            "database_sha256": bundle.manifest.databaseSha256, "coverage": bundle.manifest.coverage, "file_name": filename,
-            "attribution_bytes": bundle.attribution.count, "attribution_sha256": sha256(bundle.attribution),
+            "snapshot_id": "snapshot-dad7cd7d5ce73236", "database_bytes": legacy.database.count,
+            "database_sha256": legacy.manifest.databaseSha256, "coverage": legacy.manifest.coverage, "file_name": filename,
+            "attribution_bytes": legacy.attribution.count, "attribution_sha256": sha256(legacy.attribution),
         ]
         try JSONSerialization.data(withJSONObject: flutterPointer).write(to: state.appendingPathComponent("active_catalog.json"))
         let installer = CatalogInstaller(supportURL: support)
-        let installed = try await installer.prepare(bundle)
+        let installed = try await installer.prepare(legacy)
         XCTAssertEqual(installed.outcome, "Opened the current validated Catalog")
         let saved = try user(support)
         let ref = ObjectRef(type: .pet, objectID: "pet_000007", name: "Saved creature")
+        let legacyCatalog = CatalogRepository(databaseURL: root.appendingPathComponent("data/release/2/assets/catalog/catalog.db"))
+        let legacySkill = try await legacyCatalog.skillDetail("skill_000208")
+        let skillRef = ObjectRef(type: .skill, objectID: legacySkill.summary.id, name: legacySkill.summary.name)
         try await saved.setFavorite(ref, enabled: true)
+        try await saved.setFavorite(skillRef, enabled: true)
         try await saved.setCollected("handbook_000004", name: "Saved entry", collected: true)
         _ = try await saved.saveNote(ref, content: "Keep this note")
         try await saved.setLayout(.list)
         let before = try Data(contentsOf: saved.databaseURL)
         let reused = try await installer.prepare(bundle)
-        XCTAssertEqual(installed.databaseURL, reused.databaseURL)
+        XCTAssertNotEqual(installed.databaseURL, reused.databaseURL)
+        XCTAssertEqual(reused.manifest.dataVersion, 3)
+        let refreshedSkill = try await catalog.skillDetail(skillRef.objectID)
+        XCTAssertEqual(refreshedSkill.summary.name, skillRef.name)
         let restored = try await installer.prepare(bundle, restore: true)
-        XCTAssertEqual(restored.manifest.dataVersion, 2)
+        XCTAssertEqual(restored.manifest.dataVersion, 3)
         XCTAssertEqual(before, try Data(contentsOf: saved.databaseURL))
         let reopened = try user(support)
         let favorites = try await reopened.favorites()
         let notes = try await reopened.notes(ref)
         let layout = try await reopened.layout()
-        XCTAssertEqual(favorites.map(\.object), [ref])
+        XCTAssertEqual(Set(favorites.map(\.object)), Set([ref, skillRef]))
         XCTAssertEqual(notes.map(\.content), ["Keep this note"])
         XCTAssertEqual(layout, .list)
     }
@@ -296,9 +304,9 @@ final class HandbookCoreTests: XCTestCase {
         let activities = try await repository.activities()
         let fashions = try await repository.fashions()
         XCTAssertEqual(descriptions.entries.count, 54)
-        XCTAssertEqual(activities.entries.count, 547)
-        XCTAssertEqual(fashions.entries.count, 110)
-        XCTAssertEqual(fashions.entries.flatMap(\.variants).count, 220)
+        XCTAssertEqual(activities.entries.count, 552)
+        XCTAssertEqual(fashions.entries.count, 124)
+        XCTAssertEqual(fashions.entries.flatMap(\.variants).count, 248)
         let sources = try await repository.visualSources()
         XCTAssertGreaterThan(sources.count, 1700)
         XCTAssertTrue(sources.contains { $0.name == "RocoDisplay" })
@@ -365,17 +373,17 @@ final class HandbookCoreTests: XCTestCase {
         try bundle.database.write(to: candidateFile)
         do {
             let db = try SQLite(candidateFile, readOnly: false)
-            try db.execute("UPDATE catalog_meta SET data_version = 3, snapshot_id = ?", [.text("snapshot-owned-native-test-v3")])
+            try db.execute("UPDATE catalog_meta SET data_version = 4, snapshot_id = ?", [.text("snapshot-owned-native-test-v4")])
         }
         let bytes = try Data(contentsOf: candidateFile)
         var manifest = try JSONSerialization.jsonObject(with: Data(contentsOf: assets.appendingPathComponent("catalog/bundled_catalog.json"))) as! [String: Any]
-        manifest["data_version"] = 3; manifest["snapshot_id"] = "snapshot-owned-native-test-v3"
+        manifest["data_version"] = 4; manifest["snapshot_id"] = "snapshot-owned-native-test-v4"
         manifest["database_sha256"] = sha256(bytes); manifest["database_bytes"] = bytes.count
         let next = try CatalogBundle(manifest: JSONSerialization.data(withJSONObject: manifest), database: bytes, attribution: bundle.attribution)
         let installed = try await installer.installRemote(next, sequence: 3)
-        XCTAssertEqual(installed.manifest.dataVersion, 3)
+        XCTAssertEqual(installed.manifest.dataVersion, 4)
         let reused = try await installer.prepare(bundle)
-        XCTAssertEqual(reused.manifest.dataVersion, 3)
+        XCTAssertEqual(reused.manifest.dataVersion, 4)
         _ = try await installer.prepare(bundle, restore: true)
         let floor = try await installer.highestSequence()
         XCTAssertEqual(floor, 3)

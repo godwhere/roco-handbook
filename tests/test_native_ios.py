@@ -68,16 +68,19 @@ class NativeIOSPackagingTests(unittest.TestCase):
             script.stage(destination)
             for name in ("catalog.db", "bundled_catalog.json", "ATTRIBUTION.txt"):
                 self.assertEqual(
-                    (ROOT / "data/release/2/assets/catalog" / name).read_bytes(),
+                    (ROOT / "data/release/3/assets/catalog" / name).read_bytes(),
                     (destination / "catalog" / name).read_bytes(),
                 )
             self.assertEqual(
                 (ROOT / "schemas/user_v1.sql").read_bytes(),
                 (destination / "database/user_v1.sql").read_bytes(),
             )
-            self.assertTrue((destination / "wiki/v3/asset-manifest.json").is_file())
+            self.assertTrue((destination / "wiki/v4/asset-manifest.json").is_file())
             self.assertFalse((destination / "wiki/v1").exists())
             self.assertFalse((destination / "wiki/v2").exists())
+            self.assertFalse((destination / "wiki/v3").exists())
+            self.assertFalse((destination / "wiki/tools/v1").exists())
+            self.assertTrue((destination / "wiki/tools/v2/asset-manifest.json").is_file())
             self.assertFalse(list(destination.rglob("*.dart")))
 
     def test_native_project_matches_generator(self) -> None:

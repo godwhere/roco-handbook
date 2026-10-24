@@ -1,7 +1,9 @@
+from contextlib import closing
 import hashlib
 import json
 from pathlib import Path
 import shutil
+import sqlite3
 import tempfile
 import unittest
 
@@ -49,11 +51,11 @@ class NrcNormalizationTests(unittest.TestCase):
         self.lock_path = self.snapshot / "sources.lock.json"
         self.lock_path.write_text(json.dumps(self.lock), encoding="utf-8")
 
-    def normalize(self) -> dict:
+    def normalize(self, previous_catalog=None) -> dict:
         return normalize_nrc_snapshot(
             self.snapshot,
             type_aliases_path=ROOT / "config/type_aliases.json",
-            previous_catalog_path=ROOT / "data/release/1/assets/catalog/catalog.db",
+            previous_catalog_path=previous_catalog or ROOT / "data/release/1/assets/catalog/catalog.db",
             data_version=2,
             built_at_utc="2026-10-15T00:00:00Z",
         )
@@ -116,6 +118,32 @@ class NrcNormalizationTests(unittest.TestCase):
         (self.snapshot / "core.lua").unlink()
         with self.assertRaisesRegex(AdapterError, "Cannot read NRC module core"):
             self.normalize()
+
+    def test_nrc_refresh_preserves_existing_local_illustration_aliases(self) -> None:
+        previous = ROOT / "data/release/2/assets/catalog/catalog.db"
+        rebuilt = self.normalize(previous)
+        pet = next(row for row in rebuilt["pets"] if row["pet_id"] == "pet_000598")
+        with closing(sqlite3.connect(f"file:{previous}?mode=ro", uri=True)) as connection:
+            expected = connection.execute(
+                "SELECT illustration_key FROM pets WHERE pet_id = 'pet_000598'"
+            ).fetchone()[0]
+        self.assertEqual(expected, pet["illustration_key"])
+        self.assertEqual(3542, pet["extra_json"]["game_id"])
+        self.assertEqual([], rebuilt["inspection_summary"]["warnings"])
+
+    def test_invalid_explicit_game_id_cannot_fall_back_to_head_filename(self) -> None:
+        previous = self.snapshot / "previous.db"
+        with closing(sqlite3.connect(previous)) as connection:
+            connection.execute(
+                "CREATE TABLE pets (head_key TEXT, illustration_key TEXT, extra_json TEXT, status TEXT)"
+            )
+            connection.execute(
+                "INSERT INTO pets VALUES (?, ?, ?, 'active')",
+                ("Head_3542", "RetainedImage", json.dumps({"game_id": True})),
+            )
+            connection.commit()
+        with self.assertRaisesRegex(AdapterError, "invalid image alias record"):
+            self.normalize(previous)
 
 
 class NrcPipelineTests(unittest.TestCase):

@@ -8,8 +8,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "app/assets"
 ACTIVE = (
-    "brand/v1", "catalog", "database", "fonts/v1", "wiki/v3",
-    "wiki/tools/v1", "wiki/type-relations-v1.json", "wiki/game-descriptions-v1.json",
+    "brand/v1", "catalog", "database", "fonts/v1", "wiki/v4",
+    "wiki/tools/v2", "wiki/type-relations-v1.json", "wiki/game-descriptions-v1.json",
     "wiki/activity-timeline-v1.json", "wiki/fashion-catalog-v1.json",
 )
 

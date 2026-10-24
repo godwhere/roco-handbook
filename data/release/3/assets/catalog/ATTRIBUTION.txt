@@ -1,0 +1,20 @@
+Roco World Offline Handbook - Catalog Attribution
+
+This is an independent, non-commercial, unofficial project.
+
+Source: Roco Kingdom World BWIKI contributors
+License: CC BY-NC-SA 4.0
+License URL: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+Changes: MediaWiki data was validated, safely parsed, normalized,
+cross-referenced, and packaged into an offline SQLite Catalog.
+
+Frozen source revisions:
+- core: revision 19223 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Catalog&oldid=19223
+- evolution: revision 19224 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Evolutions&oldid=19224
+- handbook: revision 18791 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Handbooks&oldid=18791
+- history: revision 18792 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/History&oldid=18792
+- index: revision 18793 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Index&oldid=18793
+- learnset_catalog: revision 18761 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Learnsets&oldid=18761
+- overview: revision 18794 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Overview&oldid=18794
+- skill_catalog: revision 18764 - https://wiki.biligame.com/nrc/index.php?title=%E6%A8%A1%E5%9D%97%3APets/data/Skills&oldid=18764

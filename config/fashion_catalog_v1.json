@@ -6,7 +6,7 @@
   "source_title": "Module:Fashions/data/Catalog",
   "source_page_id": 9495,
   "source_url_prefix": "https://wiki.biligame.com/nrc/index.php?title=Module%3AFashions%2Fdata%2FCatalog&oldid=",
-  "expected_count": 110,
+  "expected_count": 124,
   "gender_order": ["female", "male"],
   "image_overrides": {
     "fashion_000037:male": "FashionPose_fashion_000037_Male.png",

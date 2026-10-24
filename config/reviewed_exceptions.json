@@ -21,6 +21,16 @@
       "pair_set_sha256": "a71114693e32e01b59a6fb7d42b83da4e57a85b23af71e2409bd2383e1408bcd",
       "resolution": "use_core_pet_types",
       "reason": "The NRC Catalog remains authoritative for current creature types. Evolution variants preserve their duplicated type snapshots for review but cannot overwrite Catalog attributes."
+    },
+    {
+      "exception_id": "evolution-member-types-nrc-core-19223-evolution-19224",
+      "exception_type": "evolution_member_type_snapshot_mismatch",
+      "core_revision_id": 19223,
+      "evolution_revision_id": 19224,
+      "pair_count": 38,
+      "pair_set_sha256": "a71114693e32e01b59a6fb7d42b83da4e57a85b23af71e2409bd2383e1408bcd",
+      "resolution": "use_core_pet_types",
+      "reason": "The exact 38-pair mismatch set is unchanged from Catalog 2 after reviewed stable-ID mapping. Catalog owns current creature types; Evolution owns directional relations and conditions and retains its duplicated type snapshots for audit."
     }
   ]
 }

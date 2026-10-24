@@ -179,11 +179,11 @@ class ProjectStructureTests(unittest.TestCase):
             hashlib.sha256(copied).hexdigest(),
         )
 
-    def test_flutter_assets_match_the_validated_catalog_release(self) -> None:
+    def test_shared_assets_match_the_validated_catalog_release(self) -> None:
         names = ["catalog.db", "bundled_catalog.json", "ATTRIBUTION.txt"]
         for name in names:
             with self.subTest(name=name):
-                released = ROOT / "data" / "release" / "2" / "assets" / "catalog" / name
+                released = ROOT / "data" / "release" / "3" / "assets" / "catalog" / name
                 bundled = ROOT / "app" / "assets" / "catalog" / name
                 self.assertEqual(released.read_bytes(), bundled.read_bytes())
 
@@ -317,6 +317,7 @@ class ProjectStructureTests(unittest.TestCase):
             ROOT / "config/wiki_assets_v1.json",
             ROOT / "config/wiki_assets_v2.json",
             ROOT / "config/wiki_assets_v3.json",
+            ROOT / "config/wiki_assets_v4.json",
             ROOT / "config/type_relations_v1.json",
             ROOT / "config/game_descriptions_v1.json",
             ROOT / "config/activity_timeline_v1.json",

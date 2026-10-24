@@ -157,7 +157,7 @@ public actor AssetRepository {
             throw HandbookError("font_sources", "The frozen font sources are invalid.")
         }
         var result = fonts.fonts.map { VisualSource(name: $0.family, url: $0.sourceUrl, frozenAt: fonts.importedAtUtc) }
-        for path in ["wiki/v3/asset-manifest.json", "wiki/tools/v1/asset-manifest.json"] {
+        for path in ["wiki/v4/asset-manifest.json", "wiki/tools/v2/asset-manifest.json"] {
             let images = try decode(ImageManifest.self, path)
             guard images.manifestVersion == 1, images.datasetId == "roco-world-zh-cn", !images.assets.isEmpty else {
                 throw HandbookError("image_sources", "The frozen image sources are invalid.")
@@ -231,22 +231,22 @@ public actor AssetRepository {
               !path.contains("\\"), path.split(separator: "/").count == 3 else {
             throw HandbookError("asset_path", "The offline image path is invalid.")
         }
-        return "wiki/tools/v1/\(path)"
+        return "wiki/tools/v2/\(path)"
     }
 }
 
 public enum CatalogAssets {
     public static func pet(_ key: String?, shiny: Bool = false) -> String? {
         guard let key, safeKey(key) else { return nil }
-        return shiny ? "wiki/v3/pets/shiny/\(key)_yise.png" : "wiki/v3/pets/illustrations/\(key).png"
+        return shiny ? "wiki/v4/pets/shiny/\(key)_yise.png" : "wiki/v4/pets/illustrations/\(key).png"
     }
     public static func skill(_ skill: SkillSummary) -> String? {
         guard let key = skill.iconKey, safeKey(key) else { return nil }
-        return "wiki/v3/skills/\(skill.isFeature ? "Feature" : "Skill")_\(key).png"
+        return "wiki/v4/skills/\(skill.isFeature ? "Feature" : "Skill")_\(key).png"
     }
     public static func type(_ type: String) -> String? {
         let short = type.hasSuffix("\u{7cfb}") ? String(type.dropLast()) : type
-        return typeFiles[short].map { "wiki/v3/ui/types/\($0).png" }
+        return typeFiles[short].map { "wiki/v4/ui/types/\($0).png" }
     }
     private static func safeKey(_ key: String) -> Bool {
         !key.isEmpty && !key.contains("/") && !key.contains("\\") && !key.contains("..") && !key.contains("\0")

@@ -143,7 +143,7 @@
       "grade_name": "纪念时装",
       "name": "旧日的追忆",
       "outfit_id": "fashion_000002",
-      "page_title": "旧日的追忆（002_01）",
+      "page_title": "旧日的追忆",
       "quality": 3,
       "series_id": 2,
       "source_record": {
@@ -155,8 +155,11 @@
         "grade_name": "纪念时装",
         "id": "fashion_000002",
         "name": "旧日的追忆",
-        "page_title": "旧日的追忆（002_01）",
+        "page_title": "旧日的追忆",
         "quality": 3,
+        "same_name_ids": [
+          "fashion_000059"
+        ],
         "series_id": 2,
         "source_ids": [
           3,
@@ -1731,6 +1734,13 @@
               "id": 10102,
               "name": "誓约圣骑士"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3194.png",
+              "form": "星光能量的样子",
+              "name": "星光狮",
+              "pet_id": "pet_000171",
+              "source_id": 3194
+            },
             "piece_ids": [
               2070190101,
               20801901,
@@ -1858,6 +1868,13 @@
               "background_color": "#B43656FF",
               "id": 10101,
               "name": "誓约圣骑士"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3194.png",
+              "form": "星光能量的样子",
+              "name": "星光狮",
+              "pet_id": "pet_000171",
+              "source_id": 3194
             },
             "piece_ids": [
               1070190101,
@@ -2047,6 +2064,12 @@
               "id": 10102,
               "name": "誓约圣骑士"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3092.png",
+              "name": "烈火守护",
+              "pet_id": "pet_000083",
+              "source_id": 3092
+            },
             "piece_ids": [
               2070200101,
               20802001,
@@ -2174,6 +2197,12 @@
               "background_color": "#B43656FF",
               "id": 10101,
               "name": "誓约圣骑士"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3092.png",
+              "name": "烈火守护",
+              "pet_id": "pet_000083",
+              "source_id": 3092
             },
             "piece_ids": [
               1070200101,
@@ -2363,6 +2392,13 @@
               "id": 10102,
               "name": "誓约圣骑士"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3469.png",
+              "form": "高山地的样子",
+              "name": "皇家狮鹫",
+              "pet_id": "pet_000370",
+              "source_id": 3469
+            },
             "piece_ids": [
               2070210101,
               20802101,
@@ -2490,6 +2526,13 @@
               "background_color": "#B43656FF",
               "id": 10101,
               "name": "誓约圣骑士"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3469.png",
+              "form": "高山地的样子",
+              "name": "皇家狮鹫",
+              "pet_id": "pet_000370",
+              "source_id": 3469
             },
             "piece_ids": [
               1070210101,
@@ -2679,6 +2722,13 @@
               "id": 10202,
               "name": "毛绒巡林者"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3071.png",
+              "form": "本来的样子",
+              "name": "音速犬",
+              "pet_id": "pet_000062",
+              "source_id": 3071
+            },
             "piece_ids": [
               2070180101,
               20801801,
@@ -2806,6 +2856,13 @@
               "background_color": "#4D9843FF",
               "id": 10201,
               "name": "毛绒巡林者"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3071.png",
+              "form": "本来的样子",
+              "name": "音速犬",
+              "pet_id": "pet_000062",
+              "source_id": 3071
             },
             "piece_ids": [
               1070180101,
@@ -2995,6 +3052,13 @@
               "id": 10202,
               "name": "毛绒巡林者"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3037.png",
+              "form": "本来的样子",
+              "name": "岚鸟",
+              "pet_id": "pet_000034",
+              "source_id": 3037
+            },
             "piece_ids": [
               2070220101,
               20802201,
@@ -3122,6 +3186,13 @@
               "background_color": "#4D9843FF",
               "id": 10201,
               "name": "毛绒巡林者"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3037.png",
+              "form": "本来的样子",
+              "name": "岚鸟",
+              "pet_id": "pet_000034",
+              "source_id": 3037
             },
             "piece_ids": [
               1070220101,
@@ -3311,6 +3382,12 @@
               "id": 10202,
               "name": "毛绒巡林者"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3420.png",
+              "name": "厉毒修萝",
+              "pet_id": "pet_000333",
+              "source_id": 3420
+            },
             "piece_ids": [
               2070230101,
               20802301,
@@ -3438,6 +3515,12 @@
               "background_color": "#4D9843FF",
               "id": 10201,
               "name": "毛绒巡林者"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3420.png",
+              "name": "厉毒修萝",
+              "pet_id": "pet_000333",
+              "source_id": 3420
             },
             "piece_ids": [
               1070230101,
@@ -3627,6 +3710,12 @@
               "id": 10302,
               "name": "重逢圆舞曲"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3346.png",
+              "name": "翠顶夫人",
+              "pet_id": "pet_000280",
+              "source_id": 3346
+            },
             "piece_ids": [
               2070240101,
               20802401,
@@ -3754,6 +3843,12 @@
               "background_color": "#409598FF",
               "id": 10301,
               "name": "重逢圆舞曲"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3346.png",
+              "name": "翠顶夫人",
+              "pet_id": "pet_000280",
+              "source_id": 3346
             },
             "piece_ids": [
               1070240101,
@@ -3943,6 +4038,12 @@
               "id": 10302,
               "name": "重逢圆舞曲"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3157.png",
+              "name": "花魁蜂后",
+              "pet_id": "pet_000143",
+              "source_id": 3157
+            },
             "piece_ids": [
               2070250101,
               20802501,
@@ -4070,6 +4171,12 @@
               "background_color": "#409598FF",
               "id": 10301,
               "name": "重逢圆舞曲"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3157.png",
+              "name": "花魁蜂后",
+              "pet_id": "pet_000143",
+              "source_id": 3157
             },
             "piece_ids": [
               1070250101,
@@ -4259,6 +4366,12 @@
               "id": 10302,
               "name": "重逢圆舞曲"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3114.png",
+              "name": "卡洛儿",
+              "pet_id": "pet_000103",
+              "source_id": 3114
+            },
             "piece_ids": [
               2070260101,
               20802601,
@@ -4386,6 +4499,12 @@
               "background_color": "#409598FF",
               "id": 10301,
               "name": "重逢圆舞曲"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3114.png",
+              "name": "卡洛儿",
+              "pet_id": "pet_000103",
+              "source_id": 3114
             },
             "piece_ids": [
               1070260101,
@@ -4573,6 +4692,13 @@
               "id": 10402,
               "name": "雪山研究员"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3126.png",
+              "form": "樱桃巧克力口味",
+              "name": "圣代甜甜",
+              "pet_id": "pet_000115",
+              "source_id": 3126
+            },
             "piece_ids": [
               2070270101,
               20802701,
@@ -4668,6 +4794,13 @@
               "background_color": "#4C86A2FF",
               "id": 10401,
               "name": "雪山研究员"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3126.png",
+              "form": "樱桃巧克力口味",
+              "name": "圣代甜甜",
+              "pet_id": "pet_000115",
+              "source_id": 3126
             },
             "piece_ids": [
               1070270101,
@@ -4830,6 +4963,12 @@
               "id": 10402,
               "name": "雪山研究员"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3263.png",
+              "name": "獠牙猪",
+              "pet_id": "pet_000219",
+              "source_id": 3263
+            },
             "piece_ids": [
               2070280101,
               20802801,
@@ -4925,6 +5064,12 @@
               "background_color": "#4C86A2FF",
               "id": 10401,
               "name": "雪山研究员"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3263.png",
+              "name": "獠牙猪",
+              "pet_id": "pet_000219",
+              "source_id": 3263
             },
             "piece_ids": [
               1070280101,
@@ -5084,6 +5229,12 @@
               "id": 10402,
               "name": "雪山研究员"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3027.png",
+              "name": "蒲公英娃娃",
+              "pet_id": "pet_000024",
+              "source_id": 3027
+            },
             "piece_ids": [
               2070290101,
               20802901,
@@ -5179,6 +5330,12 @@
               "background_color": "#4C86A2FF",
               "id": 10401,
               "name": "雪山研究员"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3027.png",
+              "name": "蒲公英娃娃",
+              "pet_id": "pet_000024",
+              "source_id": 3027
             },
             "piece_ids": [
               1070290101,
@@ -5338,6 +5495,12 @@
               "id": 10402,
               "name": "雪山研究员"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3335.png",
+              "name": "雪灵",
+              "pet_id": "pet_000274",
+              "source_id": 3335
+            },
             "piece_ids": [
               2070300101,
               20803001,
@@ -5433,6 +5596,12 @@
               "background_color": "#4C86A2FF",
               "id": 10401,
               "name": "雪山研究员"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3335.png",
+              "name": "雪灵",
+              "pet_id": "pet_000274",
+              "source_id": 3335
             },
             "piece_ids": [
               1070300101,
@@ -5619,6 +5788,12 @@
               "id": 10502,
               "name": "治愈童话书"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3141.png",
+              "name": "花衣蝶",
+              "pet_id": "pet_000127",
+              "source_id": 3141
+            },
             "piece_ids": [
               2070350101,
               22103501,
@@ -5747,6 +5922,12 @@
               "background_color": "#7F72E4FF",
               "id": 10501,
               "name": "治愈童话书"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3141.png",
+              "name": "花衣蝶",
+              "pet_id": "pet_000127",
+              "source_id": 3141
             },
             "piece_ids": [
               1070350101,
@@ -5962,6 +6143,12 @@
               "id": 10502,
               "name": "治愈童话书"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3350.png",
+              "name": "红绒十字",
+              "pet_id": "pet_000284",
+              "source_id": 3350
+            },
             "piece_ids": [
               2070360101,
               22103601,
@@ -6090,6 +6277,12 @@
               "background_color": "#7F72E4FF",
               "id": 10501,
               "name": "治愈童话书"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3350.png",
+              "name": "红绒十字",
+              "pet_id": "pet_000284",
+              "source_id": 3350
             },
             "piece_ids": [
               1070360101,
@@ -6305,6 +6498,12 @@
               "id": 10502,
               "name": "治愈童话书"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3063.png",
+              "name": "白金独角兽",
+              "pet_id": "pet_000055",
+              "source_id": 3063
+            },
             "piece_ids": [
               2070370101,
               22103701,
@@ -6433,6 +6632,12 @@
               "background_color": "#7F72E4FF",
               "id": 10501,
               "name": "治愈童话书"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3063.png",
+              "name": "白金独角兽",
+              "pet_id": "pet_000055",
+              "source_id": 3063
             },
             "piece_ids": [
               1070370101,
@@ -6622,6 +6827,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305023,
+            "bonus_ids": [
+              32400501
+            ],
             "card_image": "FashionSuit_fashion_000029_Female.png",
             "description": "旅程中的危险总是最迷人的，不过当心不要陷进去哦。",
             "effects": [
@@ -6642,6 +6850,12 @@
               "background_color": "#079E79FF",
               "id": 10602,
               "name": "野外考察队"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3035.png",
+              "name": "魔草巫灵",
+              "pet_id": "pet_000032",
+              "source_id": 3035
             },
             "piece_ids": [
               20703101,
@@ -6720,6 +6934,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305023,
+            "bonus_ids": [
+              32400501
+            ],
             "card_image": "FashionSuit_fashion_000029_Male.png",
             "description": "旅程中的危险总是最迷人的，不过当心不要陷进去哦。",
             "effects": [
@@ -6740,6 +6957,12 @@
               "background_color": "#079E79FF",
               "id": 10601,
               "name": "野外考察队"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3035.png",
+              "name": "魔草巫灵",
+              "pet_id": "pet_000032",
+              "source_id": 3035
             },
             "piece_ids": [
               10703101,
@@ -6905,6 +7128,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305024,
+            "bonus_ids": [
+              32400501
+            ],
             "card_image": "FashionSuit_fashion_000030_Female.png",
             "description": "不论在哪里都是被阳光眷顾着的幸运儿。",
             "effects": [
@@ -6925,6 +7151,12 @@
               "background_color": "#079E79FF",
               "id": 10602,
               "name": "野外考察队"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3031.png",
+              "name": "奇丽花",
+              "pet_id": "pet_000028",
+              "source_id": 3031
             },
             "piece_ids": [
               20703201,
@@ -7003,6 +7235,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305024,
+            "bonus_ids": [
+              32400501
+            ],
             "card_image": "FashionSuit_fashion_000030_Male.png",
             "description": "不论在哪里都是被阳光眷顾着的幸运儿。",
             "effects": [
@@ -7023,6 +7258,12 @@
               "background_color": "#079E79FF",
               "id": 10601,
               "name": "野外考察队"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3031.png",
+              "name": "奇丽花",
+              "pet_id": "pet_000028",
+              "source_id": 3031
             },
             "piece_ids": [
               10703201,
@@ -7188,6 +7429,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305025,
+            "bonus_ids": [
+              32400501
+            ],
             "card_image": "FashionSuit_fashion_000031_Female.png",
             "description": "我知道，冬天里的第一朵花在哪里盛开。",
             "effects": [
@@ -7208,6 +7452,12 @@
               "background_color": "#079E79FF",
               "id": 10602,
               "name": "野外考察队"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3252.png",
+              "name": "高脚鹬",
+              "pet_id": "pet_000212",
+              "source_id": 3252
             },
             "piece_ids": [
               20703301,
@@ -7286,6 +7536,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305025,
+            "bonus_ids": [
+              32400501
+            ],
             "card_image": "FashionSuit_fashion_000031_Male.png",
             "description": "我知道，冬天里的第一朵花在哪里盛开。",
             "effects": [
@@ -7306,6 +7559,12 @@
               "background_color": "#079E79FF",
               "id": 10601,
               "name": "野外考察队"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3252.png",
+              "name": "高脚鹬",
+              "pet_id": "pet_000212",
+              "source_id": 3252
             },
             "piece_ids": [
               10703301,
@@ -7468,6 +7727,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305026,
+            "bonus_ids": [
+              32400501
+            ],
             "card_image": "FashionSuit_fashion_000032_Female.png",
             "description": "仔细听，这片广茂无垠的土地上诉说着秘密。",
             "effects": [
@@ -7488,6 +7750,12 @@
               "background_color": "#079E79FF",
               "id": 10602,
               "name": "野外考察队"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3278.png",
+              "name": "魔眷鸟",
+              "pet_id": "pet_000228",
+              "source_id": 3278
             },
             "piece_ids": [
               20703401,
@@ -7566,6 +7834,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305026,
+            "bonus_ids": [
+              32400501
+            ],
             "card_image": "FashionSuit_fashion_000032_Male.png",
             "description": "仔细听，这片广茂无垠的土地上诉说着秘密。",
             "effects": [
@@ -7586,6 +7857,12 @@
               "background_color": "#079E79FF",
               "id": 10601,
               "name": "野外考察队"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3278.png",
+              "name": "魔眷鸟",
+              "pet_id": "pet_000228",
+              "source_id": 3278
             },
             "piece_ids": [
               10703401,
@@ -7748,6 +8025,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305030,
+            "bonus_ids": [
+              32404501
+            ],
             "card_image": "FashionSuit_fashion_000033_Female.png",
             "description": "如果梦可以被记录，那你的梦会是什么颜色的呢？",
             "effects": [
@@ -7768,6 +8048,13 @@
               "background_color": "#1F58C9FF",
               "id": 10702,
               "name": "晚安睡衣派对"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3439.png",
+              "form": "穿旧睡衣的样子",
+              "name": "梦悠悠",
+              "pet_id": "pet_000343",
+              "source_id": 3439
             },
             "piece_ids": [
               2070410101,
@@ -7845,6 +8132,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305030,
+            "bonus_ids": [
+              32404501
+            ],
             "card_image": "FashionSuit_fashion_000033_Male.png",
             "description": "如果梦可以被记录，那你的梦会是什么颜色的呢？",
             "effects": [
@@ -7865,6 +8155,13 @@
               "background_color": "#1F58C9FF",
               "id": 10701,
               "name": "晚安睡衣派对"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3439.png",
+              "form": "穿旧睡衣的样子",
+              "name": "梦悠悠",
+              "pet_id": "pet_000343",
+              "source_id": 3439
             },
             "piece_ids": [
               1070410101,
@@ -8026,6 +8323,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305031,
+            "bonus_ids": [
+              32404501
+            ],
             "card_image": "FashionSuit_fashion_000034_Female.png",
             "description": "晚安，闭上眼睛，准备好迎接疯狂的冒险了吗？",
             "effects": [
@@ -8046,6 +8346,12 @@
               "background_color": "#1F58C9FF",
               "id": 10702,
               "name": "晚安睡衣派对"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3192.png",
+              "name": "电球咩咩",
+              "pet_id": "pet_000169",
+              "source_id": 3192
             },
             "piece_ids": [
               2070420101,
@@ -8123,6 +8429,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305031,
+            "bonus_ids": [
+              32404501
+            ],
             "card_image": "FashionSuit_fashion_000034_Male.png",
             "description": "晚安，闭上眼睛，准备好迎接疯狂的冒险了吗？",
             "effects": [
@@ -8143,6 +8452,12 @@
               "background_color": "#1F58C9FF",
               "id": 10701,
               "name": "晚安睡衣派对"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3192.png",
+              "name": "电球咩咩",
+              "pet_id": "pet_000169",
+              "source_id": 3192
             },
             "piece_ids": [
               1070420101,
@@ -8307,6 +8622,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305032,
+            "bonus_ids": [
+              32404501
+            ],
             "card_image": "FashionSuit_fashion_000035_Female.png",
             "description": "开心还是难过也没关系，就这样，一直陪在你身边。",
             "effects": [
@@ -8327,6 +8645,12 @@
               "background_color": "#1F58C9FF",
               "id": 10702,
               "name": "晚安睡衣派对"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3123.png",
+              "name": "雪影娃娃",
+              "pet_id": "pet_000112",
+              "source_id": 3123
             },
             "piece_ids": [
               2070430101,
@@ -8404,6 +8728,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305032,
+            "bonus_ids": [
+              32404501
+            ],
             "card_image": "FashionSuit_fashion_000035_Male.png",
             "description": "开心还是难过也没关系，就这样，一直陪在你身边。",
             "effects": [
@@ -8424,6 +8751,12 @@
               "background_color": "#1F58C9FF",
               "id": 10701,
               "name": "晚安睡衣派对"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3123.png",
+              "name": "雪影娃娃",
+              "pet_id": "pet_000112",
+              "source_id": 3123
             },
             "piece_ids": [
               1070430101,
@@ -8585,6 +8918,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305033,
+            "bonus_ids": [
+              32404501
+            ],
             "card_image": "FashionSuit_fashion_000036_Female.png",
             "description": "闭上眼看到的世界仿佛也是可以触摸到一切的。",
             "effects": [
@@ -8605,6 +8941,13 @@
               "background_color": "#1F58C9FF",
               "id": 10702,
               "name": "晚安睡衣派对"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3405.png",
+              "form": "睁眼的样子",
+              "name": "幽冥眼",
+              "pet_id": "pet_000326",
+              "source_id": 3405
             },
             "piece_ids": [
               2070440101,
@@ -8682,6 +9025,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305033,
+            "bonus_ids": [
+              32404501
+            ],
             "card_image": "FashionSuit_fashion_000036_Male.png",
             "description": "闭上眼看到的世界仿佛也是可以触摸到一切的。",
             "effects": [
@@ -8702,6 +9048,13 @@
               "background_color": "#1F58C9FF",
               "id": 10701,
               "name": "晚安睡衣派对"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3405.png",
+              "form": "睁眼的样子",
+              "name": "幽冥眼",
+              "pet_id": "pet_000326",
+              "source_id": 3405
             },
             "piece_ids": [
               1070440101,
@@ -8864,6 +9217,12 @@
               "id": 10802,
               "name": "壁炉边伙伴"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3359.png",
+              "name": "爵士鹿",
+              "pet_id": "pet_000290",
+              "source_id": 3359
+            },
             "piece_ids": [
               2070520101,
               21205201,
@@ -8991,6 +9350,12 @@
               "background_color": "#3144A5FF",
               "id": 10801,
               "name": "壁炉边伙伴"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3359.png",
+              "name": "爵士鹿",
+              "pet_id": "pet_000290",
+              "source_id": 3359
             },
             "piece_ids": [
               1070520101,
@@ -9180,6 +9545,12 @@
               "id": 10802,
               "name": "壁炉边伙伴"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3528.png",
+              "name": "熔岩布丁",
+              "pet_id": "pet_000415",
+              "source_id": 3528
+            },
             "piece_ids": [
               2070530101,
               21205301,
@@ -9307,6 +9678,12 @@
               "background_color": "#3144A5FF",
               "id": 10801,
               "name": "壁炉边伙伴"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3528.png",
+              "name": "熔岩布丁",
+              "pet_id": "pet_000415",
+              "source_id": 3528
             },
             "piece_ids": [
               1070530101,
@@ -9496,6 +9873,13 @@
               "id": 10802,
               "name": "壁炉边伙伴"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3019.png",
+              "form": "海神球形态",
+              "name": "蹦蹦花",
+              "pet_id": "pet_000018",
+              "source_id": 3019
+            },
             "piece_ids": [
               2070540101,
               21205401,
@@ -9623,6 +10007,13 @@
               "background_color": "#3144A5FF",
               "id": 10801,
               "name": "壁炉边伙伴"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3019.png",
+              "form": "海神球形态",
+              "name": "蹦蹦花",
+              "pet_id": "pet_000018",
+              "source_id": 3019
             },
             "piece_ids": [
               1070540101,
@@ -9837,6 +10228,12 @@
               "id": 10902,
               "name": "嘭炼金药剂"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3368.png",
+              "name": "嘟嘟锅",
+              "pet_id": "pet_000295",
+              "source_id": 3368
+            },
             "piece_ids": [
               2070380101,
               21203801,
@@ -9965,6 +10362,12 @@
               "background_color": "#4848A1FF",
               "id": 10901,
               "name": "嘭炼金药剂"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3368.png",
+              "name": "嘟嘟锅",
+              "pet_id": "pet_000295",
+              "source_id": 3368
             },
             "piece_ids": [
               1070380101,
@@ -10177,6 +10580,12 @@
               "id": 10902,
               "name": "嘭炼金药剂"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3120.png",
+              "name": "琉璃水母",
+              "pet_id": "pet_000109",
+              "source_id": 3120
+            },
             "piece_ids": [
               2070390101,
               21203901,
@@ -10305,6 +10714,12 @@
               "background_color": "#4848A1FF",
               "id": 10901,
               "name": "嘭炼金药剂"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3120.png",
+              "name": "琉璃水母",
+              "pet_id": "pet_000109",
+              "source_id": 3120
             },
             "piece_ids": [
               1070390101,
@@ -10517,6 +10932,12 @@
               "id": 10902,
               "name": "嘭炼金药剂"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3380.png",
+              "name": "九幽菇",
+              "pet_id": "pet_000307",
+              "source_id": 3380
+            },
             "piece_ids": [
               2070400101,
               21204001,
@@ -10645,6 +11066,12 @@
               "background_color": "#4848A1FF",
               "id": 10901,
               "name": "嘭炼金药剂"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3380.png",
+              "name": "九幽菇",
+              "pet_id": "pet_000307",
+              "source_id": 3380
             },
             "piece_ids": [
               1070400101,
@@ -11366,6 +11793,12 @@
             "main_image": "FashionPose_fashion_000048_Female.png",
             "name": "异色奇丽花印象",
             "original_id": "fashion_000030",
+            "pet": {
+              "avatar": "PetAvatarBig_3031.png",
+              "name": "奇丽花",
+              "pet_id": "pet_000028",
+              "source_id": 3031
+            },
             "piece_ids": [
               20703202,
               20903202,
@@ -11404,6 +11837,12 @@
             "main_image": "FashionPose_fashion_000048_Male.png",
             "name": "异色奇丽花印象",
             "original_id": "fashion_000030",
+            "pet": {
+              "avatar": "PetAvatarBig_3031.png",
+              "name": "奇丽花",
+              "pet_id": "pet_000028",
+              "source_id": 3031
+            },
             "piece_ids": [
               10703202,
               10903202,
@@ -11502,6 +11941,12 @@
             "main_image": "FashionPose_fashion_000049_Female.png",
             "name": "异色雪影娃娃",
             "original_id": "fashion_000035",
+            "pet": {
+              "avatar": "PetAvatarBig_3123.png",
+              "name": "雪影娃娃",
+              "pet_id": "pet_000112",
+              "source_id": 3123
+            },
             "piece_ids": [
               2070430201,
               21204302,
@@ -11539,6 +11984,12 @@
             "main_image": "FashionPose_fashion_000049_Male.png",
             "name": "异色雪影娃娃",
             "original_id": "fashion_000035",
+            "pet": {
+              "avatar": "PetAvatarBig_3123.png",
+              "name": "雪影娃娃",
+              "pet_id": "pet_000112",
+              "source_id": 3123
+            },
             "piece_ids": [
               1070430201,
               11204302,
@@ -11636,6 +12087,12 @@
             "main_image": "FashionPose_fashion_000050_Female.png",
             "name": "异色獠牙猪",
             "original_id": "fashion_000023",
+            "pet": {
+              "avatar": "PetAvatarBig_3263.png",
+              "name": "獠牙猪",
+              "pet_id": "pet_000219",
+              "source_id": 3263
+            },
             "piece_ids": [
               2070280201,
               20802802,
@@ -11673,6 +12130,12 @@
             "main_image": "FashionPose_fashion_000050_Male.png",
             "name": "异色獠牙猪",
             "original_id": "fashion_000023",
+            "pet": {
+              "avatar": "PetAvatarBig_3263.png",
+              "name": "獠牙猪",
+              "pet_id": "pet_000219",
+              "source_id": 3263
+            },
             "piece_ids": [
               1070280201,
               10802802,
@@ -11773,6 +12236,12 @@
             "main_image": "FashionPose_fashion_000051_Female.png",
             "name": "异色红绒十字",
             "original_id": "fashion_000027",
+            "pet": {
+              "avatar": "PetAvatarBig_3350.png",
+              "name": "红绒十字",
+              "pet_id": "pet_000284",
+              "source_id": 3350
+            },
             "piece_ids": [
               2070360201,
               22103602,
@@ -11814,6 +12283,12 @@
             "main_image": "FashionPose_fashion_000051_Male.png",
             "name": "异色红绒十字",
             "original_id": "fashion_000027",
+            "pet": {
+              "avatar": "PetAvatarBig_3350.png",
+              "name": "红绒十字",
+              "pet_id": "pet_000284",
+              "source_id": 3350
+            },
             "piece_ids": [
               1070360201,
               12103602,
@@ -11918,6 +12393,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305037,
+            "bonus_ids": [
+              32404601
+            ],
             "card_image": "FashionSuit_fashion_000052_Female.png",
             "description": "嘀嘟嘀嘟！吹响欢快的号角！",
             "effects": [
@@ -11938,6 +12416,12 @@
               "background_color": "#F1784EFF",
               "id": 11002,
               "name": "乐团协奏曲"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3530.png",
+              "name": "圆号鱼",
+              "pet_id": "pet_000417",
+              "source_id": 3530
             },
             "piece_ids": [
               20704501,
@@ -12016,6 +12500,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305037,
+            "bonus_ids": [
+              32404601
+            ],
             "card_image": "FashionSuit_fashion_000052_Male.png",
             "description": "嘀嘟嘀嘟！吹响欢快的号角！",
             "effects": [
@@ -12036,6 +12523,12 @@
               "background_color": "#F1784EFF",
               "id": 11001,
               "name": "乐团协奏曲"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3530.png",
+              "name": "圆号鱼",
+              "pet_id": "pet_000417",
+              "source_id": 3530
             },
             "piece_ids": [
               10704501,
@@ -12198,6 +12691,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305038,
+            "bonus_ids": [
+              32404601
+            ],
             "card_image": "FashionSuit_fashion_000053_Female.png",
             "description": "蹦蹦跳跳，将这份诗意带到你身旁。",
             "effects": [
@@ -12218,6 +12714,12 @@
               "background_color": "#F1784EFF",
               "id": 11002,
               "name": "乐团协奏曲"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3100.png",
+              "name": "蹦床松鼠",
+              "pet_id": "pet_000089",
+              "source_id": 3100
             },
             "piece_ids": [
               20704601,
@@ -12296,6 +12798,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305038,
+            "bonus_ids": [
+              32404601
+            ],
             "card_image": "FashionSuit_fashion_000053_Male.png",
             "description": "蹦蹦跳跳，将这份诗意带到你身旁。",
             "effects": [
@@ -12316,6 +12821,12 @@
               "background_color": "#F1784EFF",
               "id": 11001,
               "name": "乐团协奏曲"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3100.png",
+              "name": "蹦床松鼠",
+              "pet_id": "pet_000089",
+              "source_id": 3100
             },
             "piece_ids": [
               10704601,
@@ -12478,6 +12989,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305039,
+            "bonus_ids": [
+              32404601
+            ],
             "card_image": "FashionSuit_fashion_000054_Female.png",
             "description": "叮咚叮咚！随着这节奏一起迈开脚步。",
             "effects": [
@@ -12498,6 +13012,13 @@
               "background_color": "#F1784EFF",
               "id": 11002,
               "name": "乐团协奏曲"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3042.png",
+              "form": "草地附近的样子",
+              "name": "卡瓦重",
+              "pet_id": "pet_000039",
+              "source_id": 3042
             },
             "piece_ids": [
               20704701,
@@ -12576,6 +13097,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305039,
+            "bonus_ids": [
+              32404601
+            ],
             "card_image": "FashionSuit_fashion_000054_Male.png",
             "description": "叮咚叮咚！随着这节奏一起迈开脚步。",
             "effects": [
@@ -12596,6 +13120,13 @@
               "background_color": "#F1784EFF",
               "id": 11001,
               "name": "乐团协奏曲"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3042.png",
+              "form": "草地附近的样子",
+              "name": "卡瓦重",
+              "pet_id": "pet_000039",
+              "source_id": 3042
             },
             "piece_ids": [
               10704701,
@@ -12758,6 +13289,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305040,
+            "bonus_ids": [
+              32404601
+            ],
             "card_image": "FashionSuit_fashion_000055_Female.png",
             "description": "演奏一首悠扬的琴曲，诉说着海底的秘密。",
             "effects": [
@@ -12778,6 +13312,12 @@
               "background_color": "#F1784EFF",
               "id": 11002,
               "name": "乐团协奏曲"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3521.png",
+              "name": "里拉鳐",
+              "pet_id": "pet_000412",
+              "source_id": 3521
             },
             "piece_ids": [
               20704801,
@@ -12856,6 +13396,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305040,
+            "bonus_ids": [
+              32404601
+            ],
             "card_image": "FashionSuit_fashion_000055_Male.png",
             "description": "演奏一首悠扬的琴曲，诉说着海底深埋的秘密。",
             "effects": [
@@ -12876,6 +13419,12 @@
               "background_color": "#F1784EFF",
               "id": 11001,
               "name": "乐团协奏曲"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3521.png",
+              "name": "里拉鳐",
+              "pet_id": "pet_000412",
+              "source_id": 3521
             },
             "piece_ids": [
               10704801,
@@ -13310,7 +13859,7 @@
       "grade_name": "纪念时装",
       "name": "旧日的追忆",
       "outfit_id": "fashion_000059",
-      "page_title": "旧日的追忆（999_01）",
+      "page_title": "旧日的追忆（长裤）",
       "quality": 3,
       "series_id": 2,
       "source_record": {
@@ -13322,14 +13871,18 @@
         "grade_name": "纪念时装",
         "id": "fashion_000059",
         "name": "旧日的追忆",
-        "page_title": "旧日的追忆（999_01）",
+        "page_title": "旧日的追忆（长裤）",
         "quality": 3,
+        "same_name_ids": [
+          "fashion_000002"
+        ],
         "series_id": 2,
         "source_ids": [
           141,
           142
         ],
         "style_key": "999_01",
+        "title_suffix": "长裤",
         "variants": {
           "female": {
             "acquire": [
@@ -13502,6 +14055,12 @@
               "id": 11102,
               "name": "梦境流浪者"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3147.png",
+              "name": "幻影灵菇",
+              "pet_id": "pet_000133",
+              "source_id": 3147
+            },
             "piece_ids": [
               21106501,
               21006501,
@@ -13630,6 +14189,12 @@
               "background_color": "#554EB6FF",
               "id": 11101,
               "name": "梦境流浪者"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3147.png",
+              "name": "幻影灵菇",
+              "pet_id": "pet_000133",
+              "source_id": 3147
             },
             "piece_ids": [
               11106501,
@@ -13842,6 +14407,12 @@
               "id": 11102,
               "name": "梦境流浪者"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3241.png",
+              "name": "怖哭菇",
+              "pet_id": "pet_000206",
+              "source_id": 3241
+            },
             "piece_ids": [
               21106601,
               21006601,
@@ -13970,6 +14541,12 @@
               "background_color": "#554EB6FF",
               "id": 11101,
               "name": "梦境流浪者"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3241.png",
+              "name": "怖哭菇",
+              "pet_id": "pet_000206",
+              "source_id": 3241
             },
             "piece_ids": [
               11106601,
@@ -14182,6 +14759,13 @@
               "id": 11102,
               "name": "梦境流浪者"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3256.png",
+              "form": "流浪的样子",
+              "name": "流浪鼠",
+              "pet_id": "pet_000214",
+              "source_id": 3256
+            },
             "piece_ids": [
               21106701,
               21006701,
@@ -14310,6 +14894,13 @@
               "background_color": "#554EB6FF",
               "id": 11101,
               "name": "梦境流浪者"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3256.png",
+              "form": "流浪的样子",
+              "name": "流浪鼠",
+              "pet_id": "pet_000214",
+              "source_id": 3256
             },
             "piece_ids": [
               11106701,
@@ -14502,6 +15093,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305044,
+            "bonus_ids": [
+              32405901
+            ],
             "card_image": "FashionSuit_fashion_000063_Female.png",
             "description": "猜猜我的帽子里藏着什么？是魔术，还是魔法？",
             "effects": [
@@ -14522,6 +15116,12 @@
               "background_color": "#9A2025FF",
               "id": 11202,
               "name": "魔法嘉年华"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3684.png",
+              "name": "咕德帽帽",
+              "pet_id": "pet_000493",
+              "source_id": 3684
             },
             "piece_ids": [
               20705501,
@@ -14600,6 +15200,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305044,
+            "bonus_ids": [
+              32405901
+            ],
             "card_image": "FashionSuit_fashion_000063_Male.png",
             "description": "猜猜我的帽子里藏着什么？是魔术，还是魔法？",
             "effects": [
@@ -14620,6 +15223,12 @@
               "background_color": "#9A2025FF",
               "id": 11201,
               "name": "魔法嘉年华"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3684.png",
+              "name": "咕德帽帽",
+              "pet_id": "pet_000493",
+              "source_id": 3684
             },
             "piece_ids": [
               10705501,
@@ -14785,6 +15394,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305045,
+            "bonus_ids": [
+              32405901
+            ],
             "card_image": "FashionSuit_fashion_000064_Female.png",
             "description": "敲击乐鼓，响起欢快的节奏！",
             "effects": [
@@ -14805,6 +15417,12 @@
               "background_color": "#9A2025FF",
               "id": 11202,
               "name": "魔法嘉年华"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3709.png",
+              "name": "巨鼓象",
+              "pet_id": "pet_000501",
+              "source_id": 3709
             },
             "piece_ids": [
               20705601,
@@ -14883,6 +15501,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305045,
+            "bonus_ids": [
+              32405901
+            ],
             "card_image": "FashionSuit_fashion_000064_Male.png",
             "description": "敲击乐鼓，响起欢快的节奏！",
             "effects": [
@@ -14903,6 +15524,12 @@
               "background_color": "#9A2025FF",
               "id": 11201,
               "name": "魔法嘉年华"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3709.png",
+              "name": "巨鼓象",
+              "pet_id": "pet_000501",
+              "source_id": 3709
             },
             "piece_ids": [
               10705601,
@@ -15068,6 +15695,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305046,
+            "bonus_ids": [
+              32405901
+            ],
             "card_image": "FashionSuit_fashion_000065_Female.png",
             "description": "即使是绽放一瞬的烟花也会变成美好的回忆。",
             "effects": [
@@ -15088,6 +15718,12 @@
               "background_color": "#9A2025FF",
               "id": 11202,
               "name": "魔法嘉年华"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3678.png",
+              "name": "烟花伯爵",
+              "pet_id": "pet_000491",
+              "source_id": 3678
             },
             "piece_ids": [
               20705701,
@@ -15166,6 +15802,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305046,
+            "bonus_ids": [
+              32405901
+            ],
             "card_image": "FashionSuit_fashion_000065_Male.png",
             "description": "即使是绽放一瞬的烟花也会变成美好的回忆。",
             "effects": [
@@ -15186,6 +15825,12 @@
               "background_color": "#9A2025FF",
               "id": 11201,
               "name": "魔法嘉年华"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3678.png",
+              "name": "烟花伯爵",
+              "pet_id": "pet_000491",
+              "source_id": 3678
             },
             "piece_ids": [
               10705701,
@@ -15351,6 +15996,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305047,
+            "bonus_ids": [
+              32405901
+            ],
             "card_image": "FashionSuit_fashion_000066_Female.png",
             "description": "希望能在这里给你带来欢笑。这就是我的“魔法”。",
             "effects": [
@@ -15371,6 +16019,12 @@
               "background_color": "#9A2025FF",
               "id": 11202,
               "name": "魔法嘉年华"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3489.png",
+              "name": "小丑公爵",
+              "pet_id": "pet_000389",
+              "source_id": 3489
             },
             "piece_ids": [
               20705801,
@@ -15449,6 +16103,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305047,
+            "bonus_ids": [
+              32405901
+            ],
             "card_image": "FashionSuit_fashion_000066_Male.png",
             "description": "希望能在这里给你带来欢笑。这就是我的“魔法”。",
             "effects": [
@@ -15469,6 +16126,12 @@
               "background_color": "#9A2025FF",
               "id": 11201,
               "name": "魔法嘉年华"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3489.png",
+              "name": "小丑公爵",
+              "pet_id": "pet_000389",
+              "source_id": 3489
             },
             "piece_ids": [
               10705801,
@@ -15654,6 +16317,12 @@
               "id": 11302,
               "name": "深海的馈赠"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3216.png",
+              "name": "海豹船长",
+              "pet_id": "pet_000190",
+              "source_id": 3216
+            },
             "piece_ids": [
               2070750101,
               21307501,
@@ -15782,6 +16451,12 @@
               "background_color": "#0097DBFF",
               "id": 11301,
               "name": "深海的馈赠"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3216.png",
+              "name": "海豹船长",
+              "pet_id": "pet_000190",
+              "source_id": 3216
             },
             "piece_ids": [
               1070750101,
@@ -15997,6 +16672,13 @@
               "id": 11302,
               "name": "深海的馈赠"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3332.png",
+              "form": "本来的样子",
+              "name": "千棘盔",
+              "pet_id": "pet_000271",
+              "source_id": 3332
+            },
             "piece_ids": [
               2070760101,
               22707601,
@@ -16125,6 +16807,13 @@
               "background_color": "#0097DBFF",
               "id": 11301,
               "name": "深海的馈赠"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3332.png",
+              "form": "本来的样子",
+              "name": "千棘盔",
+              "pet_id": "pet_000271",
+              "source_id": 3332
             },
             "piece_ids": [
               1070760101,
@@ -16337,6 +17026,12 @@
               "id": 11302,
               "name": "深海的馈赠"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3619.png",
+              "name": "迷迷箱怪",
+              "pet_id": "pet_000484",
+              "source_id": 3619
+            },
             "piece_ids": [
               2070770101,
               22807701,
@@ -16465,6 +17160,12 @@
               "background_color": "#0097DBFF",
               "id": 11301,
               "name": "深海的馈赠"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3619.png",
+              "name": "迷迷箱怪",
+              "pet_id": "pet_000484",
+              "source_id": 3619
             },
             "piece_ids": [
               1070770101,
@@ -16650,6 +17351,12 @@
             "main_image": "FashionPose_fashion_000070_Female.png",
             "name": "异色白金独角兽印象",
             "original_id": "fashion_000028",
+            "pet": {
+              "avatar": "PetAvatarBig_3063.png",
+              "name": "白金独角兽",
+              "pet_id": "pet_000055",
+              "source_id": 3063
+            },
             "piece_ids": [
               2070370201,
               22103702,
@@ -16691,6 +17398,12 @@
             "main_image": "FashionPose_fashion_000070_Male.png",
             "name": "异色白金独角兽印象",
             "original_id": "fashion_000028",
+            "pet": {
+              "avatar": "PetAvatarBig_3063.png",
+              "name": "白金独角兽",
+              "pet_id": "pet_000055",
+              "source_id": 3063
+            },
             "piece_ids": [
               1070370201,
               12103702,
@@ -16788,6 +17501,12 @@
             "main_image": "FashionPose_fashion_000071_Female.png",
             "name": "异色小丑公爵印象",
             "original_id": "fashion_000066",
+            "pet": {
+              "avatar": "PetAvatarBig_3489.png",
+              "name": "小丑公爵",
+              "pet_id": "pet_000389",
+              "source_id": 3489
+            },
             "piece_ids": [
               20705802,
               20905802,
@@ -16826,6 +17545,12 @@
             "main_image": "FashionPose_fashion_000071_Male.png",
             "name": "异色小丑公爵印象",
             "original_id": "fashion_000066",
+            "pet": {
+              "avatar": "PetAvatarBig_3489.png",
+              "name": "小丑公爵",
+              "pet_id": "pet_000389",
+              "source_id": 3489
+            },
             "piece_ids": [
               10705802,
               10905802,
@@ -16924,6 +17649,12 @@
             "main_image": "FashionPose_fashion_000072_Female.png",
             "name": "异色烟花伯爵印象",
             "original_id": "fashion_000065",
+            "pet": {
+              "avatar": "PetAvatarBig_3678.png",
+              "name": "烟花伯爵",
+              "pet_id": "pet_000491",
+              "source_id": 3678
+            },
             "piece_ids": [
               20705702,
               20905702,
@@ -16962,6 +17693,12 @@
             "main_image": "FashionPose_fashion_000072_Male.png",
             "name": "异色烟花伯爵印象",
             "original_id": "fashion_000065",
+            "pet": {
+              "avatar": "PetAvatarBig_3678.png",
+              "name": "烟花伯爵",
+              "pet_id": "pet_000491",
+              "source_id": 3678
+            },
             "piece_ids": [
               10705702,
               10905702,
@@ -17060,6 +17797,12 @@
             "main_image": "FashionPose_fashion_000073_Female.png",
             "name": "异色咕德帽帽印象",
             "original_id": "fashion_000063",
+            "pet": {
+              "avatar": "PetAvatarBig_3684.png",
+              "name": "咕德帽帽",
+              "pet_id": "pet_000493",
+              "source_id": 3684
+            },
             "piece_ids": [
               20705502,
               20905502,
@@ -17098,6 +17841,12 @@
             "main_image": "FashionPose_fashion_000073_Male.png",
             "name": "异色咕德帽帽印象",
             "original_id": "fashion_000063",
+            "pet": {
+              "avatar": "PetAvatarBig_3684.png",
+              "name": "咕德帽帽",
+              "pet_id": "pet_000493",
+              "source_id": 3684
+            },
             "piece_ids": [
               10705502,
               10905502,
@@ -17196,6 +17945,12 @@
             "main_image": "FashionPose_fashion_000074_Female.png",
             "name": "异色巨鼓象印象",
             "original_id": "fashion_000064",
+            "pet": {
+              "avatar": "PetAvatarBig_3709.png",
+              "name": "巨鼓象",
+              "pet_id": "pet_000501",
+              "source_id": 3709
+            },
             "piece_ids": [
               20705602,
               20905602,
@@ -17234,6 +17989,12 @@
             "main_image": "FashionPose_fashion_000074_Male.png",
             "name": "异色巨鼓象印象",
             "original_id": "fashion_000064",
+            "pet": {
+              "avatar": "PetAvatarBig_3709.png",
+              "name": "巨鼓象",
+              "pet_id": "pet_000501",
+              "source_id": 3709
+            },
             "piece_ids": [
               10705602,
               10905602,
@@ -17335,6 +18096,12 @@
             "main_image": "FashionPose_fashion_000075_Female.png",
             "name": "异色嘟嘟锅印象",
             "original_id": "fashion_000040",
+            "pet": {
+              "avatar": "PetAvatarBig_3368.png",
+              "name": "嘟嘟锅",
+              "pet_id": "pet_000295",
+              "source_id": 3368
+            },
             "piece_ids": [
               2070380201,
               21203802,
@@ -17376,6 +18143,12 @@
             "main_image": "FashionPose_fashion_000075_Male.png",
             "name": "异色嘟嘟锅印象",
             "original_id": "fashion_000040",
+            "pet": {
+              "avatar": "PetAvatarBig_3368.png",
+              "name": "嘟嘟锅",
+              "pet_id": "pet_000295",
+              "source_id": 3368
+            },
             "piece_ids": [
               1070380201,
               11203802,
@@ -17669,6 +18442,12 @@
               "id": 11402,
               "name": "秘密潜入计划"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3144.png",
+              "name": "朔夜伊芙",
+              "pet_id": "pet_000130",
+              "source_id": 3144
+            },
             "piece_ids": [
               2070720101,
               20807201,
@@ -17797,6 +18576,12 @@
               "background_color": "#B71D49FF",
               "id": 11401,
               "name": "秘密潜入计划"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3144.png",
+              "name": "朔夜伊芙",
+              "pet_id": "pet_000130",
+              "source_id": 3144
             },
             "piece_ids": [
               1070720101,
@@ -18009,6 +18794,13 @@
               "id": 11402,
               "name": "秘密潜入计划"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3538.png",
+              "form": "极昼的样子",
+              "name": "乌拉塔",
+              "pet_id": "pet_000425",
+              "source_id": 3538
+            },
             "piece_ids": [
               2070730101,
               20807301,
@@ -18137,6 +18929,13 @@
               "background_color": "#B71D49FF",
               "id": 11401,
               "name": "秘密潜入计划"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3538.png",
+              "form": "极昼的样子",
+              "name": "乌拉塔",
+              "pet_id": "pet_000425",
+              "source_id": 3538
             },
             "piece_ids": [
               1070730101,
@@ -18349,6 +19148,12 @@
               "id": 11402,
               "name": "秘密潜入计划"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3156.png",
+              "name": "裘卡",
+              "pet_id": "pet_000142",
+              "source_id": 3156
+            },
             "piece_ids": [
               2070740101,
               20807401,
@@ -18477,6 +19282,12 @@
               "background_color": "#B71D49FF",
               "id": 11401,
               "name": "秘密潜入计划"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3156.png",
+              "name": "裘卡",
+              "pet_id": "pet_000142",
+              "source_id": 3156
             },
             "piece_ids": [
               1070740101,
@@ -18666,6 +19477,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305051,
+            "bonus_ids": [
+              32406801
+            ],
             "card_image": "FashionSuit_fashion_000080_Female.png",
             "description": "让我用魔法让知识全部进入你的脑子。",
             "effects": [
@@ -18686,6 +19500,12 @@
               "background_color": "#0A95B3FF",
               "id": 11502,
               "name": "年轮诗社"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3612.png",
+              "name": "古卷执政官",
+              "pet_id": "pet_000477",
+              "source_id": 3612
             },
             "piece_ids": [
               20908201,
@@ -18764,6 +19584,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305051,
+            "bonus_ids": [
+              32406801
+            ],
             "card_image": "FashionSuit_fashion_000080_Male.png",
             "description": "让我用魔法让知识全部进入你的脑子。",
             "effects": [
@@ -18784,6 +19607,12 @@
               "background_color": "#0A95B3FF",
               "id": 11501,
               "name": "年轮诗社"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3612.png",
+              "name": "古卷执政官",
+              "pet_id": "pet_000477",
+              "source_id": 3612
             },
             "piece_ids": [
               10908201,
@@ -18946,6 +19775,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305052,
+            "bonus_ids": [
+              32406801
+            ],
             "card_image": "FashionSuit_fashion_000081_Female.png",
             "description": "追寻真理的道路永远没有尽头，勇往直前吧！",
             "effects": [
@@ -18966,6 +19798,12 @@
               "background_color": "#0A95B3FF",
               "id": 11502,
               "name": "年轮诗社"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3613.png",
+              "name": "古卷匣魔像",
+              "pet_id": "pet_000478",
+              "source_id": 3613
             },
             "piece_ids": [
               20908301,
@@ -19044,6 +19882,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305052,
+            "bonus_ids": [
+              32406801
+            ],
             "card_image": "FashionSuit_fashion_000081_Male.png",
             "description": "追寻真理的道路永远没有尽头，勇往直前吧！",
             "effects": [
@@ -19064,6 +19905,12 @@
               "background_color": "#0A95B3FF",
               "id": 11501,
               "name": "年轮诗社"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3613.png",
+              "name": "古卷匣魔像",
+              "pet_id": "pet_000478",
+              "source_id": 3613
             },
             "piece_ids": [
               10908301,
@@ -19226,6 +20073,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305053,
+            "bonus_ids": [
+              32406801
+            ],
             "card_image": "FashionSuit_fashion_000082_Female.png",
             "description": "画中的你，亦成为了永恒。",
             "effects": [
@@ -19246,6 +20096,12 @@
               "background_color": "#0A95B3FF",
               "id": 11502,
               "name": "年轮诗社"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3608.png",
+              "name": "画间法师手",
+              "pet_id": "pet_000473",
+              "source_id": 3608
             },
             "piece_ids": [
               2070840101,
@@ -19323,6 +20179,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305053,
+            "bonus_ids": [
+              32406801
+            ],
             "card_image": "FashionSuit_fashion_000082_Male.png",
             "description": "画中的你，亦成为了永恒。",
             "effects": [
@@ -19343,6 +20202,12 @@
               "background_color": "#0A95B3FF",
               "id": 11501,
               "name": "年轮诗社"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3608.png",
+              "name": "画间法师手",
+              "pet_id": "pet_000473",
+              "source_id": 3608
             },
             "piece_ids": [
               1070840101,
@@ -19504,6 +20369,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305054,
+            "bonus_ids": [
+              32406801
+            ],
             "card_image": "FashionSuit_fashion_000083_Female.png",
             "description": "画卷沉默地低语，我听见它们的声音。",
             "effects": [
@@ -19524,6 +20392,12 @@
               "background_color": "#0A95B3FF",
               "id": 11502,
               "name": "年轮诗社"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3609.png",
+              "name": "画间沉铁兽",
+              "pet_id": "pet_000474",
+              "source_id": 3609
             },
             "piece_ids": [
               2070850101,
@@ -19601,6 +20475,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305054,
+            "bonus_ids": [
+              32406801
+            ],
             "card_image": "FashionSuit_fashion_000083_Male.png",
             "description": "画卷沉默地低语，我听见它们的声音。",
             "effects": [
@@ -19621,6 +20498,12 @@
               "background_color": "#0A95B3FF",
               "id": 11501,
               "name": "年轮诗社"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3609.png",
+              "name": "画间沉铁兽",
+              "pet_id": "pet_000474",
+              "source_id": 3609
             },
             "piece_ids": [
               1070850101,
@@ -19782,6 +20665,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305065,
+            "bonus_ids": [
+              32408701
+            ],
             "card_image": "FashionSuit_fashion_000084_Female.png",
             "description": "只要念出咒语，就可以通通打扫的很干净哦！",
             "effects": [
@@ -19802,6 +20688,12 @@
               "background_color": "#553DD3FF",
               "id": 11702,
               "name": "怎么可以用魔法扫帚当画笔"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3605.png",
+              "name": "食尘短绒",
+              "pet_id": "pet_000470",
+              "source_id": 3605
             },
             "piece_ids": [
               20906801,
@@ -19880,6 +20772,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305065,
+            "bonus_ids": [
+              32408701
+            ],
             "card_image": "FashionSuit_fashion_000084_Male.png",
             "description": "只要念出咒语，就可以通通打扫的很干净哦！",
             "effects": [
@@ -19900,6 +20795,12 @@
               "background_color": "#553DD3FF",
               "id": 11701,
               "name": "怎么可以用魔法扫帚当画笔"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3605.png",
+              "name": "食尘短绒",
+              "pet_id": "pet_000470",
+              "source_id": 3605
             },
             "piece_ids": [
               10906801,
@@ -20062,6 +20963,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305066,
+            "bonus_ids": [
+              32408701
+            ],
             "card_image": "FashionSuit_fashion_000085_Female.png",
             "description": "奇怪，我的扫帚怎么自己飞起来啦？",
             "effects": [
@@ -20082,6 +20986,12 @@
               "background_color": "#553DD3FF",
               "id": 11702,
               "name": "怎么可以用魔法扫帚当画笔"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3604.png",
+              "name": "捕尘长绒",
+              "pet_id": "pet_000469",
+              "source_id": 3604
             },
             "piece_ids": [
               2070690101,
@@ -20159,6 +21069,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305066,
+            "bonus_ids": [
+              32408701
+            ],
             "card_image": "FashionSuit_fashion_000085_Male.png",
             "description": "奇怪，我的扫帚怎么自己飞起来啦？",
             "effects": [
@@ -20179,6 +21092,12 @@
               "background_color": "#553DD3FF",
               "id": 11701,
               "name": "怎么可以用魔法扫帚当画笔"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3604.png",
+              "name": "捕尘长绒",
+              "pet_id": "pet_000469",
+              "source_id": 3604
             },
             "piece_ids": [
               1070690101,
@@ -20340,6 +21259,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305067,
+            "bonus_ids": [
+              32408701
+            ],
             "card_image": "FashionSuit_fashion_000086_Female.png",
             "description": "保持创作是可以感受艺术的神奇魔法。",
             "effects": [
@@ -20360,6 +21282,12 @@
               "background_color": "#553DD3FF",
               "id": 11702,
               "name": "怎么可以用魔法扫帚当画笔"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3579.png",
+              "name": "秩序鱿墨",
+              "pet_id": "pet_000451",
+              "source_id": 3579
             },
             "piece_ids": [
               2070700101,
@@ -20437,6 +21365,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305067,
+            "bonus_ids": [
+              32408701
+            ],
             "card_image": "FashionSuit_fashion_000086_Male.png",
             "description": "保持创作是可以感受艺术的神奇魔法。",
             "effects": [
@@ -20457,6 +21388,12 @@
               "background_color": "#553DD3FF",
               "id": 11701,
               "name": "怎么可以用魔法扫帚当画笔"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3579.png",
+              "name": "秩序鱿墨",
+              "pet_id": "pet_000451",
+              "source_id": 3579
             },
             "piece_ids": [
               1070700101,
@@ -20618,6 +21555,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305068,
+            "bonus_ids": [
+              32408701
+            ],
             "card_image": "FashionSuit_fashion_000087_Female.png",
             "description": "用画笔绘出彩色的梦想，是我想要到达的地方。",
             "effects": [
@@ -20638,6 +21578,12 @@
               "background_color": "#553DD3FF",
               "id": 11702,
               "name": "怎么可以用魔法扫帚当画笔"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3578.png",
+              "name": "混乱鱿彩",
+              "pet_id": "pet_000450",
+              "source_id": 3578
             },
             "piece_ids": [
               20907101,
@@ -20716,6 +21662,9 @@
               "皮卡月刊限定"
             ],
             "bond_id": 305068,
+            "bonus_ids": [
+              32408701
+            ],
             "card_image": "FashionSuit_fashion_000087_Male.png",
             "description": "用画笔绘出彩色的梦想，是我想要到达的地方。",
             "effects": [
@@ -20736,6 +21685,12 @@
               "background_color": "#553DD3FF",
               "id": 11701,
               "name": "怎么可以用魔法扫帚当画笔"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3578.png",
+              "name": "混乱鱿彩",
+              "pet_id": "pet_000450",
+              "source_id": 3578
             },
             "piece_ids": [
               10907101,
@@ -21248,6 +22203,12 @@
               "id": 11602,
               "name": "初心的继承者"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3007.png",
+              "name": "魔力猫",
+              "pet_id": "pet_000007",
+              "source_id": 3007
+            },
             "piece_ids": [
               2071040101,
               20810401,
@@ -21376,6 +22337,12 @@
               "background_color": "#F5CE48FF",
               "id": 11601,
               "name": "初心的继承者"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3007.png",
+              "name": "魔力猫",
+              "pet_id": "pet_000007",
+              "source_id": 3007
             },
             "piece_ids": [
               1071040101,
@@ -21588,6 +22555,12 @@
               "id": 11602,
               "name": "初心的继承者"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3006.png",
+              "name": "火神",
+              "pet_id": "pet_000006",
+              "source_id": 3006
+            },
             "piece_ids": [
               2071050101,
               20810501,
@@ -21716,6 +22689,12 @@
               "background_color": "#F5CE48FF",
               "id": 11601,
               "name": "初心的继承者"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3006.png",
+              "name": "火神",
+              "pet_id": "pet_000006",
+              "source_id": 3006
             },
             "piece_ids": [
               1071050101,
@@ -21928,6 +22907,12 @@
               "id": 11602,
               "name": "初心的继承者"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3005.png",
+              "name": "水灵",
+              "pet_id": "pet_000005",
+              "source_id": 3005
+            },
             "piece_ids": [
               2071060101,
               20810601,
@@ -22056,6 +23041,12 @@
               "background_color": "#F5CE48FF",
               "id": 11601,
               "name": "初心的继承者"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3005.png",
+              "name": "水灵",
+              "pet_id": "pet_000005",
+              "source_id": 3005
             },
             "piece_ids": [
               1071060101,
@@ -22241,6 +23232,13 @@
             "main_image": "FashionPose_fashion_000094_Female.png",
             "name": "异色千棘盔印象",
             "original_id": "fashion_000068",
+            "pet": {
+              "avatar": "PetAvatarBig_3332.png",
+              "form": "本来的样子",
+              "name": "千棘盔",
+              "pet_id": "pet_000271",
+              "source_id": 3332
+            },
             "piece_ids": [
               2070760201,
               20807602,
@@ -22282,6 +23280,13 @@
             "main_image": "FashionPose_fashion_000094_Male.png",
             "name": "异色千棘盔印象",
             "original_id": "fashion_000068",
+            "pet": {
+              "avatar": "PetAvatarBig_3332.png",
+              "form": "本来的样子",
+              "name": "千棘盔",
+              "pet_id": "pet_000271",
+              "source_id": 3332
+            },
             "piece_ids": [
               1070760201,
               10807602,
@@ -22379,6 +23384,12 @@
             "main_image": "FashionPose_fashion_000095_Female.png",
             "name": "异色高脚鹬印象",
             "original_id": "fashion_000031",
+            "pet": {
+              "avatar": "PetAvatarBig_3252.png",
+              "name": "高脚鹬",
+              "pet_id": "pet_000212",
+              "source_id": 3252
+            },
             "piece_ids": [
               20703302,
               20903302,
@@ -22417,6 +23428,12 @@
             "main_image": "FashionPose_fashion_000095_Male.png",
             "name": "异色高脚鹬印象",
             "original_id": "fashion_000031",
+            "pet": {
+              "avatar": "PetAvatarBig_3252.png",
+              "name": "高脚鹬",
+              "pet_id": "pet_000212",
+              "source_id": 3252
+            },
             "piece_ids": [
               10703302,
               10903302,
@@ -22518,6 +23535,12 @@
             "main_image": "FashionPose_fashion_000096_Female.png",
             "name": "异色花衣蝶印象",
             "original_id": "fashion_000026",
+            "pet": {
+              "avatar": "PetAvatarBig_3141.png",
+              "name": "花衣蝶",
+              "pet_id": "pet_000127",
+              "source_id": 3141
+            },
             "piece_ids": [
               2070350201,
               20803502,
@@ -22559,6 +23582,12 @@
             "main_image": "FashionPose_fashion_000096_Male.png",
             "name": "异色花衣蝶印象",
             "original_id": "fashion_000026",
+            "pet": {
+              "avatar": "PetAvatarBig_3141.png",
+              "name": "花衣蝶",
+              "pet_id": "pet_000127",
+              "source_id": 3141
+            },
             "piece_ids": [
               1070350201,
               10803502,
@@ -22659,6 +23688,12 @@
             "main_image": "FashionPose_fashion_000097_Female.png",
             "name": "异色朔夜伊芙印象",
             "original_id": "fashion_000077",
+            "pet": {
+              "avatar": "PetAvatarBig_3144.png",
+              "name": "朔夜伊芙",
+              "pet_id": "pet_000130",
+              "source_id": 3144
+            },
             "piece_ids": [
               2070720201,
               20807202,
@@ -22700,6 +23735,12 @@
             "main_image": "FashionPose_fashion_000097_Male.png",
             "name": "异色朔夜伊芙印象",
             "original_id": "fashion_000077",
+            "pet": {
+              "avatar": "PetAvatarBig_3144.png",
+              "name": "朔夜伊芙",
+              "pet_id": "pet_000130",
+              "source_id": 3144
+            },
             "piece_ids": [
               1070720201,
               10807202,
@@ -23262,6 +24303,12 @@
               "id": 11802,
               "name": "宇宙拓荒者"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3269.png",
+              "name": "寂灭骨龙",
+              "pet_id": "pet_000225",
+              "source_id": 3269
+            },
             "piece_ids": [
               2070900101,
               21009001,
@@ -23384,6 +24431,12 @@
               "background_color": "#1D3BA9FF",
               "id": 11801,
               "name": "宇宙拓荒者"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3269.png",
+              "name": "寂灭骨龙",
+              "pet_id": "pet_000225",
+              "source_id": 3269
             },
             "piece_ids": [
               1070900101,
@@ -23593,6 +24646,12 @@
               "id": 11802,
               "name": "宇宙拓荒者"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3236.png",
+              "name": "星星眼",
+              "pet_id": "pet_000597",
+              "source_id": 3236
+            },
             "piece_ids": [
               2070910101,
               21009101,
@@ -23715,6 +24774,12 @@
               "background_color": "#1D3BA9FF",
               "id": 11801,
               "name": "宇宙拓荒者"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3236.png",
+              "name": "星星眼",
+              "pet_id": "pet_000597",
+              "source_id": 3236
             },
             "piece_ids": [
               1070910101,
@@ -23924,6 +24989,12 @@
               "id": 11802,
               "name": "宇宙拓荒者"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3768.png",
+              "name": "智辉章脑",
+              "pet_id": "pet_000613",
+              "source_id": 3768
+            },
             "piece_ids": [
               2070920101,
               21009201,
@@ -24047,6 +25118,12 @@
               "id": 11801,
               "name": "宇宙拓荒者"
             },
+            "pet": {
+              "avatar": "PetAvatarBig_3768.png",
+              "name": "智辉章脑",
+              "pet_id": "pet_000613",
+              "source_id": 3768
+            },
             "piece_ids": [
               1070920101,
               11009201,
@@ -24166,6 +25243,1148 @@
           "item_count": 6,
           "name": "智辉章脑印象",
           "source_image": "FashionSuit_fashion_000105_Male.png"
+        }
+      ]
+    },
+    {
+      "description": "我穿过引力的涟漪，拥抱无尽繁星。",
+      "grade_name": "手作时装",
+      "name": "星云旅者印象",
+      "outfit_id": "fashion_000106",
+      "page_title": "星云旅者印象",
+      "quality": 4,
+      "series_id": 3,
+      "source_record": {
+        "bond_id": 305072,
+        "description": "我穿过引力的涟漪，拥抱无尽繁星。",
+        "genders": [
+          "male",
+          "female"
+        ],
+        "grade": 3,
+        "grade_name": "手作时装",
+        "id": "fashion_000106",
+        "monthly": [
+          {
+            "end": "2026-10-09 03:59:59",
+            "spreads": [
+              {
+                "gender": "male",
+                "gender_label": "男款",
+                "name": "天空邮局",
+                "poster": "FashionMonthlyPoster_11901.png",
+                "title_logo": "FashionMonthlyTitle_11901.png"
+              },
+              {
+                "gender": "female",
+                "gender_label": "女款",
+                "name": "天空邮局",
+                "poster": "FashionMonthlyPoster_11902.png",
+                "title_logo": "FashionMonthlyTitle_11901.png"
+              }
+            ],
+            "start": "2026-09-25 04:00:00"
+          }
+        ],
+        "name": "星云旅者印象",
+        "package_related_ids": [
+          "fashion_000107",
+          "fashion_000108",
+          "fashion_000109"
+        ],
+        "page_title": "星云旅者印象",
+        "quality": 4,
+        "series_id": 3,
+        "source_ids": [
+          237,
+          241
+        ],
+        "style_key": "086",
+        "variants": {
+          "female": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305072,
+            "bonus_ids": [
+              32413101
+            ],
+            "card_image": "FashionSuit_fashion_000106_Female.png",
+            "description": "我穿过引力的涟漪，拥抱无尽繁星。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「星云旅者印象」的套装，在对战中更换星云旅者印象进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits86_female_callout.mp4"
+              }
+            ],
+            "gender": "female",
+            "gender_label": "女款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000106_Female.png",
+            "name": "星云旅者印象",
+            "package": {
+              "background_color": "#5FADEBFF",
+              "id": 11902,
+              "name": "天空邮局"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3466.png",
+              "name": "星云旅者",
+              "pet_id": "pet_000367",
+              "source_id": 3466
+            },
+            "piece_ids": [
+              2070860101,
+              20808601,
+              21008601,
+              21108601,
+              21208601,
+              21308601
+            ],
+            "quality": 4,
+            "series_id": 3,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-10-09 04:00:00",
+                "goods_id": 24001291,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-11-20 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-09-25 04:00:00"
+              }
+            ],
+            "source_id": 241,
+            "source_ids": [
+              241
+            ],
+            "upgrades": [
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_342.png",
+                "id": 342,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "天空邮局-星云旅者",
+                "quality": 4
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305072.png",
+                "id": 305072,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-星云旅者",
+                "quality": 2
+              }
+            ]
+          },
+          "male": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305072,
+            "bonus_ids": [
+              32413101
+            ],
+            "card_image": "FashionSuit_fashion_000106_Male.png",
+            "description": "我穿过引力的涟漪，拥抱无尽繁星。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「星云旅者印象」的套装，在对战中更换星云旅者印象进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits86_male_callout.mp4"
+              }
+            ],
+            "gender": "male",
+            "gender_label": "男款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000106_Male.png",
+            "name": "星云旅者印象",
+            "package": {
+              "background_color": "#5FADEBFF",
+              "id": 11901,
+              "name": "天空邮局"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3466.png",
+              "name": "星云旅者",
+              "pet_id": "pet_000367",
+              "source_id": 3466
+            },
+            "piece_ids": [
+              1070860101,
+              10808601,
+              11008601,
+              11108601,
+              11208601,
+              11308601
+            ],
+            "quality": 4,
+            "series_id": 3,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-10-09 04:00:00",
+                "goods_id": 24001287,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-11-20 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-09-25 04:00:00"
+              }
+            ],
+            "source_id": 237,
+            "source_ids": [
+              237
+            ],
+            "upgrades": [
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_341.png",
+                "id": 341,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "天空邮局-星云旅者",
+                "quality": 4
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305072.png",
+                "id": 305072,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-星云旅者",
+                "quality": 2
+              }
+            ]
+          }
+        }
+      },
+      "variants": [
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": "我穿过引力的涟漪，拥抱无尽繁星。",
+          "gender": "female",
+          "gender_label": "女款",
+          "image_path": "fashions/cards/fashion_000106-female.png",
+          "item_count": 6,
+          "name": "星云旅者印象",
+          "source_image": "FashionSuit_fashion_000106_Female.png"
+        },
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": "我穿过引力的涟漪，拥抱无尽繁星。",
+          "gender": "male",
+          "gender_label": "男款",
+          "image_path": "fashions/cards/fashion_000106-male.png",
+          "item_count": 6,
+          "name": "星云旅者印象",
+          "source_image": "FashionSuit_fashion_000106_Male.png"
+        }
+      ]
+    },
+    {
+      "description": "宇宙的高塔永无止境。",
+      "grade_name": "手作时装",
+      "name": "玳塔印象",
+      "outfit_id": "fashion_000107",
+      "page_title": "玳塔印象",
+      "quality": 4,
+      "series_id": 3,
+      "source_record": {
+        "bond_id": 305073,
+        "color_ids": [
+          "fashion_000123"
+        ],
+        "description": "宇宙的高塔永无止境。",
+        "genders": [
+          "male",
+          "female"
+        ],
+        "grade": 3,
+        "grade_name": "手作时装",
+        "id": "fashion_000107",
+        "monthly": [
+          {
+            "end": "2026-10-09 03:59:59",
+            "spreads": [
+              {
+                "gender": "male",
+                "gender_label": "男款",
+                "name": "天空邮局",
+                "poster": "FashionMonthlyPoster_11901.png",
+                "title_logo": "FashionMonthlyTitle_11901.png"
+              },
+              {
+                "gender": "female",
+                "gender_label": "女款",
+                "name": "天空邮局",
+                "poster": "FashionMonthlyPoster_11902.png",
+                "title_logo": "FashionMonthlyTitle_11901.png"
+              }
+            ],
+            "start": "2026-09-25 04:00:00"
+          }
+        ],
+        "name": "玳塔印象",
+        "package_related_ids": [
+          "fashion_000106",
+          "fashion_000108",
+          "fashion_000109"
+        ],
+        "page_title": "玳塔印象",
+        "quality": 4,
+        "series_id": 3,
+        "source_ids": [
+          238,
+          242
+        ],
+        "style_key": "087",
+        "variants": {
+          "female": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305073,
+            "bonus_ids": [
+              32413101
+            ],
+            "card_image": "FashionSuit_fashion_000107_Female.png",
+            "description": "宇宙的高塔永无止境。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「玳塔印象」的套装，在对战中更换玳塔印象进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits87_female_callout.mp4"
+              }
+            ],
+            "gender": "female",
+            "gender_label": "女款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000107_Female.png",
+            "name": "玳塔印象",
+            "package": {
+              "background_color": "#5FADEBFF",
+              "id": 11902,
+              "name": "天空邮局"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3590.png",
+              "name": "玳塔",
+              "pet_id": "pet_000603",
+              "source_id": 3590
+            },
+            "piece_ids": [
+              2070870101,
+              20808701,
+              21008701,
+              21108701,
+              21208701,
+              21308701
+            ],
+            "quality": 4,
+            "series_id": 3,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-10-09 04:00:00",
+                "goods_id": 24001292,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-11-20 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-09-25 04:00:00"
+              }
+            ],
+            "source_id": 242,
+            "source_ids": [
+              242
+            ],
+            "upgrades": [
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_344.png",
+                "id": 344,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "天空邮局-玳塔",
+                "quality": 4
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305073.png",
+                "id": 305073,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-玳塔",
+                "quality": 2
+              }
+            ]
+          },
+          "male": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305073,
+            "bonus_ids": [
+              32413101
+            ],
+            "card_image": "FashionSuit_fashion_000107_Male.png",
+            "description": "宇宙的高塔永无止境。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「玳塔印象」的套装，在对战中更换玳塔印象进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits87_male_callout.mp4"
+              }
+            ],
+            "gender": "male",
+            "gender_label": "男款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000107_Male.png",
+            "name": "玳塔印象",
+            "package": {
+              "background_color": "#5FADEBFF",
+              "id": 11901,
+              "name": "天空邮局"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3590.png",
+              "name": "玳塔",
+              "pet_id": "pet_000603",
+              "source_id": 3590
+            },
+            "piece_ids": [
+              1070870101,
+              10808701,
+              11008701,
+              11108701,
+              11208701,
+              11308701
+            ],
+            "quality": 4,
+            "series_id": 3,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-10-09 04:00:00",
+                "goods_id": 24001288,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-11-20 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-09-25 04:00:00"
+              }
+            ],
+            "source_id": 238,
+            "source_ids": [
+              238
+            ],
+            "upgrades": [
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_343.png",
+                "id": 343,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "天空邮局-玳塔",
+                "quality": 4
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305073.png",
+                "id": 305073,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-玳塔",
+                "quality": 2
+              }
+            ]
+          }
+        }
+      },
+      "variants": [
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": "宇宙的高塔永无止境。",
+          "gender": "female",
+          "gender_label": "女款",
+          "image_path": "fashions/cards/fashion_000107-female.png",
+          "item_count": 6,
+          "name": "玳塔印象",
+          "source_image": "FashionSuit_fashion_000107_Female.png"
+        },
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": "宇宙的高塔永无止境。",
+          "gender": "male",
+          "gender_label": "男款",
+          "image_path": "fashions/cards/fashion_000107-male.png",
+          "item_count": 6,
+          "name": "玳塔印象",
+          "source_image": "FashionSuit_fashion_000107_Male.png"
+        }
+      ]
+    },
+    {
+      "description": "我的心跳与闪烁的群星同频。",
+      "grade_name": "手作时装",
+      "name": "小皮球印象",
+      "outfit_id": "fashion_000108",
+      "page_title": "小皮球印象",
+      "quality": 4,
+      "series_id": 3,
+      "source_record": {
+        "bond_id": 305074,
+        "color_ids": [
+          "fashion_000124"
+        ],
+        "description": "我的心跳与闪烁的群星同频。",
+        "genders": [
+          "male",
+          "female"
+        ],
+        "grade": 3,
+        "grade_name": "手作时装",
+        "id": "fashion_000108",
+        "monthly": [
+          {
+            "end": "2026-10-09 03:59:59",
+            "spreads": [
+              {
+                "gender": "male",
+                "gender_label": "男款",
+                "name": "天空邮局",
+                "poster": "FashionMonthlyPoster_11901.png",
+                "title_logo": "FashionMonthlyTitle_11901.png"
+              },
+              {
+                "gender": "female",
+                "gender_label": "女款",
+                "name": "天空邮局",
+                "poster": "FashionMonthlyPoster_11902.png",
+                "title_logo": "FashionMonthlyTitle_11901.png"
+              }
+            ],
+            "start": "2026-09-25 04:00:00"
+          }
+        ],
+        "name": "小皮球印象",
+        "package_related_ids": [
+          "fashion_000106",
+          "fashion_000107",
+          "fashion_000109"
+        ],
+        "page_title": "小皮球印象",
+        "quality": 4,
+        "series_id": 3,
+        "source_ids": [
+          239,
+          243
+        ],
+        "style_key": "088",
+        "variants": {
+          "female": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305074,
+            "bonus_ids": [
+              32413101
+            ],
+            "card_image": "FashionSuit_fashion_000108_Female.png",
+            "description": "我的心跳与闪烁的群星同频。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「小皮球印象」的套装，在对战中更换小皮球进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits88_female_callout.mp4"
+              }
+            ],
+            "gender": "female",
+            "gender_label": "女款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000108_Female.png",
+            "name": "小皮球印象",
+            "package": {
+              "background_color": "#5FADEBFF",
+              "id": 11902,
+              "name": "天空邮局"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3199.png",
+              "name": "小皮球",
+              "pet_id": "pet_000176",
+              "source_id": 3199
+            },
+            "piece_ids": [
+              2070880101,
+              20808801,
+              21008801,
+              21108801,
+              21208801,
+              22108801
+            ],
+            "quality": 4,
+            "series_id": 3,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-10-09 04:00:00",
+                "goods_id": 24001293,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-11-20 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-09-25 04:00:00"
+              }
+            ],
+            "source_id": 243,
+            "source_ids": [
+              243
+            ],
+            "upgrades": [
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_346.png",
+                "id": 346,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "天空邮局-小皮球",
+                "quality": 4
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305074.png",
+                "id": 305074,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-小皮球",
+                "quality": 2
+              }
+            ]
+          },
+          "male": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305074,
+            "bonus_ids": [
+              32413101
+            ],
+            "card_image": "FashionSuit_fashion_000108_Male.png",
+            "description": "我的心跳与闪烁的群星同频。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「小皮球印象」的套装，在对战中更换小皮球进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits88_male_callout.mp4"
+              }
+            ],
+            "gender": "male",
+            "gender_label": "男款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000108_Male.png",
+            "name": "小皮球印象",
+            "package": {
+              "background_color": "#5FADEBFF",
+              "id": 11901,
+              "name": "天空邮局"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3199.png",
+              "name": "小皮球",
+              "pet_id": "pet_000176",
+              "source_id": 3199
+            },
+            "piece_ids": [
+              1070880101,
+              10808801,
+              11008801,
+              11108801,
+              11208801,
+              12108801
+            ],
+            "quality": 4,
+            "series_id": 3,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-10-09 04:00:00",
+                "goods_id": 24001289,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-11-20 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-09-25 04:00:00"
+              }
+            ],
+            "source_id": 239,
+            "source_ids": [
+              239
+            ],
+            "upgrades": [
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_345.png",
+                "id": 345,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "天空邮局-小皮球",
+                "quality": 4
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305074.png",
+                "id": 305074,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-小皮球",
+                "quality": 2
+              }
+            ]
+          }
+        }
+      },
+      "variants": [
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": "我的心跳与闪烁的群星同频。",
+          "gender": "female",
+          "gender_label": "女款",
+          "image_path": "fashions/cards/fashion_000108-female.png",
+          "item_count": 6,
+          "name": "小皮球印象",
+          "source_image": "FashionSuit_fashion_000108_Female.png"
+        },
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": "我的心跳与闪烁的群星同频。",
+          "gender": "male",
+          "gender_label": "男款",
+          "image_path": "fashions/cards/fashion_000108-male.png",
+          "item_count": 6,
+          "name": "小皮球印象",
+          "source_image": "FashionSuit_fashion_000108_Male.png"
+        }
+      ]
+    },
+    {
+      "description": "在无垠的宇宙中，我们分享同一颗星星。",
+      "grade_name": "手作时装",
+      "name": "友爱星飞印象",
+      "outfit_id": "fashion_000109",
+      "page_title": "友爱星飞印象",
+      "quality": 4,
+      "series_id": 3,
+      "source_record": {
+        "bond_id": 305075,
+        "description": "在无垠的宇宙中，我们分享同一颗星星。",
+        "genders": [
+          "male",
+          "female"
+        ],
+        "grade": 3,
+        "grade_name": "手作时装",
+        "id": "fashion_000109",
+        "monthly": [
+          {
+            "end": "2026-10-09 03:59:59",
+            "spreads": [
+              {
+                "gender": "male",
+                "gender_label": "男款",
+                "name": "天空邮局",
+                "poster": "FashionMonthlyPoster_11901.png",
+                "title_logo": "FashionMonthlyTitle_11901.png"
+              },
+              {
+                "gender": "female",
+                "gender_label": "女款",
+                "name": "天空邮局",
+                "poster": "FashionMonthlyPoster_11902.png",
+                "title_logo": "FashionMonthlyTitle_11901.png"
+              }
+            ],
+            "start": "2026-09-25 04:00:00"
+          }
+        ],
+        "name": "友爱星飞印象",
+        "package_related_ids": [
+          "fashion_000106",
+          "fashion_000107",
+          "fashion_000108"
+        ],
+        "page_title": "友爱星飞印象",
+        "quality": 4,
+        "series_id": 3,
+        "source_ids": [
+          240,
+          244
+        ],
+        "style_key": "089",
+        "variants": {
+          "female": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305075,
+            "bonus_ids": [
+              32413101
+            ],
+            "card_image": "FashionSuit_fashion_000109_Female.png",
+            "description": "在无垠的宇宙中，我们分享同一颗星星。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「友爱星飞印象」的套装，在对战中更换友爱星飞进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits89_female_callout.mp4"
+              }
+            ],
+            "gender": "female",
+            "gender_label": "女款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000109_Female.png",
+            "name": "友爱星飞印象",
+            "package": {
+              "background_color": "#5FADEBFF",
+              "id": 11902,
+              "name": "天空邮局"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3229.png",
+              "name": "友爱星飞",
+              "pet_id": "pet_000195",
+              "source_id": 3229
+            },
+            "piece_ids": [
+              2070890101,
+              20808901,
+              21008901,
+              21108901,
+              21208901,
+              22108901
+            ],
+            "quality": 4,
+            "series_id": 3,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-10-09 04:00:00",
+                "goods_id": 24001294,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-11-20 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-09-25 04:00:00"
+              }
+            ],
+            "source_id": 244,
+            "source_ids": [
+              244
+            ],
+            "upgrades": [
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_348.png",
+                "id": 348,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "天空邮局-友爱星飞",
+                "quality": 4
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305075.png",
+                "id": 305075,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-友爱星飞",
+                "quality": 2
+              }
+            ]
+          },
+          "male": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305075,
+            "bonus_ids": [
+              32413101
+            ],
+            "card_image": "FashionSuit_fashion_000109_Male.png",
+            "description": "在无垠的宇宙中，我们分享同一颗星星。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「友爱星飞印象」的套装，在对战中更换友爱星飞进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits89_male_callout.mp4"
+              }
+            ],
+            "gender": "male",
+            "gender_label": "男款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000109_Male.png",
+            "name": "友爱星飞印象",
+            "package": {
+              "background_color": "#5FADEBFF",
+              "id": 11901,
+              "name": "天空邮局"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3229.png",
+              "name": "友爱星飞",
+              "pet_id": "pet_000195",
+              "source_id": 3229
+            },
+            "piece_ids": [
+              1070890101,
+              10808901,
+              11008901,
+              11108901,
+              11208901,
+              12108901
+            ],
+            "quality": 4,
+            "series_id": 3,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-10-09 04:00:00",
+                "goods_id": 24001290,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-11-20 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-09-25 04:00:00"
+              }
+            ],
+            "source_id": 240,
+            "source_ids": [
+              240
+            ],
+            "upgrades": [
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_347.png",
+                "id": 347,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "天空邮局-友爱星飞",
+                "quality": 4
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305075.png",
+                "id": 305075,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-友爱星飞",
+                "quality": 2
+              }
+            ]
+          }
+        }
+      },
+      "variants": [
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": "在无垠的宇宙中，我们分享同一颗星星。",
+          "gender": "female",
+          "gender_label": "女款",
+          "image_path": "fashions/cards/fashion_000109-female.png",
+          "item_count": 6,
+          "name": "友爱星飞印象",
+          "source_image": "FashionSuit_fashion_000109_Female.png"
+        },
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": "在无垠的宇宙中，我们分享同一颗星星。",
+          "gender": "male",
+          "gender_label": "男款",
+          "image_path": "fashions/cards/fashion_000109-male.png",
+          "item_count": 6,
+          "name": "友爱星飞印象",
+          "source_image": "FashionSuit_fashion_000109_Male.png"
         }
       ]
     },
@@ -24502,6 +26721,2328 @@
     {
       "description": null,
       "grade_name": "契约时装",
+      "name": "溯源钟印象",
+      "outfit_id": "fashion_000113",
+      "page_title": "溯源钟印象",
+      "quality": 5,
+      "series_id": 1,
+      "source_record": {
+        "bond_id": 305095,
+        "genders": [
+          "male",
+          "female"
+        ],
+        "grade": 2,
+        "grade_name": "契约时装",
+        "id": "fashion_000113",
+        "monthly": [
+          {
+            "end": "2026-10-23 03:59:59",
+            "spreads": [
+              {
+                "gender": "male",
+                "gender_label": "男款",
+                "name": "怪奇实验室",
+                "poster": "FashionMonthlyPoster_12001.png",
+                "title_logo": "FashionMonthlyTitle_12001.png"
+              },
+              {
+                "gender": "female",
+                "gender_label": "女款",
+                "name": "怪奇实验室",
+                "poster": "FashionMonthlyPoster_12002.png",
+                "title_logo": "FashionMonthlyTitle_12001.png"
+              }
+            ],
+            "start": "2026-10-09 04:00:00"
+          }
+        ],
+        "name": "溯源钟印象",
+        "package_related_ids": [
+          "fashion_000114",
+          "fashion_000115"
+        ],
+        "page_title": "溯源钟印象",
+        "quality": 5,
+        "series_id": 1,
+        "source_ids": [
+          251,
+          252
+        ],
+        "style_key": "108",
+        "variants": {
+          "female": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305095,
+            "card_image": "FashionSuit_fashion_000113_Female.png",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「溯源钟印象」的套装，在对战中更换溯源钟进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits108_female_callout.mp4"
+              },
+              {
+                "kind": "win",
+                "text": "在和其他玩家对战中，溯源钟给对方最终一击时，还可以看到特殊胜利结算演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits108_female_win.mp4"
+              }
+            ],
+            "gender": "female",
+            "gender_label": "女款",
+            "grade": 2,
+            "grade_name": "契约时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000113_Female.png",
+            "name": "溯源钟印象",
+            "package": {
+              "background_color": "#117684FF",
+              "id": 12002,
+              "name": "怪奇实验室"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3617.png",
+              "name": "溯源钟",
+              "pet_id": "pet_000482",
+              "source_id": 3617
+            },
+            "piece_ids": [
+              2071080101,
+              21010801,
+              21310801,
+              21210801,
+              20810801,
+              21110801
+            ],
+            "quality": 5,
+            "series_id": 1,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-10-23 04:00:00",
+                "goods_id": 24001300,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-12-04 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-10-09 04:00:00"
+              }
+            ],
+            "source_id": 252,
+            "source_ids": [
+              252
+            ],
+            "upgrades": [
+              {
+                "cost": 5,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_360.png",
+                "id": 360,
+                "kind": "salon",
+                "label": "面部组件",
+                "name": "瞳孔-溯源钟印象",
+                "quality": 5
+              },
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_355.png",
+                "id": 355,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "怪奇实验室-溯源钟",
+                "quality": 5
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionItem_32412601.png",
+                "id": 32412601,
+                "kind": "fashion",
+                "label": "包挂饰",
+                "name": "包挂饰-不咕钟",
+                "quality": 5
+              },
+              {
+                "cost": 60,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305095.png",
+                "id": 305095,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-溯源钟",
+                "quality": 1
+              }
+            ]
+          },
+          "male": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305095,
+            "card_image": "FashionSuit_fashion_000113_Male.png",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「溯源钟印象」的套装，在对战中更换溯源钟进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits108_male_callout.mp4"
+              },
+              {
+                "kind": "win",
+                "text": "在和其他玩家对战中，溯源钟给对方最终一击时，还可以看到特殊胜利结算演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits108_male_win.mp4"
+              }
+            ],
+            "gender": "male",
+            "gender_label": "男款",
+            "grade": 2,
+            "grade_name": "契约时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000113_Male.png",
+            "name": "溯源钟印象",
+            "package": {
+              "background_color": "#117684FF",
+              "id": 12001,
+              "name": "怪奇实验室"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3617.png",
+              "name": "溯源钟",
+              "pet_id": "pet_000482",
+              "source_id": 3617
+            },
+            "piece_ids": [
+              1071080101,
+              11110801,
+              10810801,
+              11010801,
+              11210801,
+              11310801
+            ],
+            "quality": 5,
+            "series_id": 1,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-10-23 04:00:00",
+                "goods_id": 24001299,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-12-04 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-10-09 04:00:00"
+              }
+            ],
+            "source_id": 251,
+            "source_ids": [
+              251
+            ],
+            "upgrades": [
+              {
+                "cost": 5,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_360.png",
+                "id": 360,
+                "kind": "salon",
+                "label": "面部组件",
+                "name": "瞳孔-溯源钟印象",
+                "quality": 5
+              },
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_354.png",
+                "id": 354,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "怪奇实验室-溯源钟",
+                "quality": 5
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionItem_32412601.png",
+                "id": 32412601,
+                "kind": "fashion",
+                "label": "包挂饰",
+                "name": "包挂饰-不咕钟",
+                "quality": 5
+              },
+              {
+                "cost": 60,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305095.png",
+                "id": 305095,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-溯源钟",
+                "quality": 1
+              }
+            ]
+          }
+        }
+      },
+      "variants": [
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": null,
+          "gender": "female",
+          "gender_label": "女款",
+          "image_path": "fashions/cards/fashion_000113-female.png",
+          "item_count": 6,
+          "name": "溯源钟印象",
+          "source_image": "FashionSuit_fashion_000113_Female.png"
+        },
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": null,
+          "gender": "male",
+          "gender_label": "男款",
+          "image_path": "fashions/cards/fashion_000113-male.png",
+          "item_count": 6,
+          "name": "溯源钟印象",
+          "source_image": "FashionSuit_fashion_000113_Male.png"
+        }
+      ]
+    },
+    {
+      "description": null,
+      "grade_name": "契约时装",
+      "name": "克莱因龙印象",
+      "outfit_id": "fashion_000114",
+      "page_title": "克莱因龙印象",
+      "quality": 5,
+      "series_id": 1,
+      "source_record": {
+        "bond_id": 305096,
+        "genders": [
+          "male",
+          "female"
+        ],
+        "grade": 2,
+        "grade_name": "契约时装",
+        "id": "fashion_000114",
+        "monthly": [
+          {
+            "end": "2026-10-23 03:59:59",
+            "spreads": [
+              {
+                "gender": "male",
+                "gender_label": "男款",
+                "name": "怪奇实验室",
+                "poster": "FashionMonthlyPoster_12001.png",
+                "title_logo": "FashionMonthlyTitle_12001.png"
+              },
+              {
+                "gender": "female",
+                "gender_label": "女款",
+                "name": "怪奇实验室",
+                "poster": "FashionMonthlyPoster_12002.png",
+                "title_logo": "FashionMonthlyTitle_12001.png"
+              }
+            ],
+            "start": "2026-10-09 04:00:00"
+          }
+        ],
+        "name": "克莱因龙印象",
+        "package_related_ids": [
+          "fashion_000113",
+          "fashion_000115"
+        ],
+        "page_title": "克莱因龙印象",
+        "quality": 5,
+        "series_id": 1,
+        "source_ids": [
+          253,
+          254
+        ],
+        "style_key": "109",
+        "variants": {
+          "female": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305096,
+            "card_image": "FashionSuit_fashion_000114_Female.png",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「克莱因龙印象」的套装，在对战中更换克莱因龙进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits109_female_callout.mp4"
+              },
+              {
+                "kind": "win",
+                "text": "在和其他玩家对战中，克莱因龙给对方最终一击时，还可以看到特殊胜利结算演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits109_female_win.mp4"
+              }
+            ],
+            "gender": "female",
+            "gender_label": "女款",
+            "grade": 2,
+            "grade_name": "契约时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000114_Female.png",
+            "name": "克莱因龙印象",
+            "package": {
+              "background_color": "#117684FF",
+              "id": 12002,
+              "name": "怪奇实验室"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3748.png",
+              "name": "克莱因龙",
+              "pet_id": "pet_000519",
+              "source_id": 3748
+            },
+            "piece_ids": [
+              2071090101,
+              20810901,
+              21010901,
+              22110901,
+              21210901,
+              21110901
+            ],
+            "quality": 5,
+            "series_id": 1,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-10-23 04:00:00",
+                "goods_id": 24001314,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-12-04 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-10-09 04:00:00"
+              }
+            ],
+            "source_id": 254,
+            "source_ids": [
+              254
+            ],
+            "upgrades": [
+              {
+                "cost": 5,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_361.png",
+                "id": 361,
+                "kind": "salon",
+                "label": "面部组件",
+                "name": "瞳孔-克莱因龙印象",
+                "quality": 5
+              },
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_357.png",
+                "id": 357,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "怪奇实验室-克莱因龙",
+                "quality": 5
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionItem_32412701.png",
+                "id": 32412701,
+                "kind": "fashion",
+                "label": "包挂饰",
+                "name": "包挂饰-莫比乌乌",
+                "quality": 5
+              },
+              {
+                "cost": 60,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305096.png",
+                "id": 305096,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-克莱因龙",
+                "quality": 1
+              }
+            ]
+          },
+          "male": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305096,
+            "card_image": "FashionSuit_fashion_000114_Male.png",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「克莱因龙印象」的套装，在对战中更换克莱因龙进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits109_male_callout.mp4"
+              },
+              {
+                "kind": "win",
+                "text": "在和其他玩家对战中，克莱因龙给对方最终一击时，还可以看到特殊胜利结算演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits109_male_win.mp4"
+              }
+            ],
+            "gender": "male",
+            "gender_label": "男款",
+            "grade": 2,
+            "grade_name": "契约时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000114_Male.png",
+            "name": "克莱因龙印象",
+            "package": {
+              "background_color": "#117684FF",
+              "id": 12001,
+              "name": "怪奇实验室"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3748.png",
+              "name": "克莱因龙",
+              "pet_id": "pet_000519",
+              "source_id": 3748
+            },
+            "piece_ids": [
+              1071090101,
+              10810901,
+              11010901,
+              11210901,
+              12110901,
+              11110901
+            ],
+            "quality": 5,
+            "series_id": 1,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-10-23 04:00:00",
+                "goods_id": 24001313,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-12-04 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-10-09 04:00:00"
+              }
+            ],
+            "source_id": 253,
+            "source_ids": [
+              253
+            ],
+            "upgrades": [
+              {
+                "cost": 5,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_361.png",
+                "id": 361,
+                "kind": "salon",
+                "label": "面部组件",
+                "name": "瞳孔-克莱因龙印象",
+                "quality": 5
+              },
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_356.png",
+                "id": 356,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "怪奇实验室-克莱因龙",
+                "quality": 5
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionItem_32412701.png",
+                "id": 32412701,
+                "kind": "fashion",
+                "label": "包挂饰",
+                "name": "包挂饰-莫比乌乌",
+                "quality": 5
+              },
+              {
+                "cost": 60,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305096.png",
+                "id": 305096,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-克莱因龙",
+                "quality": 1
+              }
+            ]
+          }
+        }
+      },
+      "variants": [
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": null,
+          "gender": "female",
+          "gender_label": "女款",
+          "image_path": "fashions/cards/fashion_000114-female.png",
+          "item_count": 6,
+          "name": "克莱因龙印象",
+          "source_image": "FashionSuit_fashion_000114_Female.png"
+        },
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": null,
+          "gender": "male",
+          "gender_label": "男款",
+          "image_path": "fashions/cards/fashion_000114-male.png",
+          "item_count": 6,
+          "name": "克莱因龙印象",
+          "source_image": "FashionSuit_fashion_000114_Male.png"
+        }
+      ]
+    },
+    {
+      "description": null,
+      "grade_name": "契约时装",
+      "name": "测风蝉印象",
+      "outfit_id": "fashion_000115",
+      "page_title": "测风蝉印象",
+      "quality": 5,
+      "series_id": 1,
+      "source_record": {
+        "bond_id": 305097,
+        "color_ids": [
+          "fashion_000120"
+        ],
+        "genders": [
+          "male",
+          "female"
+        ],
+        "grade": 2,
+        "grade_name": "契约时装",
+        "id": "fashion_000115",
+        "monthly": [
+          {
+            "end": "2026-10-23 03:59:59",
+            "spreads": [
+              {
+                "gender": "male",
+                "gender_label": "男款",
+                "name": "怪奇实验室",
+                "poster": "FashionMonthlyPoster_12001.png",
+                "title_logo": "FashionMonthlyTitle_12001.png"
+              },
+              {
+                "gender": "female",
+                "gender_label": "女款",
+                "name": "怪奇实验室",
+                "poster": "FashionMonthlyPoster_12002.png",
+                "title_logo": "FashionMonthlyTitle_12001.png"
+              }
+            ],
+            "start": "2026-10-09 04:00:00"
+          }
+        ],
+        "name": "测风蝉印象",
+        "package_related_ids": [
+          "fashion_000113",
+          "fashion_000114"
+        ],
+        "page_title": "测风蝉印象",
+        "quality": 5,
+        "series_id": 1,
+        "source_ids": [
+          255,
+          256
+        ],
+        "style_key": "110",
+        "variants": {
+          "female": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305097,
+            "card_image": "FashionSuit_fashion_000115_Female.png",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「测风蝉印象」的套装，在对战中更换测风蝉进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits110_female_callout.mp4"
+              },
+              {
+                "kind": "win",
+                "text": "在和其他玩家对战中，测风蝉给对方最终一击时，还可以看到特殊胜利结算演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits110_female_win.mp4"
+              }
+            ],
+            "gender": "female",
+            "gender_label": "女款",
+            "grade": 2,
+            "grade_name": "契约时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000115_Female.png",
+            "name": "测风蝉印象",
+            "package": {
+              "background_color": "#117684FF",
+              "id": 12002,
+              "name": "怪奇实验室"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3663.png",
+              "name": "测风蝉",
+              "pet_id": "pet_000605",
+              "source_id": 3664
+            },
+            "piece_ids": [
+              2071100101,
+              20811001,
+              21011001,
+              22111001,
+              21211001,
+              21111001
+            ],
+            "quality": 5,
+            "series_id": 1,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-10-23 04:00:00",
+                "goods_id": 24001328,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-12-04 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-10-09 04:00:00"
+              }
+            ],
+            "source_id": 256,
+            "source_ids": [
+              256
+            ],
+            "upgrades": [
+              {
+                "cost": 5,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_363.png",
+                "id": 363,
+                "kind": "salon",
+                "label": "面部组件",
+                "name": "眼型-测风蝉印象",
+                "quality": 5
+              },
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_359.png",
+                "id": 359,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "怪奇实验室-测风蝉",
+                "quality": 5
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionItem_32412801.png",
+                "id": 32412801,
+                "kind": "fashion",
+                "label": "包挂饰",
+                "name": "包挂饰-量风碗",
+                "quality": 5
+              },
+              {
+                "cost": 60,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305097.png",
+                "id": 305097,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-测风蝉",
+                "quality": 1
+              }
+            ]
+          },
+          "male": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305097,
+            "card_image": "FashionSuit_fashion_000115_Male.png",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「测风蝉印象」的套装，在对战中更换测风蝉进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits110_male_callout.mp4"
+              },
+              {
+                "kind": "win",
+                "text": "在和其他玩家对战中，测风蝉给对方最终一击时，还可以看到特殊胜利结算演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits110_male_win.mp4"
+              }
+            ],
+            "gender": "male",
+            "gender_label": "男款",
+            "grade": 2,
+            "grade_name": "契约时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000115_Male.png",
+            "name": "测风蝉印象",
+            "package": {
+              "background_color": "#117684FF",
+              "id": 12001,
+              "name": "怪奇实验室"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3663.png",
+              "name": "测风蝉",
+              "pet_id": "pet_000605",
+              "source_id": 3664
+            },
+            "piece_ids": [
+              1071100101,
+              11111001,
+              10811001,
+              11011001,
+              11211001,
+              12111001
+            ],
+            "quality": 5,
+            "series_id": 1,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-10-23 04:00:00",
+                "goods_id": 24001327,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-12-04 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-10-09 04:00:00"
+              }
+            ],
+            "source_id": 255,
+            "source_ids": [
+              255
+            ],
+            "upgrades": [
+              {
+                "cost": 5,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_362.png",
+                "id": 362,
+                "kind": "salon",
+                "label": "面部组件",
+                "name": "眼型-测风蝉印象",
+                "quality": 5
+              },
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_358.png",
+                "id": 358,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "怪奇实验室-测风蝉",
+                "quality": 5
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionItem_32412801.png",
+                "id": 32412801,
+                "kind": "fashion",
+                "label": "包挂饰",
+                "name": "包挂饰-量风碗",
+                "quality": 5
+              },
+              {
+                "cost": 60,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305097.png",
+                "id": 305097,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-测风蝉",
+                "quality": 1
+              }
+            ]
+          }
+        }
+      },
+      "variants": [
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": null,
+          "gender": "female",
+          "gender_label": "女款",
+          "image_path": "fashions/cards/fashion_000115-female.png",
+          "item_count": 6,
+          "name": "测风蝉印象",
+          "source_image": "FashionSuit_fashion_000115_Female.png"
+        },
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": null,
+          "gender": "male",
+          "gender_label": "男款",
+          "image_path": "fashions/cards/fashion_000115-male.png",
+          "item_count": 6,
+          "name": "测风蝉印象",
+          "source_image": "FashionSuit_fashion_000115_Male.png"
+        }
+      ]
+    },
+    {
+      "description": "石头吞下晚霞，长出亮晶晶的心。",
+      "grade_name": "手作时装",
+      "name": "罗隐印象",
+      "outfit_id": "fashion_000116",
+      "page_title": "罗隐印象",
+      "quality": 4,
+      "series_id": 4,
+      "source_record": {
+        "bond_id": 305076,
+        "description": "石头吞下晚霞，长出亮晶晶的心。",
+        "genders": [
+          "male",
+          "female"
+        ],
+        "grade": 3,
+        "grade_name": "手作时装",
+        "id": "fashion_000116",
+        "monthly": [
+          {
+            "end": "2026-11-05 03:59:59",
+            "spreads": [
+              {
+                "gender": "male",
+                "gender_label": "男款",
+                "name": "宝石狩猎",
+                "poster": "FashionMonthlyPoster_12101.png",
+                "title_logo": "FashionMonthlyTitle_12101.png"
+              },
+              {
+                "gender": "female",
+                "gender_label": "女款",
+                "name": "宝石狩猎",
+                "poster": "FashionMonthlyPoster_12102.png",
+                "title_logo": "FashionMonthlyTitle_12101.png"
+              }
+            ],
+            "start": "2026-10-23 04:00:00"
+          }
+        ],
+        "name": "罗隐印象",
+        "package_related_ids": [
+          "fashion_000117",
+          "fashion_000118",
+          "fashion_000119"
+        ],
+        "page_title": "罗隐印象",
+        "quality": 4,
+        "series_id": 4,
+        "source_ids": [
+          257,
+          258
+        ],
+        "style_key": "078",
+        "variants": {
+          "female": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305076,
+            "bonus_ids": [
+              32410001
+            ],
+            "card_image": "FashionSuit_fashion_000116_Female.png",
+            "description": "石头吞下晚霞，长出亮晶晶的心。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「罗隐印象」的套装，在对战中更换罗隐进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits78_female_callout.mp4"
+              }
+            ],
+            "gender": "female",
+            "gender_label": "女款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 7,
+            "main_image": "FashionPose_fashion_000116_Female.png",
+            "name": "罗隐印象",
+            "package": {
+              "background_color": "#4F47B3FF",
+              "id": 12102,
+              "name": "宝石狩猎"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3016.png",
+              "name": "罗隐",
+              "pet_id": "pet_000015",
+              "source_id": 3016
+            },
+            "piece_ids": [
+              21207801,
+              21107801,
+              20907801,
+              20707801,
+              20807801,
+              21007801,
+              21307801
+            ],
+            "quality": 4,
+            "series_id": 4,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-11-05 04:00:00",
+                "goods_id": 24001347,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-12-18 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-10-23 04:00:00"
+              }
+            ],
+            "source_id": 258,
+            "source_ids": [
+              258
+            ],
+            "upgrades": [
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_367.png",
+                "id": 367,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "宝石狩猎-罗隐",
+                "quality": 4
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305076.png",
+                "id": 305076,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-罗隐",
+                "quality": 2
+              }
+            ]
+          },
+          "male": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305076,
+            "bonus_ids": [
+              32410001
+            ],
+            "card_image": "FashionSuit_fashion_000116_Male.png",
+            "description": "石头吞下晚霞，长出亮晶晶的心。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「罗隐印象」的套装，在对战中更换罗隐进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits78_male_callout.mp4"
+              }
+            ],
+            "gender": "male",
+            "gender_label": "男款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 7,
+            "main_image": "FashionPose_fashion_000116_Male.png",
+            "name": "罗隐印象",
+            "package": {
+              "background_color": "#4F47B3FF",
+              "id": 12101,
+              "name": "宝石狩猎"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3016.png",
+              "name": "罗隐",
+              "pet_id": "pet_000015",
+              "source_id": 3016
+            },
+            "piece_ids": [
+              10907801,
+              11007801,
+              11207801,
+              11307801,
+              11107801,
+              10807801,
+              10707801
+            ],
+            "quality": 4,
+            "series_id": 4,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-11-05 04:00:00",
+                "goods_id": 24001346,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-12-18 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-10-23 04:00:00"
+              }
+            ],
+            "source_id": 257,
+            "source_ids": [
+              257
+            ],
+            "upgrades": [
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_366.png",
+                "id": 366,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "宝石狩猎-罗隐",
+                "quality": 4
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305076.png",
+                "id": 305076,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-罗隐",
+                "quality": 2
+              }
+            ]
+          }
+        }
+      },
+      "variants": [
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": "石头吞下晚霞，长出亮晶晶的心。",
+          "gender": "female",
+          "gender_label": "女款",
+          "image_path": "fashions/cards/fashion_000116-female.png",
+          "item_count": 7,
+          "name": "罗隐印象",
+          "source_image": "FashionSuit_fashion_000116_Female.png"
+        },
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": "石头吞下晚霞，长出亮晶晶的心。",
+          "gender": "male",
+          "gender_label": "男款",
+          "image_path": "fashions/cards/fashion_000116-male.png",
+          "item_count": 7,
+          "name": "罗隐印象",
+          "source_image": "FashionSuit_fashion_000116_Male.png"
+        }
+      ]
+    },
+    {
+      "description": "愿宝石的光辉为你的荣耀加冕。",
+      "grade_name": "手作时装",
+      "name": "蝎子王印象",
+      "outfit_id": "fashion_000117",
+      "page_title": "蝎子王印象",
+      "quality": 4,
+      "series_id": 4,
+      "source_record": {
+        "bond_id": 305077,
+        "description": "愿宝石的光辉为你的荣耀加冕。",
+        "genders": [
+          "male",
+          "female"
+        ],
+        "grade": 3,
+        "grade_name": "手作时装",
+        "id": "fashion_000117",
+        "monthly": [
+          {
+            "end": "2026-11-05 03:59:59",
+            "spreads": [
+              {
+                "gender": "male",
+                "gender_label": "男款",
+                "name": "宝石狩猎",
+                "poster": "FashionMonthlyPoster_12101.png",
+                "title_logo": "FashionMonthlyTitle_12101.png"
+              },
+              {
+                "gender": "female",
+                "gender_label": "女款",
+                "name": "宝石狩猎",
+                "poster": "FashionMonthlyPoster_12102.png",
+                "title_logo": "FashionMonthlyTitle_12101.png"
+              }
+            ],
+            "start": "2026-10-23 04:00:00"
+          }
+        ],
+        "name": "蝎子王印象",
+        "package_related_ids": [
+          "fashion_000116",
+          "fashion_000118",
+          "fashion_000119"
+        ],
+        "page_title": "蝎子王印象",
+        "quality": 4,
+        "series_id": 4,
+        "source_ids": [
+          259,
+          260
+        ],
+        "style_key": "079",
+        "variants": {
+          "female": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305077,
+            "bonus_ids": [
+              32410001
+            ],
+            "card_image": "FashionSuit_fashion_000117_Female.png",
+            "description": "愿宝石的光辉为你的荣耀加冕。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「蝎子王印象」的套装，在对战中更换蝎子王进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits79_female_callout.mp4"
+              }
+            ],
+            "gender": "female",
+            "gender_label": "女款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 7,
+            "main_image": "FashionPose_fashion_000117_Female.png",
+            "name": "蝎子王印象",
+            "package": {
+              "background_color": "#4F47B3FF",
+              "id": 12102,
+              "name": "宝石狩猎"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3404.png",
+              "name": "蝎子王",
+              "pet_id": "pet_000325",
+              "source_id": 3404
+            },
+            "piece_ids": [
+              21207901,
+              21107901,
+              20907901,
+              20707901,
+              20807901,
+              21007901,
+              22107901
+            ],
+            "quality": 4,
+            "series_id": 4,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-11-05 04:00:00",
+                "goods_id": 24001363,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-12-18 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-10-23 04:00:00"
+              }
+            ],
+            "source_id": 260,
+            "source_ids": [
+              260
+            ],
+            "upgrades": [
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_369.png",
+                "id": 369,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "宝石狩猎-蝎子王",
+                "quality": 4
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305077.png",
+                "id": 305077,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-蝎子王",
+                "quality": 2
+              }
+            ]
+          },
+          "male": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305077,
+            "bonus_ids": [
+              32410001
+            ],
+            "card_image": "FashionSuit_fashion_000117_Male.png",
+            "description": "愿宝石的光辉为你的荣耀加冕。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「蝎子王印象」的套装，在对战中更换蝎子王进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits79_male_callout.mp4"
+              }
+            ],
+            "gender": "male",
+            "gender_label": "男款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 7,
+            "main_image": "FashionPose_fashion_000117_Male.png",
+            "name": "蝎子王印象",
+            "package": {
+              "background_color": "#4F47B3FF",
+              "id": 12101,
+              "name": "宝石狩猎"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3404.png",
+              "name": "蝎子王",
+              "pet_id": "pet_000325",
+              "source_id": 3404
+            },
+            "piece_ids": [
+              10907901,
+              11007901,
+              11207901,
+              12107901,
+              11107901,
+              10807901,
+              10707901
+            ],
+            "quality": 4,
+            "series_id": 4,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-11-05 04:00:00",
+                "goods_id": 24001362,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-12-18 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-10-23 04:00:00"
+              }
+            ],
+            "source_id": 259,
+            "source_ids": [
+              259
+            ],
+            "upgrades": [
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_368.png",
+                "id": 368,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "宝石狩猎-蝎子王",
+                "quality": 4
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305077.png",
+                "id": 305077,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-蝎子王",
+                "quality": 2
+              }
+            ]
+          }
+        }
+      },
+      "variants": [
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": "愿宝石的光辉为你的荣耀加冕。",
+          "gender": "female",
+          "gender_label": "女款",
+          "image_path": "fashions/cards/fashion_000117-female.png",
+          "item_count": 7,
+          "name": "蝎子王印象",
+          "source_image": "FashionSuit_fashion_000117_Female.png"
+        },
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": "愿宝石的光辉为你的荣耀加冕。",
+          "gender": "male",
+          "gender_label": "男款",
+          "image_path": "fashions/cards/fashion_000117-male.png",
+          "item_count": 7,
+          "name": "蝎子王印象",
+          "source_image": "FashionSuit_fashion_000117_Male.png"
+        }
+      ]
+    },
+    {
+      "description": "我将山野的彩虹藏起来，做成宝石赠予你。",
+      "grade_name": "手作时装",
+      "name": "晶石蜗印象",
+      "outfit_id": "fashion_000118",
+      "page_title": "晶石蜗印象",
+      "quality": 4,
+      "series_id": 4,
+      "source_record": {
+        "bond_id": 305078,
+        "description": "我将山野的彩虹藏起来，做成宝石赠予你。",
+        "genders": [
+          "male",
+          "female"
+        ],
+        "grade": 3,
+        "grade_name": "手作时装",
+        "id": "fashion_000118",
+        "monthly": [
+          {
+            "end": "2026-11-05 03:59:59",
+            "spreads": [
+              {
+                "gender": "male",
+                "gender_label": "男款",
+                "name": "宝石狩猎",
+                "poster": "FashionMonthlyPoster_12101.png",
+                "title_logo": "FashionMonthlyTitle_12101.png"
+              },
+              {
+                "gender": "female",
+                "gender_label": "女款",
+                "name": "宝石狩猎",
+                "poster": "FashionMonthlyPoster_12102.png",
+                "title_logo": "FashionMonthlyTitle_12101.png"
+              }
+            ],
+            "start": "2026-10-23 04:00:00"
+          }
+        ],
+        "name": "晶石蜗印象",
+        "package_related_ids": [
+          "fashion_000116",
+          "fashion_000117",
+          "fashion_000119"
+        ],
+        "page_title": "晶石蜗印象",
+        "quality": 4,
+        "series_id": 4,
+        "source_ids": [
+          261,
+          262
+        ],
+        "style_key": "080",
+        "variants": {
+          "female": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305078,
+            "bonus_ids": [
+              32410001
+            ],
+            "card_image": "FashionSuit_fashion_000118_Female.png",
+            "description": "我将山野的彩虹藏起来，做成宝石赠予你。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「晶石蜗印象」的套装，在对战中更换晶石蜗进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits80_female_callout.mp4"
+              }
+            ],
+            "gender": "female",
+            "gender_label": "女款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 7,
+            "main_image": "FashionPose_fashion_000118_Female.png",
+            "name": "晶石蜗印象",
+            "package": {
+              "background_color": "#4F47B3FF",
+              "id": 12102,
+              "name": "宝石狩猎"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3243.png",
+              "form": "西瓜碧玺的样子",
+              "name": "晶石蜗",
+              "pet_id": "pet_000257",
+              "source_id": 3308
+            },
+            "piece_ids": [
+              21208001,
+              21108001,
+              20708001,
+              20808001,
+              21008001,
+              21308001,
+              20908001
+            ],
+            "quality": 4,
+            "series_id": 4,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-11-05 04:00:00",
+                "goods_id": 24001379,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-12-18 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-10-23 04:00:00"
+              }
+            ],
+            "source_id": 262,
+            "source_ids": [
+              262
+            ],
+            "upgrades": [
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_371.png",
+                "id": 371,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "宝石狩猎-晶石蜗",
+                "quality": 4
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305078.png",
+                "id": 305078,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-晶石蜗",
+                "quality": 2
+              }
+            ]
+          },
+          "male": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305078,
+            "bonus_ids": [
+              32410001
+            ],
+            "card_image": "FashionSuit_fashion_000118_Male.png",
+            "description": "我将山野的彩虹藏起来，做成宝石赠予你。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「晶石蜗印象」的套装，在对战中更换晶石蜗进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits80_male_callout.mp4"
+              }
+            ],
+            "gender": "male",
+            "gender_label": "男款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 7,
+            "main_image": "FashionPose_fashion_000118_Male.png",
+            "name": "晶石蜗印象",
+            "package": {
+              "background_color": "#4F47B3FF",
+              "id": 12101,
+              "name": "宝石狩猎"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3243.png",
+              "form": "西瓜碧玺的样子",
+              "name": "晶石蜗",
+              "pet_id": "pet_000257",
+              "source_id": 3308
+            },
+            "piece_ids": [
+              11008001,
+              11208001,
+              11308001,
+              10908001,
+              11108001,
+              10808001,
+              10708001
+            ],
+            "quality": 4,
+            "series_id": 4,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-11-05 04:00:00",
+                "goods_id": 24001378,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-12-18 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-10-23 04:00:00"
+              }
+            ],
+            "source_id": 261,
+            "source_ids": [
+              261
+            ],
+            "upgrades": [
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_370.png",
+                "id": 370,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "宝石狩猎-晶石蜗",
+                "quality": 4
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305078.png",
+                "id": 305078,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-晶石蜗",
+                "quality": 2
+              }
+            ]
+          }
+        }
+      },
+      "variants": [
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": "我将山野的彩虹藏起来，做成宝石赠予你。",
+          "gender": "female",
+          "gender_label": "女款",
+          "image_path": "fashions/cards/fashion_000118-female.png",
+          "item_count": 7,
+          "name": "晶石蜗印象",
+          "source_image": "FashionSuit_fashion_000118_Female.png"
+        },
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": "我将山野的彩虹藏起来，做成宝石赠予你。",
+          "gender": "male",
+          "gender_label": "男款",
+          "image_path": "fashions/cards/fashion_000118-male.png",
+          "item_count": 7,
+          "name": "晶石蜗印象",
+          "source_image": "FashionSuit_fashion_000118_Male.png"
+        }
+      ]
+    },
+    {
+      "description": "你听，大地在讲述时光雕刻的古老故事。",
+      "grade_name": "手作时装",
+      "name": "巨灵石印象",
+      "outfit_id": "fashion_000119",
+      "page_title": "巨灵石印象",
+      "quality": 4,
+      "series_id": 4,
+      "source_record": {
+        "bond_id": 305079,
+        "description": "你听，大地在讲述时光雕刻的古老故事。",
+        "genders": [
+          "male",
+          "female"
+        ],
+        "grade": 3,
+        "grade_name": "手作时装",
+        "id": "fashion_000119",
+        "monthly": [
+          {
+            "end": "2026-11-05 03:59:59",
+            "spreads": [
+              {
+                "gender": "male",
+                "gender_label": "男款",
+                "name": "宝石狩猎",
+                "poster": "FashionMonthlyPoster_12101.png",
+                "title_logo": "FashionMonthlyTitle_12101.png"
+              },
+              {
+                "gender": "female",
+                "gender_label": "女款",
+                "name": "宝石狩猎",
+                "poster": "FashionMonthlyPoster_12102.png",
+                "title_logo": "FashionMonthlyTitle_12101.png"
+              }
+            ],
+            "start": "2026-10-23 04:00:00"
+          }
+        ],
+        "name": "巨灵石印象",
+        "package_related_ids": [
+          "fashion_000116",
+          "fashion_000117",
+          "fashion_000118"
+        ],
+        "page_title": "巨灵石印象",
+        "quality": 4,
+        "series_id": 4,
+        "source_ids": [
+          263,
+          264
+        ],
+        "style_key": "081",
+        "variants": {
+          "female": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305079,
+            "bonus_ids": [
+              32410001
+            ],
+            "card_image": "FashionSuit_fashion_000119_Female.png",
+            "description": "你听，大地在讲述时光雕刻的古老故事。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「巨灵石印象」的套装，在对战中更换巨灵石进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits81_female_callout.mp4"
+              }
+            ],
+            "gender": "female",
+            "gender_label": "女款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 7,
+            "main_image": "FashionPose_fashion_000119_Female.png",
+            "name": "巨灵石印象",
+            "package": {
+              "background_color": "#4F47B3FF",
+              "id": 12102,
+              "name": "宝石狩猎"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3171.png",
+              "name": "巨灵石",
+              "pet_id": "pet_000150",
+              "source_id": 3171
+            },
+            "piece_ids": [
+              21208101,
+              21108101,
+              20908101,
+              20708101,
+              20808101,
+              21008101,
+              22108101
+            ],
+            "quality": 4,
+            "series_id": 4,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-11-05 04:00:00",
+                "goods_id": 24001395,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-12-18 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-10-23 04:00:00"
+              }
+            ],
+            "source_id": 264,
+            "source_ids": [
+              264
+            ],
+            "upgrades": [
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_373.png",
+                "id": 373,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "宝石狩猎-巨灵石",
+                "quality": 4
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305079.png",
+                "id": 305079,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-巨灵石",
+                "quality": 2
+              }
+            ]
+          },
+          "male": {
+            "acquire": [
+              "皮卡月刊限定"
+            ],
+            "bond_id": 305079,
+            "bonus_ids": [
+              32410001
+            ],
+            "card_image": "FashionSuit_fashion_000119_Male.png",
+            "description": "你听，大地在讲述时光雕刻的古老故事。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「巨灵石印象」的套装，在对战中更换巨灵石进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits81_male_callout.mp4"
+              }
+            ],
+            "gender": "male",
+            "gender_label": "男款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 7,
+            "main_image": "FashionPose_fashion_000119_Male.png",
+            "name": "巨灵石印象",
+            "package": {
+              "background_color": "#4F47B3FF",
+              "id": 12101,
+              "name": "宝石狩猎"
+            },
+            "pet": {
+              "avatar": "PetAvatarBig_3171.png",
+              "name": "巨灵石",
+              "pet_id": "pet_000150",
+              "source_id": 3171
+            },
+            "piece_ids": [
+              10908101,
+              11008101,
+              11208101,
+              12108101,
+              11108101,
+              10808101,
+              10708101
+            ],
+            "quality": 4,
+            "series_id": 4,
+            "shops": [
+              {
+                "enabled": true,
+                "end": "2026-11-05 04:00:00",
+                "goods_id": 24001394,
+                "price": {
+                  "goods_id": 2,
+                  "goods_type": 2
+                },
+                "random": {
+                  "enabled": true,
+                  "start": "2026-12-18 04:00:00"
+                },
+                "shop_id": 103,
+                "shop_name": "皮卡月刊",
+                "shop_type": 1,
+                "shop_type_name": "常规商店",
+                "start": "2026-10-23 04:00:00"
+              }
+            ],
+            "source_id": 263,
+            "source_ids": [
+              263
+            ],
+            "upgrades": [
+              {
+                "cost": 10,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionSalon_372.png",
+                "id": 372,
+                "kind": "salon",
+                "label": "发型发色",
+                "name": "宝石狩猎-巨灵石",
+                "quality": 4
+              },
+              {
+                "cost": 30,
+                "currency": {
+                  "icon": "Item_40.png",
+                  "id": 40,
+                  "name": "积分卡"
+                },
+                "icon": "FashionBond_305079.png",
+                "id": 305079,
+                "kind": "bond",
+                "label": "华丽徽章",
+                "name": "华丽徽章-巨灵石",
+                "quality": 2
+              }
+            ]
+          }
+        }
+      },
+      "variants": [
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": "你听，大地在讲述时光雕刻的古老故事。",
+          "gender": "female",
+          "gender_label": "女款",
+          "image_path": "fashions/cards/fashion_000119-female.png",
+          "item_count": 7,
+          "name": "巨灵石印象",
+          "source_image": "FashionSuit_fashion_000119_Female.png"
+        },
+        {
+          "acquisition": [
+            "皮卡月刊限定"
+          ],
+          "description": "你听，大地在讲述时光雕刻的古老故事。",
+          "gender": "male",
+          "gender_label": "男款",
+          "image_path": "fashions/cards/fashion_000119-male.png",
+          "item_count": 7,
+          "name": "巨灵石印象",
+          "source_image": "FashionSuit_fashion_000119_Male.png"
+        }
+      ]
+    },
+    {
+      "description": null,
+      "grade_name": "契约时装",
+      "name": "异色测风蝉印象",
+      "outfit_id": "fashion_000120",
+      "page_title": "异色测风蝉印象",
+      "quality": 5,
+      "series_id": 1,
+      "source_record": {
+        "bond_id": 305097,
+        "genders": [
+          "male",
+          "female"
+        ],
+        "grade": 2,
+        "grade_name": "契约时装",
+        "id": "fashion_000120",
+        "name": "异色测风蝉印象",
+        "original_ids": [
+          "fashion_000115"
+        ],
+        "page_title": "异色测风蝉印象",
+        "quality": 5,
+        "series_id": 1,
+        "source_ids": [
+          267,
+          268
+        ],
+        "style_key": "110_02",
+        "variants": {
+          "female": {
+            "acquire": [
+              "解锁徽章后异色精灵赠送"
+            ],
+            "bond_id": 305097,
+            "card_image": "FashionSuit_fashion_000120_Female.png",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「测风蝉印象」的套装，在对战中更换测风蝉进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits110_female_callout.mp4"
+              },
+              {
+                "kind": "win",
+                "text": "在和其他玩家对战中，克莱因龙给对方最终一击时，还可以看到特殊胜利结算演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits110_female_win.mp4"
+              }
+            ],
+            "gender": "female",
+            "gender_label": "女款",
+            "grade": 2,
+            "grade_name": "契约时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000120_Female.png",
+            "name": "异色测风蝉印象",
+            "original_id": "fashion_000115",
+            "pet": {
+              "avatar": "PetAvatarBig_3663.png",
+              "name": "测风蝉",
+              "pet_id": "pet_000605",
+              "source_id": 3664
+            },
+            "piece_ids": [
+              2071100201,
+              20811002,
+              21011002,
+              22111002,
+              21211002,
+              21111002
+            ],
+            "quality": 5,
+            "series_id": 1,
+            "source_id": 268,
+            "source_ids": [
+              268
+            ]
+          },
+          "male": {
+            "acquire": [
+              "解锁徽章后异色精灵赠送"
+            ],
+            "bond_id": 305097,
+            "card_image": "FashionSuit_fashion_000120_Male.png",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「测风蝉印象」的套装，在对战中更换测风蝉进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits110_male_callout.mp4"
+              },
+              {
+                "kind": "win",
+                "text": "在和其他玩家对战中，克莱因龙给对方最终一击时，还可以看到特殊胜利结算演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits110_male_win.mp4"
+              }
+            ],
+            "gender": "male",
+            "gender_label": "男款",
+            "grade": 2,
+            "grade_name": "契约时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000120_Male.png",
+            "name": "异色测风蝉印象",
+            "original_id": "fashion_000115",
+            "pet": {
+              "avatar": "PetAvatarBig_3663.png",
+              "name": "测风蝉",
+              "pet_id": "pet_000605",
+              "source_id": 3664
+            },
+            "piece_ids": [
+              1071100201,
+              11111002,
+              10811002,
+              11011002,
+              11211002,
+              12111002
+            ],
+            "quality": 5,
+            "series_id": 1,
+            "source_id": 267,
+            "source_ids": [
+              267
+            ]
+          }
+        }
+      },
+      "variants": [
+        {
+          "acquisition": [
+            "解锁徽章后异色精灵赠送"
+          ],
+          "description": null,
+          "gender": "female",
+          "gender_label": "女款",
+          "image_path": "fashions/cards/fashion_000120-female.png",
+          "item_count": 6,
+          "name": "异色测风蝉印象",
+          "source_image": "FashionSuit_fashion_000120_Female.png"
+        },
+        {
+          "acquisition": [
+            "解锁徽章后异色精灵赠送"
+          ],
+          "description": null,
+          "gender": "male",
+          "gender_label": "男款",
+          "image_path": "fashions/cards/fashion_000120-male.png",
+          "item_count": 6,
+          "name": "异色测风蝉印象",
+          "source_image": "FashionSuit_fashion_000120_Male.png"
+        }
+      ]
+    },
+    {
+      "description": null,
+      "grade_name": "契约时装",
       "name": "异色星星眼印象",
       "outfit_id": "fashion_000121",
       "page_title": "异色星星眼印象",
@@ -24555,6 +29096,12 @@
             "main_image": "FashionPose_fashion_000121_Female.png",
             "name": "异色星星眼印象",
             "original_id": "fashion_000104",
+            "pet": {
+              "avatar": "PetAvatarBig_3236.png",
+              "name": "星星眼",
+              "pet_id": "pet_000597",
+              "source_id": 3236
+            },
             "piece_ids": [
               2070910201,
               21009102,
@@ -24596,6 +29143,12 @@
             "main_image": "FashionPose_fashion_000121_Male.png",
             "name": "异色星星眼印象",
             "original_id": "fashion_000104",
+            "pet": {
+              "avatar": "PetAvatarBig_3236.png",
+              "name": "星星眼",
+              "pet_id": "pet_000597",
+              "source_id": 3236
+            },
             "piece_ids": [
               1070910201,
               11009102,
@@ -24696,6 +29249,12 @@
             "main_image": "FashionPose_fashion_000122_Female.png",
             "name": "异色智辉章脑印象",
             "original_id": "fashion_000105",
+            "pet": {
+              "avatar": "PetAvatarBig_3768.png",
+              "name": "智辉章脑",
+              "pet_id": "pet_000613",
+              "source_id": 3768
+            },
             "piece_ids": [
               2070920201,
               21009202,
@@ -24737,6 +29296,12 @@
             "main_image": "FashionPose_fashion_000122_Male.png",
             "name": "异色智辉章脑印象",
             "original_id": "fashion_000105",
+            "pet": {
+              "avatar": "PetAvatarBig_3768.png",
+              "name": "智辉章脑",
+              "pet_id": "pet_000613",
+              "source_id": 3768
+            },
             "piece_ids": [
               1070920201,
               11009202,
@@ -24778,6 +29343,298 @@
           "item_count": 6,
           "name": "异色智辉章脑印象",
           "source_image": "FashionSuit_fashion_000122_Male.png"
+        }
+      ]
+    },
+    {
+      "description": "宇宙的高塔永无止境。",
+      "grade_name": "手作时装",
+      "name": "异色玳塔印象",
+      "outfit_id": "fashion_000123",
+      "page_title": "异色玳塔印象",
+      "quality": 4,
+      "series_id": 3,
+      "source_record": {
+        "bond_id": 305073,
+        "description": "宇宙的高塔永无止境。",
+        "genders": [
+          "male",
+          "female"
+        ],
+        "grade": 3,
+        "grade_name": "手作时装",
+        "id": "fashion_000123",
+        "name": "异色玳塔印象",
+        "original_ids": [
+          "fashion_000107"
+        ],
+        "page_title": "异色玳塔印象",
+        "quality": 4,
+        "series_id": 3,
+        "source_ids": [
+          273,
+          274
+        ],
+        "style_key": "087_02",
+        "variants": {
+          "female": {
+            "acquire": [
+              "解锁徽章后异色精灵赠送"
+            ],
+            "bond_id": 305073,
+            "card_image": "FashionSuit_fashion_000123_Female.png",
+            "description": "宇宙的高塔永无止境。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「玳塔印象」的套装，在对战中更换玳塔印象进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits87_female_callout.mp4"
+              }
+            ],
+            "gender": "female",
+            "gender_label": "女款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000123_Female.png",
+            "name": "异色玳塔印象",
+            "original_id": "fashion_000107",
+            "pet": {
+              "avatar": "PetAvatarBig_3590.png",
+              "name": "玳塔",
+              "pet_id": "pet_000603",
+              "source_id": 3590
+            },
+            "piece_ids": [
+              2070870201,
+              20808702,
+              21008702,
+              21108702,
+              21208702,
+              21308702
+            ],
+            "quality": 4,
+            "series_id": 3,
+            "source_id": 274,
+            "source_ids": [
+              274
+            ]
+          },
+          "male": {
+            "acquire": [
+              "解锁徽章后异色精灵赠送"
+            ],
+            "bond_id": 305073,
+            "card_image": "FashionSuit_fashion_000123_Male.png",
+            "description": "宇宙的高塔永无止境。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「玳塔印象」的套装，在对战中更换玳塔印象进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits87_male_callout.mp4"
+              }
+            ],
+            "gender": "male",
+            "gender_label": "男款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000123_Male.png",
+            "name": "异色玳塔印象",
+            "original_id": "fashion_000107",
+            "pet": {
+              "avatar": "PetAvatarBig_3590.png",
+              "name": "玳塔",
+              "pet_id": "pet_000603",
+              "source_id": 3590
+            },
+            "piece_ids": [
+              1070870201,
+              10808702,
+              11008702,
+              11108702,
+              11208702,
+              11308702
+            ],
+            "quality": 4,
+            "series_id": 3,
+            "source_id": 273,
+            "source_ids": [
+              273
+            ]
+          }
+        }
+      },
+      "variants": [
+        {
+          "acquisition": [
+            "解锁徽章后异色精灵赠送"
+          ],
+          "description": "宇宙的高塔永无止境。",
+          "gender": "female",
+          "gender_label": "女款",
+          "image_path": "fashions/cards/fashion_000123-female.png",
+          "item_count": 6,
+          "name": "异色玳塔印象",
+          "source_image": "FashionSuit_fashion_000123_Female.png"
+        },
+        {
+          "acquisition": [
+            "解锁徽章后异色精灵赠送"
+          ],
+          "description": "宇宙的高塔永无止境。",
+          "gender": "male",
+          "gender_label": "男款",
+          "image_path": "fashions/cards/fashion_000123-male.png",
+          "item_count": 6,
+          "name": "异色玳塔印象",
+          "source_image": "FashionSuit_fashion_000123_Male.png"
+        }
+      ]
+    },
+    {
+      "description": "我的心跳与闪烁的群星同频。",
+      "grade_name": "手作时装",
+      "name": "异色小皮球印象",
+      "outfit_id": "fashion_000124",
+      "page_title": "异色小皮球印象",
+      "quality": 4,
+      "series_id": 3,
+      "source_record": {
+        "bond_id": 305074,
+        "description": "我的心跳与闪烁的群星同频。",
+        "genders": [
+          "male",
+          "female"
+        ],
+        "grade": 3,
+        "grade_name": "手作时装",
+        "id": "fashion_000124",
+        "name": "异色小皮球印象",
+        "original_ids": [
+          "fashion_000108"
+        ],
+        "page_title": "异色小皮球印象",
+        "quality": 4,
+        "series_id": 3,
+        "source_ids": [
+          275,
+          276
+        ],
+        "style_key": "088_02",
+        "variants": {
+          "female": {
+            "acquire": [
+              "解锁徽章后异色精灵赠送"
+            ],
+            "bond_id": 305074,
+            "card_image": "FashionSuit_fashion_000124_Female.png",
+            "description": "我的心跳与闪烁的群星同频。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「小皮球印象」的套装，在对战中更换小皮球进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Female/suits88_female_callout.mp4"
+              }
+            ],
+            "gender": "female",
+            "gender_label": "女款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000124_Female.png",
+            "name": "异色小皮球印象",
+            "original_id": "fashion_000108",
+            "pet": {
+              "avatar": "PetAvatarBig_3199.png",
+              "name": "小皮球",
+              "pet_id": "pet_000176",
+              "source_id": 3199
+            },
+            "piece_ids": [
+              2070880201,
+              20808802,
+              21008802,
+              21108802,
+              21208802,
+              22108802
+            ],
+            "quality": 4,
+            "series_id": 3,
+            "source_id": 276,
+            "source_ids": [
+              276
+            ]
+          },
+          "male": {
+            "acquire": [
+              "解锁徽章后异色精灵赠送"
+            ],
+            "bond_id": 305074,
+            "card_image": "FashionSuit_fashion_000124_Male.png",
+            "description": "我的心跳与闪烁的群星同频。",
+            "effects": [
+              {
+                "kind": "callout",
+                "text": "穿着「小皮球印象」的套装，在对战中更换小皮球进场时，可以看到特殊登场演出效果。",
+                "url": "https://video.nrc.qq.com/MoviesMobile/Operations/Male/suits88_male_callout.mp4"
+              }
+            ],
+            "gender": "male",
+            "gender_label": "男款",
+            "grade": 3,
+            "grade_name": "手作时装",
+            "item_count": 6,
+            "main_image": "FashionPose_fashion_000124_Male.png",
+            "name": "异色小皮球印象",
+            "original_id": "fashion_000108",
+            "pet": {
+              "avatar": "PetAvatarBig_3199.png",
+              "name": "小皮球",
+              "pet_id": "pet_000176",
+              "source_id": 3199
+            },
+            "piece_ids": [
+              1070880201,
+              10808802,
+              11008802,
+              11108802,
+              11208802,
+              12108802
+            ],
+            "quality": 4,
+            "series_id": 3,
+            "source_id": 275,
+            "source_ids": [
+              275
+            ]
+          }
+        }
+      },
+      "variants": [
+        {
+          "acquisition": [
+            "解锁徽章后异色精灵赠送"
+          ],
+          "description": "我的心跳与闪烁的群星同频。",
+          "gender": "female",
+          "gender_label": "女款",
+          "image_path": "fashions/cards/fashion_000124-female.png",
+          "item_count": 6,
+          "name": "异色小皮球印象",
+          "source_image": "FashionSuit_fashion_000124_Female.png"
+        },
+        {
+          "acquisition": [
+            "解锁徽章后异色精灵赠送"
+          ],
+          "description": "我的心跳与闪烁的群星同频。",
+          "gender": "male",
+          "gender_label": "男款",
+          "image_path": "fashions/cards/fashion_000124-male.png",
+          "item_count": 6,
+          "name": "异色小皮球印象",
+          "source_image": "FashionSuit_fashion_000124_Male.png"
         }
       ]
     },
@@ -24837,6 +29694,12 @@
             "main_image": "FashionPose_fashion_000125_Female.png",
             "name": "异色幻影灵菇印象",
             "original_id": "fashion_000060",
+            "pet": {
+              "avatar": "PetAvatarBig_3147.png",
+              "name": "幻影灵菇",
+              "pet_id": "pet_000133",
+              "source_id": 3147
+            },
             "piece_ids": [
               21106502,
               21006502,
@@ -24878,6 +29741,12 @@
             "main_image": "FashionPose_fashion_000125_Male.png",
             "name": "异色幻影灵菇印象",
             "original_id": "fashion_000060",
+            "pet": {
+              "avatar": "PetAvatarBig_3147.png",
+              "name": "幻影灵菇",
+              "pet_id": "pet_000133",
+              "source_id": 3147
+            },
             "piece_ids": [
               11106502,
               11006502,
@@ -24927,13 +29796,13 @@
     "female",
     "male"
   ],
-  "imported_at_utc": "2026-09-10T12:46:24.896511Z",
+  "imported_at_utc": "2026-10-24T18:05:11.560183Z",
   "source": {
     "page_id": 9495,
-    "revised_at_utc": "2026-09-10T06:57:26Z",
-    "revision_id": 12224,
-    "source_sha1": "1e215c2d19e7b1d8bb914ef338408eb9cfc2197f",
-    "source_url": "https://wiki.biligame.com/nrc/index.php?title=Module%3AFashions%2Fdata%2FCatalog&oldid=12224",
+    "revised_at_utc": "2026-10-21T02:52:52Z",
+    "revision_id": 18962,
+    "source_sha1": "694e98290e8d532483c02ec3b7117c85d756c6f0",
+    "source_url": "https://wiki.biligame.com/nrc/index.php?title=Module%3AFashions%2Fdata%2FCatalog&oldid=18962",
     "title": "Module:Fashions/data/Catalog"
   }
 }

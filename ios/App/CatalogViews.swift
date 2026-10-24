@@ -238,7 +238,7 @@ enum SkillTerms {
                        "\u{8fc5}\u{6377}", "\u{4f20}\u{52a8}", "\u{8ff8}\u{53d1}", "\u{5949}\u{732e}", "\u{6253}\u{65ad}"]
     static func icon(_ type: String) -> String? {
         guard let index = types.firstIndex(of: type) else { return nil }
-        return "wiki/v3/ui/skill-categories/\(["physical-attack", "magic-attack", "defense", "status"][index]).png"
+        return "wiki/v4/ui/skill-categories/\(["physical-attack", "magic-attack", "defense", "status"][index]).png"
     }
 }
 struct SkillFiltersView: View {

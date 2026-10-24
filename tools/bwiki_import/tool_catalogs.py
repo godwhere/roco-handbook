@@ -24,14 +24,22 @@ from .image_assets import (
 
 
 _ACTIVITY_FIELDS = {
+    "arrivals",
     "category",
+    "clues",
+    "collection_rewards",
     "description",
     "fashion_groups",
     "id",
     "kind",
     "kind_label",
+    "letters",
     "masked",
+    "missions",
     "name",
+    "newspapers",
+    "opponents",
+    "paid_bundles",
     "page_title",
     "prerequisite",
     "related",
@@ -72,14 +80,17 @@ _FASHION_FIELDS = {
     "package_related_ids",
     "page_title",
     "quality",
+    "same_name_ids",
     "series_id",
     "source_ids",
     "style_key",
+    "title_suffix",
     "variants",
 }
 _FASHION_VARIANT_FIELDS = {
     "acquire",
     "activity_available_at",
+    "bonus_ids",
     "bond_id",
     "card_image",
     "description",
@@ -93,6 +104,7 @@ _FASHION_VARIANT_FIELDS = {
     "name",
     "original_id",
     "package",
+    "pet",
     "piece_ids",
     "quality",
     "series_id",
@@ -655,6 +667,7 @@ def import_tool_assets(
     output_root: Path,
     *,
     cache_root: Path | None = None,
+    reuse_root: Path | None = None,
     transport: UrlTransport | None = None,
 ) -> FrozenAssetSet:
     specs = derive_tool_asset_specs(
@@ -665,5 +678,6 @@ def import_tool_assets(
         config_path,
         output_root,
         cache_root=cache_root,
+        reuse_root=reuse_root,
         transport=transport,
     )

@@ -94,6 +94,7 @@ def _parser() -> argparse.ArgumentParser:
     tool_assets.add_argument("--config", type=Path, required=True)
     tool_assets.add_argument("--output", type=Path, required=True)
     tool_assets.add_argument("--cache", type=Path)
+    tool_assets.add_argument("--reuse-assets", type=Path)
     font_assets = subparsers.add_parser(
         "import-font-assets",
         help="Validate, download, and freeze the offline Wiki font set.",
@@ -205,6 +206,7 @@ def main(argv: list[str] | None = None) -> int:
                 args.config,
                 args.output,
                 cache_root=args.cache,
+                reuse_root=args.reuse_assets,
             )
             print(
                 json.dumps(

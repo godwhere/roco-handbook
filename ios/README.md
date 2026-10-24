@@ -29,8 +29,8 @@ Temporary build roots avoid the resource-fork signing failure observed when buil
 
 ## Assets and upgrade compatibility
 
-The build stages active immutable resources from `../app/assets/` using `prepare_resources.py`. It validates the personal SQL against `../schemas/user_v1.sql`; both database schemas and Catalog data version 2 remain unchanged. All browsing, images, reference tools, favorites, and notes work without runtime network access. Only explicit Settings update actions use the fixed Phase 7 GitHub source.
+The build stages active immutable resources from `../app/assets/` using `prepare_resources.py`. It validates the personal SQL against `../schemas/user_v1.sql`; both database schemas remain unchanged. The active bundle contains Catalog data version 3, core images version 4, Tool images version 2, and font assets version 1. All browsing, images, reference tools, favorites, and notes work without runtime network access. Only explicit Settings update actions use the fixed Phase 7 GitHub source.
 
-The bundle ID and iOS application support layout remain compatible with the preceding client. The native installer accepts existing Catalog descriptors; `user/user.db` is opened independently without replacement. Unknown personal schemas are preserved and block startup.
+The bundle ID and iOS application support layout remain compatible with the preceding client. The native installer accepts existing Catalog descriptors; `user/user.db` is opened independently without replacement. Unknown personal schemas are preserved and block startup. Catalog 3 retains all Catalog 2 creature, handbook, and skill local IDs after the reviewed upstream skill-key reallocation. The refresh contract and commands are documented in [content refresh](../docs/features/catalog-content-refresh.md).
 
 `generate_project.py` regenerates the checked-in Xcode project and shared scheme from the owned App sources. Run it after adding or removing App source files. Do not edit the preserved historical client to implement a new native feature.

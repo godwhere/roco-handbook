@@ -1,0 +1,14 @@
+{
+  "asset_count": 307,
+  "changed_existing_local_hashes": [],
+  "download_count": 34,
+  "kind_counts": {
+    "activity_icon": 59,
+    "fashion_card": 248
+  },
+  "manifest_sha256": "19fe148353153ad35bb73c4ff0273279f3ca00ec62048dbe3d7c959421f7f123",
+  "new_paths": 34,
+  "reference_count": 796,
+  "removed_paths": 0,
+  "total_bytes": 13961806
+}

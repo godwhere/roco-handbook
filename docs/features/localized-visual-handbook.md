@@ -20,9 +20,9 @@ Filter sheets observe the parent type list through a binding. Opening a sheet be
 
 ## Offline resources and typography
 
-`ios/prepare_resources.py` stages only active resources from the unchanged `app/assets/`: Catalog data version 2, Wiki images version 3, Tool/font assets version 1, and the frozen reference JSON files. Earlier image versions are excluded. No runtime image or font request exists. Native path helpers validate keys and Tool subdirectories and show a local fallback when a resource is unavailable.
+`ios/prepare_resources.py` stages only active resources from `app/assets/`: Catalog data version 3, Wiki images version 4, Tool images version 2, font assets version 1, and the frozen reference JSON files. Earlier image versions are excluded. No runtime image or font request exists. Native path helpers validate keys and Tool subdirectories and show a local fallback when a resource is unavailable.
 
-All 621 concrete forms, 193 shiny references, 824 skill/feature references, and explicit type icons are checked against native domain path helpers. The underlying frozen image manifests retain their source URLs, revisions, filenames, sizes, and hashes. Original/shiny switching uses the same source illustration keys. The image and font source information remains separate from Catalog data attribution; packaging does not establish new artwork or font rights.
+All 633 concrete forms, 197 shiny references, 825 skill/feature references, and explicit type icons are checked against native domain path helpers. The underlying frozen image manifests retain their source URLs, revisions, filenames, sizes, and hashes. Original/shiny switching uses the same source illustration keys. The image and font source information remains separate from Catalog data attribution; packaging does not establish new artwork or font rights.
 
 Headings use the frozen display font with platform fallback. Descriptions and inputs use the system font; numeric values use system monospaced digits. Both frozen font files are staged without modification. SwiftUI relative text styles support Dynamic Type, but physical large-text and VoiceOver acceptance remain open.
 
@@ -54,8 +54,8 @@ Compact skill cards follow the supplied reference with a dark rounded surface. T
 - Feature handbook queries independent feature ownership.
 - Egg groups combine normal creature search with one or more stored group IDs.
 - Game descriptions browse 54 definitions and associated Catalog skills.
-- Activity timeline browses 547 entries with text, month, category, and date-derived status filters; missing dates remain unknown.
-- Outfit inspiration browses 110 outfits and 220 gender variants with search, grade filters, original previews, and acquisition text.
+- Activity timeline browses 552 entries with text, month, category, and date-derived status filters; missing dates remain unknown.
+- Outfit inspiration browses 124 outfits and 248 gender variants with search, grade filters, original previews, and acquisition text.
 - My library resolves stable saved objects and retains unavailable name snapshots and notes.
 
 ## Evidence boundary

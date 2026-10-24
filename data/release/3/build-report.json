@@ -1,0 +1,136 @@
+{
+  "data_version": 3,
+  "database": {
+    "database_bytes": 4710400,
+    "database_path": "assets/catalog/catalog.db",
+    "database_sha256": "e5072f8a8776eb0d93cad20623c040381c17391803fd8a9d80fedfedea9889d4",
+    "foreign_key_check_count": 0,
+    "integrity_check": "ok",
+    "table_counts": {
+      "catalog_meta": 1,
+      "entity_sources": 2517,
+      "evolution_edges": 508,
+      "evolution_groups": 279,
+      "handbook_display": 468,
+      "handbook_entries": 468,
+      "learnset_blood_skills": 5616,
+      "learnset_legendary_skills": 7,
+      "learnset_native_skills": 4421,
+      "learnset_skill_stones": 5560,
+      "learnsets": 312,
+      "pet_aliases": 171,
+      "pet_evolution_groups": 787,
+      "pet_learnsets": 633,
+      "pet_types": 964,
+      "pets": 633,
+      "skill_description_notes": 554,
+      "skills": 825,
+      "source_revisions": 8,
+      "types": 18
+    }
+  },
+  "difference": {
+    "additions": {
+      "evolution_group": [
+        "evolution_03e5b95fb668",
+        "evolution_176ab057d3ff",
+        "evolution_941222564031",
+        "evolution_ddfcd320921c",
+        "evolution_e0825d72760c",
+        "evolution_e35badf7e825"
+      ],
+      "handbook": [
+        "handbook_000467",
+        "handbook_000468"
+      ],
+      "learnset": [
+        "learnset_82c460e52064"
+      ],
+      "pet": [
+        "pet_000620",
+        "pet_000621",
+        "pet_000628",
+        "pet_000629",
+        "pet_000630",
+        "pet_000631",
+        "pet_000632",
+        "pet_000633",
+        "pet_000634",
+        "pet_000635",
+        "pet_000636",
+        "pet_000637"
+      ],
+      "skill": [
+        "skill_000834"
+      ]
+    },
+    "baseline": false,
+    "previous_data_version": 2,
+    "previous_database": "data/release/2/assets/catalog/catalog.db",
+    "removals": {},
+    "unreviewed_removal_count": 0
+  },
+  "identity_audit": {
+    "blocking_issues": [],
+    "candidate_count": 1926,
+    "fingerprint_changes": [],
+    "mapping_count": 1926,
+    "status": "passed",
+    "unreviewed_removal_count": 0
+  },
+  "manifest": {
+    "catalog_schema_version": 1,
+    "coverage": {
+      "description_note_definitions": false,
+      "evolutions": true,
+      "pets": true,
+      "skill_stone_topics": false,
+      "skills": true,
+      "topic_rewards": false
+    },
+    "data_version": 3,
+    "database_asset": "assets/catalog/catalog.db",
+    "database_bytes": 4710400,
+    "database_sha256": "e5072f8a8776eb0d93cad20623c040381c17391803fd8a9d80fedfedea9889d4",
+    "dataset_id": "roco-world-zh-cn",
+    "manifest_version": 1,
+    "snapshot_id": "snapshot-a7dec7b598109dc2"
+  },
+  "normalized_snapshot_id": "snapshot-a7dec7b598109dc2",
+  "status": "passed_with_warnings",
+  "validation": {
+    "blocking_issues": [],
+    "counts": {
+      "evolution_edges": 508,
+      "evolution_groups": 279,
+      "handbooks": 468,
+      "learnsets": 312,
+      "legendary_skill_sources": 7,
+      "pets": 633,
+      "skills": 825,
+      "types": 18
+    },
+    "reviewed_evolution_type_exception_id": "evolution-member-types-nrc-core-19223-evolution-19224",
+    "status": "passed_with_warnings",
+    "warnings": [
+      {
+        "code": "handbook_fields_outside_v1_database",
+        "fields": [
+          "areas",
+          "habitat",
+          "title",
+          "topics"
+        ],
+        "preserved_in_normalized_source_extra": true
+      },
+      {
+        "code": "disabled_coverage",
+        "features": [
+          "description_note_definitions",
+          "skill_stone_topics",
+          "topic_rewards"
+        ]
+      }
+    ]
+  }
+}
