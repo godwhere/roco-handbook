@@ -1,7 +1,19 @@
 # Phase 12 Wiki-grounded UI design study
 
 - Date: 2026-10-25
-- Status: original-art revision complete; revised composition delivered for review
+- Status: decorative-art revision complete; improved composition delivered for review
+
+## Decorative-art revision boundary
+
+The user rejected the overly plain original-art composition and explicitly requested attractive backgrounds and frames. Continue Phase 12 as a visual study with original game PNGs preserved, adding generated scenery/paper, a transparent reusable corner frame, and a text-free title plaque. Generation is limited to decorative UI assets and must contain no creatures, people, gameplay claims, or UI text. The original-art revision remains historical evidence.
+
+Allowed paths are this report, the Phase 12 visual-study evidence document, and new files under `docs/evidence/phase-12/decorated-art-study/`, plus a matching task-owned inline preview. Production App, frozen media, Catalog, schemas, models, runtime networking, dependencies, and release settings remain outside scope. Verify source-byte identity, actual asset transparency/placement, preserved labels/controls, local preview interactions, 320/390-pixel visual quality, self-contained resources, English project prose, and `git diff --check`. Deliver the improved visual proposal before any native implementation.
+
+The new preview is `docs/evidence/phase-12/decorated-art-study/roco-decorated-art.html`. It replaces gray wells with castle scenery or map-paper backdrops, adds a reusable blue/gold corner frame, integrates short labels into ivory nameplates, removes the repeated header pet, and uses one outer frame for each Settings group. A navy activity badge improves contrast, and portrait/nameplate clearance preserves the full visible source silhouettes. Titles stay at 20 pixels, Tool/primary Settings labels at 14 pixels, and layout-choice labels at 12 pixels.
+
+Three decorative assets were generated independently with the built-in ImageGen tool, inspected, and saved with their full English prompts and original PNGs. No generated scene contains pets or people. Apple `sips` creates display-size delivery derivatives; the frame and nameplate retain real alpha. The frame center and outer corner measure alpha 0; the nameplate outer corner measures 0. All eight original game PNGs remain byte-identical to the source manifest and prior verified study. The 961,730-byte inline fragment embeds the original game art and all three decorative resources without fragment network calls. JSON/hash/length/closure checks, JavaScript syntax, CSS/inline-copy equality, English-prose/whitespace checks, local tab/radio state behavior, and visual checks at 320/390 CSS-pixel viewports passed. An independent visual review prompted varied scenery, a contrasting activity backing, and extra portrait clearance.
+
+The asset/prompt/source records, editable decoration CSS, and four final browser captures are in the same directory. This remains a visual proposal; native navigation, real preference persistence, update/recovery execution, dark rendering, Dynamic Type, VoiceOver, physical devices, image-rights acceptance, and release checks were not run. No native/data test suite is repeated because production files are unchanged. The README and feature documentation still describe the effective Phase 11 App; this report and design evidence record the proposal. Delivery uses a scoped GitHub Desktop commit/push, with native implementation as the next selected-design boundary.
 
 ## Original-art revision boundary
 

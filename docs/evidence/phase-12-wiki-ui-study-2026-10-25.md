@@ -3,7 +3,7 @@
 - Date: 2026-10-25, Asia/Shanghai
 - Scope confirmed by user: Tools and Settings only
 - Baseline: Phase 11, commit `0c5138b`
-- Status: original-art revision complete; generated boards superseded after user feedback
+- Status: decorative-art revision complete; original game artwork preserved
 
 ## Actual visual sources
 
@@ -67,3 +67,24 @@ The preview explicitly defines 20-pixel page titles, 15-pixel Tool labels, 14-pi
 Passed checks: eight frozen image hashes/lengths, eight embedded-byte equality checks, all image references resolved, seven Tool plus five Settings identifiers retained, six layout choices, local tab switching, an observed radio selection/state update, valid embedded/source JSON, ASCII project prose and escaped UI strings, final newlines, trailing whitespace, matching inline/project copies, and `git diff --check`. The fragment is 693,406 bytes and has no network calls. The local server was only used for browser inspection; the delivered inline preview is self-contained.
 
 Not run: native App builds/tests, Dynamic Type, VoiceOver, dark preview rendering, physical devices, real navigation/update/recovery operations, image-rights acceptance, or release validation. This is a corrected design proposal only. Production App, Catalog, immutable media, schemas, personal data, dependencies, network behavior, and release composition are unchanged, so feature documentation and README require no effective-state revision. The next boundary is review of this original-art composition followed by a separately scoped native implementation.
+
+## Decorative-art revision
+
+The user found the original-art study too plain and requested backgrounds and frame decoration. This feedback calls for a stronger art treatment while preserving the exact real-game creature images. The new [decorated preview](phase-12/decorated-art-study/roco-decorated-art.html) combines three generated, text-free decorative UI assets with the eight unchanged original PNGs. Generated scenery is decorative fan UI art, not a canonical game-location claim.
+
+| Artifact | Purpose |
+| --- | --- |
+| [Decoration CSS](phase-12/decorated-art-study/decorated-theme.css) | Authoring source for the added scenery, image frames, title plaques, compact labels, and responsive spacing; embedded verbatim in the preview |
+| [Generation prompts](phase-12/decorated-art-study/decorative-prompts.json) | Complete English prompts, actual image references, date anchor, and strict no-character constraint |
+| [Decorative asset records](phase-12/decorated-art-study/decorative-assets.json) | Original/delivery paths, dimensions, sizes, hashes, and Apple image-delivery processing |
+| [Original game-art records](phase-12/decorated-art-study/source-art.json) | Frozen manifest identities, source URLs, and byte-preservation evidence; decorative art recorded separately |
+| [Tools, 390 CSS pixels](phase-12/decorated-art-study/tools-decorated-light.jpg) / [320 CSS pixels](phase-12/decorated-art-study/tools-decorated-narrow.jpg) | Final browser visual evidence |
+| [Settings, 390 CSS pixels](phase-12/decorated-art-study/settings-decorated-light.jpg) / [320 CSS pixels](phase-12/decorated-art-study/settings-decorated-narrow.jpg) | Final browser visual evidence |
+
+The generated originals are saved under `decorated-art-study/generated/`; optimized delivery resources are under `decorated-art-study/assets/`. The backdrop adds a blue-sky castle courtyard, warm map-paper reading surface, and restrained edge foliage. A transparent blue/antique-gold picture frame uses nine-slice placement, while text is rendered separately over a text-free ivory nameplate. Scene and paper regions alternate across Tool cards, the low-contrast activity icon has a navy backing, and full source silhouettes have clearance above the overlaid names. Settings uses decorative outer frames with opaque paper behind all controls and text. No new feature, counter, season, or user record is invented.
+
+The built-in ImageGen tool generated only the three decorative assets. Apple `sips` performs display-size resampling and background JPEG encoding; no character art is processed. AppKit verified real alpha: the delivered frame center/corner are 0, and the nameplate corner is 0. Original and delivery hashes are recorded. The eight embedded game PNGs equal their frozen source bytes and hashes; all 32 image references and three CSS decoration resources resolve. The HTML fragment is 961,730 bytes, below the inline limit, and its thread/project copies match. It issues no fetch/XHR/WebSocket calls and adds no project dependency.
+
+Validation passed: source/hash/size/identity preservation, decorative resource hashes and alpha, embedded-image closure, twelve existing destination identifiers, six layout choices, local tab switching and radio selection retained while switching pages, JavaScript syntax, exact embedded CSS, valid ASCII Markdown/JSON/source with escaped UI strings, newlines/whitespace, and `git diff --check`. Both pages were visually inspected at 320 and 390 CSS-pixel browser viewports. Independent review found the frame/background direction appropriate and identified the scene repetition, activity contrast, and portrait clearance refinements addressed in the final composition.
+
+Native App build/tests, actual Tool navigation, Catalog update/recovery, real preference storage, dark-mode preview rendering, Dynamic Type, VoiceOver, devices, image-rights acceptance, and release checks remain unrun. This is a reviewable design proposal, with no App, data, immutable-media, network, or release change. The root README and effective feature documentation remain accurate and unchanged. The next allowed step is a scoped native implementation of the reviewed design.

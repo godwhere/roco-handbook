@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-25",
+  "generation_tool": "Built-in ImageGen",
+  "game_art_policy": "All eight original embedded game PNGs are byte-identical to the prior verified source art study",
+  "assets": [
+    {
+      "key": "background",
+      "delivery_path": "docs/evidence/phase-12/decorated-art-study/assets/page-background.jpg",
+      "delivery_bytes": 65317,
+      "delivery_sha256": "62bbd99caf8012a7528f691fe061e6f15cfab36e9114d7da4a3e55a9c122108d",
+      "generated_original_path": "docs/evidence/phase-12/decorated-art-study/generated/page-background.png",
+      "generated_original_sha256": "23325235b5e6ed9c665080244af7fd13fe9f9abca3ad2b8abf0baab375bf6f86",
+      "role": "decorative UI only; contains no game characters",
+      "delivery_processing": "Apple sips display-size resampling; background JPEG encoding; PNG alpha preserved; no semantic repainting",
+      "generated_original_dimensions": [
+        853,
+        1844
+      ]
+    },
+    {
+      "key": "frame",
+      "delivery_path": "docs/evidence/phase-12/decorated-art-study/assets/picture-frame.png",
+      "delivery_bytes": 68220,
+      "delivery_sha256": "9aa231e67304cc4ec6a92582a9d895db59714e5c9ba304deba65a804d1f4ba27",
+      "generated_original_path": "docs/evidence/phase-12/decorated-art-study/generated/picture-frame.png",
+      "generated_original_sha256": "b37392418309435ab44b0e7e3170123546dff059a7986a1665e969832ae46d07",
+      "role": "decorative UI only; contains no game characters",
+      "delivery_processing": "Apple sips display-size resampling; background JPEG encoding; PNG alpha preserved; no semantic repainting",
+      "delivery_dimensions": [
+        384,
+        384
+      ],
+      "generated_original_dimensions": [
+        1254,
+        1254
+      ]
+    },
+    {
+      "key": "plaque",
+      "delivery_path": "docs/evidence/phase-12/decorated-art-study/assets/nameplate.png",
+      "delivery_bytes": 61512,
+      "delivery_sha256": "194d7197230b038fa10db6259e40f67487098fd4dbb967efe4d2f59295f772ed",
+      "generated_original_path": "docs/evidence/phase-12/decorated-art-study/generated/nameplate.png",
+      "generated_original_sha256": "729a873036ed1df10087dc9461c930475ff0548b43730589efd458c22e5b5a02",
+      "role": "decorative UI only; contains no game characters",
+      "delivery_processing": "Apple sips display-size resampling; background JPEG encoding; PNG alpha preserved; no semantic repainting",
+      "delivery_dimensions": [
+        512,
+        170
+      ],
+      "generated_original_dimensions": [
+        2172,
+        724
+      ]
+    }
+  ]
+}
