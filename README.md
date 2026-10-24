@@ -8,6 +8,18 @@ App 首次启动不需要下载数据，也不会在浏览过程中访问 Wiki�
 
 > 当前原生开发版本为 `1.2.0`，构建号 `3`。项目尚未发布到应用商店，真机、正式签名、商店上传和审核仍属于独立的发布验收环节。
 
+## 项目展示
+
+[公开源码](https://github.com/godwhere/roco-handbook)。以下为原生 SwiftUI 客户端的 iOS 模拟器运行截图，分别展示图鉴、精灵资料和特性关联；不使用历史 Flutter 界面代表当前原生版本。
+
+<p>
+  <img src="docs/images/project-showcase/roc-catalog.png" width="240" alt="原生 iOS 精灵图鉴">
+  <img src="docs/images/project-showcase/roc-detail.png" width="240" alt="精灵资料和种族资质">
+  <img src="docs/images/project-showcase/roc-skill.png" width="240" alt="特性和关联精灵">
+</p>
+
+源码与游戏数据、图片的权利边界不同，第三方内容仍按 [数据署名与依赖许可](licenses/) 中的说明使用。
+
 ## 项目概览
 
 | 项目 | 当前实现 |
