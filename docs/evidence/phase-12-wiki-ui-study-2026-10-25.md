@@ -3,7 +3,7 @@
 - Date: 2026-10-25, Asia/Shanghai
 - Scope confirmed by user: Tools and Settings only
 - Baseline: Phase 11, commit `0c5138b`
-- Status: source study and three visual proposals complete; awaiting design selection
+- Status: original-art revision complete; generated boards superseded after user feedback
 
 ## Actual visual sources
 
@@ -50,3 +50,20 @@ These are raster design proposals. They do not demonstrate interactive controls,
 ## Validation and delivery
 
 The five source captures and three generated boards were inspected. The new text artifacts were checked for ASCII English prose, valid JSON with escaped UI strings, final newlines, and whitespace; the complete allowed file list and `git diff --check` were reviewed. Design evidence is delivered through GitHub Desktop. The temporary reference viewport override was reset. App builds and data tests are not repeated because no implementation or content changed. The root README stays unchanged because the effective App is still the committed Phase 11 version.
+
+## Original-art revision after user feedback
+
+The user found the generated boards attractive but too AI-like, and noted that many pictured creatures were not from the game. The generated art is therefore rejected as an identity reference. No direction number from that set authorizes its creature artwork for implementation. This revision uses deterministic UI composition with existing frozen PNGs, avoiding another generative repaint of the creatures.
+
+- [Inspectable paired-page preview](phase-12/original-art-study/roco-original-art.html): one compact composition with local Tools/Settings navigation, selectable layout previews, thin image outlines, inset flat mats, and no long Tool subtitles or decorative fantasy scenery.
+- [Source-art records](phase-12/original-art-study/source-art.json): manifest paths, source URLs/timestamps/page IDs, Catalog identities, sizes, and SHA-256 for every unique embedded PNG.
+- [Tools at 390 CSS pixels](phase-12/original-art-study/tools-original-light.jpg) and [Settings at 390 CSS pixels](phase-12/original-art-study/settings-original-light.jpg).
+- [Tools at 320 CSS pixels](phase-12/original-art-study/tools-original-narrow.jpg) and [Settings at 320 CSS pixels](phase-12/original-art-study/settings-original-narrow.jpg).
+
+The three creature images map through the current Catalog and asset manifest to `pet_000001` / `JL_miaomiao`, `pet_000002` / `JL_shuilanlan`, and `pet_000003` / `JL_huohua`. One feature icon, two skill icons, one activity icon, and one outfit preview come from the same existing immutable resource sets. Every embedded image equals its source PNG byte-for-byte and matches the frozen manifest hash and length. CSS uses `object-fit: contain`; there is no repainting, image filtering, crop, warp, new download, or synthetic pet. Short labels use the current native Chinese localization resource. No new game data or season claims are added.
+
+The preview explicitly defines 20-pixel page titles, 15-pixel Tool labels, 14-pixel primary Settings text, and 12-pixel layout-choice labels. Both page compositions were visually inspected at 320 and 390 CSS pixels, including complete lower actions and navigation. Native accessibility acceptance is not implied by these CSS sizes. Layout diagrams are presentation samples rather than real user collections, saved choices, or previews of the exact native rendering.
+
+Passed checks: eight frozen image hashes/lengths, eight embedded-byte equality checks, all image references resolved, seven Tool plus five Settings identifiers retained, six layout choices, local tab switching, an observed radio selection/state update, valid embedded/source JSON, ASCII project prose and escaped UI strings, final newlines, trailing whitespace, matching inline/project copies, and `git diff --check`. The fragment is 693,406 bytes and has no network calls. The local server was only used for browser inspection; the delivered inline preview is self-contained.
+
+Not run: native App builds/tests, Dynamic Type, VoiceOver, dark preview rendering, physical devices, real navigation/update/recovery operations, image-rights acceptance, or release validation. This is a corrected design proposal only. Production App, Catalog, immutable media, schemas, personal data, dependencies, network behavior, and release composition are unchanged, so feature documentation and README require no effective-state revision. The next boundary is review of this original-art composition followed by a separately scoped native implementation.

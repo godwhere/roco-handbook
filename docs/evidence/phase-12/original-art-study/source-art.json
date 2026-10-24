@@ -1,0 +1,150 @@
+{
+  "date": "2026-10-25",
+  "method": "byte-identical source PNGs embedded without image generation, repainting, filtering, cropping, or deformation",
+  "assets": [
+    {
+      "key": "miaomiao",
+      "path": "app/assets/wiki/v4/pets/illustrations/JL_miaomiao.png",
+      "identity": "pet_000001",
+      "name": "\u55b5\u55b5",
+      "sha256": "86cdc641507a543a7ecb1cbe2b89802d79702b07411e3696cca178c07965eaba",
+      "local_bytes": 105865,
+      "catalog_ids": [
+        "pet_000001"
+      ],
+      "source_title": "File:PetPortrait miaomiao.png",
+      "source_url": "https://patchwiki.biligame.com/images/nrc/2/24/oz3rw0p59i5ithijoul5wl0ma96n06p.png",
+      "source_page_id": 634,
+      "source_timestamp": "2026-08-23T21:19:40Z",
+      "manifest_version": 4
+    },
+    {
+      "key": "shuilanlan",
+      "path": "app/assets/wiki/v4/pets/illustrations/JL_shuilanlan.png",
+      "identity": "pet_000002",
+      "name": "\u6c34\u84dd\u84dd",
+      "sha256": "396273673f4c4a372f03da1df7f96a6d1aa47565746ce6f27ec095daa0b3ab4b",
+      "local_bytes": 120497,
+      "catalog_ids": [
+        "pet_000002"
+      ],
+      "source_title": "File:PetPortrait shuilanlan.png",
+      "source_url": "https://patchwiki.biligame.com/images/nrc/f/f0/k6un0ljv0cqjuf8i1eezmvxep7a2z39.png",
+      "source_page_id": 635,
+      "source_timestamp": "2026-08-23T21:19:41Z",
+      "manifest_version": 4
+    },
+    {
+      "key": "huohua",
+      "path": "app/assets/wiki/v4/pets/illustrations/JL_huohua.png",
+      "identity": "pet_000003",
+      "name": "\u706b\u82b1",
+      "sha256": "79b1e88b9c2ff3e8ec9604bf4264b021e67cf0d791b946bc0ccc664f5bbf1db9",
+      "local_bytes": 142158,
+      "catalog_ids": [
+        "pet_000003"
+      ],
+      "source_title": "File:PetPortrait huohua.png",
+      "source_url": "https://patchwiki.biligame.com/images/nrc/b/bb/ssqs82q81krezt93j5t1evi46xukl00.png",
+      "source_page_id": 636,
+      "source_timestamp": "2026-08-23T21:19:42Z",
+      "manifest_version": 4
+    },
+    {
+      "key": "feature",
+      "path": "app/assets/wiki/v4/skills/Feature_200074.png",
+      "identity": "skill_000001",
+      "name": "\u504f\u632f",
+      "sha256": "e29f8027ebb41ad5c1917998a2e76637352fcb5a0fa849461bd592d87b38148f",
+      "local_bytes": 18658,
+      "catalog_ids": [
+        "skill_000001",
+        "skill_000217"
+      ],
+      "source_title": "File:Feature 200074.png",
+      "source_url": "https://patchwiki.biligame.com/images/nrc/e/e3/ccwc1ruwueid8gau7d72660s75zbtpc.png",
+      "source_page_id": 1889,
+      "source_timestamp": "2026-08-24T01:36:49Z",
+      "manifest_version": 4
+    },
+    {
+      "key": "star",
+      "path": "app/assets/wiki/v4/skills/Skill_101069.png",
+      "identity": "skill_000302",
+      "name": "\u843d\u661f",
+      "sha256": "6e3118ee5ee6867cdbec158757572661ba1f231e896fcdba9181d99c58b0f1ae",
+      "local_bytes": 25001,
+      "catalog_ids": [
+        "skill_000302"
+      ],
+      "source_title": "File:Skill 101069.png",
+      "source_url": "https://patchwiki.biligame.com/images/nrc/f/fe/iyg9fygo3yy4rsiy8niqkkyrci90ue5.png",
+      "source_page_id": 1429,
+      "source_timestamp": "2026-08-24T01:34:03Z",
+      "manifest_version": 4
+    },
+    {
+      "key": "strike",
+      "path": "app/assets/wiki/v4/skills/Skill_101070.png",
+      "identity": "skill_000303",
+      "name": "\u62cd\u51fb",
+      "sha256": "0a81957cb4dd93c9fc3bc178630cf9f8f29a94642c90ff57e59b257ec0d14f86",
+      "local_bytes": 27899,
+      "catalog_ids": [
+        "skill_000303"
+      ],
+      "source_title": "File:Skill 101070.png",
+      "source_url": "https://patchwiki.biligame.com/images/nrc/e/e8/pt87k126ek5apqyseiaf8u0jf1z5gkf.png",
+      "source_page_id": 1430,
+      "source_timestamp": "2026-08-24T01:34:03Z",
+      "manifest_version": 4
+    },
+    {
+      "key": "activity",
+      "path": "app/assets/wiki/tools/v2/activities/icons/Activity_1700012_IconSelected.png",
+      "identity": null,
+      "name": "Frozen activity icon",
+      "sha256": "e42fdabc0f2c6bb4d5d2e4a892124a9811e084342e07394ec3f9a36f51a6e8f6",
+      "local_bytes": 1757,
+      "catalog_ids": [
+        "activity_1700001",
+        "activity_1700002",
+        "activity_1700003",
+        "activity_1700004",
+        "activity_1700005",
+        "activity_1700006",
+        "activity_1700007",
+        "activity_1700008",
+        "activity_1700009",
+        "activity_1700010",
+        "activity_1700011",
+        "activity_1700012",
+        "activity_1700013",
+        "activity_1700014",
+        "activity_1700015",
+        "activity_1700016"
+      ],
+      "source_title": "File:Activity_1700012_IconSelected.png",
+      "source_url": "https://patchwiki.biligame.com/images/nrc/b/b4/7cui62ehgkdoyelvafeil88xs7ctph6.png",
+      "source_page_id": 8483,
+      "source_timestamp": "2026-09-09T18:51:16Z",
+      "manifest_version": 2
+    },
+    {
+      "key": "outfit",
+      "path": "app/assets/wiki/tools/v2/fashions/cards/fashion_000001-female.png",
+      "identity": null,
+      "name": "Frozen outfit preview",
+      "sha256": "4accb35f6574ee5a5ba6ce594119f25d78c4070a30b75ee8cb7bf2c56a24f52d",
+      "local_bytes": 63051,
+      "catalog_ids": [
+        "fashion_000001:female"
+      ],
+      "source_title": "File:FashionSuit_fashion_000001_Female.png",
+      "source_url": "https://patchwiki.biligame.com/images/nrc/7/7e/h4ggqtouvr3fiblkusetwdpcpy93pbc.png",
+      "source_page_id": 11328,
+      "source_timestamp": "2026-09-10T06:38:59Z",
+      "manifest_version": 2
+    }
+  ]
+}

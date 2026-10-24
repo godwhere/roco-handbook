@@ -1,7 +1,17 @@
 # Phase 12 Wiki-grounded UI design study
 
 - Date: 2026-10-25
-- Status: visual study complete; three design proposals delivered for selection
+- Status: original-art revision complete; revised composition delivered for review
+
+## Original-art revision boundary
+
+The user rejected the generated creature identities and excessive AI-like decoration after reviewing the three boards. Continue this design-only phase with a deterministic, inspectable Tools/Settings composition using byte-identical existing frozen game artwork. Allow this report, the Phase 12 visual-study evidence document, and new files under `docs/evidence/phase-12/original-art-study/`. A task-owned inline preview may be copied into the thread visualization directory for delivery. No further creature generation, network acquisition, production App edit, immutable media edit, or native behavior change is authorized by this revision.
+
+Acceptance is source-manifest identity/hash verification for every embedded image, direct visual inspection of both revised pages at phone widths, local preview interaction checks, explicit compact typography, complete existing top-level entry points, valid offline preview resources, English project prose, and `git diff --check`. Stop after delivering the revised visual composition for user review. Native implementation remains a separate selected-design boundary.
+
+The revised composition is `docs/evidence/phase-12/original-art-study/roco-original-art.html`, with eight source records in `source-art.json` and four 320/390 CSS-pixel browser captures in the same directory. It embeds the exact existing PNG bytes for three Catalog-identified creatures, one feature, two skills, one activity icon, and one outfit preview. All images passed frozen-manifest hash/length checks and embedded-byte equality checks; no new art was generated or acquired. Chinese UI strings come from the native localization resource. The preview uses 20-pixel headings, 15-pixel Tool labels, and 14-pixel primary Settings text with flat image mats and thin outlines. Existing entry points are represented without repeated Tool subtitles.
+
+Both pages were visually inspected at 320 and 390 CSS pixels. Local Tools/Settings switching and a layout-choice state change passed; the six choices and twelve destination identifiers are present. The 693,406-byte fragment has complete embedded-image closure, no network calls, valid JSON, matching thread/project copies, and clean ASCII/newline/whitespace checks. The local preview is a visual study: Tool routes, update/recovery operations, real saved preferences, native accessibility, dark rendering, and device behavior are not implemented or accepted by it. Native App/data/resource files remain unchanged. The original three generated boards remain historical evidence and are superseded by this revision; no generated creature identity is a selected target.
 
 ## Declared boundary
 
