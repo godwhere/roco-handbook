@@ -10,6 +10,8 @@ from .font_assets import import_font_assets
 from .game_descriptions import import_game_descriptions
 from .image_assets import asset_preflight, import_image_assets
 from .live_snapshot import import_live_snapshot
+from .reference_catalogs import freeze_reference_sources, publish_reference_catalogs
+from .reference_media import import_reference_media
 from .rendered_snapshot import import_rendered_index_response
 from .snapshot_store import import_local_snapshot
 from .tool_catalogs import (
@@ -101,6 +103,17 @@ def _parser() -> argparse.ArgumentParser:
     )
     font_assets.add_argument("--config", type=Path, required=True)
     font_assets.add_argument("--output", type=Path, required=True)
+    references = subparsers.add_parser("import-reference-sources", help="Freeze the complete approved reference source revision set.")
+    references.add_argument("--config", type=Path, required=True)
+    references.add_argument("--output", type=Path, required=True)
+    reference_media = subparsers.add_parser("import-reference-media", help="Freeze declared reference icons with explicit source-unavailable records.")
+    reference_media.add_argument("--declaration", type=Path, required=True)
+    reference_media.add_argument("--config", type=Path, required=True)
+    reference_media.add_argument("--output", type=Path, required=True)
+    reference_media.add_argument("--cache", type=Path)
+    reference_build = subparsers.add_parser("build-reference-catalogs", help="Validate and assemble offline reference JSON and verified media.")
+    for flag in ("snapshot", "config", "identity-config", "output", "normalized-output", "reports-output", "media", "media-report"):
+        reference_build.add_argument("--" + flag, type=Path, required=True)
     return parser
 
 
@@ -238,6 +251,19 @@ def main(argv: list[str] | None = None) -> int:
                     sort_keys=True,
                 )
             )
+            return 0
+        if args.command == "import-reference-sources":
+            snapshot = freeze_reference_sources(args.config, args.output)
+            print(json.dumps({"snapshot_id": snapshot.snapshot_id, "path": str(snapshot.path), "sources": len(snapshot.source_keys)}, sort_keys=True))
+            return 0
+        if args.command == "import-reference-media":
+            result = import_reference_media(args.declaration, args.config, args.output, cache_root=args.cache)
+            print(json.dumps(result, sort_keys=True))
+            return 0
+        if args.command == "build-reference-catalogs":
+            report = publish_reference_catalogs(args.snapshot, args.config, args.identity_config, args.output,
+                args.normalized_output, args.reports_output, args.media, args.media_report)
+            print(json.dumps({"snapshot_id": report["snapshot_id"], "counts": report["counts"], "catalog_bytes": report["catalog_bytes"]}, sort_keys=True))
             return 0
     except ImportToolError as error:
         print(

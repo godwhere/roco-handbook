@@ -8,6 +8,8 @@ The four destinations remain available. The original seven Tools routes are join
 
 The remaining sections retain the source/domain feature contract. Where they mention platform branches, 60-row pages, or Flutter presentation, this native section and ADR-0023 take precedence.
 
+Phase 16 extends Tools to thirteen routes with five offline reference supplements. They reuse native navigation, normal text search, group filters, exact creature/item links and independent research/trial checklists. The [reference contract](offline-references.md) defines their separate frozen JSON resources, source validation, media, uncertain mappings and personal-data semantics; they do not override Catalog records or require SQL changes.
+
 ## Entry and navigation
 
 The App prepares the bundled Catalog before showing normal navigation. Preparation is a local copy and validation step; the screen explicitly states that no download is required. A startup failure shows a retry action and confirms that personal data was not changed.

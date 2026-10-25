@@ -1,0 +1,67 @@
+Roco World Offline Handbook - Reference Supplement Attribution
+
+This is an independent, non-commercial, unofficial project.
+Data/text source: Roco Kingdom World BWIKI contributors.
+Data/text license: CC BY-NC-SA 4.0
+License URL: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+Game names, characters and artwork remain the property of their respective rights holders.
+This project claims no ownership, endorsement or affiliation with the game or BWIKI.
+The data license does not replace the rights attached to original game artwork.
+
+Changes: validated revision snapshots were safely parsed, cross-referenced and projected
+into offline JSON references. Source variants, recipes and uncertain mappings are preserved.
+Icons were resized by the upstream MediaWiki thumbnail service; no artwork was generated.
+Image provenance/hashes/dimensions: asset-manifest.json. Reused creature/type artwork
+retains the existing wiki/v4/asset-manifest.json attribution and immutable bytes.
+Unavailable upstream icon: File:Item_20000027.png; presented with the local placeholder.
+
+Frozen source revisions:
+- Module:Items/data/Index: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FIndex&oldid=18754
+- Module:Items/data/Catalog: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FCatalog&oldid=18733
+- Module:Items/data/Details/01: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F01&oldid=18734
+- Module:Items/data/Details/02: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F02&oldid=18735
+- Module:Items/data/Details/03: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F03&oldid=18736
+- Module:Items/data/Details/04: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F04&oldid=18737
+- Module:Items/data/Details/05: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F05&oldid=18738
+- Module:Items/data/Details/06: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F06&oldid=18739
+- Module:Items/data/Details/07: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F07&oldid=18740
+- Module:Items/data/Details/08: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F08&oldid=18741
+- Module:Items/data/Details/09: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F09&oldid=18742
+- Module:Items/data/Details/10: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F10&oldid=18743
+- Module:Items/data/Details/11: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F11&oldid=18744
+- Module:Items/data/Details/12: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F12&oldid=18745
+- Module:Items/data/Details/13: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F13&oldid=18746
+- Module:Items/data/Details/14: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F14&oldid=18747
+- Module:Items/data/Details/15: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F15&oldid=18748
+- Module:Items/data/Details/16: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F16&oldid=18749
+- Module:Items/data/Details/17: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F17&oldid=18750
+- Module:Items/data/Details/18: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F18&oldid=18787
+- Module:Items/data/Details/19: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F19&oldid=18752
+- Module:Items/data/Details/20: https://wiki.biligame.com/nrc/index.php?title=Module%3AItems%2Fdata%2FDetails%2F20&oldid=18753
+- Module:Pets/data/Handbooks: https://wiki.biligame.com/nrc/index.php?title=Module%3APets%2Fdata%2FHandbooks&oldid=18791
+- Module:Pets/data/Index: https://wiki.biligame.com/nrc/index.php?title=Module%3APets%2Fdata%2FIndex&oldid=18793
+- Module:Medals/data/Index: https://wiki.biligame.com/nrc/index.php?title=Module%3AMedals%2Fdata%2FIndex&oldid=8974
+- Module:Medals/data/Catalog: https://wiki.biligame.com/nrc/index.php?title=Module%3AMedals%2Fdata%2FCatalog&oldid=16411
+- Module:Medals/data/Config: https://wiki.biligame.com/nrc/index.php?title=Module%3AMedals%2Fdata%2FConfig&oldid=16412
+- Module:GrassTracker/Markup: https://wiki.biligame.com/nrc/index.php?title=Module%3AGrassTracker%2FMarkup&oldid=16398
+- MediaWiki:WorldMap.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap.js&oldid=18649
+- MediaWiki:WorldMap/data/mainland-map-core-1.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Fmainland-map-core-1.js&oldid=18650
+- MediaWiki:WorldMap/data/mainland-map-core-2.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Fmainland-map-core-2.js&oldid=13027
+- MediaWiki:WorldMap/data/mainland-map-core-3.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Fmainland-map-core-3.js&oldid=18652
+- MediaWiki:WorldMap/data/mainland-map-core-4.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Fmainland-map-core-4.js&oldid=13029
+- MediaWiki:WorldMap/data/mainland-map-core-5.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Fmainland-map-core-5.js&oldid=13030
+- MediaWiki:WorldMap/data/mainland-map-core-6.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Fmainland-map-core-6.js&oldid=17321
+- MediaWiki:WorldMap/data/mainland-map-core-7.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Fmainland-map-core-7.js&oldid=16562
+- MediaWiki:WorldMap/data/mainland-map-core-8.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Fmainland-map-core-8.js&oldid=18653
+- MediaWiki:WorldMap/data/mainland-map-core-9.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Fmainland-map-core-9.js&oldid=18654
+- MediaWiki:WorldMap/data/mainland-map-core-10.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Fmainland-map-core-10.js&oldid=18651
+- MediaWiki:WorldMap/data/mainland-map-points-1.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Fmainland-map-points-1.js&oldid=13036
+- MediaWiki:WorldMap/data/mainland-map-points-2.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Fmainland-map-points-2.js&oldid=17322
+- MediaWiki:WorldMap/data/mainland-map-points-3.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Fmainland-map-points-3.js&oldid=17323
+- MediaWiki:WorldMap/data/mainland-map-points-4.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Fmainland-map-points-4.js&oldid=17324
+- MediaWiki:WorldMap/data/mainland-map-points-5.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Fmainland-map-points-5.js&oldid=17325
+- MediaWiki:WorldMap/data/mainland-map-points-6.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Fmainland-map-points-6.js&oldid=18655
+- MediaWiki:WorldMap/data/academy-map-core-1.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Facademy-map-core-1.js&oldid=13693
+- MediaWiki:WorldMap/data/academy-map-core-2.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Facademy-map-core-2.js&oldid=13043
+- MediaWiki:WorldMap/data/academy-map-points-1.js: https://wiki.biligame.com/nrc/index.php?title=MediaWiki%3AWorldMap%2Fdata%2Facademy-map-points-1.js&oldid=13044

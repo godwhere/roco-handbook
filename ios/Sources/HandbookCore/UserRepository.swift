@@ -96,6 +96,35 @@ public actor UserRepository {
             ON CONFLICT(setting_key) DO UPDATE SET value_json = excluded.value_json, updated_at_utc = excluded.updated_at_utc
             """, [.text("interface_language"), .text(json), .text(utcNow())])
     }
+    public func referenceProgress(_ kind: ReferenceCatalogKind) throws -> Set<String> {
+        guard kind.supportsProgress else {
+            throw HandbookError("reference_progress_kind", "Completion marks are available only for research and trials.")
+        }
+        let key = "reference_progress.\(kind.rawValue)"
+        guard let row = try database.rows("SELECT value_json FROM settings WHERE setting_key = ?", [.text(key)]).first else { return [] }
+        guard let ids = try? JSONDecoder().decode([String].self, from: Data(row.text("value_json").utf8)),
+              Set(ids).count == ids.count, ids.allSatisfy(kind.acceptsID) else {
+            throw HandbookError("reference_progress_data", "Saved completion marks are invalid. They have been preserved.")
+        }
+        return Set(ids)
+    }
+    public func setReferenceProgress(_ kind: ReferenceCatalogKind, id: String, completed: Bool) throws {
+        guard kind.supportsProgress else {
+            throw HandbookError("reference_progress_kind", "Completion marks are available only for research and trials.")
+        }
+        guard kind.acceptsID(id) else {
+            throw HandbookError("reference_progress_id", "The completion mark identity is invalid.")
+        }
+        try database.transaction {
+            var ids = try referenceProgress(kind)
+            if completed { ids.insert(id) } else { ids.remove(id) }
+            let json = String(decoding: try JSONEncoder().encode(ids.sorted()), as: UTF8.self)
+            try database.execute("""
+                INSERT INTO settings(setting_key, value_json, updated_at_utc) VALUES(?, ?, ?)
+                ON CONFLICT(setting_key) DO UPDATE SET value_json = excluded.value_json, updated_at_utc = excluded.updated_at_utc
+                """, [.text("reference_progress.\(kind.rawValue)"), .text(json), .text(utcNow())])
+        }
+    }
     public func isFavorite(_ object: ObjectRef) throws -> Bool {
         try !database.rows("SELECT 1 FROM favorites WHERE dataset_id = ? AND object_type = ? AND object_id = ?", arguments(object)).isEmpty
     }

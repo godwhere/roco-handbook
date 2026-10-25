@@ -1,0 +1,13 @@
+{
+  "report_version": 1,
+  "validated_at_utc": "2026-10-25T17:40:29.012837+00:00",
+  "manifest_sha256": "21aa1051d090ddbe222cf709aa31f9aa615fbd17869a10bfb72d4c3efaf2e0a1",
+  "verified_original_count": 1159,
+  "original_sha1_and_size_match": true,
+  "thumbnail_proof": "Verified download source metadata and local SHA-256, byte count and PNG dimensions in asset-manifest.json. Thumbnail hashes are distinct from original-file SHA-1.",
+  "regression_checks": [
+    "Reject a different but valid PNG returned for an original URL.",
+    "Reject a different but valid cached original without overwriting the cache."
+  ],
+  "log": "/tmp/roco-phase16-original-media-proof.log"
+}

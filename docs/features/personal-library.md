@@ -36,6 +36,8 @@ My Library resolves saved IDs through the current Catalog. When an object is una
 
 ## Settings information
 
+Tools also exposes independent research and trial checklists. Explicit task progress IDs share handbook membership across forms; explicit trial encounter IDs record encounters rather than ownership. The existing `settings` table stores sorted JSON ID arrays under `reference_progress.research` and `reference_progress.trials`, without a schema migration. Missing arrays mean no marks; malformed existing arrays fail without replacement. Unknown well-formed IDs survive source changes. Repository transactions serialize read/modify/write, UI state changes only after successful writes, and canceled or superseded refreshes cannot replace newer completion state. Restart and Catalog recovery preserve these sets separately from collection marks, favorites, notes, layouts and language.
+
 Settings shows App, Catalog, and personal schema versions, source revision range, build time, attribution, and the local-storage and uninstall warning. Theme currently follows the device setting.
 
 The Appearance language menu offers Follow System, Simplified Chinese, and English. The saved mode survives restart and Catalog recovery independently of layout, favorites, collection marks, and notes. Missing or invalid values fall back to Follow System. The preference affects the interface, not stored game text or personal notes; it does not modify system language preferences. See ADR-0033 and the localized visual handbook feature document for runtime behavior.

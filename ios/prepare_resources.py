@@ -11,6 +11,7 @@ ACTIVE = (
     "brand/v1", "catalog", "database", "fonts/v1", "wiki/v4",
     "wiki/tools/v2", "wiki/type-relations-v1.json", "wiki/game-descriptions-v1.json",
     "wiki/activity-timeline-v1.json", "wiki/fashion-catalog-v1.json",
+    "wiki/references/v1",
 )
 
 

@@ -1,0 +1,28 @@
+{
+  "batchcomplete": true,
+  "query": {
+    "pages": [
+      {
+        "ns": 828,
+        "pageid": 6522,
+        "revisions": [
+          {
+            "parentid": 13553,
+            "revid": 16412,
+            "sha1": "1a269ea39a7f17f124def2c12ad242cc2e3023f1",
+            "size": 506,
+            "slots": {
+              "main": {
+                "content": "return {counts={bonds=6,deprecated_conditions=3,medals=60,optional_asset_gaps=0,tasks=30,upgrade_chains=2},data_version=\"s4-2026-09-24\",optional_asset_ids={},quality={[1]={color=\"#a9a79e\",label=\"普通\"},[2]={color=\"#58a96b\",label=\"珍贵\"},[3]={color=\"#4b9fc7\",label=\"稀有\"},[4]={color=\"#8a61d7\",label=\"史诗\"},[5]={color=\"#e5a52f\",label=\"传说\"}},schema_version=1,sources={[0]=\"未标注\",[1]=\"特殊条件\",[2]=\"赠礼\",[3]=\"活动\"},types={[1]=\"种群奖牌\",[2]=\"个体奖牌\",[3]=\"羁绊奖牌\"}}",
+                "contentformat": "text/plain",
+                "contentmodel": "Scribunto"
+              }
+            },
+            "timestamp": "2026-09-24T03:07:34Z"
+          }
+        ],
+        "title": "模块:Medals/data/Config"
+      }
+    ]
+  }
+}

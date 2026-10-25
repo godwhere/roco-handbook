@@ -1,0 +1,97 @@
+{
+  "report_version": 1,
+  "scope": "Phase 16 source/adapter subtask; native and full-mirror acceptance are coordinated by the root agent.",
+  "snapshot_id": "references-3ad202f604caf1d1",
+  "checks": [
+    {
+      "name": "complete_source_freeze",
+      "status": "passed",
+      "live_sources": 46,
+      "accepted_frozen_inputs": 2,
+      "before_after_heads_equal": true,
+      "complete_response_content_hashes_verified": true,
+      "log": "/tmp/roco-phase16-source-import.log"
+    },
+    {
+      "name": "owned_reference_regressions",
+      "status": "passed",
+      "test_count": 11,
+      "log": "/tmp/roco-phase16-reference-tests.log"
+    },
+    {
+      "name": "immutable_cli_replay",
+      "status": "passed",
+      "log": "/tmp/roco-phase16-replay.log"
+    },
+    {
+      "name": "source_fixture_whitespace_and_ascii_configurations",
+      "status": "passed"
+    },
+    {
+      "name": "default_offline_suite_in_original_checkout",
+      "status": "interrupted_after_bounded_stalled_read",
+      "completed_tests_before_stall": 45,
+      "blocked_test": "import.test_image_assets.ImageAssetTests.test_frozen_asset_manifest_matches_every_bundled_png",
+      "blocked_file": "app/assets/wiki/v3/skills/Feature_200294.png",
+      "log": "/tmp/roco-phase16-offline-suite.log",
+      "handoff": "Root owns the full default suite in its fresh validation mirror; no historical asset or network setting was changed."
+    },
+    {
+      "name": "remaining_suite_retry",
+      "status": "interrupted_at_root_request",
+      "log": "/tmp/roco-phase16-offline-remaining.log"
+    },
+    {
+      "name": "explicit_medal_numeric_targets",
+      "status": "passed",
+      "regression": "An active count of 1 remains explicit when the source description contains 10; tier goals are always explicit as well.",
+      "verified_production_ids": [
+        "medal_1009",
+        "medal_1010"
+      ],
+      "preserved": "All medal IDs/raw/native links/media unchanged; other four catalogs byte-identical.",
+      "log": "/tmp/roco-phase16-medal-target-fix.log"
+    }
+  ],
+  "unrun_here": [
+    "Native Swift, packaging, simulator UI and device/release acceptance are owned by other agents."
+  ],
+  "root_validation": {
+    "default_offline_suite": {
+      "status": "passed",
+      "test_count": 147,
+      "directory": "/tmp/roco-phase16-validation",
+      "log": "/tmp/roco-phase16-offline-final.log"
+    },
+    "native_packaging": {
+      "status": "passed",
+      "test_count": 4,
+      "log": "/tmp/roco-phase16-packaging.log"
+    },
+    "native_ui": {
+      "status": "passed",
+      "test_count": 4,
+      "result_bundle": "/tmp/roco-phase16-final-native.xcresult",
+      "log": "/tmp/roco-phase16-final-ui.log"
+    },
+    "original_media": {
+      "status": "passed",
+      "original_count": 1159,
+      "proof": "original-media-validation.json"
+    },
+    "media_regressions": {
+      "status": "passed",
+      "test_count": 5,
+      "log": "/tmp/roco-phase16-media-final-tests.log"
+    },
+    "final_simulator_build": {
+      "status": "passed",
+      "log": "/tmp/roco-phase16-final-build.log"
+    },
+    "swift_core": {
+      "status": "passed",
+      "test_count": 40,
+      "log": "/tmp/roco-phase16-swift-settled.log"
+    }
+  }
+}

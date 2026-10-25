@@ -1,0 +1,336 @@
+{
+  "config_version": 1,
+  "dataset_id": "roco-world-zh-cn",
+  "api_endpoint": "https://wiki.biligame.com/nrc/api.php",
+  "api_host": "wiki.biligame.com",
+  "source_version": 1,
+  "request_policy": {
+    "minimum_interval_seconds": 1,
+    "timeout_seconds": 60,
+    "max_retries": 3,
+    "head_batch_size": 40,
+    "max_source_bytes": 8388608,
+    "max_decoded_part_bytes": 16777216,
+    "max_decoded_total_bytes": 67108864
+  },
+  "sources": [
+    {
+      "key": "module_items_data_index",
+      "title": "Module:Items/data/Index",
+      "page_id": 12886,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_catalog",
+      "title": "Module:Items/data/Catalog",
+      "page_id": 12887,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_01",
+      "title": "Module:Items/data/Details/01",
+      "page_id": 12892,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_02",
+      "title": "Module:Items/data/Details/02",
+      "page_id": 12893,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_03",
+      "title": "Module:Items/data/Details/03",
+      "page_id": 12894,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_04",
+      "title": "Module:Items/data/Details/04",
+      "page_id": 12895,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_05",
+      "title": "Module:Items/data/Details/05",
+      "page_id": 12896,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_06",
+      "title": "Module:Items/data/Details/06",
+      "page_id": 12897,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_07",
+      "title": "Module:Items/data/Details/07",
+      "page_id": 12898,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_08",
+      "title": "Module:Items/data/Details/08",
+      "page_id": 12899,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_09",
+      "title": "Module:Items/data/Details/09",
+      "page_id": 12900,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_10",
+      "title": "Module:Items/data/Details/10",
+      "page_id": 12901,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_11",
+      "title": "Module:Items/data/Details/11",
+      "page_id": 12902,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_12",
+      "title": "Module:Items/data/Details/12",
+      "page_id": 12903,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_13",
+      "title": "Module:Items/data/Details/13",
+      "page_id": 12904,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_14",
+      "title": "Module:Items/data/Details/14",
+      "page_id": 12905,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_15",
+      "title": "Module:Items/data/Details/15",
+      "page_id": 12906,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_16",
+      "title": "Module:Items/data/Details/16",
+      "page_id": 12907,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_17",
+      "title": "Module:Items/data/Details/17",
+      "page_id": 12908,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_18",
+      "title": "Module:Items/data/Details/18",
+      "page_id": 12909,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_19",
+      "title": "Module:Items/data/Details/19",
+      "page_id": 12910,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_items_data_details_20",
+      "title": "Module:Items/data/Details/20",
+      "page_id": 16403,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_medals_data_index",
+      "title": "Module:Medals/data/Index",
+      "page_id": 6523,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_medals_data_catalog",
+      "title": "Module:Medals/data/Catalog",
+      "page_id": 6521,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_medals_data_config",
+      "title": "Module:Medals/data/Config",
+      "page_id": 6522,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "module_grasstracker_markup",
+      "title": "Module:GrassTracker/Markup",
+      "page_id": 12470,
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "mediawiki_worldmap_js",
+      "title": "MediaWiki:WorldMap.js",
+      "page_id": 12306,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_mainland_map_core_1_js",
+      "title": "MediaWiki:WorldMap/data/mainland-map-core-1.js",
+      "page_id": 12309,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_mainland_map_core_2_js",
+      "title": "MediaWiki:WorldMap/data/mainland-map-core-2.js",
+      "page_id": 12310,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_mainland_map_core_3_js",
+      "title": "MediaWiki:WorldMap/data/mainland-map-core-3.js",
+      "page_id": 12311,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_mainland_map_core_4_js",
+      "title": "MediaWiki:WorldMap/data/mainland-map-core-4.js",
+      "page_id": 12312,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_mainland_map_core_5_js",
+      "title": "MediaWiki:WorldMap/data/mainland-map-core-5.js",
+      "page_id": 12313,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_mainland_map_core_6_js",
+      "title": "MediaWiki:WorldMap/data/mainland-map-core-6.js",
+      "page_id": 12314,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_mainland_map_core_7_js",
+      "title": "MediaWiki:WorldMap/data/mainland-map-core-7.js",
+      "page_id": 12315,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_mainland_map_core_8_js",
+      "title": "MediaWiki:WorldMap/data/mainland-map-core-8.js",
+      "page_id": 12316,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_mainland_map_core_9_js",
+      "title": "MediaWiki:WorldMap/data/mainland-map-core-9.js",
+      "page_id": 12317,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_mainland_map_core_10_js",
+      "title": "MediaWiki:WorldMap/data/mainland-map-core-10.js",
+      "page_id": 12318,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_mainland_map_points_1_js",
+      "title": "MediaWiki:WorldMap/data/mainland-map-points-1.js",
+      "page_id": 12319,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_mainland_map_points_2_js",
+      "title": "MediaWiki:WorldMap/data/mainland-map-points-2.js",
+      "page_id": 12320,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_mainland_map_points_3_js",
+      "title": "MediaWiki:WorldMap/data/mainland-map-points-3.js",
+      "page_id": 12321,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_mainland_map_points_4_js",
+      "title": "MediaWiki:WorldMap/data/mainland-map-points-4.js",
+      "page_id": 12322,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_mainland_map_points_5_js",
+      "title": "MediaWiki:WorldMap/data/mainland-map-points-5.js",
+      "page_id": 12323,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_mainland_map_points_6_js",
+      "title": "MediaWiki:WorldMap/data/mainland-map-points-6.js",
+      "page_id": 12324,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_academy_map_core_1_js",
+      "title": "MediaWiki:WorldMap/data/academy-map-core-1.js",
+      "page_id": 12325,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_academy_map_core_2_js",
+      "title": "MediaWiki:WorldMap/data/academy-map-core-2.js",
+      "page_id": 12326,
+      "content_model": "javascript"
+    },
+    {
+      "key": "mediawiki_worldmap_data_academy_map_points_1_js",
+      "title": "MediaWiki:WorldMap/data/academy-map-points-1.js",
+      "page_id": 12327,
+      "content_model": "javascript"
+    }
+  ],
+  "frozen_inputs": [
+    {
+      "key": "pets_handbook",
+      "title": "Module:Pets/data/Handbooks",
+      "page_id": 6399,
+      "revision_id": 18791,
+      "snapshot": "data/raw/snapshot-a7dec7b598109dc2",
+      "response_file": "responses/handbook.json",
+      "content_sha256": "736decba189c9971a2b63b2a5283b2aa8b7ec7ca467447c8607c068ef32b9c3a",
+      "content_model": "Scribunto"
+    },
+    {
+      "key": "pets_index",
+      "title": "Module:Pets/data/Index",
+      "page_id": 6394,
+      "revision_id": 18793,
+      "snapshot": "data/raw/snapshot-a7dec7b598109dc2",
+      "response_file": "responses/index.json",
+      "content_sha256": "0b50a4e8e503e89814e6f2176e40dc5d046895ec9ee0596d128f113457946098",
+      "content_model": "Scribunto"
+    }
+  ],
+  "normalized_catalog": {
+    "path": "data/normalized/snapshot-a7dec7b598109dc2/catalog-v3.json",
+    "sha256": "7bf1bebbdddf6303a33c85cb276f55cf88697d1f989bb8f2578cbb7beeba1514"
+  },
+  "expected_counts": {
+    "items": 1534,
+    "item_detail_shards": 20,
+    "research": 2351,
+    "handbooks": 468,
+    "medals": 60,
+    "visible_medals": 56,
+    "trials": 726,
+    "map_parts": 19
+  },
+  "public_medal_statuses": [
+    "structured",
+    "described"
+  ],
+  "review_policy": "Only unique exact accepted Pets Index titles and explicitly reviewed item identity matches become native links. All other references remain source text and explicit review records.",
+  "media_policy": "Only presented item, public medal and task reward icons are acquired. Exact staged v4 creature art may be reused. No map tiles or base imagery."
+}

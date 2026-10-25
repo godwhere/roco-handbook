@@ -83,7 +83,8 @@ final class RocoHandbookUITests: XCTestCase {
         XCTAssertLessThanOrEqual(features.frame.maxY, eggs.frame.minY)
         XCTAssertGreaterThanOrEqual(season.frame.maxY + 2, eggs.frame.maxY)
         capture(app, name: "tools-zh")
-        for id in ["tools.coverage", "tools.descriptions", "tools.activities", "tools.outfits", "tools.library"] {
+        for id in ["tools.coverage", "tools.items", "tools.research", "tools.medals", "tools.trials", "tools.habitats",
+                   "tools.descriptions", "tools.activities", "tools.outfits", "tools.library"] {
             let card = app.buttons[id]
             reveal(card, in: app)
             XCTAssertGreaterThanOrEqual(card.frame.width + 0.001, 44)
@@ -686,7 +687,7 @@ final class RocoHandbookUITests: XCTestCase {
         variants.buttons["Original"].tap()
         XCTAssertTrue(variants.buttons["Original"].isSelected)
     }
-    func testAllDestinationsAndEightToolRoutes() {
+    func testAllDestinationsAndThirteenToolRoutes() {
         let app = launch()
         followSystemLanguage(in: app)
         app.tabBars.buttons["Skills"].tap()
@@ -697,6 +698,11 @@ final class RocoHandbookUITests: XCTestCase {
             ("tools.features", "Feature handbook"),
             ("tools.eggGroups", "Egg groups"),
             ("tools.coverage", "Attack coverage"),
+            ("tools.items", "Item reference"),
+            ("tools.research", "Handbook research"),
+            ("tools.medals", "Medal reference"),
+            ("tools.trials", "Trial encounters"),
+            ("tools.habitats", "Areas and habitats"),
             ("tools.descriptions", "Game descriptions"),
             ("tools.activities", "Activity timeline"),
             ("tools.outfits", "Outfit inspiration"),
@@ -713,6 +719,249 @@ final class RocoHandbookUITests: XCTestCase {
         app.tabBars.buttons["Settings"].tap()
         XCTAssertTrue(app.buttons["settings.restore"].waitForExistence(timeout: 10))
         reveal(app.buttons["settings.restore"], in: app)
+    }
+    func testChineseReferenceVariantsLinksMedalVisibilityAndHabitatNotes() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-AppleLanguages", "(zh-Hans)", "-AppleLocale", "zh_CN"]
+        app.launch()
+        XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
+        followSystemLanguage(in: app)
+        openReferenceCatalog("items", in: app)
+        let search = app.textFields["reference.items.search"]
+        search.tap(); search.typeText("\u{53f7}\u{513f}\u{9c7c}\u{7684}\u{86cb}\n")
+        let egg = app.buttons["reference.items.entry.item_0d5380880661"]
+        XCTAssertTrue(egg.waitForExistence(timeout: 10)); egg.tap()
+        XCTAssertEqual(app.staticTexts["reference.detail.name"].label, "\u{53f7}\u{513f}\u{9c7c}\u{7684}\u{86cb}")
+        for index in 0..<3 {
+            let title = app.staticTexts["reference.section.title.\(index)"]
+            reveal(title, in: app)
+            XCTAssertEqual(title.label, "\u{7248}\u{672c}\u{8be6}\u{60c5}")
+            XCTAssertTrue(app.staticTexts["reference.section.\(index).line.0"].label.hasPrefix("\(index + 1) / 3"))
+        }
+        let acquisition = app.staticTexts["reference.section.2.line.1"]
+        reveal(acquisition, in: app)
+        XCTAssertTrue(acquisition.label.contains("\u{91cd}\u{9022}\u{5951}\u{7ea6}"))
+        capture(app, name: "reference-item-variants-zh")
+        let pet = app.buttons["reference.link.pet.pet_000416"]
+        reveal(pet, in: app); pet.tap()
+        XCTAssertTrue(app.staticTexts["detail.identity.name"].waitForExistence(timeout: 15))
+        XCTAssertEqual(app.staticTexts["detail.identity.name"].label, "\u{53f7}\u{513f}\u{9c7c}")
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        let source = app.buttons["reference.detail.sources"]
+        revealTowardTop(source, in: app); assertReferenceTarget(source); source.tap()
+        let sourceURL = app.staticTexts.matching(NSPredicate(format: "identifier BEGINSWITH %@", "reference.source.url.")).firstMatch
+        XCTAssertTrue(sourceURL.waitForExistence(timeout: 10))
+        XCTAssertTrue(sourceURL.label.hasPrefix("https://wiki.biligame.com/nrc/index.php?"))
+        XCTAssertTrue(sourceURL.label.contains("oldid="))
+        capture(app, name: "reference-source-zh")
+        app.buttons["reference.sources.done"].tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+
+        openReferenceCatalog("medals", in: app)
+        XCTAssertTrue(waitForReferenceCount(56, kind: "medals", in: app))
+        for id in ["medal_1011", "medal_1013", "medal_1014", "medal_1015"] {
+            let search = app.textFields["reference.medals.search"]
+            search.tap(); search.typeText(id + "\n")
+            XCTAssertTrue(waitForReferenceCount(0, kind: "medals", in: app))
+            XCTAssertFalse(app.buttons["reference.medals.entry.\(id)"].exists)
+            app.buttons["reference.medals.clear"].tap()
+        }
+        let group = app.buttons["reference.medals.group"]
+        group.tap()
+        let populationMedals = app.buttons["\u{79cd}\u{7fa4}\u{5956}\u{724c}"]
+        XCTAssertTrue(populationMedals.waitForExistence(timeout: 10)); populationMedals.tap()
+        XCTAssertTrue(waitForReferenceCount(15, kind: "medals", in: app))
+        let medal = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "reference.medals.entry.")).firstMatch
+        reveal(medal, in: app); medal.tap()
+        XCTAssertTrue(app.staticTexts["reference.detail.name"].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "reference.medals.completion.")).count, 0)
+        capture(app, name: "reference-medal-zh")
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+
+        openReferenceCatalog("habitats", in: app)
+        searchReferenceEntry("p-267589b999d33f27", kind: "habitats", in: app)
+        let notice = app.descendants(matching: .any).matching(identifier: "reference.habitat.notice").firstMatch
+        reveal(notice, in: app)
+        let areaNote = app.staticTexts["reference.section.2.line.0"]
+        reveal(areaNote, in: app)
+        XCTAssertTrue(areaNote.label.contains("\u{975e}\u{7cbe}\u{786e}"))
+        let layer = app.staticTexts["reference.section.2.line.1"]
+        reveal(layer, in: app)
+        XCTAssertEqual(layer.label, "\u{4e8c}\u{53e0}\u{5c71}\u{4e18}\u{4e00}\u{5c42}")
+        capture(app, name: "reference-habitat-zh")
+    }
+    func testResearchAndTrialProgressSurviveRestartAndRestoreWithPersonalData() {
+        let app = launch()
+        followSystemLanguage(in: app)
+        let note = "Phase 16 reference progress test note"
+        let pet = app.buttons["pet.pet_000001"]
+        XCTAssertTrue(pet.waitForExistence(timeout: 10)); pet.tap()
+        let favorite = app.buttons["personal.favorite"]
+        XCTAssertTrue(favorite.waitForExistence(timeout: 10))
+        if favorite.label == "Add favorite" { favorite.tap() }
+        app.buttons["detail.more"].tap(); app.buttons["detail.section.My library"].tap()
+        XCTAssertTrue(app.buttons["personal.addNote"].waitForExistence(timeout: 10))
+        if !app.staticTexts[note].exists {
+            app.buttons["personal.addNote"].tap()
+            let editor = app.textViews["note.editor"]
+            XCTAssertTrue(editor.waitForExistence(timeout: 10)); editor.tap(); editor.typeText(note)
+            app.buttons["note.save"].tap()
+        }
+        XCTAssertTrue(app.staticTexts[note].waitForExistence(timeout: 10))
+        app.buttons["Done"].tap()
+        let trialID = "gt_f3d14cc7cdb16636"
+        let researchID = "pt_000001_000003"
+        openReferenceCatalog("trials", in: app)
+        searchReferenceEntry(trialID, kind: "trials", in: app)
+        XCTAssertTrue(app.staticTexts["reference.section.0.line.0"].label.contains("1\u{3001}2\u{3001}3\u{3001}5"))
+        setEnglishReferenceCompletion(false, kind: "trials", id: trialID, in: app)
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        openReferenceCatalog("research", in: app)
+        let group = app.buttons["reference.research.group"]
+        group.tap()
+        let dimo = app.buttons["\u{8fea}\u{83ab}"]
+        XCTAssertTrue(dimo.waitForExistence(timeout: 10)); dimo.tap()
+        searchReferenceEntry(researchID, kind: "research", in: app)
+        setEnglishReferenceCompletion(false, kind: "research", id: researchID, in: app)
+        setEnglishReferenceCompletion(true, kind: "research", id: researchID, in: app)
+        let recipe = app.staticTexts["reference.section.0.line.0"]
+        reveal(recipe, in: app)
+        XCTAssertTrue(recipe.label.contains("\u{914d}\u{65b9}-\u{6700}\u{597d}\u{7684}\u{4f19}\u{4f34}"))
+        XCTAssertEqual(app.staticTexts["reference.section.0.line.1"].label, "50 × \u{8bfe}\u{9898}\u{7814}\u{7a76}\u{70b9}")
+        let reward = app.buttons["reference.link.item.item_92a871d56ce1"]
+        reveal(reward, in: app); reward.tap()
+        XCTAssertTrue(app.staticTexts["reference.detail.name"].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["reference.detail.name"].label, "\u{8bfe}\u{9898}\u{7814}\u{7a76}\u{70b9}")
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        openReferenceCatalog("trials", in: app)
+        searchReferenceEntry(trialID, kind: "trials", in: app)
+        let encounter = app.buttons["reference.trials.completion.\(trialID)"]
+        XCTAssertTrue(waitForReferenceEnabled(encounter))
+        XCTAssertTrue(waitForValue("No", on: encounter))
+        setEnglishReferenceCompletion(true, kind: "trials", id: trialID, in: app)
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        for restore in [false, true] {
+            if restore {
+                app.tabBars.buttons.element(boundBy: 3).tap()
+                let restore = app.buttons["settings.restore"]
+                reveal(restore, in: app); restore.tap()
+                XCTAssertTrue(app.alerts.buttons["Restore Catalog"].waitForExistence(timeout: 10))
+                app.alerts.buttons["Restore Catalog"].tap()
+            } else { app.terminate(); app.launch() }
+            XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
+            XCTAssertTrue(app.tabBars.buttons.element(boundBy: 0).isSelected)
+            for (kind, id) in [("research", researchID), ("trials", trialID)] {
+                openReferenceCatalog(kind, in: app)
+                searchReferenceEntry(id, kind: kind, in: app)
+                let completion = app.buttons["reference.\(kind).completion.\(id)"]
+                XCTAssertTrue(waitForReferenceEnabled(completion))
+                XCTAssertTrue(waitForValue("Yes", on: completion))
+                app.navigationBars.buttons.element(boundBy: 0).tap()
+                app.navigationBars.buttons.element(boundBy: 0).tap()
+            }
+        }
+        let library = app.buttons["tools.library"]
+        reveal(library, in: app); library.tap()
+        let saved = app.buttons["favorite.pet.pet_000001"]
+        XCTAssertTrue(saved.waitForExistence(timeout: 10)); saved.tap()
+        app.buttons["detail.more"].tap(); app.buttons["detail.section.My library"].tap()
+        XCTAssertTrue(app.staticTexts[note].waitForExistence(timeout: 10))
+    }
+    private func openReferenceCatalog(_ kind: String, in app: XCUIApplication) {
+        app.tabBars.buttons.element(boundBy: 2).tap()
+        revealTowardTop(app.buttons["tools.coverage"], in: app)
+        let entry = app.buttons["tools.\(kind)"]
+        reveal(entry, in: app); entry.tap()
+        XCTAssertTrue(app.textFields["reference.\(kind).search"].waitForExistence(timeout: 30))
+    }
+    private func searchReferenceEntry(_ id: String, kind: String, in app: XCUIApplication) {
+        let clear = app.buttons["reference.\(kind).clear"]
+        if clear.exists { clear.tap() }
+        let search = app.textFields["reference.\(kind).search"]
+        search.tap(); search.typeText(id + "\n")
+        let entry = app.buttons["reference.\(kind).entry.\(id)"]
+        XCTAssertTrue(entry.waitForExistence(timeout: 10)); reveal(entry, in: app); entry.tap()
+        XCTAssertTrue(app.staticTexts["reference.detail.name"].waitForExistence(timeout: 10))
+    }
+    private func setEnglishReferenceCompletion(_ completed: Bool, kind: String, id: String, in app: XCUIApplication) {
+        let control = app.buttons["reference.\(kind).completion.\(id)"]
+        reveal(control, in: app)
+        XCTAssertTrue(waitForReferenceEnabled(control))
+        let expected = completed ? "Yes" : "No"
+        if control.value as? String != expected { control.tap() }
+        XCTAssertTrue(waitForValue(expected, on: control))
+    }
+    private func waitForReferenceCount(_ count: Int, kind: String, in app: XCUIApplication) -> Bool {
+        let label = app.staticTexts["reference.\(kind).count"]
+        return XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "label ENDSWITH %@", " · \(count)"), object: label)], timeout: 10) == .completed
+    }
+    func testChineseReferenceControlsRemainReachableWithAccessibilityText() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-AppleLanguages", "(zh-Hans)", "-AppleLocale", "zh_CN",
+                               "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+        app.launch()
+        XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
+        followSystemLanguage(in: app)
+        app.tabBars.buttons.element(boundBy: 2).tap()
+        let items = app.buttons["tools.items"]
+        reveal(items, in: app); items.tap()
+        XCTAssertTrue(app.textFields["reference.items.search"].waitForExistence(timeout: 30))
+        let group = app.buttons["reference.items.group"]
+        assertReferenceTarget(group)
+        let source = app.buttons["reference.items.sources"]
+        assertReferenceTarget(source)
+        XCTAssertLessThanOrEqual(group.frame.maxX, source.frame.minX)
+        capture(app, name: "reference-items-large-text-zh")
+        source.tap()
+        let done = app.buttons["reference.sources.done"]
+        XCTAssertTrue(done.waitForExistence(timeout: 10)); assertReferenceTarget(done)
+        capture(app, name: "reference-source-large-text-zh")
+        done.tap()
+        let firstItem = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "reference.items.entry.")).firstMatch
+        reveal(firstItem, in: app); firstItem.tap()
+        XCTAssertTrue(app.staticTexts["reference.detail.name"].waitForExistence(timeout: 10))
+        let detailSource = app.buttons["reference.detail.sources"]
+        assertReferenceTarget(detailSource)
+        capture(app, name: "reference-item-detail-large-text-zh")
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        let research = app.buttons["tools.research"]
+        reveal(research, in: app); research.tap()
+        XCTAssertTrue(app.textFields["reference.research.search"].waitForExistence(timeout: 30))
+        let firstTask = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "reference.research.entry.")).firstMatch
+        reveal(firstTask, in: app); firstTask.tap()
+        let completion = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "reference.research.completion.")).firstMatch
+        reveal(completion, in: app)
+        XCTAssertTrue(waitForReferenceEnabled(completion)); assertReferenceTarget(completion)
+        let original = completion.value as? String ?? ""
+        XCTAssertTrue(["\u{662f}", "\u{5426}"].contains(original))
+        completion.tap()
+        XCTAssertTrue(waitForValue(original == "\u{662f}" ? "\u{5426}" : "\u{662f}", on: completion))
+        capture(app, name: "reference-research-large-text-zh")
+        XCTAssertTrue(waitForReferenceEnabled(completion)); completion.tap()
+        XCTAssertTrue(waitForValue(original, on: completion))
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        let habitats = app.buttons["tools.habitats"]
+        reveal(habitats, in: app); habitats.tap()
+        XCTAssertTrue(app.textFields["reference.habitats.search"].waitForExistence(timeout: 30))
+        let notice = app.descendants(matching: .any).matching(identifier: "reference.habitat.notice").firstMatch
+        reveal(notice, in: app)
+        capture(app, name: "reference-habitats-large-text-zh")
+    }
+    private func assertReferenceTarget(_ element: XCUIElement) {
+        XCTAssertTrue(element.isHittable)
+        XCTAssertGreaterThanOrEqual(element.frame.width + 0.001, 44)
+        XCTAssertGreaterThanOrEqual(element.frame.height + 0.001, 44)
+    }
+    private func waitForReferenceEnabled(_ element: XCUIElement) -> Bool {
+        XCTWaiter.wait(for: [XCTNSPredicateExpectation(predicate: NSPredicate(format: "enabled == true"), object: element)], timeout: 10) == .completed
     }
     func testFavoritesNotesLayoutAndRestorePreservePersonalData() {
         let app = launch()

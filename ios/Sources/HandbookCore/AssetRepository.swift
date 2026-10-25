@@ -183,7 +183,7 @@ public actor AssetRepository {
             throw HandbookError("font_sources", "The frozen font sources are invalid.")
         }
         var result = fonts.fonts.map { VisualSource(name: $0.family, url: $0.sourceUrl, frozenAt: fonts.importedAtUtc) }
-        for path in ["wiki/v4/asset-manifest.json", "wiki/tools/v2/asset-manifest.json"] {
+        for path in ["wiki/v4/asset-manifest.json", "wiki/tools/v2/asset-manifest.json", "wiki/references/v1/asset-manifest.json"] {
             let images = try decode(ImageManifest.self, path)
             guard images.manifestVersion == 1, images.datasetId == "roco-world-zh-cn", !images.assets.isEmpty else {
                 throw HandbookError("image_sources", "The frozen image sources are invalid.")
@@ -219,6 +219,16 @@ public actor AssetRepository {
             }
             for variant in entry.variants { _ = try Self.toolImage(variant.imagePath, prefix: "fashions/cards/") }
         }
+        return result
+    }
+    public func referenceCatalog(_ kind: ReferenceCatalogKind) throws -> ReferenceCatalog {
+        let result: ReferenceCatalog
+        do {
+            result = try decode(ReferenceCatalog.self, "wiki/references/v1/\(kind.rawValue).json")
+        } catch {
+            throw HandbookError("reference_contract", "The offline reference catalog is invalid.")
+        }
+        try result.validate(for: kind)
         return result
     }
     public func attackCoverage(for types: [String]) throws -> AttackCoverage {

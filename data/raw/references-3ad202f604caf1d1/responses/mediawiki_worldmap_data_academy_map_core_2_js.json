@@ -1,0 +1,28 @@
+{
+  "batchcomplete": true,
+  "query": {
+    "pages": [
+      {
+        "ns": 8,
+        "pageid": 12326,
+        "revisions": [
+          {
+            "parentid": 0,
+            "revid": 13043,
+            "sha1": "39f2821f012a8140338be6960c7e6d5c5e9bdd8a",
+            "size": 4663,
+            "slots": {
+              "main": {
+                "content": "window.NrcWorldMap.receive(\"MediaWiki:WorldMap/data/academy-map-core-2.js\",\"gz1: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\");",
+                "contentformat": "text/javascript",
+                "contentmodel": "javascript"
+              }
+            },
+            "timestamp": "2026-09-12T05:17:03Z"
+          }
+        ],
+        "title": "MediaWiki:WorldMap/data/academy-map-core-2.js"
+      }
+    ]
+  }
+}

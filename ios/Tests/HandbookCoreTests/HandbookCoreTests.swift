@@ -23,6 +23,42 @@ final class HandbookCoreTests: XCTestCase {
         try JSONSerialization.data(withJSONObject: value).write(to: wiki.appendingPathComponent("type-relations-v1.json"))
         return AssetRepository(assetRoot: fixture)
     }
+    private func referenceValue(_ kind: ReferenceCatalogKind) -> [String: Any] {
+        let id: String
+        switch kind {
+        case .items: id = "item_0123456789ab"
+        case .research: id = "pt_000001_000001"
+        case .medals: id = "medal_1"
+        case .trials: id = "gt_0123456789abcdef"
+        case .habitats: id = "p-0123456789abcdef"
+        }
+        let group = kind == .research ? "handbook_000001" : "source-group"
+        var entry: [String: Any] = [
+            "id": id, "name": "Canonical source name", "group_id": group, "visible": true,
+            "sections": [["title": "Source conditions", "lines": ["First condition", "Second condition"]]],
+            "links": [["kind": "pet", "id": "pet_000007", "name": "Source creature"],
+                      ["kind": "item", "id": "item_0123456789ab", "name": "Source item"]],
+            "image_path": "wiki/references/v1/icons/source.png", "raw": ["unknown": [1, 2]],
+        ]
+        if kind.supportsProgress { entry["progress_id"] = id }
+        if kind == .research { entry["handbook_id"] = group }
+        return [
+            "contract_version": 1, "dataset_id": "roco-world-zh-cn", "snapshot_id": "reference-fixture", "kind": kind.rawValue,
+            "sources": [["title": "Module:ReferenceFixture", "page_id": 101, "revision_id": 202,
+                         "revised_at_utc": "2026-10-26T00:00:00Z", "sha1": String(repeating: "a", count: 40),
+                         "sha256": String(repeating: "b", count: 64),
+                         "url": "https://wiki.biligame.com/nrc/index.php?title=Module%3AReferenceFixture&oldid=202"]],
+            "groups": [["id": group, "title": "Source group", "image_path": "wiki/v4/ui/types/fire.png"]],
+            "entries": [entry],
+        ]
+    }
+    private func referenceFixture(_ kind: ReferenceCatalogKind, value: [String: Any]) throws -> AssetRepository {
+        let fixture = try temporary()
+        let directory = fixture.appendingPathComponent("wiki/references/v1")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        try JSONSerialization.data(withJSONObject: value).write(to: directory.appendingPathComponent("\(kind.rawValue).json"))
+        return AssetRepository(assetRoot: fixture)
+    }
     private var catalog: CatalogRepository { CatalogRepository(databaseURL: assets.appendingPathComponent("catalog/catalog.db")) }
 
     func testBundledCatalogMatchesImmutableRelease() throws {
@@ -316,6 +352,8 @@ final class HandbookCoreTests: XCTestCase {
         try await saved.setCollected("handbook_000004", name: "Saved entry", collected: true)
         _ = try await saved.saveNote(ref, content: "Keep this note")
         try await saved.setLayout(.list)
+        try await saved.setReferenceProgress(.research, id: "pt_000001_000001", completed: true)
+        try await saved.setReferenceProgress(.trials, id: "gt_0123456789abcdef", completed: true)
         let before = try Data(contentsOf: saved.databaseURL)
         let reused = try await installer.prepare(bundle)
         XCTAssertNotEqual(installed.databaseURL, reused.databaseURL)
@@ -329,9 +367,13 @@ final class HandbookCoreTests: XCTestCase {
         let favorites = try await reopened.favorites()
         let notes = try await reopened.notes(ref)
         let layout = try await reopened.layout()
+        let research = try await reopened.referenceProgress(.research)
+        let trials = try await reopened.referenceProgress(.trials)
         XCTAssertEqual(Set(favorites.map(\.object)), Set([ref, skillRef]))
         XCTAssertEqual(notes.map(\.content), ["Keep this note"])
         XCTAssertEqual(layout, .list)
+        XCTAssertEqual(research, ["pt_000001_000001"])
+        XCTAssertEqual(trials, ["gt_0123456789abcdef"])
     }
     func testFailedCandidateDoesNotChangeActivePointer() async throws {
         let support = try temporary()
@@ -395,6 +437,9 @@ final class HandbookCoreTests: XCTestCase {
         let sources = try await repository.visualSources()
         XCTAssertGreaterThan(sources.count, 1700)
         XCTAssertTrue(sources.contains { $0.name == "RocoDisplay" })
+        XCTAssertTrue(sources.contains {
+            $0.name == "File:Item_100002.png" && $0.url.hasPrefix("https://patchwiki.biligame.com/images/nrc/")
+        })
         let types = try await catalog.types()
         var sawCap = false
         for a in types {
@@ -405,6 +450,210 @@ final class HandbookCoreTests: XCTestCase {
             }
         }
         XCTAssertTrue(sawCap)
+    }
+    func testReferenceCatalogKeepsSourceOrderLinksAndAdapterVisibility() async throws {
+        for kind in ReferenceCatalogKind.allCases {
+            var value = referenceValue(kind)
+            if kind == .medals {
+                var entries = value["entries"] as! [[String: Any]]
+                var hidden = entries[0]
+                hidden["id"] = "medal_2"
+                hidden["visible"] = false
+                entries.append(hidden)
+                value["entries"] = entries
+            }
+            let result = try await referenceFixture(kind, value: value).referenceCatalog(kind)
+            XCTAssertEqual(result.kind, kind)
+            XCTAssertEqual(result.sources.first?.id, "101:202")
+            XCTAssertEqual(result.sources.first?.title, "Module:ReferenceFixture")
+            XCTAssertEqual(result.visibleEntries.count, 1)
+            XCTAssertEqual(result.entries.count, kind == .medals ? 2 : 1)
+            XCTAssertEqual(result.entries.first?.name, "Canonical source name")
+            XCTAssertEqual(result.entries.first?.sections.first?.lines, ["First condition", "Second condition"])
+            XCTAssertEqual(result.entries.first?.links.map(\.kind), ["pet", "item"])
+            XCTAssertEqual(result.entries.first?.links.map(\.id), ["pet_000007", "item_0123456789ab"])
+            XCTAssertEqual(result.groups.first?.imagePath, "wiki/v4/ui/types/fire.png")
+            XCTAssertEqual(kind.supportsProgress, kind == .research || kind == .trials)
+        }
+    }
+    func testBundledReferenceCatalogsResolveExactLinksAndLocalImages() async throws {
+        let repository = AssetRepository(assetRoot: assets)
+        let items = try await repository.referenceCatalog(.items)
+        let itemIDs = Set(items.entries.map(\.id))
+        var petIDs: Set<String> = [], handbookIDs: Set<String> = []
+        var query = PetQuery(); query.limit = 200
+        while true {
+            let page = try await catalog.searchPets(query)
+            petIDs.formUnion(page.map(\.id)); handbookIDs.formUnion(page.map(\.handbookID))
+            if page.count < query.limit { break }
+            query.offset += query.limit
+        }
+        let counts: [ReferenceCatalogKind: Int] = [.items: 1534, .research: 2351, .medals: 60, .trials: 726, .habitats: 109]
+        let sourceCounts: [ReferenceCatalogKind: Int] = [.items: 22, .research: 2, .medals: 3, .trials: 1, .habitats: 20]
+        var imagePaths: Set<String> = []
+        for kind in ReferenceCatalogKind.allCases {
+            let value = kind == .items ? items : try await repository.referenceCatalog(kind)
+            XCTAssertEqual(value.entries.count, counts[kind])
+            XCTAssertEqual(value.sources.count, sourceCounts[kind])
+            if kind == .medals { XCTAssertEqual(value.visibleEntries.count, 56) }
+            imagePaths.formUnion(value.groups.compactMap(\.imagePath))
+            imagePaths.formUnion(value.entries.compactMap(\.imagePath))
+            for entry in value.entries {
+                if let handbook = entry.handbookId { XCTAssertTrue(handbookIDs.contains(handbook), handbook) }
+                for link in entry.links {
+                    XCTAssertTrue(link.kind == "pet" ? petIDs.contains(link.id) : itemIDs.contains(link.id), link.id)
+                }
+            }
+        }
+        for path in imagePaths { try FileSafety.regular(assets.appendingPathComponent(path)) }
+        let unavailable = try XCTUnwrap(items.entries.first { $0.id == "item_a73c5a669658" })
+        XCTAssertNil(unavailable.imagePath)
+    }
+    func testReferenceCatalogRejectsMalformedMembershipLinksAndImages() async throws {
+        let original = referenceValue(.research)
+        func changed(_ key: String, _ value: Any) -> [String: Any] {
+            var result = original; result[key] = value; return result
+        }
+        func entry(_ key: String, _ value: Any) -> [String: Any] {
+            var first = (original["entries"] as! [[String: Any]])[0]
+            first[key] = value
+            return changed("entries", [first])
+        }
+        let invalid = [
+            changed("contract_version", 2), changed("dataset_id", "other"), changed("snapshot_id", ""), changed("kind", "items"),
+            changed("sources", []), changed("groups", []), changed("entries", []),
+            changed("groups", (original["groups"] as! [[String: Any]]) + (original["groups"] as! [[String: Any]])),
+            changed("entries", (original["entries"] as! [[String: Any]]) + (original["entries"] as! [[String: Any]])),
+            entry("id", "pt_1_1"), entry("name", ""), entry("group_id", "missing"), entry("visible", "true"),
+            entry("progress_id", "pt_000001_000002"), entry("handbook_id", "handbook_000002"),
+            entry("links", [["kind": "skill", "id": "skill_000001", "name": "Wrong link kind"]]),
+            entry("links", [["kind": "pet", "id": "pet_000007/other", "name": "Invalid native ID"]]),
+            entry("links", [["kind": "item", "id": "item_unknown", "name": "Invalid item ID"]]),
+            entry("image_path", "wiki/references/v1/icons/../secret.png"), entry("image_path", "catalog/catalog.png"),
+            entry("image_path", "wiki/references/v1/icons\\secret.png"), entry("image_path", "https://example.test/image.png"),
+            entry("sections", [["title": "Condition", "lines": ["\u{0}"]]]),
+        ]
+        for value in invalid {
+            let repository = try referenceFixture(.research, value: value)
+            do {
+                _ = try await repository.referenceCatalog(.research)
+                XCTFail("Invalid catalog shape, membership, link identities, and image paths must fail.")
+            } catch { XCTAssertEqual((error as? HandbookError)?.code, "reference_contract") }
+        }
+        for kind in ReferenceCatalogKind.allCases {
+            var value = referenceValue(kind)
+            var entries = value["entries"] as! [[String: Any]]
+            if kind.supportsProgress { entries[0].removeValue(forKey: "progress_id") }
+            else { entries[0]["progress_id"] = "pt_000001_000001" }
+            value["entries"] = entries
+            let repository = try referenceFixture(kind, value: value)
+            do {
+                _ = try await repository.referenceCatalog(kind)
+                XCTFail("Checklist membership must follow the explicit catalog kind.")
+            } catch { XCTAssertEqual((error as? HandbookError)?.code, "reference_contract") }
+        }
+    }
+    func testReferenceCatalogRejectsUnfrozenOrMalformedSourceMetadata() async throws {
+        let original = referenceValue(.items)
+        let source = (original["sources"] as! [[String: Any]])[0]
+        let invalid: [(String, Any)] = [
+            ("page_id", 0), ("revision_id", 0), ("revised_at_utc", "invalid"), ("sha1", String(repeating: "z", count: 40)),
+            ("sha256", "abc"), ("title", "Different title"),
+            ("url", "http://wiki.biligame.com/nrc/index.php?title=Module%3AReferenceFixture&oldid=202"),
+            ("url", "https://wiki.biligame.com/rocom/index.php?title=Module%3AReferenceFixture&oldid=202"),
+            ("url", "https://example.test/nrc/index.php?title=Module%3AReferenceFixture&oldid=202"),
+            ("url", "https://wiki.biligame.com/nrc/index.php?title=Module%3AReferenceFixture&oldid=203"),
+            ("url", "https://wiki.biligame.com/nrc/index.php?title=Module%3AReferenceFixture&oldid=202#fragment"),
+        ]
+        for (key, invalidValue) in invalid {
+            var changed = source; changed[key] = invalidValue
+            var value = original; value["sources"] = [changed]
+            let repository = try referenceFixture(.items, value: value)
+            do {
+                _ = try await repository.referenceCatalog(.items)
+                XCTFail("Every source must retain valid identity, hashes, and a matching frozen NRC URL.")
+            } catch { XCTAssertEqual((error as? HandbookError)?.code, "reference_contract") }
+        }
+        var duplicate = original; duplicate["sources"] = [source, source]
+        let repository = try referenceFixture(.items, value: duplicate)
+        do {
+            _ = try await repository.referenceCatalog(.items)
+            XCTFail("Duplicate source identities must fail.")
+        } catch { XCTAssertEqual((error as? HandbookError)?.code, "reference_contract") }
+    }
+    func testReferenceProgressPersistsSortedIndependentSetsAndPreservesPersonalData() async throws {
+        let support = try temporary()
+        let saved = try user(support)
+        let initialResearch = try await saved.referenceProgress(.research)
+        let initialTrials = try await saved.referenceProgress(.trials)
+        XCTAssertTrue(initialResearch.isEmpty && initialTrials.isEmpty)
+        let ref = ObjectRef(type: .pet, objectID: "pet_000007", name: "Saved creature")
+        try await saved.setFavorite(ref, enabled: true)
+        try await saved.setCollected("handbook_000004", name: "Saved entry", collected: true)
+        let noteID = try await saved.saveNote(ref, content: "Preserve this note")
+        try await saved.setLayout(.list)
+        try await saved.setSkillLayout(.detailed)
+        try await saved.setInterfaceLanguage(.english)
+        let unknown = "pt_999999_999999"
+        try await saved.setReferenceProgress(.research, id: unknown, completed: true)
+        try await saved.setReferenceProgress(.research, id: "pt_000001_000002", completed: true)
+        try await saved.setReferenceProgress(.research, id: "pt_000001_000001", completed: true)
+        try await saved.setReferenceProgress(.research, id: "pt_000001_000002", completed: false)
+        try await saved.setReferenceProgress(.trials, id: "gt_0123456789abcdef", completed: true)
+        let reopened = try user(support)
+        let research = try await reopened.referenceProgress(.research)
+        let trials = try await reopened.referenceProgress(.trials)
+        let favorites = try await reopened.favorites()
+        let collected = try await reopened.isCollected("handbook_000004")
+        let notes = try await reopened.notes(ref)
+        let layout = try await reopened.layout()
+        let skillLayout = try await reopened.skillLayout()
+        let language = try await reopened.interfaceLanguage()
+        XCTAssertEqual(research, ["pt_000001_000001", unknown])
+        XCTAssertEqual(trials, ["gt_0123456789abcdef"])
+        XCTAssertEqual(favorites.map(\.object), [ref])
+        XCTAssertTrue(collected)
+        XCTAssertEqual(notes.map(\.id), [noteID])
+        XCTAssertEqual(notes.first?.content, "Preserve this note")
+        XCTAssertEqual(layout, .list); XCTAssertEqual(skillLayout, .detailed); XCTAssertEqual(language, .english)
+        let db = try SQLite(saved.databaseURL, readOnly: true)
+        let rows = try db.rows("SELECT value_json FROM settings WHERE setting_key = 'reference_progress.research'")
+        XCTAssertEqual(rows.first?.text("value_json"), "[\"pt_000001_000001\",\"pt_999999_999999\"]")
+        XCTAssertEqual(try db.rows("PRAGMA user_version").first?.integer("user_version"), 1)
+    }
+    func testReferenceProgressRejectsInvalidStoredValuesWithoutOverwriting() async throws {
+        let saved = try user(temporary())
+        try await saved.setReferenceProgress(.research, id: "pt_000001_000001", completed: true)
+        try await saved.setReferenceProgress(.trials, id: "gt_0123456789abcdef", completed: true)
+        let db = try SQLite(saved.databaseURL, readOnly: false)
+        for json in ["{", "null", "{}", "[1]", "[\"Unknown\"]", "[\"gt_0123456789abcdef\"]",
+                     "[\"pt_000001_000001\",\"pt_000001_000001\"]", "[\"pt_000001_000001\\n\"]"] {
+            try db.execute("UPDATE settings SET value_json = ? WHERE setting_key = 'reference_progress.research'", [.text(json)])
+            let before = try db.rows("SELECT * FROM settings ORDER BY setting_key")
+            do {
+                _ = try await saved.referenceProgress(.research)
+                XCTFail("Malformed saved progress must fail on read.")
+            } catch { XCTAssertEqual((error as? HandbookError)?.code, "reference_progress_data") }
+            do {
+                try await saved.setReferenceProgress(.research, id: "pt_000001_000002", completed: true)
+                XCTFail("A write must preserve malformed saved progress.")
+            } catch { XCTAssertEqual((error as? HandbookError)?.code, "reference_progress_data") }
+            XCTAssertEqual(try db.rows("SELECT * FROM settings ORDER BY setting_key"), before)
+        }
+        let before = try db.rows("SELECT * FROM settings ORDER BY setting_key")
+        for kind in [ReferenceCatalogKind.items, .medals, .habitats] {
+            do { _ = try await saved.referenceProgress(kind); XCTFail("Only checklist kinds may read marks.") }
+            catch { XCTAssertEqual((error as? HandbookError)?.code, "reference_progress_kind") }
+            do { try await saved.setReferenceProgress(kind, id: "pt_000001_000001", completed: true); XCTFail("Only checklist kinds may write marks.") }
+            catch { XCTAssertEqual((error as? HandbookError)?.code, "reference_progress_kind") }
+        }
+        for (kind, id) in [(ReferenceCatalogKind.research, "gt_0123456789abcdef"), (.trials, "pt_000001_000001")] {
+            do { try await saved.setReferenceProgress(kind, id: id, completed: true); XCTFail("Checklist IDs must match their kind.") }
+            catch { XCTAssertEqual((error as? HandbookError)?.code, "reference_progress_id") }
+        }
+        XCTAssertEqual(try db.rows("SELECT * FROM settings ORDER BY setting_key"), before)
+        let trials = try await saved.referenceProgress(.trials)
+        XCTAssertEqual(trials, ["gt_0123456789abcdef"])
     }
     func testAttackCoverageUsesFrozenFireResultsAndChartOrder() async throws {
         let result = try await AssetRepository(assetRoot: assets).attackCoverage(for: ["\u{706b}\u{7cfb}"])

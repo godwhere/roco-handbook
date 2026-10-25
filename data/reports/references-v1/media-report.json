@@ -1,0 +1,21 @@
+{
+  "available_count": 1589,
+  "config_sha256": "08d5cc7d357c805f8b14df735f661b5356fd0ff72cae733280dd4c366d9da613",
+  "dataset_id": "roco-world-zh-cn",
+  "declaration_sha256": "93da4cb1b592b6cd27187827c9381f3b20f7a4103e6d4a96ecedca8760fca9b1",
+  "manifest_path": "/tmp/roco-phase16-reference-media/v1/asset-manifest.json",
+  "path": "/tmp/roco-phase16-reference-media/v1",
+  "reference_count": 1589,
+  "report_version": 1,
+  "requested_count": 1590,
+  "reused_existing": false,
+  "total_bytes": 33091988,
+  "unavailable": [
+    {
+      "catalog_ids": [
+        "items:item_a73c5a669658"
+      ],
+      "source_title": "File:Item_20000027.png"
+    }
+  ]
+}

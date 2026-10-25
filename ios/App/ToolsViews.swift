@@ -20,6 +20,11 @@ struct ToolsView: View {
                     NavigationLink(destination: AttackCoverageView(session: session)) {
                         WikiToolRow(title: tr("Attack coverage"), imagePath: CatalogAssets.type("\u{706b}"))
                     }.accessibilityIdentifier("tools.coverage")
+                    ForEach(ReferenceCatalogKind.allCases, id: \.self) { kind in
+                        NavigationLink(destination: ReferenceCatalogView(session: session, kind: kind)) {
+                            WikiToolRow(title: tr(kind.titleKey), imagePath: kind.entranceImagePath)
+                        }.accessibilityIdentifier("tools.\(kind.rawValue)")
+                    }
                     NavigationLink(destination: GameDescriptionsView(session: session)) {
                         WikiToolRow(title: tr("Game descriptions"), imagePath: "wiki/v4/skills/Skill_418039.png")
                     }.accessibilityIdentifier("tools.descriptions")

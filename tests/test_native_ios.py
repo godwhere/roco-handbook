@@ -38,6 +38,9 @@ class NativeIOSPackagingTests(unittest.TestCase):
                 required.update(re.findall(expression, source))
         for path in (ROOT / "ios/Sources/HandbookCore").glob("*.swift"):
             required.update(re.findall(r'HandbookError\("[^"\\]*", "([^"\\]*)"\)', path.read_text()))
+        for kind in ("items", "research", "medals", "trials", "habitats"):
+            catalog = json.loads((ROOT / f"app/assets/wiki/references/v1/{kind}.json").read_text())
+            required.update(section["title"] for entry in catalog["entries"] for section in entry["sections"])
         for key in sorted(required):
             with self.subTest(key=key):
                 self.assertIn(key, localized["en"])
@@ -81,7 +84,31 @@ class NativeIOSPackagingTests(unittest.TestCase):
             self.assertFalse((destination / "wiki/v3").exists())
             self.assertFalse((destination / "wiki/tools/v1").exists())
             self.assertTrue((destination / "wiki/tools/v2/asset-manifest.json").is_file())
+            references = destination / "wiki/references/v1"
+            self.assertTrue((references / "asset-manifest.json").is_file())
+            for kind in ("items", "research", "medals", "trials", "habitats"):
+                with self.subTest(reference=kind):
+                    staged = references / f"{kind}.json"
+                    self.assertEqual(
+                        (ROOT / "app/assets/wiki/references/v1" / staged.name).read_bytes(),
+                        staged.read_bytes(),
+                    )
+                    catalog = json.loads(staged.read_text())
+                    self.assertEqual(1, catalog["contract_version"])
+                    self.assertEqual("roco-world-zh-cn", catalog["dataset_id"])
+                    self.assertEqual(kind, catalog["kind"])
+                    self.assertTrue(catalog["sources"])
+                    self.assertTrue(catalog["groups"])
+                    self.assertTrue(catalog["entries"])
+                    for record in catalog["groups"] + catalog["entries"]:
+                        image = record.get("image_path")
+                        if image is not None:
+                            self.assertNotIn("..", Path(image).parts)
+                            self.assertFalse(Path(image).is_absolute())
+                            self.assertTrue((destination / image).is_file(), image)
             self.assertFalse(list(destination.rglob("*.dart")))
+            self.assertFalse(list(references.rglob("*.lua")))
+            self.assertFalse(list(references.rglob("*.js")))
 
     def test_native_project_matches_generator(self) -> None:
         paths = [
