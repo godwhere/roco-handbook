@@ -490,3 +490,16 @@
 "Keep your favorite discoveries" = "Keep your favorite discoveries";
 "Make it your handbook" = "Make it your handbook";
 "A little preparation for your next adventure" = "A little preparation for your next adventure";
+"Attack coverage" = "Attack coverage";
+"Attacking types" = "Attacking types";
+"Reset" = "Reset";
+"Choose up to five attacking types." = "Choose up to five attacking types.";
+"Deselect a type to choose another." = "Deselect a type to choose another.";
+"Covered types" = "Covered types";
+"At least one selected type is super effective." = "At least one selected type is super effective.";
+"Weak spots" = "Weak spots";
+"Every selected type is resisted." = "Every selected type is resisted.";
+"Neutral types" = "Neutral types";
+"Other defending types." = "Other defending types.";
+"The offline attack coverage types or relationships are invalid." = "The offline attack coverage types or relationships are invalid.";
+"The offline attack coverage source is invalid." = "The offline attack coverage source is invalid.";

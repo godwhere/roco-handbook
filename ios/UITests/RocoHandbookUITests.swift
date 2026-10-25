@@ -15,6 +15,26 @@ final class RocoHandbookUITests: XCTestCase {
         }
         XCTAssertTrue(element.isHittable)
     }
+    private func revealTowardTop(_ element: XCUIElement, in app: XCUIApplication) {
+        for _ in 0..<10 {
+            if element.isHittable { return }
+            app.swipeDown()
+        }
+        XCTAssertTrue(element.isHittable)
+    }
+    private func followSystemLanguage(in app: XCUIApplication) {
+        app.tabBars.buttons.element(boundBy: 3).tap()
+        let language = app.buttons["settings.language"]
+        XCTAssertTrue(language.waitForExistence(timeout: 10))
+        reveal(language, in: app); language.tap()
+        let titles = ["Follow System", "\u{8ddf}\u{968f}\u{7cfb}\u{7edf}"]
+        let option = app.buttons.matching(NSPredicate(format: "label IN %@", titles)).firstMatch
+        XCTAssertTrue(option.waitForExistence(timeout: 10)); option.tap()
+        let selected = XCTNSPredicateExpectation(predicate: NSPredicate(format: "value IN %@", titles), object: language)
+        XCTAssertEqual(XCTWaiter.wait(for: [selected], timeout: 10), .completed)
+        app.tabBars.buttons.element(boundBy: 0).tap()
+        XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
+    }
     func testOfflineCatalogSearchAndDetailNavigation() {
         let app = launch()
         let search = app.textFields["pets.search"]
@@ -63,7 +83,7 @@ final class RocoHandbookUITests: XCTestCase {
         XCTAssertLessThanOrEqual(features.frame.maxY, eggs.frame.minY)
         XCTAssertGreaterThanOrEqual(season.frame.maxY + 2, eggs.frame.maxY)
         capture(app, name: "tools-zh")
-        for id in ["tools.descriptions", "tools.activities", "tools.outfits", "tools.library"] {
+        for id in ["tools.coverage", "tools.descriptions", "tools.activities", "tools.outfits", "tools.library"] {
             let card = app.buttons[id]
             reveal(card, in: app)
             XCTAssertGreaterThanOrEqual(card.frame.width + 0.001, 44)
@@ -84,6 +104,72 @@ final class RocoHandbookUITests: XCTestCase {
             XCTAssertGreaterThanOrEqual(action.frame.height + 0.001, 44)
         }
         capture(app, name: "settings-lower-zh")
+    }
+    func testAttackCoverageSelectionLimitResetAndChineseCapture() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-AppleLanguages", "(zh-Hans)", "-AppleLocale", "zh_CN"]
+        app.launch()
+        XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
+        followSystemLanguage(in: app)
+        app.tabBars.buttons.element(boundBy: 2).tap()
+        let entry = app.buttons["tools.coverage"]
+        reveal(entry, in: app); entry.tap()
+        XCTAssertTrue(app.navigationBars["\u{6253}\u{51fb}\u{9762}"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["coverage.empty"].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.staticTexts["coverage.covered.count"].exists)
+        let fire = app.buttons["coverage.type.\u{706b}"]
+        XCTAssertTrue(fire.waitForExistence(timeout: 10)); fire.tap()
+        XCTAssertTrue(fire.isSelected)
+        let covered = app.staticTexts["coverage.covered.count"]
+        let resisted = app.staticTexts["coverage.resisted.count"]
+        XCTAssertTrue(covered.waitForExistence(timeout: 10))
+        XCTAssertTrue(covered.label.hasSuffix(" · 4"))
+        XCTAssertTrue(resisted.waitForExistence(timeout: 10))
+        XCTAssertTrue(resisted.label.hasSuffix(" · 3"))
+        let additionalTypes = ["\u{666e}\u{901a}", "\u{8349}", "\u{6c34}", "\u{5149}"]
+        for type in additionalTypes {
+            let choice = app.buttons["coverage.type.\(type)"]
+            XCTAssertTrue(choice.isEnabled); choice.tap()
+            XCTAssertTrue(choice.isSelected)
+        }
+        XCTAssertTrue(app.staticTexts["coverage.selection.count"].label.hasSuffix("5 / 5"))
+        XCTAssertTrue(app.staticTexts["coverage.limit"].exists)
+        let ground = app.buttons["coverage.type.\u{5730}"]
+        XCTAssertFalse(ground.isEnabled)
+        XCTAssertTrue(fire.isEnabled)
+        let water = app.buttons["coverage.type.\u{6c34}"]
+        water.tap()
+        XCTAssertFalse(water.isSelected)
+        XCTAssertTrue(ground.isEnabled); ground.tap()
+        XCTAssertTrue(ground.isSelected)
+        XCTAssertTrue(app.staticTexts["coverage.selection.count"].label.hasSuffix("5 / 5"))
+        let reset = app.buttons["coverage.reset"]
+        reset.tap()
+        XCTAssertTrue(app.staticTexts["coverage.empty"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["coverage.selection.count"].label.hasSuffix("0 / 5"))
+        XCTAssertFalse(reset.isEnabled)
+        XCTAssertFalse(fire.isSelected)
+        XCTAssertFalse(ground.isSelected)
+        XCTAssertTrue(water.isEnabled)
+        XCTAssertFalse(covered.exists)
+        fire.tap()
+        XCTAssertTrue(covered.waitForExistence(timeout: 10))
+        reveal(resisted, in: app)
+        capture(app, name: "coverage-fire-zh")
+        let source = app.buttons["tools.coverage.sources"]
+        revealTowardTop(source, in: app)
+        XCTAssertGreaterThanOrEqual(source.frame.width + 0.001, 44)
+        XCTAssertGreaterThanOrEqual(source.frame.height + 0.001, 44)
+        source.tap()
+        XCTAssertTrue(app.staticTexts["coverage.source.name"].waitForExistence(timeout: 10))
+        XCTAssertEqual(app.staticTexts["coverage.source.name"].label, "Module:TypeRelation")
+        let sourceURL = app.staticTexts["coverage.source.url"].label
+        XCTAssertTrue(sourceURL.contains("title=Module%3ATypeRelation"))
+        XCTAssertTrue(sourceURL.contains("oldid="))
+        XCTAssertTrue(app.staticTexts["coverage.source.date"].exists)
+        capture(app, name: "coverage-source-zh")
+        app.buttons["coverage.source.done"].tap()
+        XCTAssertTrue(app.navigationBars["\u{6253}\u{51fb}\u{9762}"].waitForExistence(timeout: 10))
     }
     func testInterfaceLanguageSwitchPersistsAcrossRestartAndCatalogRestore() {
         let app = launch()
@@ -164,11 +250,35 @@ final class RocoHandbookUITests: XCTestCase {
                                "UICTContentSizeCategoryAccessibilityXXXL"]
         app.launch()
         XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
+        followSystemLanguage(in: app)
         app.tabBars.buttons.element(boundBy: 2).tap()
         let first = app.buttons["tools.seasons"]
         XCTAssertTrue(first.waitForExistence(timeout: 10))
         XCTAssertGreaterThanOrEqual(first.frame.height + 0.001, 44)
         capture(app, name: "tools-large-text-zh")
+        let coverage = app.buttons["tools.coverage"]
+        reveal(coverage, in: app); coverage.tap()
+        let fire = app.buttons["coverage.type.\u{706b}"]
+        XCTAssertTrue(fire.waitForExistence(timeout: 10))
+        reveal(fire, in: app)
+        XCTAssertGreaterThanOrEqual(fire.frame.width + 0.001, 44)
+        XCTAssertGreaterThanOrEqual(fire.frame.height + 0.001, 44)
+        XCTAssertLessThanOrEqual(fire.frame.maxX, app.frame.maxX)
+        fire.tap()
+        let covered = app.staticTexts["coverage.covered.count"]
+        reveal(covered, in: app)
+        XCTAssertTrue(covered.label.hasSuffix(" · 4"))
+        capture(app, name: "coverage-large-text-zh")
+        let source = app.buttons["tools.coverage.sources"]
+        revealTowardTop(source, in: app)
+        XCTAssertGreaterThanOrEqual(source.frame.width + 0.001, 44)
+        XCTAssertGreaterThanOrEqual(source.frame.height + 0.001, 44)
+        XCTAssertLessThanOrEqual(app.staticTexts["coverage.selection.count"].frame.maxY, source.frame.minY)
+        XCTAssertLessThanOrEqual(app.buttons["coverage.reset"].frame.maxX, source.frame.minX)
+        source.tap()
+        XCTAssertTrue(app.staticTexts["coverage.source.name"].waitForExistence(timeout: 10))
+        app.buttons["coverage.source.done"].tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
         reveal(app.buttons["tools.library"], in: app)
         app.tabBars.buttons.element(boundBy: 3).tap()
         let language = app.buttons["settings.language"]
@@ -576,8 +686,9 @@ final class RocoHandbookUITests: XCTestCase {
         variants.buttons["Original"].tap()
         XCTAssertTrue(variants.buttons["Original"].isSelected)
     }
-    func testAllDestinationsAndSevenToolRoutes() {
+    func testAllDestinationsAndEightToolRoutes() {
         let app = launch()
+        followSystemLanguage(in: app)
         app.tabBars.buttons["Skills"].tap()
         XCTAssertTrue(app.descendants(matching: .any)["skills.catalog"].waitForExistence(timeout: 10))
         app.tabBars.buttons["Tools"].tap()
@@ -585,6 +696,7 @@ final class RocoHandbookUITests: XCTestCase {
             ("tools.seasons", "Season archive"),
             ("tools.features", "Feature handbook"),
             ("tools.eggGroups", "Egg groups"),
+            ("tools.coverage", "Attack coverage"),
             ("tools.descriptions", "Game descriptions"),
             ("tools.activities", "Activity timeline"),
             ("tools.outfits", "Outfit inspiration"),

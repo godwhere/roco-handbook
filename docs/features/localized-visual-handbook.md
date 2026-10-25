@@ -58,7 +58,7 @@ Skill and feature catalogs and creature skill tabs share a saved layout: two com
 
 Compact skill cards follow the supplied reference with a dark rounded surface. The enlarged contained illustration sits on the left; the name and type/power pill form a vertically stacked module on the right. Both modules align at their vertical centers. Two-column artwork is 60 points; three-column artwork is 40 points. The energy badge stays on the illustration, the classification glyph occupies the upper-right corner, and recorded creature learning levels occupy a reserved lower-right area. Names can wrap within the right-hand module. Raw textual metrics and unknown values retain their meaning. Feature cards show their feature role without adding invented combat metrics. Full descriptions remain available by tapping a card or selecting detailed mode. Creature-origin skill details show that exact acquisition record near the top, including source kind, level, source stage, bloodline values, and requirements. Detailed mode retains the previous description and acquisition rows. Individual skill details and glossary reading contexts always use full descriptions. Accessibility text sizes use the full-width detailed presentation without changing the saved density.
 
-## Seven offline Tools
+## Offline Tools
 
 - Season archive filters explicit owning seasons.
 - Feature handbook queries independent feature ownership.
@@ -67,6 +67,7 @@ Compact skill cards follow the supplied reference with a dark rounded surface. T
 - Activity timeline browses 552 entries with text, month, category, and date-derived status filters; missing dates remain unknown.
 - Outfit inspiration browses 124 outfits and 248 gender variants with search, grade filters, original previews, and acquisition text.
 - My library resolves stable saved objects and retains unavailable name snapshots and notes.
+- Attack coverage combines up to five distinct attacking types from the frozen eighteen-type chart. Covered means any selected type is super effective; resisted means every selected type is resisted; remaining defending types are neutral. Empty selection shows instructions. The no-type placeholder is excluded. Choices, reset, counts and exact frozen-chart source information remain offline. Selection is transient, and this tool does not calculate full battle damage or dual-type creature matchups.
 
 ## Evidence boundary
 

@@ -17,6 +17,9 @@ struct ToolsView: View {
                     }
                 }
                 VStack(spacing: 10) {
+                    NavigationLink(destination: AttackCoverageView(session: session)) {
+                        WikiToolRow(title: tr("Attack coverage"), imagePath: CatalogAssets.type("\u{706b}"))
+                    }.accessibilityIdentifier("tools.coverage")
                     NavigationLink(destination: GameDescriptionsView(session: session)) {
                         WikiToolRow(title: tr("Game descriptions"), imagePath: "wiki/v4/skills/Skill_418039.png")
                     }.accessibilityIdentifier("tools.descriptions")
@@ -123,6 +126,164 @@ private struct WikiToolRow: View {
     }
 }
 
+struct AttackCoverageView: View {
+    let session: HandbookSession
+    @EnvironmentObject private var app: AppModel
+    @Environment(\.sizeCategory) private var sizeCategory
+    @ScaledMetric(relativeTo: .subheadline) private var minimumTypeWidth: CGFloat = 96
+    @State private var selectedTypes: [String] = []
+    @State private var coverage: AttackCoverage?
+    @State private var error = false
+    @State private var showingSource = false
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 14) {
+                if error {
+                    Button(tr("Retry")) { Task { await load(for: selectedTypes) } }
+                        .frame(minWidth: 44, minHeight: 44)
+                } else if let coverage {
+                    selectionPanel(coverage)
+                    if !selectedTypes.isEmpty {
+                        if Set(coverage.selectedTypes) == Set(selectedTypes) {
+                            resultPanel("Covered types", types: coverage.covered,
+                                        explanation: "At least one selected type is super effective.", identifier: "covered")
+                            resultPanel("Weak spots", types: coverage.resisted,
+                                        explanation: "Every selected type is resisted.", identifier: "resisted")
+                            resultPanel("Neutral types", types: coverage.neutral,
+                                        explanation: "Other defending types.", identifier: "neutral")
+                        } else { ProgressView() }
+                    }
+                } else { ProgressView() }
+            }.padding(16).padding(.bottom, 12)
+        }.background(HandbookWikiBackground()).tint(HandbookWikiTheme.accent)
+            .navigationTitle(tr("Attack coverage")).navigationBarTitleDisplayMode(.inline)
+            .accessibilityIdentifier("tools.attackCoverage")
+            .sheet(isPresented: $showingSource) {
+                if let source = coverage?.source {
+                    AppNavigation {
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: 14) {
+                                Text(source.name).font(.headline).accessibilityIdentifier("coverage.source.name")
+                                Text(source.url).font(.footnote).textSelection(.enabled)
+                                    .accessibilityIdentifier("coverage.source.url")
+                                if let date = source.frozenAt {
+                                    Text(date).font(.caption).foregroundColor(.secondary)
+                                        .accessibilityIdentifier("coverage.source.date")
+                                }
+                            }.padding(18).frame(maxWidth: .infinity, alignment: .leading)
+                        }.background(HandbookWikiBackground()).navigationTitle(tr("Source"))
+                            .navigationBarTitleDisplayMode(.inline)
+                            .toolbar {
+                                ToolbarItem(placement: .confirmationAction) {
+                                    Button(tr("Done")) { showingSource = false }
+                                        .frame(minWidth: 44, minHeight: 44)
+                                        .accessibilityIdentifier("coverage.source.done")
+                                }
+                            }
+                    }
+                }
+            }
+            .task(id: selectedTypes) { await load(for: selectedTypes) }
+    }
+    private func selectionPanel(_ coverage: AttackCoverage) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            if sizeCategory.isAccessibilityCategory {
+                VStack(alignment: .leading, spacing: 12) { selectionTitle; selectionActions }
+            } else {
+                HStack(alignment: .top, spacing: 12) { selectionTitle; selectionActions }
+            }
+            if selectedTypes.isEmpty {
+                Text(tr("Choose up to five attacking types.")).font(.caption)
+                    .foregroundColor(HandbookWikiTheme.secondary).accessibilityIdentifier("coverage.empty")
+            } else if selectedTypes.count == 5 {
+                Text(tr("Deselect a type to choose another.")).font(.caption)
+                    .foregroundColor(HandbookWikiTheme.secondary).accessibilityIdentifier("coverage.limit")
+            }
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: minimumTypeWidth), spacing: 8)], spacing: 8) {
+                ForEach(coverage.availableTypes, id: \.self) { type in typeChoice(type) }
+            }
+        }.padding(14).frame(maxWidth: .infinity, alignment: .leading)
+            .background(HandbookWikiTheme.surface).clipShape(RoundedRectangle(cornerRadius: 9))
+            .overlay(RoundedRectangle(cornerRadius: 9).stroke(HandbookWikiTheme.line, lineWidth: 0.5))
+    }
+    private var selectionTitle: some View {
+        Text("\(tr("Attacking types")) · \(selectedTypes.count) / 5")
+            .font(HandbookTheme.display(16)).fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading).accessibilityAddTraits(.isHeader)
+            .accessibilityIdentifier("coverage.selection.count")
+    }
+    private var selectionActions: some View {
+        HStack(spacing: 8) {
+            Button { selectedTypes = [] } label: {
+                Text(tr("Reset")).font(.subheadline.weight(.semibold))
+                    .frame(minWidth: 44, minHeight: 44).contentShape(Rectangle())
+            }.disabled(selectedTypes.isEmpty).accessibilityIdentifier("coverage.reset")
+            Button { showingSource = true } label: {
+                Image(systemName: "doc.text").font(.subheadline)
+                    .frame(minWidth: 44, minHeight: 44).contentShape(Rectangle())
+                    .background(HandbookWikiTheme.background).clipShape(RoundedRectangle(cornerRadius: 8))
+            }.accessibilityLabel(tr("Source")).accessibilityIdentifier("tools.coverage.sources")
+        }.buttonStyle(.plain).foregroundColor(HandbookWikiTheme.accent)
+            .fixedSize(horizontal: true, vertical: false)
+    }
+    private func typeChoice(_ type: String) -> some View {
+        let selected = selectedTypes.contains(type)
+        let unavailable = selectedTypes.count == 5 && !selected
+        return Button {
+            if selected { selectedTypes.removeAll { $0 == type } }
+            else if selectedTypes.count < 5 { selectedTypes.append(type) }
+        } label: {
+            HStack(spacing: 6) {
+                AssetImage(path: CatalogAssets.type(type), label: "", size: 24).accessibilityHidden(true)
+                Text(type).font(.subheadline.weight(.medium)).fixedSize(horizontal: false, vertical: true)
+                Spacer(minLength: 0)
+                Image(systemName: selected ? "checkmark.circle.fill" : "circle")
+                    .font(.caption2).accessibilityHidden(true)
+            }.padding(.horizontal, 8).padding(.vertical, 8).frame(maxWidth: .infinity, minHeight: 44)
+                .foregroundColor(HandbookWikiTheme.ink)
+                .background(selected ? HandbookWikiTheme.blue : HandbookWikiTheme.background)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .overlay(RoundedRectangle(cornerRadius: 8)
+                    .stroke(selected ? HandbookWikiTheme.accent : HandbookWikiTheme.line, lineWidth: selected ? 1.5 : 0.5))
+        }.buttonStyle(.plain).disabled(unavailable).opacity(unavailable ? 0.45 : 1)
+            .accessibilityLabel(type).accessibilityAddTraits(selected ? .isSelected : [])
+            .accessibilityIdentifier("coverage.type.\(type)")
+    }
+    private func resultPanel(_ title: String, types: [String], explanation: String, identifier: String) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("\(tr(title)) · \(types.count)").font(HandbookTheme.display(16))
+                .accessibilityAddTraits(.isHeader).accessibilityIdentifier("coverage.\(identifier).count")
+            Text(tr(explanation)).font(.caption).foregroundColor(HandbookWikiTheme.secondary)
+            if types.isEmpty { Text(tr("None")).font(.subheadline).foregroundColor(HandbookWikiTheme.secondary) }
+            else {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: minimumTypeWidth), spacing: 8)], spacing: 8) {
+                    ForEach(types, id: \.self) { type in
+                        HStack(spacing: 6) {
+                            AssetImage(path: CatalogAssets.type(type), label: "", size: 24).accessibilityHidden(true)
+                            Text(type).font(.subheadline).fixedSize(horizontal: false, vertical: true)
+                        }.padding(8).frame(maxWidth: .infinity, alignment: .leading)
+                            .background(HandbookWikiTheme.background).clipShape(RoundedRectangle(cornerRadius: 8))
+                            .accessibilityElement(children: .ignore).accessibilityLabel(type)
+                            .accessibilityIdentifier("coverage.\(identifier).\(type)")
+                    }
+                }
+            }
+        }.padding(14).frame(maxWidth: .infinity, alignment: .leading)
+            .background(HandbookWikiTheme.surface).clipShape(RoundedRectangle(cornerRadius: 9))
+            .overlay(RoundedRectangle(cornerRadius: 9).stroke(HandbookWikiTheme.line, lineWidth: 0.5))
+    }
+    private func load(for types: [String]) async {
+        error = false
+        do {
+            let result = try await session.assets.attackCoverage(for: types)
+            guard !Task.isCancelled else { return }
+            coverage = result
+        } catch {
+            guard !Task.isCancelled else { return }
+            self.error = true; app.report(error)
+        }
+    }
+}
 
 struct SeasonArchiveView: View {
     let session: HandbookSession

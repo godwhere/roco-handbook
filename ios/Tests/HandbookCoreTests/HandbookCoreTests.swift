@@ -16,6 +16,13 @@ final class HandbookCoreTests: XCTestCase {
     private func user(_ support: URL) throws -> UserRepository {
         try UserRepository(supportURL: support, schemaSQL: String(contentsOf: root.appendingPathComponent("schemas/user_v1.sql")))
     }
+    private func typeFixture(_ value: [String: Any]) throws -> AssetRepository {
+        let fixture = try temporary()
+        let wiki = fixture.appendingPathComponent("wiki")
+        try FileManager.default.createDirectory(at: wiki, withIntermediateDirectories: true)
+        try JSONSerialization.data(withJSONObject: value).write(to: wiki.appendingPathComponent("type-relations-v1.json"))
+        return AssetRepository(assetRoot: fixture)
+    }
     private var catalog: CatalogRepository { CatalogRepository(databaseURL: assets.appendingPathComponent("catalog/catalog.db")) }
 
     func testBundledCatalogMatchesImmutableRelease() throws {
@@ -398,6 +405,157 @@ final class HandbookCoreTests: XCTestCase {
             }
         }
         XCTAssertTrue(sawCap)
+    }
+    func testAttackCoverageUsesFrozenFireResultsAndChartOrder() async throws {
+        let result = try await AssetRepository(assetRoot: assets).attackCoverage(for: ["\u{706b}\u{7cfb}"])
+        XCTAssertEqual(result.availableTypes, [
+            "\u{666e}\u{901a}", "\u{8349}", "\u{706b}", "\u{6c34}", "\u{5149}", "\u{5730}",
+            "\u{51b0}", "\u{9f99}", "\u{7535}", "\u{6bd2}", "\u{866b}", "\u{6b66}",
+            "\u{7ffc}", "\u{840c}", "\u{5e7d}", "\u{6076}", "\u{673a}\u{68b0}", "\u{5e7b}",
+        ])
+        XCTAssertEqual(result.selectedTypes, ["\u{706b}"])
+        XCTAssertEqual(result.covered, ["\u{8349}", "\u{51b0}", "\u{866b}", "\u{673a}\u{68b0}"])
+        XCTAssertEqual(result.resisted, ["\u{6c34}", "\u{5730}", "\u{9f99}"])
+        XCTAssertEqual(result.neutral, [
+            "\u{666e}\u{901a}", "\u{706b}", "\u{5149}", "\u{7535}", "\u{6bd2}", "\u{6b66}",
+            "\u{7ffc}", "\u{840c}", "\u{5e7d}", "\u{6076}", "\u{5e7b}",
+        ])
+        XCTAssertEqual(result.source.name, "Module:TypeRelation")
+        XCTAssertEqual(result.source.url, "https://wiki.biligame.com/rocom/index.php?title=Module%3ATypeRelation&oldid=39538")
+        XCTAssertEqual(result.source.frozenAt, "2026-06-08T19:57:39Z")
+    }
+    func testAttackCoverageCombinesStrongUnionAndResistedIntersection() async throws {
+        let result = try await AssetRepository(assetRoot: assets).attackCoverage(for: ["\u{6c34}", "\u{706b}"])
+        XCTAssertEqual(result.selectedTypes, ["\u{706b}", "\u{6c34}"])
+        XCTAssertEqual(result.covered, ["\u{8349}", "\u{706b}", "\u{5730}", "\u{51b0}", "\u{866b}", "\u{673a}\u{68b0}"])
+        XCTAssertEqual(result.resisted, ["\u{9f99}"])
+        XCTAssertEqual(result.neutral, [
+            "\u{666e}\u{901a}", "\u{6c34}", "\u{5149}", "\u{7535}", "\u{6bd2}", "\u{6b66}",
+            "\u{7ffc}", "\u{840c}", "\u{5e7d}", "\u{6076}", "\u{5e7b}",
+        ])
+        XCTAssertTrue(Set(result.covered).isDisjoint(with: result.resisted))
+        XCTAssertTrue(Set(result.covered + result.resisted).isDisjoint(with: result.neutral))
+        XCTAssertEqual(Set(result.covered + result.resisted + result.neutral), Set(result.availableTypes))
+    }
+    func testAttackCoverageEmptySelectionAndInputValidation() async throws {
+        let repository = AssetRepository(assetRoot: assets)
+        let empty = try await repository.attackCoverage(for: [])
+        XCTAssertEqual(empty.availableTypes.count, 18)
+        XCTAssertFalse(empty.availableTypes.contains("\u{65e0}\u{7cfb}\u{522b}"))
+        XCTAssertTrue(empty.selectedTypes.isEmpty && empty.covered.isEmpty && empty.resisted.isEmpty && empty.neutral.isEmpty)
+        let five = ["\u{706b}", "\u{6c34}", "\u{8349}", "\u{5149}", "\u{5730}"]
+        let maximum = try await repository.attackCoverage(for: five)
+        XCTAssertEqual(maximum.selectedTypes.count, 5)
+        for invalid in [[""], ["Unknown"], ["\u{65e0}\u{7cfb}\u{522b}"], ["\u{706b}", "\u{706b}"],
+                        ["\u{706b}", "\u{706b}\u{7cfb}"], five + ["\u{51b0}"]] {
+            do {
+                _ = try await repository.attackCoverage(for: invalid)
+                XCTFail("Unknown, placeholder, duplicate, and over-limit selections must fail.")
+            } catch { XCTAssertEqual((error as? HandbookError)?.code, "type_contract") }
+        }
+    }
+    func testAttackCoverageRejectsMalformedFrozenContracts() async throws {
+        let data = try Data(contentsOf: assets.appendingPathComponent("wiki/type-relations-v1.json"))
+        let original = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+        let order = original["type_order"] as! [String]
+        func changed(_ change: (inout [String: Any]) -> Void) -> [String: Any] {
+            var value = original
+            change(&value)
+            return value
+        }
+        func relationship(_ field: String, _ values: [String]) -> [String: Any] {
+            changed { value in
+                var relations = value["relations"] as! [String: [String: Any]]
+                relations["\u{6c34}"]?[field] = values
+                value["relations"] = relations
+            }
+        }
+        let invalid = [
+            changed { $0["contract_version"] = 2 },
+            changed { $0["dataset_id"] = "unknown" },
+            changed { $0["type_order"] = [String]() },
+            changed { $0["type_order"] = order + ["\u{706b}"] },
+            changed { value in
+                var relations = value["relations"] as! [String: [String: Any]]
+                relations.removeValue(forKey: "\u{6c34}")
+                value["relations"] = relations
+            },
+            relationship("strong_against", ["Unknown"]),
+            relationship("strong_against", ["\u{5730}", "\u{5730}"]),
+            relationship("resisted_by", ["\u{9f99}", "\u{9f99}"]),
+            relationship("strong_against", ["\u{8349}"]),
+        ]
+        for value in invalid {
+            let repository = try typeFixture(value)
+            do {
+                _ = try await repository.attackCoverage(for: ["\u{706b}"])
+                XCTFail("Invalid chart identity, references, duplicates, or overlapping relationships must fail.")
+            } catch { XCTAssertEqual((error as? HandbookError)?.code, "type_contract") }
+        }
+    }
+    func testAttackCoverageRequiresCompleteKnownTypeSet() async throws {
+        let data = try Data(contentsOf: assets.appendingPathComponent("wiki/type-relations-v1.json"))
+        let original = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+        let order = original["type_order"] as! [String]
+        let relations = original["relations"] as! [String: [String: Any]]
+        for (removed, replacement) in [("\u{6c34}", nil), ("\u{6c34}", "Unknown"),
+                                       ("\u{65e0}\u{7cfb}\u{522b}", nil)] as [(String, String?)] {
+            func remap(_ name: String) -> String? { name == removed ? replacement : name }
+            var value = original
+            value["type_order"] = order.compactMap(remap)
+            var changed: [String: [String: Any]] = [:]
+            for (name, relation) in relations {
+                guard let name = remap(name) else { continue }
+                var relation = relation
+                for field in ["strong_against", "resisted_by", "weak_to", "resists"] {
+                    relation[field] = (relation[field] as! [String]).compactMap(remap)
+                }
+                changed[name] = relation
+            }
+            value["relations"] = changed
+            let repository = try typeFixture(value)
+            let legacy = try await repository.relationships(for: ["\u{706b}"])
+            XCTAssertEqual(legacy.outgoing.map(\.name), ["\u{706b}"])
+            do {
+                _ = try await repository.attackCoverage(for: ["\u{706b}"])
+                XCTFail("Coverage must require the complete known type set and the no-type placeholder.")
+            } catch { XCTAssertEqual((error as? HandbookError)?.code, "type_contract") }
+        }
+    }
+    func testAttackCoverageValidatesSourceWithoutChangingRelationshipQueries() async throws {
+        let data = try Data(contentsOf: assets.appendingPathComponent("wiki/type-relations-v1.json"))
+        let original = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+        let originalSource = original["source"] as! [String: Any]
+        var invalid: [[String: Any]] = []
+        for (field, value) in [("page_id", 1), ("revision_id", 0), ("title", "Other module"),
+                               ("revised_at_utc", "invalid"), ("source_sha1", "invalid")] as [(String, Any)] {
+            var source = originalSource
+            source[field] = value
+            invalid.append(source)
+        }
+        let urls = [
+            "http://wiki.biligame.com/rocom/index.php?title=Module%3ATypeRelation&oldid=39538",
+            "https://example.test/rocom/index.php?title=Module%3ATypeRelation&oldid=39538",
+            "https://wiki.biligame.com/rocom/index.php?title=Other&oldid=39538",
+            "https://wiki.biligame.com/rocom/index.php?title=Module%3ATypeRelation&oldid=1",
+            "https://wiki.biligame.com/other?title=Module%3ATypeRelation&oldid=39538",
+        ]
+        for url in urls {
+            var source = originalSource
+            source["source_url"] = url
+            invalid.append(source)
+        }
+        for source in invalid + [[:], ["revision_id": "invalid"]] {
+            var value = original
+            value["source"] = source
+            let repository = try typeFixture(value)
+            let relationships = try await repository.relationships(for: ["\u{706b}"])
+            XCTAssertEqual(relationships.outgoing.count, 1)
+            do {
+                _ = try await repository.attackCoverage(for: ["\u{706b}"])
+                XCTFail("Coverage must require valid source identity, revision, hash, timestamp, and URL.")
+            } catch { XCTAssertEqual((error as? HandbookError)?.code, "type_contract") }
+        }
     }
     func testAssetPathsCannotEscapeBundle() throws {
         XCTAssertNil(CatalogAssets.pet("../catalog/catalog"))

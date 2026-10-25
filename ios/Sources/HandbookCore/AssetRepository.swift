@@ -93,6 +93,14 @@ public struct TypeRelationships: Sendable {
     public let outgoing: [TypeRelation]
     public let incoming: [IncomingDamage]
 }
+public struct AttackCoverage: Sendable {
+    public let availableTypes: [String]
+    public let selectedTypes: [String]
+    public let covered: [String]
+    public let resisted: [String]
+    public let neutral: [String]
+    public let source: VisualSource
+}
 public struct VisualSource: Identifiable, Sendable {
     public let name: String
     public let url: String
@@ -104,6 +112,24 @@ private struct TypeContract: Decodable {
     let datasetId: String
     let typeOrder: [String]
     let relations: [String: TypeRelation]
+    let source: TypeSource?
+    enum CodingKeys: String, CodingKey { case contractVersion, datasetId, typeOrder, relations, source }
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        contractVersion = try values.decode(Int.self, forKey: .contractVersion)
+        datasetId = try values.decode(String.self, forKey: .datasetId)
+        typeOrder = try values.decode([String].self, forKey: .typeOrder)
+        relations = try values.decode([String: TypeRelation].self, forKey: .relations)
+        source = try? values.decode(TypeSource.self, forKey: .source)
+    }
+}
+private struct TypeSource: Decodable {
+    let pageId: Int
+    let revisionId: Int
+    let title: String
+    let revisedAtUtc: String
+    let sourceSha1: String
+    let sourceUrl: String
 }
 func parseDate(_ value: String) -> Date? {
     let formatter = ISO8601DateFormatter()
@@ -194,6 +220,49 @@ public actor AssetRepository {
             for variant in entry.variants { _ = try Self.toolImage(variant.imagePath, prefix: "fashions/cards/") }
         }
         return result
+    }
+    public func attackCoverage(for types: [String]) throws -> AttackCoverage {
+        let contract = try decode(TypeContract.self, "wiki/type-relations-v1.json")
+        let names = types.map { $0.hasSuffix("\u{7cfb}") ? String($0.dropLast()) : $0 }
+        let placeholder = "\u{65e0}\u{7cfb}\u{522b}"
+        let order = contract.typeOrder.filter { $0 != placeholder }
+        let allowed = Set(contract.typeOrder)
+        let expected = Set(CatalogAssets.typeFiles.keys)
+        guard contract.contractVersion == 1, contract.datasetId == "roco-world-zh-cn",
+              Set(order) == expected, allowed == expected.union([placeholder]),
+              allowed.count == contract.typeOrder.count, allowed == Set(contract.relations.keys),
+              names.count <= 5, Set(names).count == names.count, Set(names).isSubset(of: Set(order)),
+              contract.relations.values.allSatisfy({ relation in
+                  let strong = Set(relation.strongAgainst), resisted = Set(relation.resistedBy)
+                  return strong.count == relation.strongAgainst.count && resisted.count == relation.resistedBy.count &&
+                      strong.union(resisted).isSubset(of: allowed) && strong.isDisjoint(with: resisted)
+              }) else {
+            throw HandbookError("type_contract", "The offline attack coverage types or relationships are invalid.")
+        }
+        guard let source = contract.source, source.pageId == 12987, source.revisionId > 0,
+              source.title == "Module:TypeRelation", parseDate(source.revisedAtUtc) != nil,
+              source.sourceSha1.utf8.count == 40,
+              source.sourceSha1.utf8.allSatisfy({ (48...57).contains($0) || (97...102).contains($0) }),
+              let url = URLComponents(string: source.sourceUrl), url.url != nil,
+              url.scheme == "https", url.host == "wiki.biligame.com", url.path == "/rocom/index.php",
+              url.port == nil || url.port == 443, url.user == nil, url.password == nil, url.fragment == nil,
+              let query = url.queryItems, query.count == 2,
+              query.first(where: { $0.name == "title" })?.value == source.title,
+              query.first(where: { $0.name == "oldid" })?.value == String(source.revisionId) else {
+            throw HandbookError("type_contract", "The offline attack coverage source is invalid.")
+        }
+        let visualSource = VisualSource(name: source.title, url: source.sourceUrl, frozenAt: source.revisedAtUtc)
+        let selected = order.filter { names.contains($0) }
+        guard !selected.isEmpty else {
+            return AttackCoverage(availableTypes: order, selectedTypes: [], covered: [], resisted: [], neutral: [], source: visualSource)
+        }
+        let relations = selected.compactMap { contract.relations[$0] }
+        let covered = Set(relations.flatMap(\.strongAgainst))
+        let resisted = relations.reduce(Set(order)) { $0.intersection($1.resistedBy) }
+        return AttackCoverage(availableTypes: order, selectedTypes: selected,
+                              covered: order.filter { covered.contains($0) },
+                              resisted: order.filter { resisted.contains($0) },
+                              neutral: order.filter { !covered.contains($0) && !resisted.contains($0) }, source: visualSource)
     }
     public func relationships(for types: [String]) throws -> TypeRelationships {
         let contract = try decode(TypeContract.self, "wiki/type-relations-v1.json")

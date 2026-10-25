@@ -1,0 +1,8 @@
+{
+  "ios/Sources/HandbookCore/AssetRepository.swift": "73960501d6e7cd950c3b899b9fae211682be6a4b0889be1a58cd555ac9cd389c",
+  "ios/Tests/HandbookCoreTests/HandbookCoreTests.swift": "c4981809bdd3a70b5e40f586edd160b4c77d673011b393550c3a125c2bfb9f93",
+  "ios/App/ToolsViews.swift": "831cd33455c7f1092db309d72ae0e421f3c646089d5fd96a7b4d2d8c6cd61786",
+  "ios/App/en.lproj/Localizable.strings": "0806ed6296e09d47b2fe8049119bb7eca6e1e849b6b2b39aaa091ca7edaf936a",
+  "ios/App/zh-Hans.lproj/Localizable.strings": "e1a1a1aef5d6c94fd4d0a945c49826daa96ae31c7872389ae4e82a92fe1b742f",
+  "ios/UITests/RocoHandbookUITests.swift": "7f1d4955ae00a46f4920b155381cd2d11c1ac18ef45ec9776207674cc2ebeb93"
+}

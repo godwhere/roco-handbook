@@ -490,3 +490,16 @@
 "Keep your favorite discoveries" = "珍藏喜爱的精灵与笔记";
 "Make it your handbook" = "让手册更合心意";
 "A little preparation for your next adventure" = "为下一次冒险，做好小小准备";
+"Attack coverage" = "打击面";
+"Attacking types" = "进攻系别";
+"Reset" = "重置";
+"Choose up to five attacking types." = "最多选择 5 种进攻系别。";
+"Deselect a type to choose another." = "取消一个已选系别，即可选择其他系别。";
+"Covered types" = "克制覆盖";
+"At least one selected type is super effective." = "至少一种已选系别能造成克制伤害。";
+"Weak spots" = "打击盲点";
+"Every selected type is resisted." = "所有已选系别的攻击都会被抵抗。";
+"Neutral types" = "其余系别";
+"Other defending types." = "其余防守系别。";
+"The offline attack coverage types or relationships are invalid." = "离线打击面的系别或克制关系无效。";
+"The offline attack coverage source is invalid." = "离线打击面的来源信息无效。";
