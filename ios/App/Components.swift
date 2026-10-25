@@ -7,24 +7,6 @@ func tr(_ key: String) -> String { NSLocalizedString(key, comment: "") }
 enum HandbookTheme {
     static let background = Color(uiColor: .systemGroupedBackground)
     static let surface = Color(uiColor: .secondarySystemGroupedBackground)
-    static let paperBackground = Color(uiColor: UIColor { $0.userInterfaceStyle == .dark
-        ? UIColor(red: 0.07, green: 0.10, blue: 0.08, alpha: 1)
-        : UIColor(red: 0.97, green: 0.96, blue: 0.91, alpha: 1) })
-    static let paperSurface = Color(uiColor: UIColor { $0.userInterfaceStyle == .dark
-        ? UIColor(red: 0.11, green: 0.15, blue: 0.12, alpha: 1)
-        : UIColor(red: 1, green: 0.995, blue: 0.97, alpha: 1) })
-    static let forestAccent = Color(uiColor: UIColor { $0.userInterfaceStyle == .dark
-        ? UIColor(red: 0.59, green: 0.82, blue: 0.63, alpha: 1)
-        : UIColor(red: 0.18, green: 0.36, blue: 0.24, alpha: 1) })
-    static let goldAccent = Color(uiColor: UIColor { $0.userInterfaceStyle == .dark
-        ? UIColor(red: 0.94, green: 0.78, blue: 0.43, alpha: 1)
-        : UIColor(red: 0.56, green: 0.38, blue: 0.13, alpha: 1) })
-    static let paperLine = Color(uiColor: UIColor { $0.userInterfaceStyle == .dark
-        ? UIColor(red: 0.29, green: 0.39, blue: 0.31, alpha: 1)
-        : UIColor(red: 0.82, green: 0.79, blue: 0.65, alpha: 1) })
-    static let paperSecondary = Color(uiColor: UIColor { $0.userInterfaceStyle == .dark
-        ? UIColor(red: 0.72, green: 0.77, blue: 0.70, alpha: 1)
-        : UIColor(red: 0.35, green: 0.39, blue: 0.33, alpha: 1) })
     static let detailAccent = Color(uiColor: UIColor { $0.userInterfaceStyle == .dark
         ? UIColor(red: 1, green: 0.60, blue: 0.44, alpha: 1)
         : UIColor(red: 0.72, green: 0.29, blue: 0.17, alpha: 1) })
@@ -49,41 +31,41 @@ enum HandbookTheme {
     }
 }
 
-struct HandbookPageHeader: View {
-    let title: String
-    let subtitle: String
-    let artworkPath: String
-    @Environment(\.sizeCategory) private var sizeCategory
+enum HandbookWikiTheme {
+    private static func adaptive(_ light: UInt32, _ dark: UInt32) -> Color {
+        Color(uiColor: UIColor { traits in
+            let value = traits.userInterfaceStyle == .dark ? dark : light
+            return UIColor(red: CGFloat((value >> 16) & 255) / 255,
+                           green: CGFloat((value >> 8) & 255) / 255,
+                           blue: CGFloat(value & 255) / 255, alpha: 1)
+        })
+    }
+    static let background = adaptive(0xE9EDF6, 0x171F2E)
+    static let paper = adaptive(0xF6F5EC, 0x191F29)
+    static let surface = adaptive(0xFAFBFE, 0x242E40)
+    static let paperSurface = adaptive(0xFFFEF7, 0x252B35)
+    static let ink = adaptive(0x2C3956, 0xEDF2FC)
+    static let secondary = adaptive(0x5C6880, 0xBAC6DA)
+    static let accent = adaptive(0x34476D, 0xAFC9F0)
+    static let gold = adaptive(0x8B682C, 0xE6C572)
+    static let line = adaptive(0xD5DAE5, 0x455268)
+    static let navy = adaptive(0x34476D, 0x2D4165)
+    static let lavender = adaptive(0xE4E0F1, 0x3D3553)
+    static let blue = adaptive(0xDCEAF3, 0x2D4558)
+    static let lavenderInk = adaptive(0x554872, 0xEEE5FF)
+    static let blueInk = adaptive(0x3C617C, 0xDBF0FF)
+    static let heading = adaptive(0x292C30, 0x111822)
+}
 
+struct HandbookWikiBackground: View {
+    var paper = false
     var body: some View {
-        HStack(spacing: 8) {
-            VStack(alignment: .leading, spacing: 6) {
-                if !sizeCategory.isAccessibilityCategory {
-                    Text(tr("Roco World Handbook")).font(.caption.weight(.semibold))
-                        .foregroundColor(HandbookTheme.forestAccent)
-                }
-                Text(title).font(HandbookTheme.display(sizeCategory.isAccessibilityCategory ? 18 : 21, relativeTo: .title2))
-                    .foregroundColor(.primary).accessibilityAddTraits(.isHeader)
-                if !sizeCategory.isAccessibilityCategory {
-                    Text(subtitle).font(.footnote).foregroundColor(HandbookTheme.paperSecondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-            }.frame(maxWidth: .infinity, alignment: .leading)
-            if !sizeCategory.isAccessibilityCategory {
-                AssetImage(path: artworkPath, label: "", size: 72)
-                    .accessibilityHidden(true)
-            }
-        }
-        .padding(14)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(LinearGradient(
-            colors: [HandbookTheme.forestAccent.opacity(0.12), HandbookTheme.goldAccent.opacity(0.06)],
-            startPoint: .topLeading, endPoint: .bottomTrailing
-        ))
-        .background(HandbookTheme.paperSurface)
-        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 24, style: .continuous)
-            .stroke(HandbookTheme.paperLine, lineWidth: 1))
+        ZStack(alignment: .bottomTrailing) {
+            paper ? HandbookWikiTheme.paper : HandbookWikiTheme.background
+            AssetImage(path: "wiki/v4/ui/info/starlight.png", label: "", size: 230, renderingMode: .template)
+                .foregroundColor(.white).opacity(0.09).rotationEffect(.degrees(-18))
+                .padding(.bottom, 110).offset(x: 55).accessibilityHidden(true)
+        }.clipped().ignoresSafeArea()
     }
 }
 
@@ -100,6 +82,7 @@ struct AssetImage: View {
     let path: String?
     let label: String
     var size: CGFloat = 48
+    var renderingMode: Image.TemplateRenderingMode? = nil
     private static let cache = NSCache<NSString, UIImage>()
     private var image: UIImage? {
         guard let path, !path.contains(".."), !path.hasPrefix("/"),
@@ -112,7 +95,7 @@ struct AssetImage: View {
     }
     var body: some View {
         Group {
-            if let image { Image(uiImage: image).resizable().scaledToFit() }
+            if let image { Image(uiImage: image).renderingMode(renderingMode).resizable().scaledToFit() }
             else { Image(systemName: "photo").resizable().scaledToFit().foregroundColor(.secondary).padding(size * 0.2) }
         }.frame(width: size, height: size).accessibilityLabel(label)
     }

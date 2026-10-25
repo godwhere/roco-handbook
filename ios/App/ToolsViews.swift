@@ -3,90 +3,126 @@ import HandbookCore
 
 struct ToolsView: View {
     let session: HandbookSession
+    @Environment(\.sizeCategory) private var sizeCategory
+    @ScaledMetric(relativeTo: .headline) private var tileHeight: CGFloat = 122
     var body: some View {
         ScrollView {
-            VStack(spacing: 16) {
-                HandbookPageHeader(
-                    title: tr("Your adventure notebook"),
-                    subtitle: tr("Everything for your next discovery"),
-                    artworkPath: "wiki/v4/pets/illustrations/JL_miaomiao.png"
-                )
+            VStack(spacing: 14) {
+                if sizeCategory.isAccessibilityCategory {
+                    VStack(spacing: 10) { seasons; features; eggs }
+                } else {
+                    HStack(spacing: 10) {
+                        seasons.frame(maxWidth: .infinity)
+                        VStack(spacing: 10) { features; eggs }.frame(maxWidth: .infinity)
+                    }
+                }
                 VStack(spacing: 10) {
-                    NavigationLink(destination: SeasonArchiveView(session: session)) {
-                        ToolCardLabel(title: tr("Season archive"), subtitle: tr("Follow every season"),
-                                      systemImage: "calendar", accent: HandbookTheme.forestAccent)
-                    }.accessibilityIdentifier("tools.seasons")
-                    NavigationLink(destination: SkillCatalogView(session: session, features: true)) {
-                        ToolCardLabel(title: tr("Feature handbook"), subtitle: tr("Discover what makes each creature special"),
-                                      systemImage: "sparkle", accent: HandbookTheme.goldAccent)
-                    }.accessibilityIdentifier("tools.features")
-                    NavigationLink(destination: EggGroupsView(session: session)) {
-                        ToolCardLabel(title: tr("Egg groups"), subtitle: tr("Find companions in the same egg group"),
-                                      systemImage: "oval.portrait", accent: HandbookTheme.forestAccent)
-                    }.accessibilityIdentifier("tools.eggGroups")
                     NavigationLink(destination: GameDescriptionsView(session: session)) {
-                        ToolCardLabel(title: tr("Game descriptions"), subtitle: tr("Read battle terms and effects"),
-                                      systemImage: "text.book.closed", accent: HandbookTheme.forestAccent)
+                        WikiToolRow(title: tr("Game descriptions"), imagePath: "wiki/v4/skills/Skill_418039.png")
                     }.accessibilityIdentifier("tools.descriptions")
                     NavigationLink(destination: ActivityTimelineView(session: session)) {
-                        ToolCardLabel(title: tr("Activity timeline"), subtitle: tr("Browse events and their stories"),
-                                      systemImage: "clock", accent: HandbookTheme.goldAccent)
+                        WikiToolRow(title: tr("Activity timeline"),
+                                    imagePath: "wiki/tools/v2/activities/icons/Activity_1700012_IconSelected.png",
+                                    imageBackground: HandbookWikiTheme.navy)
                     }.accessibilityIdentifier("tools.activities")
                     NavigationLink(destination: OutfitsView(session: session)) {
-                        ToolCardLabel(title: tr("Outfit inspiration"), subtitle: tr("Find your next favorite outfit"),
-                                      systemImage: "tshirt", accent: HandbookTheme.forestAccent)
+                        WikiToolRow(title: tr("Outfit inspiration"), imagePath: "wiki/tools/v2/fashions/cards/fashion_000001-female.png")
                     }.accessibilityIdentifier("tools.outfits")
                     NavigationLink(destination: PersonalLibraryView(session: session)) {
-                        ToolCardLabel(title: tr("My library"), subtitle: tr("Keep your favorite discoveries"),
-                                      systemImage: "star", accent: HandbookTheme.goldAccent)
+                        WikiToolRow(title: tr("My library"), imagePath: "wiki/v4/pets/illustrations/JL_miaomiao.png")
                     }.accessibilityIdentifier("tools.library")
-                }.buttonStyle(.plain)
+                }
             }.padding(.horizontal, 16).padding(.top, 8).padding(.bottom, 28)
-        }
-        .background(HandbookTheme.paperBackground.ignoresSafeArea())
-        .navigationTitle(tr("Tools"))
-        .navigationBarTitleDisplayMode(.inline)
-        .accessibilityIdentifier("tools.home")
+        }.background(HandbookWikiBackground()).buttonStyle(.plain).tint(HandbookWikiTheme.accent)
+            .navigationTitle(tr("Tools")).navigationBarTitleDisplayMode(.inline)
+            .accessibilityIdentifier("tools.home")
+    }
+    private var seasons: some View {
+        NavigationLink(destination: SeasonArchiveView(session: session)) {
+            if sizeCategory.isAccessibilityCategory {
+                WikiToolRow(title: tr("Season archive"), imagePath: nil)
+            } else {
+                WikiToolTile(title: tr("Season archive"),
+                             imagePath: "wiki/v4/pets/illustrations/PetPortrait_img_Win_LiangFengWan1_001_Res.png",
+                             background: HandbookWikiTheme.navy, foreground: .white,
+                             height: tileHeight * 2 + 10, imageSize: 180)
+            }
+        }.accessibilityIdentifier("tools.seasons")
+    }
+    private var features: some View {
+        NavigationLink(destination: SkillCatalogView(session: session, features: true)) {
+            if sizeCategory.isAccessibilityCategory {
+                WikiToolRow(title: tr("Feature handbook"), imagePath: nil)
+            } else {
+                WikiToolTile(title: tr("Feature handbook"), imagePath: "wiki/v4/skills/Feature_200319.png",
+                             background: HandbookWikiTheme.lavender, foreground: HandbookWikiTheme.lavenderInk,
+                             height: tileHeight, imageSize: 72)
+            }
+        }.accessibilityIdentifier("tools.features")
+    }
+    private var eggs: some View {
+        NavigationLink(destination: EggGroupsView(session: session)) {
+            if sizeCategory.isAccessibilityCategory {
+                WikiToolRow(title: tr("Egg groups"), imagePath: nil)
+            } else {
+                WikiToolTile(title: tr("Egg groups"), imagePath: "wiki/v4/pets/illustrations/JL_shuilanlan.png",
+                             background: HandbookWikiTheme.blue, foreground: HandbookWikiTheme.blueInk,
+                             height: tileHeight, imageSize: 76)
+            }
+        }.accessibilityIdentifier("tools.eggGroups")
     }
 }
 
-private struct ToolCardLabel: View {
+private struct WikiToolTile: View {
     let title: String
-    let subtitle: String
-    let systemImage: String
-    let accent: Color
-    @Environment(\.dynamicTypeSize) private var textSize
-
+    let imagePath: String
+    let background: Color
+    let foreground: Color
+    let height: CGFloat
+    let imageSize: CGFloat
     var body: some View {
-        HStack(spacing: 12) {
-            if !textSize.isAccessibilitySize {
-                Image(systemName: systemImage)
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundColor(accent)
-                    .frame(width: 36, height: 36)
-                    .background(accent.opacity(0.10))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+        ZStack(alignment: .bottomLeading) {
+            background
+            GeometryReader { geometry in
+                AssetImage(path: imagePath, label: "", size: min(imageSize, max(44, geometry.size.width - 20)))
+                    .padding(.top, 10).padding(.trailing, 10)
+                    .frame(width: geometry.size.width, height: geometry.size.height, alignment: .topTrailing)
                     .accessibilityHidden(true)
             }
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title).font(HandbookTheme.display(16)).foregroundColor(.primary)
-                Text(subtitle).font(.footnote).foregroundColor(HandbookTheme.paperSecondary)
-            }
-            .fixedSize(horizontal: false, vertical: true)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            Image(systemName: "chevron.right")
-                .font(.caption.weight(.semibold)).foregroundColor(HandbookTheme.forestAccent)
-                .accessibilityHidden(true)
-        }
-        .padding(.horizontal, 14).padding(.vertical, 10)
-        .frame(maxWidth: .infinity, minHeight: 64, alignment: .leading)
-        .background(HandbookTheme.paperSurface)
-        .clipShape(RoundedRectangle(cornerRadius: 18))
-        .overlay(RoundedRectangle(cornerRadius: 18).stroke(HandbookTheme.paperLine, lineWidth: 1))
-        .contentShape(RoundedRectangle(cornerRadius: 18))
-        .accessibilityElement(children: .combine)
+            HStack(alignment: .bottom, spacing: 6) {
+                Text(title).font(HandbookTheme.display(16)).fixedSize(horizontal: false, vertical: true)
+                Spacer(minLength: 0)
+                Image(systemName: "arrow.up.right").font(.system(size: 10, weight: .semibold))
+                    .opacity(0.65).accessibilityHidden(true)
+            }.foregroundColor(foreground).padding(12)
+        }.frame(maxWidth: .infinity).frame(height: height)
+            .clipShape(RoundedRectangle(cornerRadius: 9)).contentShape(RoundedRectangle(cornerRadius: 9))
     }
 }
+
+private struct WikiToolRow: View {
+    let title: String
+    let imagePath: String?
+    var imageBackground = Color.clear
+    @Environment(\.sizeCategory) private var sizeCategory
+    var body: some View {
+        HStack(spacing: 12) {
+            if !sizeCategory.isAccessibilityCategory {
+                AssetImage(path: imagePath, label: "", size: 52)
+                    .background(imageBackground).clipShape(RoundedRectangle(cornerRadius: 8)).accessibilityHidden(true)
+            }
+            Text(title).font(HandbookTheme.display(16)).foregroundColor(HandbookWikiTheme.ink)
+                .fixedSize(horizontal: false, vertical: true).frame(maxWidth: .infinity, alignment: .leading)
+            Image(systemName: "arrow.right").font(.caption).foregroundColor(HandbookWikiTheme.secondary)
+                .accessibilityHidden(true)
+        }.padding(.horizontal, 12).padding(.vertical, 8)
+            .frame(maxWidth: .infinity, minHeight: 64, alignment: .leading)
+            .background(HandbookWikiTheme.surface).clipShape(RoundedRectangle(cornerRadius: 9))
+            .overlay(RoundedRectangle(cornerRadius: 9).stroke(HandbookWikiTheme.line.opacity(0.65), lineWidth: 0.5))
+            .contentShape(RoundedRectangle(cornerRadius: 9))
+    }
+}
+
 
 struct SeasonArchiveView: View {
     let session: HandbookSession

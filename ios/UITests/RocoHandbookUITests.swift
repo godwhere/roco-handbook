@@ -45,11 +45,45 @@ final class RocoHandbookUITests: XCTestCase {
         app.launch()
         XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
         app.tabBars.buttons.element(boundBy: 2).tap()
-        XCTAssertTrue(app.buttons["tools.seasons"].waitForExistence(timeout: 10))
+        let season = app.buttons["tools.seasons"]
+        let features = app.buttons["tools.features"]
+        let eggs = app.buttons["tools.eggGroups"]
+        // Allow subpixel rounding without relaxing the 44-point target contract.
+        for card in [season, features, eggs] {
+            XCTAssertTrue(card.waitForExistence(timeout: 10))
+            XCTAssertTrue(card.isHittable)
+            XCTAssertGreaterThanOrEqual(card.frame.width + 0.001, 44)
+            XCTAssertGreaterThanOrEqual(card.frame.height + 0.001, 44)
+        }
+        XCTAssertGreaterThan(season.frame.height, features.frame.height * 1.5)
+        XCTAssertEqual(season.frame.minY, features.frame.minY, accuracy: 2)
+        XCTAssertEqual(features.frame.minX, eggs.frame.minX, accuracy: 2)
+        XCTAssertLessThanOrEqual(season.frame.maxX, features.frame.minX)
+        XCTAssertLessThanOrEqual(season.frame.maxX, eggs.frame.minX)
+        XCTAssertLessThanOrEqual(features.frame.maxY, eggs.frame.minY)
+        XCTAssertGreaterThanOrEqual(season.frame.maxY + 2, eggs.frame.maxY)
         capture(app, name: "tools-zh")
+        for id in ["tools.descriptions", "tools.activities", "tools.outfits", "tools.library"] {
+            let card = app.buttons[id]
+            reveal(card, in: app)
+            XCTAssertGreaterThanOrEqual(card.frame.width + 0.001, 44)
+            XCTAssertGreaterThanOrEqual(card.frame.height + 0.001, 44)
+        }
+        capture(app, name: "tools-lower-zh")
         app.tabBars.buttons.element(boundBy: 3).tap()
-        XCTAssertTrue(app.segmentedControls["settings.layout"].waitForExistence(timeout: 10))
+        for id in ["settings.layout", "settings.skillLayout"] {
+            let picker = app.segmentedControls[id]
+            XCTAssertTrue(picker.waitForExistence(timeout: 10))
+            XCTAssertTrue(picker.isHittable)
+        }
         capture(app, name: "settings-zh")
+        for id in ["settings.library", "settings.catalogInfo", "settings.checkUpdates", "settings.restore", "settings.licenses"] {
+            let action = app.buttons[id]
+            reveal(action, in: app)
+            XCTAssertGreaterThanOrEqual(action.frame.width + 0.001, 44)
+            XCTAssertGreaterThanOrEqual(action.frame.height + 0.001, 44)
+        }
+        capture(app, name: "settings-lower-zh")
     }
     func testToolsAndSettingsRemainReachableWithAccessibilityText() {
         let app = XCUIApplication()
@@ -61,7 +95,7 @@ final class RocoHandbookUITests: XCTestCase {
         app.tabBars.buttons.element(boundBy: 2).tap()
         let first = app.buttons["tools.seasons"]
         XCTAssertTrue(first.waitForExistence(timeout: 10))
-        XCTAssertGreaterThanOrEqual(first.frame.height, 44)
+        XCTAssertGreaterThanOrEqual(first.frame.height + 0.001, 44)
         capture(app, name: "tools-large-text-zh")
         reveal(app.buttons["tools.library"], in: app)
         app.tabBars.buttons.element(boundBy: 3).tap()
@@ -72,7 +106,7 @@ final class RocoHandbookUITests: XCTestCase {
         capture(app, name: "settings-large-text-zh")
         let restore = app.buttons["settings.restore"]
         reveal(restore, in: app)
-        XCTAssertGreaterThanOrEqual(restore.frame.height, 44)
+        XCTAssertGreaterThanOrEqual(restore.frame.height + 0.001, 44)
         restore.tap()
         XCTAssertTrue(app.alerts.firstMatch.waitForExistence(timeout: 10))
         app.alerts.buttons["\u{53d6}\u{6d88}"].tap()

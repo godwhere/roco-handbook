@@ -1,82 +1,37 @@
-# Phase 8 Catalog presentation and platform navigation design QA
+# Phase 13 native design QA
 
-- Review date: 2026-09-15
-- Navigation source visual truth: `/Users/ethan/.codex/generated_images/01a084ad-ac2c-7d23-9db4-d6fa0b1cfbbb/exec-6ed72adb-da77-435d-906c-a20036587ddc.png`
-- Header source: `docs/evidence/phase-8-catalog-header/source.png`
-- Creature-card sources: `docs/evidence/phase-8-creature-type-backgrounds/reference-list.png` and `reference-grid.png`
-- iOS implementation: `docs/evidence/phase-8-platform-navigation/ios-liquid-glass-home.png`
-- Android implementation: `docs/evidence/phase-8-platform-navigation/android-m3-expressive-home.png`
-- Full-view comparisons: `docs/evidence/phase-8-platform-navigation/ios-source-comparison.png` and `docs/evidence/phase-8-platform-navigation/android-source-comparison.png`
-- Focused comparison: `docs/evidence/phase-8-platform-navigation/platform-navigation-focused-comparison.png`
-- Android before and after: `docs/evidence/phase-8-platform-navigation/android-floating-navigation-before-after.png`
-- Progressive bottom-blur captures: `docs/evidence/phase-8-platform-navigation/ios-progressive-blur.png` and `android-progressive-blur.png`
-- Header comparison: `docs/evidence/phase-8-catalog-header/source-ios-android-comparison.png`
-- Immersive header implementation: `docs/evidence/phase-8-catalog-header/ios-immersive-header.png`
-- Immersive header source state and implementation comparison: `docs/evidence/phase-8-catalog-header/ios-immersive-header-before-after.png`
-- Type-background comparisons: `docs/evidence/phase-8-creature-type-backgrounds/list-reference-ios-android.png` and `grid-reference-ios-android.png`
-- States: `zh-CN`, light theme, creature list and grid, first four Dimo forms, first destination selected
+## Result
 
-## Normalization
+final result: passed
 
-The navigation source is 853 x 1844 pixels. The header source is 820 x 420 pixels. The horizontal and grid card sources are 636 x 208 and 602 x 400 pixels. The previous and immersive iOS captures are both 1206 x 2622 pixels at a 402 x 874 logical viewport and 3x density. Their top 1206 x 820 pixel regions form the focused before-and-after comparison; the macOS composition surface records that pair at 2x output density as 4824 x 1640 pixels without changing App content. The Android Flutter-surface capture is 1080 x 2057 pixels from the API 36 emulator. Other full-view and focused comparisons normalize aspect or crop only.
+No actionable P0/P1/P2 findings remain. The maximum-text Settings icon-column issue was repaired with a body-relative `ScaledMetric`, recaptured, and independently rechecked. No source images or action semantics changed for this repair.
 
-## Full-view comparison evidence
+## Source truth and implementation
 
-Both implementations preserve the selected direction's title/version hierarchy, compact Sort/Filters/Search control group, two-column illustrated Catalog, type-aligned card colors, and four equal primary destinations. The accepted creature root adds a generated pale star-and-sparkle background behind live Flutter title, data, information, sort, type, and search controls. The list and grid cards translate the supplied elemental references through code-native gradients and restrained motifs while preserving exact Wiki illustrations and type icons.
-
-The immersive iOS capture preserves that complete root state while extending the same pale background behind the transparent status bar. It removes the independent white band, top gap, and top corner rounding visible in the previous capture. Interactive content remains below the system inset and the first Catalog row begins slightly earlier because the redundant top separation is gone.
-
-The iOS capture preserves the source's floating translucent navigation hierarchy through native UIKit. System Liquid Glass appears on the version, information, and tab-bar navigation layer without adding a custom Flutter blur to cards or text. The Android capture translates the same complete floating bottom silhouette into M3 Expressive with an opaque tonal stadium, safe-area spacing, a light outline, low shadow, a circular tonal information action, and a separate pill selection indicator instead of copying iOS translucency. On both platforms, the third card row now visibly continues behind the floating navigation layer.
-
-## Focused comparison evidence
-
-The focused bottom region confirms that all three views use one complete floating capsule silhouette with four equal labeled destinations. iOS uses the system's optical material and native SF symbols. Android uses Material symbols inside an opaque M3 tonal surface, a larger selected indicator, 16-logical-pixel horizontal margins, and platform safe-area spacing. The Android before/after evidence shows that the earlier full-width edge-to-edge navigation surface has been replaced rather than merely reshaping the selected destination. Catalog content paints beneath each floating bar, and no persistent control overlaps the safe area or loses its selected state.
-
-The focused immersive-header comparison places the previous and current iOS top regions side by side at the same viewport and state. The current background begins at `y=0`, the dark system foreground remains legible, the Dynamic Island has clear surrounding contrast, and the title, tagline, actions, and toolbar remain entirely below the safe-area boundary. No further focused region is needed because the requested change is confined to this complete top composition and every affected element is readable in the crop.
+- Approved visual targets: `docs/evidence/phase-13/wiki-library-tools.jpg` and `wiki-skills.jpg`, captured from the actual NRC Wiki and explicitly approved by the user. `wiki-observations.json` records URLs and computed colors, 9-pixel corners, and the display font.
+- Implementation: native `ToolsView` and `SettingsView`; `tools-zh.png`, `settings-zh.png`, their lower-page and actual-dark variants, and the three `*-large-text-*.png` captures in the same evidence directory.
+- Browser sources are 375 x 812 pixels. Native captures are 1206 x 2622 pixels for a 402 x 874 point simulator at 3x density. Combined boards resample both views to 375 pixels wide while preserving aspect, with no content stretching. The source and native heights differ naturally; native navigation/status/tab bars and the actual seven Tool destinations replace website chrome/content by explicit product scope.
+- Full-view comparisons: `tools-comparison.png` and `settings-comparison.png`. Focused image-layout comparison: `tools-focused-comparison.png`. Both source and implementation were opened together in each board, supplemented by full-resolution native inspection.
 
 ## Required fidelity surfaces
 
-- Fonts and typography: Catalog display text retains the approved `RocoDisplay` role and identifiers retain `RocoNumbers`. Native iOS navigation uses the system face and SF Symbols. Android displays each localized destination label with the existing Material typography. Other titles and labels remain single-line and legible.
-- Spacing and layout rhythm: the two-column grid and compact list retain their established geometry. The hero now begins at the top screen edge, reserves the top inset only around live content, removes its former top margin and corners, and retains 28-logical-pixel lower rounding. Both navigation bars respect platform safe areas and visibly separate from the horizontal screen edges. Android uses a 72-logical-pixel inner bar and retains four equal destinations without clipping. The extended body exposes more of the next card row, while navigation-derived final padding preserves complete end-of-list access.
-- Colors and visual tokens: the light hero requests dark status foreground over the continuous pale-blue background, while the dark hero requests light foreground over its existing darkening layer. iOS lets the system adapt Liquid Glass contrast. Android derives tonal surfaces and selection colors from the App `ColorScheme`. Creature cards define 18 distinct element accents, blend dual-type accents, and retain a light center wash for legible copy. Default light and reviewed evolved light examples match the blue and gold source direction.
-- Image quality and asset fidelity: every Catalog card uses the exact frozen Wiki illustration and type icon. Image generation supplied only the decorative Catalog-header background; all text and controls remain code-native. Card backgrounds are drawn by Flutter, and no screenshot raster, custom SVG, emoji, placeholder, or generated navigation icon replaces a source asset or platform symbol.
-- Copy and content: source names, form labels, `NO.<dex_no>`, data version, and visible destination labels remain data-backed or localized. No concept-only tagline was added.
-
-## Interaction and accessibility evidence
-
-Focused widget coverage selects the iOS and Android shells, verifies root body extension on both branches, and now sets an explicit 47-logical-pixel top inset to verify the edge-to-edge hero origin, exact inset-aware content padding, bottom-only rounding, transparent status background, and dark light-theme foreground. It changes destination through the Cupertino test fallback and checks the Android safe-area margin, stadium surface, clipping, elevation, transparent inner navigation, visible labels, stable keys, and M3 theme geometry. Current integration flows change all four destinations and open the Phase 8 child routes on both simulators. Native iOS top-bar buttons carry accessibility labels, the bottom bar uses Flutter-owned destination semantics without duplicating the hidden native item semantics, and Android destinations retain matching visible copy and localized Flutter semantics. The complete Flutter suite covers dark theme and a 2.0 text scale.
-
-## Findings
-
-No actionable P0, P1, or P2 mismatch remains. The platform differences are intentional translations of one shared hierarchy, and the element treatments remain decorative rather than becoming a competing reading layer.
+- Typography: reuse the frozen display font for compact 16-point functional Tool titles and 15/17-point Settings section titles. Platform body/subheadline/caption styles remain readable and scalable. The user's earlier smaller-text feedback intentionally takes precedence over copying the website's larger headings.
+- Layout: one tall left tile and two stacked right tiles, 9-point corners, short left-aligned titles, four image rows, and lightly separated Settings panels. Shorter native tiles preserve room for all seven destinations. The fixed web float buttons and website navigation are intentionally omitted.
+- Colors: the regular-text home cards use the observed navy `#34476D`, lavender `#E4E0F1`, and pale blue `#DCEAF3`; Settings follows the charcoal/ivory pattern with restrained gold. Native dark-mode colors have separate values and were actually captured with the simulator reporting dark.
+- Images: eight existing frozen resources have source identity/hash/length evidence in `source-art.json`; game art is contained, not generated, repainted, warped, or relabeled as a source record. Only the decorative starlight watermark uses template rendering. No new image/font request or dependency is introduced.
+- Content: all seven original Tool IDs, both saved layout choices, personal library, Catalog information, update/recovery/cancel/error states, recovery notice, version, and licenses are retained. Marketing headers and repeated Tool descriptions are removed. The Settings grouping is an intentional native adaptation.
 
 ## Comparison history
 
-- First pass, P1: Flutter 3.47.2 does not provide complete Liquid Glass support, so a Cupertino blur would have presented a visual approximation as native behavior.
-- Fix: add a bounded UIKit platform-view bridge and keep iOS 26 `UINavigationBar` and `UITabBar` system appearances unmodified.
-- First pass, P2: applying the same translucent treatment to Android would weaken platform identity and repeat glass in a dense information surface.
-- Fix: keep Android on Material 3 and express hierarchy through tonal elevation, shape, selection scale, and label weight.
-- Second pass, P1: the Android implementation applied the capsule only to the selected destination while the complete navigation surface remained edge-to-edge, so it did not meet the shared floating silhouette.
-- Fix: wrap the complete Android `NavigationBar` in a clipped `StadiumBorder` Material surface, add 16-logical-pixel horizontal margins, respect the bottom safe area, and keep the inner navigation transparent so only the outer capsule defines the silhouette.
-- Third pass, user refinement: an icon-only Android variation was evaluated, then the labeled navigation was selected as the clearer visual result.
-- Fix: restore `alwaysShow` at 72 logical pixels, retain the cleaner Material pet symbol in place of the text-bearing creature bitmap, and keep stable automation keys for every destination.
-- Fourth pass, user refinement: let the bottom navigation float over the Catalog instead of reserving an opaque layout band beneath the content.
-- Fix: enable root body extension for both platform branches and derive creature-grid, creature-list, and skill-list final padding from the resulting navigation inset.
-- Fifth pass, P1: child page safe areas consumed the extended scaffold's bottom inset, so only Settings visibly painted behind the floating navigation.
-- Fix: stop the creature, skill, and Tools roots from reserving the bottom safe area, derive their final scroll clearance dynamically, and add a shared safe-area backdrop with a subtle surface gradient.
-- Sixth pass, user refinement: replace the ordinary creature-root top bar with the supplied branded hierarchy.
-- Fix: render the title, tagline, data version, information action, and toolbar as live widgets over one generated decorative background; retain native iOS top navigation on non-root pages.
-- Seventh pass, user refinement: give each creature element a corresponding card background in both preserved layouts.
-- Fix: add 18 distinct type accents, dual-type blending, the reviewed warm-light variant, and low-alpha code-native rings, washes, sparkles, type watermarks, and paw motifs. Focused list/grid comparisons on iOS and Android retain readable names, form labels, identifiers, and controls.
-- Eighth pass, user refinement: make the safe-area blur increase toward the bottom instead of applying one uniform strength.
-- Fix: replace the uniform six-sigma filter with seven overlapping clipped layers that begin nearly clear and accumulate toward the screen edge, then use a four-stop low-alpha surface gradient to conceal layer transitions. Ordinary-install iOS and Android captures show no hard band or blurred reading surface.
-- Ninth pass, P2 user refinement: the status-bar safe area remained an independent blank band above the inset, fully rounded branded hero, breaking the top composition into three visual layers.
-- Fix: paint the existing hero background from the top screen edge, move safe-area consumption inside that background, remove only the top margin and corners, and select system status foreground brightness from the active theme.
-- Post-fix evidence: the equal-viewport iOS comparison confirms one continuous status-and-hero field without unsafe controls, unreadable system indicators, clipped content, altered copy, or a new image asset. The normalized header, list, grid, full-navigation, focused-navigation, and Android before/after comparisons continue to show the accepted hierarchy, clear element identity, complete labeled floating capsules, distinct platform materials, content continuing behind the bars, and readable Catalog cards.
+1. Normal light and actual-dark combined/full-resolution review: no actionable P0/P1/P2 mismatch for the approved native-adaptation scope. Image identities, palette, compact labels, hierarchy, and lower-action reachability checked. A focused-board crop initially clipped a few pixels below the right tile; only the QA board crop was corrected, not App content.
+2. Maximum-accessibility inspection: P2, Settings leading symbols crowd labels because their rendered Dynamic Type size exceeds a fixed column. Before evidence: `settings-large-text-zh-before-fix.png` and `settings-large-text-lower-zh-before-fix.png`. Repair: scale the column with the body metric. The final generic build, normal/maximum-text light cases, and actual-dark capture case passed. Updated `settings-large-text-zh.png` and `settings-large-text-lower-zh.png` show clear symbol/label separation and natural wrapping. `accessibility-repair-comparison.png` places the matching before/after state together. Independent reinspection confirmed the repair and no remaining P0/P1/P2 issue.
+
+## Interaction and evidence limits
+
+The seven-route and favorites/notes/layout-through-recovery cases passed. Final normal and maximum-text light cases passed after the icon-column repair, followed by a final actual-dark capture pass. The first normal capture run hit a 43.99999999999994 versus 44-point assertion precision edge; a 0.001-point numerical tolerance preserves the 44-point target contract. Xcode's automatic failure-diagnostic collector stalled after the initial completed tests; its invocation-owned diagnostic process was stopped, preserving the result/attachments. Later runs use the supported per-invocation `-collect-test-diagnostics never` option. The simulator was restored to light appearance after final capture.
+
+This is an iOS native App, so no web-template runtime, browser console, or Sites deployment claim applies. Physical devices, iOS 15 execution, VoiceOver, device contrast settings, live signed updates, signing, and store acceptance remain unrun. Simulator screenshots and tests do not establish those layers.
 
 ## Follow-up polish
 
-- P3: validate Reduce Transparency and Increase Contrast on a physical iPhone before the store candidate.
-- P3: evaluate Android dynamic color as a separately approved enhancement; it is not required for the current M3 Expressive treatment.
-
-final result: passed
+None required beyond the recorded P2 repair. User visual acceptance remains separate from this implementation check.

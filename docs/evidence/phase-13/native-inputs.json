@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-25",
+  "mirror": "/tmp/roco-phase13-validation",
+  "sha256": {
+    "ios/App/Components.swift": "0001ac52dfc4de43f115ff31b886e855e9d3ec903549f26437d769ced7f1b7e4",
+    "ios/App/ToolsViews.swift": "81826fe939eeba19f1d176bc5f3e0a452ea60e71256cddfd7f50a48a6dbaf61e",
+    "ios/App/SettingsViews.swift": "f9d61e0990536312297f75d20f164c9bc499ed2d8d3ab280ffd1a257cc7908ce",
+    "ios/UITests/RocoHandbookUITests.swift": "6eb917f9922147fcd479ec450b7f2fccc351d5c321db50ab3c82f29a0b62939e"
+  }
+}

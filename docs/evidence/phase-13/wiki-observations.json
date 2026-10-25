@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-25",
+  "timezone": "Asia/Shanghai",
+  "scope": "Fresh visual inspection of the live NRC Wiki home, library entrances, tool section, and skill codex. No project files, App behavior, game data, or design implementation changed.",
+  "steps": [
+    {
+      "step": 1,
+      "url": "https://wiki.biligame.com/nrc/",
+      "screenshot": "01-home.jpg",
+      "rendering": "Loaded and visually inspected; carousel paused locally.",
+      "observations": "Charcoal site navigation; cool mist-blue/lavender page surface with very faint white line-art imagery; promotional art carries its own illustration and dark text overlay; recent-update rows are restrained light surfaces.",
+      "limits": "This is a visual review, not a complete navigation or accessibility test. Promotional artwork changes with the carousel."
+    },
+    {
+      "step": 2,
+      "url": "https://wiki.biligame.com/nrc/%E9%A6%96%E9%A1%B5#library",
+      "screenshot": "02-library-tools.jpg",
+      "rendering": "Loaded and visually inspected after scrolling.",
+      "observations": "Asymmetric image entrances use one tall creature tile next to two shorter tiles. Art is offset from short left-aligned titles. Colored surfaces, subtle arcs, rounded corners, and space establish boundaries. Tool rows are compact and light, with small icon tiles and short text.",
+      "measured_tokens": {
+        "title_font_family": "SSDunDunTi, sans-serif",
+        "title_font_size": "22px",
+        "title_font_weight": "400",
+        "creature_tile_background": "rgb(52, 71, 109)",
+        "skill_tile_background": "rgb(228, 224, 241)",
+        "feature_tile_background": "rgb(220, 234, 243)",
+        "tile_border_radius": "9px",
+        "tile_css_border": "0px none",
+        "observed_tall_tile": "171 x 309 CSS pixels",
+        "observed_short_tile": "171 x 150 CSS pixels"
+      },
+      "measurement_method": "Read-only computed styles of the actual visible home-reference-card containers, not their transparent link overlays.",
+      "limits": "Floating web buttons overlap parts of the narrow-screen tool region; native adaptation should retain its own navigation rather than copy those controls."
+    },
+    {
+      "step": 3,
+      "url": "https://wiki.biligame.com/nrc/%E6%8A%80%E8%83%BD%E5%9B%BE%E9%89%B4",
+      "screenshot": "03-skill-codex.jpg",
+      "rendering": "Loaded and visually inspected through the actual home link.",
+      "observations": "Charcoal header with a thin gold outline and small skill pictures, a flat warm-ivory reading surface, compact rounded controls, and small gold accents for selected states and section marks. This differs from the cool home palette but also avoids heavy ornamental metal frames.",
+      "limits": "Only the visible header/filter region was assessed. Keyboard navigation, VoiceOver, numeric contrast, zoom, and all catalog states were not tested. Visible source counts are not an App content update."
+    }
+  ],
+  "design_correction": "The preceding castle/parchment/metal-frame proposal overemphasizes generic fantasy decoration. A faithful Tools/Settings direction should use the observed colored image surfaces, offset art and titles, compact type, soft boundaries, faint background motifs, and restrained gold accents. Do not repaint game creatures or import new source data for a visual inspection.",
+  "documentation": "No repository Markdown update or Git commit is required for this read-only inspection; project files and effective capabilities are unchanged. Evidence and notes are task-owned response material."
+}

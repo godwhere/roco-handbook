@@ -1,0 +1,100 @@
+{
+  "date": "2026-10-25",
+  "assets": [
+    {
+      "path": "wiki/tools/v2/activities/icons/Activity_1700012_IconSelected.png",
+      "sha256": "e42fdabc0f2c6bb4d5d2e4a892124a9811e084342e07394ec3f9a36f51a6e8f6",
+      "bytes": 1757,
+      "catalog_ids": [
+        "activity_1700001",
+        "activity_1700002",
+        "activity_1700003",
+        "activity_1700004",
+        "activity_1700005",
+        "activity_1700006",
+        "activity_1700007",
+        "activity_1700008",
+        "activity_1700009",
+        "activity_1700010",
+        "activity_1700011",
+        "activity_1700012",
+        "activity_1700013",
+        "activity_1700014",
+        "activity_1700015",
+        "activity_1700016"
+      ],
+      "source_title": "File:Activity_1700012_IconSelected.png",
+      "role": "decorative image only; catalog identities and source pixels unchanged"
+    },
+    {
+      "path": "wiki/tools/v2/fashions/cards/fashion_000001-female.png",
+      "sha256": "4accb35f6574ee5a5ba6ce594119f25d78c4070a30b75ee8cb7bf2c56a24f52d",
+      "bytes": 63051,
+      "catalog_ids": [
+        "fashion_000001:female"
+      ],
+      "source_title": "File:FashionSuit_fashion_000001_Female.png",
+      "role": "decorative image only; catalog identities and source pixels unchanged"
+    },
+    {
+      "path": "wiki/v4/pets/illustrations/JL_miaomiao.png",
+      "sha256": "86cdc641507a543a7ecb1cbe2b89802d79702b07411e3696cca178c07965eaba",
+      "bytes": 105865,
+      "catalog_ids": [
+        "pet_000001"
+      ],
+      "source_title": "File:PetPortrait miaomiao.png",
+      "role": "decorative image only; catalog identities and source pixels unchanged"
+    },
+    {
+      "path": "wiki/v4/pets/illustrations/JL_shuilanlan.png",
+      "sha256": "396273673f4c4a372f03da1df7f96a6d1aa47565746ce6f27ec095daa0b3ab4b",
+      "bytes": 120497,
+      "catalog_ids": [
+        "pet_000002"
+      ],
+      "source_title": "File:PetPortrait shuilanlan.png",
+      "role": "decorative image only; catalog identities and source pixels unchanged"
+    },
+    {
+      "path": "wiki/v4/pets/illustrations/PetPortrait_img_Win_LiangFengWan1_001_Res.png",
+      "sha256": "c7b65a40a20b2865b638f086ff6aab6d495ee4b20f2b60aedcf8fc227323d99a",
+      "bytes": 75332,
+      "catalog_ids": [
+        "pet_000604"
+      ],
+      "source_title": "File:PetPortrait LiangFengWan1.png",
+      "role": "decorative image only; catalog identities and source pixels unchanged"
+    },
+    {
+      "path": "wiki/v4/skills/Feature_200319.png",
+      "sha256": "976bf2721de3c93384cbed9662056b6f6a85038906670592b51c0297bad2fd12",
+      "bytes": 15995,
+      "catalog_ids": [
+        "skill_000201"
+      ],
+      "source_title": "File:Feature 200319.png",
+      "role": "decorative image only; catalog identities and source pixels unchanged"
+    },
+    {
+      "path": "wiki/v4/skills/Skill_418039.png",
+      "sha256": "5ebebfde57c8b4d76c6aba1ecc9bb2580adbe5d91b3b6067de0ec12487c9f83c",
+      "bytes": 27251,
+      "catalog_ids": [
+        "skill_000828"
+      ],
+      "source_title": "File:Skill 418039.png",
+      "role": "decorative image only; catalog identities and source pixels unchanged"
+    },
+    {
+      "path": "wiki/v4/ui/info/starlight.png",
+      "sha256": "15c357f6242a143d8f8d1ded725b804e3f1b993ffd427c6ecd8d06f823ffc633",
+      "bytes": 5126,
+      "catalog_ids": [
+        "info_starlight"
+      ],
+      "source_title": "File:\u4fe1\u606f\u56fe\u6807 \u661f\u5149\u503c.png",
+      "role": "decorative image only; catalog identities and source pixels unchanged"
+    }
+  ]
+}
