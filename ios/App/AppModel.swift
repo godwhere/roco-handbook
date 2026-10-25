@@ -21,8 +21,11 @@ final class AppModel: ObservableObject {
     @Published var operationError: String?
     @Published private(set) var layout: PetCatalogLayout = .threeColumn
     @Published private(set) var skillLayout: SkillCatalogLayout = .twoColumn
+    @Published private(set) var language: InterfaceLanguage = .system
+    @Published private(set) var changingLanguage = false
     @Published private(set) var userRevision = 0
     @Published private(set) var busy = false
+    var locale: Locale { HandbookLocalization.shared.locale }
     private var supportURL: URL {
         FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
     }
@@ -52,6 +55,9 @@ final class AppModel: ObservableObject {
                                                appVersion: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.2.0")
             layout = try await user.layout()
             skillLayout = try await user.skillLayout()
+            let savedLanguage = try await user.interfaceLanguage()
+            HandbookLocalization.shared.use(savedLanguage)
+            language = savedLanguage
             session = HandbookSession(catalog: catalog, user: user, assets: AssetRepository(assetRoot: root),
                                       info: info, attribution: open.attribution, outcome: open.outcome,
                                       updateService: updates, assetRoot: root)
@@ -77,6 +83,17 @@ final class AppModel: ObservableObject {
         guard let session else { return }
         do { try await session.user.setSkillLayout(value); skillLayout = value; changed() }
         catch { operationError = message(error) }
+    }
+    func setLanguage(_ value: InterfaceLanguage) async {
+        guard let session, !busy, !changingLanguage, value != language else { return }
+        changingLanguage = true
+        defer { changingLanguage = false }
+        do {
+            try await session.user.setInterfaceLanguage(value)
+            HandbookLocalization.shared.use(value)
+            language = value
+            changed()
+        } catch { operationError = message(error) }
     }
     func changed() { userRevision += 1 }
     func report(_ error: Error) { operationError = message(error) }

@@ -1,4 +1,8 @@
 /* Native interface copy; canonical domain terminology is frozen in Phase 8. */
+"Interface language" = "Language";
+"Follow system" = "Follow System";
+"Simplified Chinese" = "简体中文";
+"English language" = "English";
 "$source — 版本 $revision" = "$source — 版本 $revision";
 "A creature may match any selected egg group." = "A creature may match any selected egg group.";
 "A creature may match any selected type." = "A creature may match any selected type.";
@@ -302,7 +306,7 @@
 "Show creatures" = "Show creatures";
 "Skill" = "Skill";
 "Skill card layout" = "Skill card layout";
-"Detailed descriptions" = "Detailed descriptions";
+"Detailed descriptions" = "Detailed";
 "Creature learning conditions" = "Creature learning conditions";
 "Skill Stone Topics" = "Skill Stone Topics";
 "Skill details" = "Skill details";

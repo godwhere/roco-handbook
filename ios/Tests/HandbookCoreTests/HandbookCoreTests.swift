@@ -119,6 +119,84 @@ final class HandbookCoreTests: XCTestCase {
             XCTAssertEqual(actual, .twoColumn)
         }
     }
+    func testInterfaceLanguageUsesPreferredMatchingAndExplicitOverrides() {
+        XCTAssertEqual(InterfaceLanguage.allCases.map(\.rawValue), ["system", "zh-Hans", "en"])
+        XCTAssertEqual(InterfaceLanguage.system.localizationIdentifier(preferredLanguages: ["zh-Hans-CN"]), "zh-Hans")
+        XCTAssertEqual(InterfaceLanguage.system.localizationIdentifier(preferredLanguages: ["en-US"]), "en")
+        XCTAssertEqual(InterfaceLanguage.system.localizationIdentifier(preferredLanguages: ["fr-FR"]), "en")
+        XCTAssertEqual(InterfaceLanguage.system.localizationIdentifier(preferredLanguages: []), "en")
+        XCTAssertEqual(InterfaceLanguage.english.localizationIdentifier(preferredLanguages: ["zh-Hans"]), "en")
+        XCTAssertEqual(InterfaceLanguage.simplifiedChinese.localizationIdentifier(preferredLanguages: ["en-US"]), "zh-Hans")
+    }
+    func testInterfaceLanguagePersistsWithoutChangingOtherPersonalData() async throws {
+        let support = try temporary()
+        let saved = try user(support)
+        let initial = try await saved.interfaceLanguage()
+        XCTAssertEqual(initial, .system)
+        try await saved.setLayout(.list)
+        try await saved.setSkillLayout(.detailed)
+        let ref = ObjectRef(type: .pet, objectID: "pet_000001", name: "Saved creature")
+        try await saved.setFavorite(ref, enabled: true)
+        let noteID = try await saved.saveNote(ref, content: "Language selection must preserve this note.")
+        try await saved.setCollected("handbook_000001", name: "Saved creature", collected: true)
+        for language in InterfaceLanguage.allCases {
+            try await saved.setInterfaceLanguage(language)
+            let reopened = try user(support)
+            let actual = try await reopened.interfaceLanguage()
+            let petLayout = try await reopened.layout()
+            let skillLayout = try await reopened.skillLayout()
+            let favorite = try await reopened.isFavorite(ref)
+            let notes = try await reopened.notes(ref)
+            let collected = try await reopened.isCollected("handbook_000001")
+            XCTAssertEqual(actual, language)
+            XCTAssertEqual(petLayout, .list)
+            XCTAssertEqual(skillLayout, .detailed)
+            XCTAssertTrue(favorite)
+            XCTAssertTrue(collected)
+            XCTAssertEqual(notes.map(\.id), [noteID])
+            XCTAssertEqual(notes.first?.content, "Language selection must preserve this note.")
+        }
+        let db = try SQLite(saved.databaseURL, readOnly: false)
+        for json in ["[]", "123", "null", "{", "", "\"unsupported\"", "\"zh-CN\""] {
+            try db.execute("UPDATE settings SET value_json = ? WHERE setting_key = 'interface_language'", [.text(json)])
+            let actual = try await saved.interfaceLanguage()
+            XCTAssertEqual(actual, .system)
+        }
+        XCTAssertEqual(try db.rows("PRAGMA user_version").first?.integer("user_version"), 1)
+    }
+    func testBundledLanguageLookupFallsBackWithoutChangingSystemLanguageOrGameText() throws {
+        let directory = try temporary().appendingPathComponent("LanguageFixture.bundle")
+        let resources = directory.appendingPathComponent("Contents/Resources")
+        for language in ["en", "zh-Hans"] {
+            let target = resources.appendingPathComponent("\(language).lproj")
+            try FileManager.default.createDirectory(at: target, withIntermediateDirectories: true)
+            try FileManager.default.copyItem(at: root.appendingPathComponent("ios/App/\(language).lproj/Localizable.strings"),
+                                             to: target.appendingPathComponent("Localizable.strings"))
+        }
+        let info: [String: Any] = ["CFBundleIdentifier": "world.roco.tests.language", "CFBundlePackageType": "BNDL",
+                                  "CFBundleDevelopmentRegion": "en", "CFBundleLocalizations": ["en", "zh-Hans"]]
+        try PropertyListSerialization.data(fromPropertyList: info, format: .xml, options: 0)
+            .write(to: directory.appendingPathComponent("Contents/Info.plist"))
+        let english = resources.appendingPathComponent("en.lproj/Localizable.strings")
+        let source = try String(contentsOf: english)
+        try (source + "\n\"Language fixture fallback\" = \"English fallback\";\n")
+            .write(to: english, atomically: true, encoding: .utf8)
+        let bundle = try XCTUnwrap(Bundle(url: directory))
+        let systemBefore = UserDefaults.standard.array(forKey: "AppleLanguages") as? [String]
+        let localizer = HandbookLocalization(bundle: bundle, language: .english, preferredLanguages: ["zh-Hans"])
+        XCTAssertEqual(localizer.string(forKey: "Tools"), "Tools")
+        XCTAssertTrue(localizer.locale.identifier.hasPrefix("en"))
+        localizer.use(.simplifiedChinese, preferredLanguages: ["en-US"])
+        XCTAssertEqual(localizer.string(forKey: "Tools"), "\u{5de5}\u{5177}")
+        XCTAssertTrue(localizer.locale.identifier.hasPrefix("zh"))
+        XCTAssertEqual(localizer.string(forKey: "Language fixture fallback"), "English fallback")
+        XCTAssertEqual(localizer.string(forKey: "Missing fixture key"), "Missing fixture key")
+        let canonicalName = "\u{55b5}\u{55b5}"
+        XCTAssertEqual(localizer.string(forKey: canonicalName), canonicalName)
+        localizer.use(.system, preferredLanguages: ["en-US"])
+        XCTAssertEqual(localizer.string(forKey: "Tools"), "Tools")
+        XCTAssertEqual(UserDefaults.standard.array(forKey: "AppleLanguages") as? [String], systemBefore)
+    }
     func testDetailEggGroupsAndMeasurementsMatchStoredSource() async throws {
         let db = try SQLite(assets.appendingPathComponent("catalog/catalog.db"), readOnly: true)
         let rows = try db.rows("SELECT pet_id, extra_json FROM pets WHERE status = 'active'")

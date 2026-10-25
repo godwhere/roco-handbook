@@ -2,7 +2,7 @@ import SwiftUI
 import CoreText
 import HandbookCore
 
-func tr(_ key: String) -> String { NSLocalizedString(key, comment: "") }
+func tr(_ key: String) -> String { HandbookLocalization.shared.string(forKey: key) }
 
 enum HandbookTheme {
     static let background = Color(uiColor: .systemGroupedBackground)

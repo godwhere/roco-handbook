@@ -6,7 +6,13 @@ ADR-0023 makes the Swift/SwiftUI iOS client in `ios/` the active implementation.
 
 The interface uses English `en.lproj` and Simplified Chinese `zh-Hans.lproj` resources, reusing the frozen `zh-CN` terminology contract and Phase 8 translations. Other locales fall back to English. Canonical creature, skill, activity, outfit, condition, and description text retains its source language. The English name is Roco World Handbook; the Simplified Chinese name is the frozen short product name. Localized InfoPlist strings set the corresponding home-screen label.
 
+Settings > Appearance includes a native Language menu with Follow System, Simplified Chinese, and English. Language names remain recognizable in either interface. The existing personal settings table stores `interface_language` as a JSON string (`system`, `zh-Hans`, or `en`); missing, malformed, and unsupported values use Follow System. Selection takes effect after a successful write, survives restart and Catalog recovery, and does not change the operating-system language. Follow System uses Apple's preferred-localization matching over the two bundled resources, with English fallback. Missing translated keys also fall back to bundled English, then the key.
+
+App-owned text and the SwiftUI locale update immediately while Settings remains selected and retains its operation state. The other three tabs rebuild their navigation roots on a language change. The control is disabled during an update, Catalog operation, or pending language save. Its row grows and stacks at accessibility text sizes. The App display name on the home screen and operating-system-owned controls remain governed by iOS. ADR-0033 defines the language-selection contract.
+
 Native interface and domain error messages have matching English and Simplified Chinese entries. The focused packaging test rejects untranslated literal controls/errors, duplicate keys, unequal locale inventories, and drift from the frozen base-stat, feature, energy, and power terms. Device linguistic and accessibility acceptance remain separate.
+
+The English skill-layout option uses the short label Detailed so all three native segments fit the phone width. Its underlying layout value and full-description behavior are unchanged.
 
 ## Navigation and presentation
 

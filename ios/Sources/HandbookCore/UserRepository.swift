@@ -83,6 +83,19 @@ public actor UserRepository {
             ON CONFLICT(setting_key) DO UPDATE SET value_json = excluded.value_json, updated_at_utc = excluded.updated_at_utc
             """, [.text("skill_catalog_layout"), .text(json), .text(utcNow())])
     }
+    public func interfaceLanguage() throws -> InterfaceLanguage {
+        guard let row = try database.rows("SELECT value_json FROM settings WHERE setting_key = ?", [.text("interface_language")]).first,
+              let string = try? JSONDecoder().decode(String.self, from: Data(row.text("value_json").utf8)),
+              let language = InterfaceLanguage(rawValue: string) else { return .system }
+        return language
+    }
+    public func setInterfaceLanguage(_ language: InterfaceLanguage) throws {
+        let json = String(decoding: try JSONEncoder().encode(language.rawValue), as: UTF8.self)
+        try database.execute("""
+            INSERT INTO settings(setting_key, value_json, updated_at_utc) VALUES(?, ?, ?)
+            ON CONFLICT(setting_key) DO UPDATE SET value_json = excluded.value_json, updated_at_utc = excluded.updated_at_utc
+            """, [.text("interface_language"), .text(json), .text(utcNow())])
+    }
     public func isFavorite(_ object: ObjectRef) throws -> Bool {
         try !database.rows("SELECT 1 FROM favorites WHERE dataset_id = ? AND object_type = ? AND object_id = ?", arguments(object)).isEmpty
     }

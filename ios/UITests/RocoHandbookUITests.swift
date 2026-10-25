@@ -85,6 +85,78 @@ final class RocoHandbookUITests: XCTestCase {
         }
         capture(app, name: "settings-lower-zh")
     }
+    func testInterfaceLanguageSwitchPersistsAcrossRestartAndCatalogRestore() {
+        let app = launch()
+        let simplifiedChinese = "\u{7b80}\u{4f53}\u{4e2d}\u{6587}"
+        let chineseSettings = "\u{8bbe}\u{7f6e}"
+        let settingsTab = app.tabBars.buttons.element(boundBy: 3)
+        settingsTab.tap()
+        let language = app.buttons["settings.language"]
+        XCTAssertTrue(language.waitForExistence(timeout: 10))
+        reveal(language, in: app)
+        language.tap()
+        let englishOption = app.buttons["English"]
+        XCTAssertTrue(englishOption.waitForExistence(timeout: 10))
+        englishOption.tap()
+        XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.tabBars.buttons["Settings"].isSelected)
+        XCTAssertEqual(language.label, "Language")
+        XCTAssertEqual(language.value as? String, "English")
+        capture(app, name: "language-english")
+
+        language.tap()
+        let chineseOption = app.buttons[simplifiedChinese]
+        XCTAssertTrue(chineseOption.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["Follow System"].exists)
+        XCTAssertTrue(englishOption.exists)
+        capture(app, name: "language-menu")
+        chineseOption.tap()
+        XCTAssertTrue(app.navigationBars[chineseSettings].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.tabBars.buttons[chineseSettings].isSelected)
+        XCTAssertTrue(app.tabBars.buttons["\u{5de5}\u{5177}"].exists)
+        XCTAssertEqual(language.value as? String, simplifiedChinese)
+        let skillLayout = app.segmentedControls["settings.skillLayout"]
+        XCTAssertTrue(skillLayout.buttons["\u{53cc}\u{5217}"].exists)
+        XCTAssertTrue(skillLayout.buttons["\u{4e09}\u{5217}"].exists)
+        XCTAssertTrue(skillLayout.buttons["\u{8be6}\u{7ec6}\u{63cf}\u{8ff0}"].exists)
+        language.tap()
+        XCTAssertTrue(app.buttons["\u{8ddf}\u{968f}\u{7cfb}\u{7edf}"].waitForExistence(timeout: 10))
+        app.navigationBars[chineseSettings].tap()
+        capture(app, name: "language-chinese")
+
+        // The saved App language takes precedence over the unchanged English launch locale.
+        app.terminate(); app.launch()
+        XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
+        XCTAssertTrue(app.tabBars.buttons[chineseSettings].exists)
+        settingsTab.tap()
+        XCTAssertTrue(app.navigationBars[chineseSettings].waitForExistence(timeout: 10))
+        XCTAssertTrue(language.waitForExistence(timeout: 10))
+        XCTAssertEqual(language.value as? String, simplifiedChinese)
+        let restore = app.buttons["settings.restore"]
+        reveal(restore, in: app)
+        restore.tap()
+        XCTAssertTrue(app.alerts.firstMatch.waitForExistence(timeout: 10))
+        app.alerts.buttons["\u{6062}\u{590d}\u{56fe}\u{9274}"].tap()
+        XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
+        XCTAssertTrue(app.tabBars.buttons.element(boundBy: 0).isSelected)
+        XCTAssertTrue(app.tabBars.buttons[chineseSettings].exists)
+        settingsTab.tap()
+        XCTAssertTrue(app.navigationBars[chineseSettings].waitForExistence(timeout: 10))
+        reveal(language, in: app)
+        XCTAssertEqual(language.value as? String, simplifiedChinese)
+
+        language.tap()
+        let systemOption = app.buttons["\u{8ddf}\u{968f}\u{7cfb}\u{7edf}"]
+        XCTAssertTrue(systemOption.waitForExistence(timeout: 10))
+        systemOption.tap()
+        XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.tabBars.buttons["Settings"].isSelected)
+        XCTAssertTrue(app.tabBars.buttons["Tools"].exists)
+        XCTAssertEqual(language.label, "Language")
+        XCTAssertEqual(language.value as? String, "Follow System")
+        XCTAssertTrue(skillLayout.buttons["Two columns"].exists)
+        XCTAssertTrue(skillLayout.buttons["Detailed"].exists)
+    }
     func testToolsAndSettingsRemainReachableWithAccessibilityText() {
         let app = XCUIApplication()
         app.launchArguments = ["-AppleLanguages", "(zh-Hans)", "-AppleLocale", "zh_CN",
@@ -99,6 +171,11 @@ final class RocoHandbookUITests: XCTestCase {
         capture(app, name: "tools-large-text-zh")
         reveal(app.buttons["tools.library"], in: app)
         app.tabBars.buttons.element(boundBy: 3).tap()
+        let language = app.buttons["settings.language"]
+        XCTAssertTrue(language.waitForExistence(timeout: 10))
+        reveal(language, in: app)
+        XCTAssertGreaterThanOrEqual(language.frame.width + 0.001, 44)
+        XCTAssertGreaterThanOrEqual(language.frame.height + 0.001, 44)
         let layout = app.buttons["settings.layout"]
         reveal(layout, in: app)
         XCTAssertTrue(layout.exists)
@@ -287,13 +364,13 @@ final class RocoHandbookUITests: XCTestCase {
         XCTAssertFalse(app.buttons["skill.skill_000678"].label.contains(description))
         chooseSkillLayout("Three columns", menu: "skills.layout", in: app)
         assertColumns(cards, count: 3, in: app)
-        chooseSkillLayout("Detailed descriptions", menu: "skills.layout", in: app)
+        chooseSkillLayout("Detailed", menu: "skills.layout", in: app)
         XCTAssertGreaterThan(cards.element(boundBy: 0).frame.width, app.frame.width * 0.8)
         XCTAssertTrue(app.buttons["skill.skill_000678"].label.contains(description))
         app.terminate(); app.launch()
         XCTAssertTrue(app.textFields["pets.search"].waitForExistence(timeout: 30))
         app.tabBars.buttons["Settings"].tap()
-        XCTAssertTrue(preference.buttons["Detailed descriptions"].isSelected)
+        XCTAssertTrue(preference.buttons["Detailed"].isSelected)
         preference.buttons["Two columns"].tap()
         app.tabBars.buttons["Creatures"].tap()
         app.buttons["pet.pet_000001"].tap()

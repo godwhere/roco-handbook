@@ -1,0 +1,12 @@
+{
+  "ios/Sources/HandbookCore/InterfaceLanguage.swift": "6b018f4688064925d1a4d50cec449c9d33f26103770b9c6af72b43c4b275d42e",
+  "ios/Sources/HandbookCore/UserRepository.swift": "9852f836a1fe58843039f24e864aac8b8be367c8080ea0d9efb5e5d52b1e011c",
+  "ios/Tests/HandbookCoreTests/HandbookCoreTests.swift": "dd24e5e705db6056e675e7fa13560c04a0c69d11e5d1cd81afe0a77ec418fbe0",
+  "ios/App/Components.swift": "ac6009a7786c88052bea4dec66be789e63a61c8c61540b88ac722844bc53ef97",
+  "ios/App/AppModel.swift": "e5aca2ddd3d4c9e422c251d44841c7c960eee465d61c7271c11fae8a17cdf6c5",
+  "ios/App/RocoHandbookApp.swift": "c76d2dea004cb0caab2295b44106bd51865cf2b7ee0e62bea1cba6b07e3fbca6",
+  "ios/App/SettingsViews.swift": "e23dbe9426288a8b20208cd766cbf7cdc8e8b5ab91090694ec71eaffd0025a34",
+  "ios/App/en.lproj/Localizable.strings": "670bf70e951d5573c346b261dc845b49d08d6c5fc3df05057015f84d6e77a374",
+  "ios/App/zh-Hans.lproj/Localizable.strings": "856a7d951a5e270b83c94a7bc65939b1ab7ead7825a8bc08eddf7dbf99baa54f",
+  "ios/UITests/RocoHandbookUITests.swift": "7b2e65c9c029112b100d86555584980e7a891a947e02d7a3ac520572ce677233"
+}

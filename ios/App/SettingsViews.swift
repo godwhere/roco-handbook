@@ -18,11 +18,13 @@ struct SettingsView: View {
         ScrollView {
             VStack(spacing: 14) {
                 SettingsPanel(title: tr("Appearance"), symbol: "paintpalette.fill", highlighted: true) {
+                    languagePicker.id(app.language)
+                    Divider().overlay(HandbookWikiTheme.line.opacity(0.5))
                     Text(tr("Creature catalog layout")).font(.subheadline.weight(.semibold))
                     creatureLayoutPicker
                     Divider().overlay(HandbookWikiTheme.line.opacity(0.5))
                     Text(tr("Skill card layout")).font(.subheadline.weight(.semibold))
-                    skillLayoutPicker
+                    skillLayoutPicker.id(app.language)
                 }
                 SettingsPanel(title: tr("Catalog"), symbol: "book.closed.fill") {
                     NavigationLink(destination: PersonalLibraryView(session: session)) {
@@ -90,6 +92,42 @@ struct SettingsView: View {
                 Text(tr("This replaces only the offline Catalog with the version included in this App. Favorites, collection marks, and notes are kept. The bundled version may be older than the current Catalog."))
             }.onDisappear { updateTask?.cancel() }
     }
+    private var languagePicker: some View {
+        Menu {
+            Picker(tr("Interface language"), selection: Binding(
+                get: { app.language }, set: { value in Task { await app.setLanguage(value) } }
+            )) {
+                ForEach(InterfaceLanguage.allCases, id: \.self) { language in
+                    Text(language.title).tag(language)
+                        .accessibilityIdentifier("settings.language.\(language.rawValue)")
+                }
+            }.pickerStyle(.inline)
+        } label: {
+            Group {
+                if sizeCategory.isAccessibilityCategory {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Label(tr("Interface language"), systemImage: "globe")
+                        languageValue
+                    }.frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    HStack(spacing: 12) {
+                        Label(tr("Interface language"), systemImage: "globe")
+                        Spacer(minLength: 0)
+                        languageValue
+                    }
+                }
+            }.font(.subheadline).frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                .contentShape(Rectangle())
+        }.accessibilityLabel(tr("Interface language")).accessibilityValue(app.language.title)
+            .accessibilityIdentifier("settings.language")
+            .disabled(updating || app.busy || app.changingLanguage)
+    }
+    private var languageValue: some View {
+        HStack(spacing: 6) {
+            Text(app.language.title).fixedSize(horizontal: false, vertical: true)
+            Image(systemName: "chevron.up.chevron.down").font(.caption).accessibilityHidden(true)
+        }.foregroundColor(HandbookWikiTheme.accent)
+    }
     @ViewBuilder private var creatureLayoutPicker: some View {
         let picker = Picker(tr("Creature catalog layout"), selection: Binding(
             get: { app.layout }, set: { value in Task { await app.setLayout(value) } }
@@ -155,6 +193,16 @@ struct SettingsView: View {
             } catch is CancellationError { updateStatus = "Catalog update cancelled. Current Catalog unchanged." }
             catch let error as URLError where error.code == .cancelled { updateStatus = "Catalog update cancelled. Current Catalog unchanged." }
             catch { updateStatus = nil; app.report(error) }
+        }
+    }
+}
+
+private extension InterfaceLanguage {
+    var title: String {
+        switch self {
+        case .system: return tr("Follow system")
+        case .simplifiedChinese: return tr("Simplified Chinese")
+        case .english: return tr("English language")
         }
     }
 }

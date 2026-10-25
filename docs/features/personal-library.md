@@ -4,7 +4,7 @@
 
 The active Swift repository keeps the preceding bundle identifier and `Library/Application Support/user/user.db` location. It executes the existing normative SQL only when creating a new independent personal database. An existing database is validated and opened without replacement; damaged or unknown schemas remain intact and block startup.
 
-Native detail pages retain favorite controls, handbook-level collection marks, and note creation, editing, deletion confirmation, failed-save draft retention, and unavailable-object snapshots. Layout remains stored as the existing JSON string under `pet_catalog_layout`. UI state refreshes after successful repository writes; it does not report a write as saved before SQLite succeeds. Catalog startup, recovery, and remote update operate in separate directories and cannot write the personal database.
+Native detail pages retain favorite controls, handbook-level collection marks, and note creation, editing, deletion confirmation, failed-save draft retention, and unavailable-object snapshots. Layout remains stored as the existing JSON string under `pet_catalog_layout`. The independent `skill_catalog_layout` and `interface_language` JSON strings use the same existing settings table without a migration. UI state refreshes after successful repository writes; it does not report a write as saved before SQLite succeeds. Catalog startup, recovery, and remote update operate in separate directories and cannot write the personal database.
 
 ## Storage and identity
 
@@ -37,3 +37,5 @@ My Library resolves saved IDs through the current Catalog. When an object is una
 ## Settings information
 
 Settings shows App, Catalog, and personal schema versions, source revision range, build time, attribution, and the local-storage and uninstall warning. Theme currently follows the device setting.
+
+The Appearance language menu offers Follow System, Simplified Chinese, and English. The saved mode survives restart and Catalog recovery independently of layout, favorites, collection marks, and notes. Missing or invalid values fall back to Follow System. The preference affects the interface, not stored game text or personal notes; it does not modify system language preferences. See ADR-0033 and the localized visual handbook feature document for runtime behavior.

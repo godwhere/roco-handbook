@@ -1,4 +1,8 @@
 /* Native interface copy; canonical domain terminology is frozen in Phase 8. */
+"Interface language" = "界面语言";
+"Follow system" = "跟随系统";
+"Simplified Chinese" = "简体中文";
+"English language" = "English";
 "$source — 版本 $revision" = "$source — revision $revision";
 "A creature may match any selected egg group." = "精灵符合任一已选孵蛋组别即可显示。";
 "A creature may match any selected type." = "精灵符合任一已选系别即可显示。";
